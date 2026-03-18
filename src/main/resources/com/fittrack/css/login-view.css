@@ -1,9 +1,3 @@
-/* ============================================================
-   FitTrack — Login View CSS
-   Matches: glassmorphism card on space/galaxy background
-   File: src/main/resources/com/fittrack/css/login-view.css
-   ============================================================ */
-
 /* ── Root / Screen ─────────────────────────────────────────── */
 .root {
     -fx-background-color: #0d0b1a;
