@@ -1,11 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.fittrack.controller.LoginController"
-            prefHeight="600.0"
-            prefWidth="900.0">
+<StackPane styleClass="root" stylesheets="@../css/login-view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fittrack.controller.LoginController">
 
-</BorderPane>
+    <!-- Background image layer -->
+    <ImageView fx:id="backgroundImage" styleClass="bg-image" StackPane.alignment="CENTER" />
+
+    <!-- Dark overlay to deepen the bg -->
+    <Pane maxHeight="Infinity" maxWidth="Infinity" styleClass="bg-overlay" StackPane.alignment="CENTER" />
+
+    <!-- Centered glass card -->
+    <VBox alignment="TOP_CENTER" maxHeight="480" maxWidth="440" styleClass="glass-card" StackPane.alignment="CENTER">
+
+        <!-- Neon accent line at top of card -->
+        <Pane maxWidth="280" prefHeight="3" styleClass="neon-line" />
+
+        <VBox alignment="TOP_CENTER" styleClass="card-inner">
+
+            <!-- Title -->
+            <Label styleClass="title-label" text="Welcome back" />
+
+            <!-- Subtitle -->
+            <Label styleClass="subtitle-label" text="Log in to continue." />
+
+            <!-- Fields container -->
+            <VBox styleClass="fields-wrap">
+
+                <!-- Email -->
+                <VBox spacing="6" styleClass="field-group">
+                    <Label styleClass="field-label" text="Email" />
+                    <TextField fx:id="emailField" promptText="Enter your email" styleClass="input-field" />
+                    <Label fx:id="emailError" managed="false" styleClass="error-label" text="Please enter a valid email" visible="false" />
+                </VBox>
+
+                <!-- Password -->
+                <VBox spacing="6" styleClass="field-group">
+                    <!-- Label row with Hide/Show toggle -->
+                    <HBox alignment="CENTER_LEFT">
+                        <Label styleClass="field-label" text="Password" HBox.hgrow="ALWAYS" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER_RIGHT" onMouseClicked="#togglePassword" spacing="5" styleClass="pw-toggle-wrap">
+                            <Label fx:id="toggleIcon" styleClass="pw-toggle-icon" text="◉" />
+                            <Label fx:id="toggleLabel" styleClass="pw-toggle-text" text="Show" />
+                        </HBox>
+                    </HBox>
+
+                    <StackPane>
+                        <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="input-field" />
+                        <TextField fx:id="passwordVisible" managed="false" promptText="Enter your password" styleClass="input-field" visible="false" />
+                    </StackPane>
+
+                    <Label fx:id="passwordError" managed="false" styleClass="error-label" text="Password must be at least 8 characters" visible="false" />
+                </VBox>
+
+            </VBox>
+
+            <!-- Log in button -->
+            <Button fx:id="loginButton" maxWidth="Infinity" onAction="#handleLogin" styleClass="login-btn" text="Log in" />
+
+            <!-- Register row -->
+            <HBox alignment="CENTER" spacing="4" styleClass="register-row">
+                <Label styleClass="register-text" text="Don't have an account?" />
+                <Hyperlink onAction="#handleRegister" styleClass="register-link" text="Register here" />
+            </HBox>
+
+        </VBox>
+    </VBox>
+
+</StackPane>

@@ -5,6 +5,10 @@ import java.sql.Statement;
 
 public class DatabaseInitializer {
 
+    private DatabaseInitializer() {
+        /* This utility class should not be instantiated */
+    }
+
     public static void initialize() {
 
         try (Connection conn = DatabaseConnection.connect();
