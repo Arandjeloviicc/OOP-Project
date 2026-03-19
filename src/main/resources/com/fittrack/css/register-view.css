@@ -1,0 +1,16 @@
+@import "base-view.css";
+
+.glass-card {
+    -fx-pref-width: 520;
+    -fx-max-width: 520;
+    -fx-pref-height: 560;
+    -fx-max-height: 560;
+}
+
+.input-field {
+    -fx-pref-width: 432;
+}
+
+.action-btn {
+    -fx-pref-width: 432;
+}

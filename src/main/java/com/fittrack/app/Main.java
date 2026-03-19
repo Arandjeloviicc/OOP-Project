@@ -1,6 +1,7 @@
 package com.fittrack.app;
 
 import com.fittrack.database.DatabaseInitializer;
+import com.fittrack.util.AppConstants;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,13 +17,12 @@ public class Main extends Application {
         SceneManager.setStage(stage);
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/com/fittrack/view/login-view.fxml")
+                getClass().getResource("/com/fittrack/view/" + AppConstants.Views.LOGIN)
         );
         Scene scene = new Scene(loader.load(), 1280, 800);
 
         stage.setTitle("FitTrack");
         stage.setScene(scene);
-        //stage.setResizable(false);
         stage.show();
     }
 

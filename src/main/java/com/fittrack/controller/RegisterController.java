@@ -1,7 +1,7 @@
 package com.fittrack.controller;
 
 import com.fittrack.util.AppConstants;
-import javafx.animation.*;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,27 +12,30 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
-public class LoginController extends FormController implements Initializable {
+public class RegisterController extends FormController implements Initializable {
 
     // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
 
     @Override
     protected Logger getLogger() { return log; }
 
     @FXML private ImageView backgroundImage;
+    @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordVisible;
+    @FXML private Label usernameError;
     @FXML private Label emailError;
     @FXML private Label passwordError;
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
-    @FXML private Button loginButton;
+    @FXML private Button registerButton;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         // Load background image
         setBackgroundImage(backgroundImage);
 
@@ -40,6 +43,7 @@ public class LoginController extends FormController implements Initializable {
         initPasswordToggle(passwordField, passwordVisible);
 
         // Clear errors on type
+        usernameField.textProperty().addListener((obs, old, val) -> clearUsernameError());
         emailField.textProperty().addListener((obs, old, val) -> clearEmailError());
         passwordField.textProperty().addListener((obs, old, val) -> clearPasswordError());
         passwordVisible.textProperty().addListener((obs, old, val) -> clearPasswordError());
@@ -51,9 +55,9 @@ public class LoginController extends FormController implements Initializable {
         togglePassword(passwordField, passwordVisible, toggleLabel, toggleIcon);
     }
 
-    // ── Login action ────────────────────────────────────────────
+    //  ── Register action ──────────────────────────────
     @FXML
-    private void handleLogin() {
+    public void handleRegister() {
         String email = emailField.getText().trim();
         String password = passwordShowing
                 ? passwordVisible.getText()
@@ -75,30 +79,47 @@ public class LoginController extends FormController implements Initializable {
 
         if (!valid) return;
 
-        loginButton.setDisable(true);
-        loginButton.setText("Logging in...");
+        registerButton.setDisable(true);
+        registerButton.setText("Registering in...");
 
         // Simulate async login — replace with real auth logic
         PauseTransition delay = new PauseTransition(Duration.millis(1000));
-        delay.setOnFinished(e -> onLoginSuccess());
+        delay.setOnFinished(e -> onRegisterSuccess());
         delay.play();
     }
 
-    // ── Register action ─────────────────────────────────────────
+    //  ── Login action ──────────────────────────────
     @FXML
-    private void handleRegister() {
-        // TODO: load register-view.fxml into the current scene
+    public void handleLogin() {
+        // TODO: Logika za pamcenje podataka kada se vratim na login
         log.info("Navigate to register");
-        navigateTo(AppConstants.Views.REGISTER);
+        navigateTo(AppConstants.Views.LOGIN);
     }
 
     // ── Success callback ────────────────────────────────────────
-    private void onLoginSuccess() {
+    private void onRegisterSuccess() {
         // TODO: load dashboard-view.fxml
-        onActionSuccess(loginButton, "Login successful!", "Log in");
+        onActionSuccess(registerButton, "Register successful!", "Register");
     }
 
     // ── Helpers ─────────────────────────────────────────────────
+    private static final Pattern USERNAME_PATTERN = Pattern.compile(
+            "^[a-zA-Z][a-zA-Z0-9_]{2,19}$"
+    );
+
+    private boolean isValidUsername(String username) {
+        if (username == null || username.isBlank()) return false;
+        return USERNAME_PATTERN.matcher(username).matches();
+    }
+
+    private void showUsernameError() {
+        setFieldError(usernameField, usernameError, true);
+    }
+
+    private void clearUsernameError() {
+        setFieldError(usernameField, usernameError, false);
+    }
+
     private void showEmailError() {
         setFieldError(emailField, emailError, true);
     }

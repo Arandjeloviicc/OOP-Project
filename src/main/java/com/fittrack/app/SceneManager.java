@@ -8,6 +8,10 @@ import java.io.IOException;
 
 public class SceneManager {
 
+    private SceneManager() {
+        /* This utility class should not be instantiated */
+    }
+
     private static Stage stage;
 
     public static void setStage(Stage s) {
