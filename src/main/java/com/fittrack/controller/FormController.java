@@ -10,6 +10,7 @@ import javafx.util.Duration;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public abstract class FormController extends BaseController {
 
     // ── Validation ──────────────────────────────────────────────
