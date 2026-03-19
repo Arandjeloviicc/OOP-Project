@@ -1,5 +1,6 @@
 package com.fittrack.controller;
 
+import com.fittrack.app.SceneManager;
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -124,6 +125,7 @@ public class LoginController implements Initializable {
     private void handleRegister() {
         // TODO: load register-view.fxml into the current scene
         log.info("Navigate to register");
+        SceneManager.switchTo("register-view.fxml");
     }
 
     // ── Success callback ────────────────────────────────────────

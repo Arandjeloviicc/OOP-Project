@@ -12,6 +12,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+
+        SceneManager.setStage(stage);
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/com/fittrack/view/login-view.fxml")
         );
@@ -19,7 +22,7 @@ public class Main extends Application {
 
         stage.setTitle("FitTrack");
         stage.setScene(scene);
-        stage.setResizable(false);
+        //stage.setResizable(false);
         stage.show();
     }
 

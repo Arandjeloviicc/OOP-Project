@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="root" stylesheets="@../css/login-view.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fittrack.controller.LoginController">
+<StackPane styleClass="root" stylesheets="@../css/login-view.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fittrack.controller.LoginController">
 
     <!-- Background image layer -->
     <ImageView fx:id="backgroundImage" styleClass="bg-image" StackPane.alignment="CENTER" />
