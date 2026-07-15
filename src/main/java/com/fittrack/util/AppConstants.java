@@ -8,7 +8,8 @@ public final class AppConstants {
 
         private Images() {}
 
-        public static final String LOGIN_REGISTER_BG = "login-bg3.png";
+        // TODO
+        public static final String LOGIN_REGISTER_BG = "login-register-bg-2.png";
     }
 
     public static final class Views {

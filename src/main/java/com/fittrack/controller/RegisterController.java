@@ -1,12 +1,14 @@
 package com.fittrack.controller;
 
+import com.fittrack.model.User;
+import com.fittrack.service.auth.RegistrationResult;
+import com.fittrack.service.auth.RegistrationService;
 import com.fittrack.util.AppConstants;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
+import javafx.scene.layout.StackPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +35,18 @@ public class RegisterController extends FormController implements Initializable 
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button registerButton;
+    @FXML private StackPane rootPane;
+
+    private final RegistrationService registrationService = new RegistrationService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Load background image
         setBackgroundImage(backgroundImage);
+
+        backgroundImage.fitWidthProperty().bind(rootPane.widthProperty());
+        backgroundImage.fitHeightProperty().bind(rootPane.heightProperty());
+        backgroundImage.setPreserveRatio(false);
 
         // Sync password fields on type
         initPasswordToggle(passwordField, passwordVisible);
@@ -58,6 +67,7 @@ public class RegisterController extends FormController implements Initializable 
     //  ── Register action ──────────────────────────────
     @FXML
     public void handleRegister() {
+        String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordShowing
                 ? passwordVisible.getText()
@@ -65,8 +75,14 @@ public class RegisterController extends FormController implements Initializable 
 
         boolean valid = true;
 
+        if(!isValidUsername(username)) {
+            showUsernameError("Username must contain 3–20 letters, numbers or underscores.");
+            shake(usernameField);
+            valid = false;
+        }
+
         if (!isValidEmail(email)) {
-            showEmailError();
+            showEmailError("Enter a valid email address.");
             shake(emailField);
             valid = false;
         }
@@ -82,24 +98,49 @@ public class RegisterController extends FormController implements Initializable 
         registerButton.setDisable(true);
         registerButton.setText("Registering in...");
 
-        // Simulate async login — replace with real auth logic
-        PauseTransition delay = new PauseTransition(Duration.millis(1000));
-        delay.setOnFinished(e -> onRegisterSuccess());
-        delay.play();
+        try {
+
+            RegistrationResult result = registrationService.register(username, email, password);
+
+            switch (result.status()) {
+                case SUCCESS -> {
+                    User user = result.user();
+
+                    // Kasnije:
+                    // UserSession.setCurrentUser(user);
+
+                    log.info("User registered successfully: {}", user.getEmail());
+
+                    navigateTo(AppConstants.Views.DASHBOARD);
+                }
+
+                case USERNAME_TAKEN -> {
+                    showUsernameError("This username is already taken.");
+                    shake(usernameField);
+                    resetRegisterButton();
+                }
+
+                case EMAIL_TAKEN -> {
+                    showEmailError("An account with this email already exists.");
+                    shake(emailField);
+                    resetRegisterButton();
+                }
+            }
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Registration failed: {}", e.getMessage());
+
+            registerButton.setDisable(false);
+            registerButton.setText("Create account");
+        }
     }
 
     //  ── Login action ──────────────────────────────
     @FXML
     public void handleLogin() {
         // TODO: Logika za pamcenje podataka kada se vratim na login
-        log.info("Navigate to register");
+        log.info("Navigate to login");
         navigateTo(AppConstants.Views.LOGIN);
-    }
-
-    // ── Success callback ────────────────────────────────────────
-    private void onRegisterSuccess() {
-        // TODO: load dashboard-view.fxml
-        onActionSuccess(registerButton, "Register successful!", "Register");
     }
 
     // ── Helpers ─────────────────────────────────────────────────
@@ -107,12 +148,14 @@ public class RegisterController extends FormController implements Initializable 
             "^[a-zA-Z][a-zA-Z0-9_]{2,19}$"
     );
 
+    // ── Username Helpers ─────────────────────────────────────────────────
     private boolean isValidUsername(String username) {
         if (username == null || username.isBlank()) return false;
         return USERNAME_PATTERN.matcher(username).matches();
     }
 
-    private void showUsernameError() {
+    private void showUsernameError(String message) {
+        usernameError.setText(message);
         setFieldError(usernameField, usernameError, true);
     }
 
@@ -120,7 +163,9 @@ public class RegisterController extends FormController implements Initializable 
         setFieldError(usernameField, usernameError, false);
     }
 
-    private void showEmailError() {
+    // ── Email Helpers ─────────────────────────────────────────────────
+    private void showEmailError(String message) {
+        emailError.setText(message);
         setFieldError(emailField, emailError, true);
     }
 
@@ -128,6 +173,7 @@ public class RegisterController extends FormController implements Initializable 
         setFieldError(emailField, emailError, false);
     }
 
+    // ── Password Helpers ─────────────────────────────────────────────────
     private void showPasswordError() {
         setFieldError(passwordField,   passwordError, true);
         setFieldError(passwordVisible, passwordError, true);
@@ -136,5 +182,11 @@ public class RegisterController extends FormController implements Initializable 
     private void clearPasswordError() {
         setFieldError(passwordField,   passwordError, false);
         setFieldError(passwordVisible, passwordError, false);
+    }
+
+    // ── Register Button Helpers ─────────────────────────────────────────────────
+    private void resetRegisterButton() {
+        registerButton.setDisable(false);
+        registerButton.setText("Register");
     }
 }

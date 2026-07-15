@@ -5,12 +5,11 @@ import javafx.scene.Parent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class SceneManager {
 
-    private SceneManager() {
-        /* This utility class should not be instantiated */
-    }
+    private SceneManager() {}
 
     private static Stage stage;
 
@@ -20,9 +19,19 @@ public class SceneManager {
 
     public static void switchTo(String fxml) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    SceneManager.class.getResource("/com/fittrack/view/" + fxml)
+            URL resource = SceneManager.class.getResource(
+                    "/com/fittrack/view/" + fxml
             );
+
+            // Wrong FXML file name
+            if(resource == null) {
+                throw new IllegalArgumentException(
+                        "FXML resource not found: " + fxml
+                );
+            }
+
+            FXMLLoader loader = new FXMLLoader(resource);
+
             Parent root = loader.load();
             stage.getScene().setRoot(root);
         }

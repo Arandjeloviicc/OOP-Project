@@ -15,7 +15,7 @@ public abstract class FormController extends BaseController {
 
     // ── Validation ──────────────────────────────────────────────
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-            "^[^\\s@]{1,64}@[^\\s@]{1,255}\\.[^\\s@.]{2,10}$"
+            "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
     );
 
     protected boolean isValidEmail(String email) {
@@ -79,11 +79,13 @@ public abstract class FormController extends BaseController {
     // ── Field errors ────────────────────────────────────────────
     protected void setFieldError(Control field, Label errorLabel, boolean show) {
         errorLabel.setVisible(show);
-        errorLabel.setManaged(show);
+
         if (show) {
-            field.getStyleClass().add("error");
+            if(!field.getStyleClass().contains("error")) {
+                field.getStyleClass().add("error");
+            }
         } else {
-            field.getStyleClass().remove("error");
+            field.getStyleClass().removeAll("error");
         }
     }
 
@@ -96,12 +98,5 @@ public abstract class FormController extends BaseController {
         t.setAutoReverse(true);
         t.setOnFinished(e -> node.setTranslateX(0));
         t.play();
-    }
-
-    // ── Success callback ────────────────────────────────────────
-    protected void onActionSuccess(Button button, String message, String btnText) {
-        getLogger().info(message);
-        button.setDisable(false);
-        button.setText(btnText);
     }
 }

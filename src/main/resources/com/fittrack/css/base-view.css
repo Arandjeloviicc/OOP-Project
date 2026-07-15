@@ -6,14 +6,11 @@
 /* ── Root / Screen ─────────────────────────────────────────── */
 .root {
     -fx-background-color: #0d0b1a;
-    -fx-pref-width: 1280px;
-    -fx-pref-height: 800px;
+    -fx-font-size: 14px;
 }
 
 /* ── Background ────────────────────────────────────────────── */
 .bg-image {
-    -fx-fit-width: 1280;
-    -fx-fit-height: 800;
     -fx-opacity: 1.0;
 }
 
@@ -21,16 +18,26 @@
     -fx-background-color: rgba(8, 6, 20, 0.25);
 }
 
+/* ── Around Glass Card ────────────────────────────────────────────── */
+.content-layer {
+    -fx-padding: 2em;
+}
+
 /* ── Glass Card ─────────────────────────────────────────────── */
-/* Dimenzije (pref-width, max-width, pref-height, max-height)
-   se definisu u svakom konkretnom CSS-u posebno             */
 .glass-card {
     -fx-background-color: rgba(20, 16, 48, 0.55);
-    -fx-background-radius: 20;
+    -fx-background-radius: 1.4em;
     -fx-border-color: rgba(140, 120, 255, 0.30);
-    -fx-border-radius: 20;
-    -fx-border-width: 1;
-    -fx-effect: dropshadow(gaussian, rgba(80, 60, 200, 0.35), 60, 0.2, 0, 8);
+    -fx-border-radius: 1.4em;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(80, 60, 200, 0.35),
+            60,
+            0.2,
+            0,
+            8
+    );
     -fx-padding: 0;
 }
 
@@ -44,68 +51,78 @@
             #6a5aff 80%,
             transparent 100%
     );
-    -fx-background-radius: 2;
+
+    -fx-background-radius: 0.15em;
     -fx-effect: dropshadow(gaussian, #7b6bff, 12, 0.8, 0, 0);
-    -fx-min-width: 280;
-    -fx-max-width: 280;
-    -fx-pref-height: 3;
-    -fx-translate-y: 0;
+
+    -fx-min-width: 0;
+    -fx-pref-width: 20em;
+    -fx-max-width: 20em;
+
+    -fx-min-height: 0.2em;
+    -fx-pref-height: 0.2em;
+    -fx-max-height: 0.2em;
 }
 
 /* ── Card inner padding ─────────────────────────────────────── */
 .card-inner {
-    -fx-padding: 32 44 36 44;
+    -fx-padding: 2.3em 3.15em 2.6em 3.15em;
     -fx-spacing: 0;
 }
 
 /* ── Typography ─────────────────────────────────────────────── */
 .title-label {
     -fx-text-fill: #ffffff;
-    -fx-font-size: 28px;
+    -fx-font-size: 2em;
     -fx-font-weight: bold;
     -fx-font-family: "Segoe UI";
-    -fx-padding: 18 0 6 0;
+    -fx-padding: 0.65em 0 0.2em 0;
     -fx-alignment: CENTER;
 }
 
 .subtitle-label {
     -fx-text-fill: rgba(200, 195, 230, 0.80);
-    -fx-font-size: 14px;
+    -fx-font-size: 1em;
     -fx-font-family: "Segoe UI";
-    -fx-padding: 0 0 28 0;
+    -fx-padding: 0 0 2em 0;
     -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }
 
 /* ── Fields ─────────────────────────────────────────────────── */
 .fields-wrap {
-    -fx-padding: 0 0 8 0;
+    -fx-padding: 0 0 0.6em 0;
     -fx-spacing: 0;
 }
 
 .field-group {
-    -fx-padding: 0 0 18 0;
-    -fx-spacing: 6;
+    -fx-padding: 0 0 1.3em 0;
+    -fx-spacing: 0.45em;
 }
 
 .field-label {
     -fx-text-fill: rgba(220, 215, 240, 0.90);
-    -fx-font-size: 13px;
-    -fx-font-weight: normal;
+    -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
 }
 
 .input-field {
+    -fx-min-height: 3.15em;
+    -fx-pref-height: 3.57em;
+    -fx-max-height: 3.57em;
+
     -fx-background-color: rgba(255, 255, 255, 0.08);
-    -fx-background-radius: 12;
+    -fx-background-radius: 0.85em;
     -fx-border-color: rgba(160, 140, 255, 0.20);
-    -fx-border-radius: 12;
-    -fx-border-width: 1;
+    -fx-border-radius: 0.85em;
+    -fx-border-width: 1px;
+
     -fx-text-fill: #ffffff;
     -fx-prompt-text-fill: rgba(160, 155, 195, 0.60);
-    -fx-font-size: 14px;
+
+    -fx-font-size: 1em;
     -fx-font-family: "Segoe UI";
-    -fx-padding: 13 16 13 16;
-    -fx-pref-height: 50px;
+    -fx-padding: 0.9em 1.15em;
 }
 
 .input-field:focused {
@@ -124,24 +141,28 @@
 
 .error-label {
     -fx-text-fill: #ff7a7a;
-    -fx-font-size: 11px;
+    -fx-font-size: 0.8em;
     -fx-font-family: "Segoe UI";
+
+    -fx-min-height: 1.45em;
+    -fx-pref-height: 1.45em;
+    -fx-max-height: 1.45em;
 }
 
 /* ── Password toggle ─────────────────────────────────────────── */
 .pw-toggle-wrap {
     -fx-cursor: hand;
-    -fx-padding: 0 0 0 8;
+    -fx-padding: 0 0 0 0.55em;
 }
 
 .pw-toggle-icon {
     -fx-text-fill: rgba(120, 110, 200, 0.85);
-    -fx-font-size: 14px;
+    -fx-font-size: 1em;
 }
 
 .pw-toggle-text {
     -fx-text-fill: rgba(120, 110, 200, 0.85);
-    -fx-font-size: 13px;
+    -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
 }
 
@@ -153,15 +174,28 @@
 /* ── Action Button (Login / Register dugme) ──────────────────── */
 .action-btn {
     -fx-background-color: linear-gradient(to right, #4a5fff, #5b6fff);
-    -fx-background-radius: 28;
+    -fx-background-radius: 1.75em;
     -fx-text-fill: #ffffff;
-    -fx-font-size: 16px;
+
+    -fx-font-size: 1.14em;
     -fx-font-weight: bold;
     -fx-font-family: "Segoe UI";
     -fx-cursor: hand;
-    -fx-pref-height: 54px;
+
+    -fx-min-height: 2.75em;
+    -fx-pref-height: 3.375em;
+    -fx-max-height: 3.375em;
+
     -fx-padding: 0;
-    -fx-effect: dropshadow(gaussian, rgba(74, 95, 255, 0.55), 20, 0.3, 0, 4);
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(74, 95, 255, 0.55),
+            20,
+            0.3,
+            0,
+            4
+    );
+
     -fx-border-color: transparent;
     -fx-border-width: 0;
 }
@@ -188,19 +222,19 @@
 
 /* ── Bottom navigation row (Register here / Back to login) ───── */
 .bottom-row {
-    -fx-padding: 20 0 0 0;
+    -fx-padding: 1.4em 0 0 0;
     -fx-alignment: CENTER;
 }
 
 .bottom-text {
     -fx-text-fill: rgba(200, 195, 230, 0.75);
-    -fx-font-size: 13px;
+    -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
 }
 
 .bottom-link {
     -fx-text-fill: rgba(160, 150, 255, 0.95);
-    -fx-font-size: 13px;
+    -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
     -fx-border-color: transparent;
     -fx-padding: 0;

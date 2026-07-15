@@ -1,12 +1,14 @@
 package com.fittrack.controller;
 
+import com.fittrack.model.User;
+import com.fittrack.service.auth.AuthenticationResult;
+import com.fittrack.service.auth.AuthenticationService;
 import com.fittrack.util.AppConstants;
-import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
+import javafx.scene.layout.StackPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,11 +32,18 @@ public class LoginController extends FormController implements Initializable {
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button loginButton;
+    @FXML private StackPane rootPane;
+
+    private final AuthenticationService authenticationService = new AuthenticationService();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Load background image
         setBackgroundImage(backgroundImage);
+
+        backgroundImage.fitWidthProperty().bind(rootPane.widthProperty());
+        backgroundImage.fitHeightProperty().bind(rootPane.heightProperty());
+        backgroundImage.setPreserveRatio(false);
 
         // Sync password fields on type
         initPasswordToggle(passwordField, passwordVisible);
@@ -62,13 +71,13 @@ public class LoginController extends FormController implements Initializable {
         boolean valid = true;
 
         if (!isValidEmail(email)) {
-            showEmailError();
+            showEmailError("Enter a valid email address.");
             shake(emailField);
             valid = false;
         }
 
         if (password.length() < AppConstants.Validation.MIN_PASSWORD_LENGTH) {
-            showPasswordError();
+            showPasswordError("Password must be 8 or more characters.");
             shake(passwordShowing ? passwordVisible : passwordField);
             valid = false;
         }
@@ -78,10 +87,41 @@ public class LoginController extends FormController implements Initializable {
         loginButton.setDisable(true);
         loginButton.setText("Logging in...");
 
-        // Simulate async login — replace with real auth logic
-        PauseTransition delay = new PauseTransition(Duration.millis(1000));
-        delay.setOnFinished(e -> onLoginSuccess());
-        delay.play();
+        try {
+            AuthenticationResult result = authenticationService.login(email, password);
+
+            switch (result.status()) {
+                case SUCCESS -> {
+                    User user = result.user();
+
+                    // Kasnije:
+                    // UserSession.setCurrentUser(user);
+
+                    log.info("Logged in successfully: {}", user.getEmail());
+
+                    navigateTo(AppConstants.Views.DASHBOARD);
+                }
+
+                case USER_NOT_FOUND -> {
+                    showEmailError("No account exists with this email.");
+                    shake(emailField);
+
+                    loginButton.setDisable(false);
+                    loginButton.setText("Log in");
+                }
+
+                case WRONG_PASSWORD -> {
+                    showPasswordError("Incorrect password.");
+                    shake(passwordShowing ? passwordVisible : passwordField);
+
+                    loginButton.setDisable(false);
+                    loginButton.setText("Log in");
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            log.error("Database error during login", e);
+            resetLoginButton();
+        }
     }
 
     // ── Register action ─────────────────────────────────────────
@@ -92,14 +132,9 @@ public class LoginController extends FormController implements Initializable {
         navigateTo(AppConstants.Views.REGISTER);
     }
 
-    // ── Success callback ────────────────────────────────────────
-    private void onLoginSuccess() {
-        // TODO: load dashboard-view.fxml
-        onActionSuccess(loginButton, "Login successful!", "Log in");
-    }
-
-    // ── Helpers ─────────────────────────────────────────────────
-    private void showEmailError() {
+    // ── Email Helpers ─────────────────────────────────────────────────
+    private void showEmailError(String message) {
+        emailError.setText(message);
         setFieldError(emailField, emailError, true);
     }
 
@@ -107,7 +142,9 @@ public class LoginController extends FormController implements Initializable {
         setFieldError(emailField, emailError, false);
     }
 
-    private void showPasswordError() {
+    // ── Password Helpers ─────────────────────────────────────────────────
+    private void showPasswordError(String message) {
+        passwordError.setText(message);
         setFieldError(passwordField,   passwordError, true);
         setFieldError(passwordVisible, passwordError, true);
     }
@@ -115,5 +152,11 @@ public class LoginController extends FormController implements Initializable {
     private void clearPasswordError() {
         setFieldError(passwordField,   passwordError, false);
         setFieldError(passwordVisible, passwordError, false);
+    }
+
+    // ── Login Button Helpers ─────────────────────────────────────────────────
+    private void resetLoginButton() {
+        loginButton.setDisable(false);
+        loginButton.setText("Log in");
     }
 }
