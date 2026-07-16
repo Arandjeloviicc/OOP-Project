@@ -9,6 +9,7 @@ public final class AppConstants {
         private Images() {}
 
         public static final String LOGIN_REGISTER_BG = "login-register-bg-2.png";
+        public static final String APP_ICON = "app-logo-transparent-2.png";
     }
 
     public static final class Views {

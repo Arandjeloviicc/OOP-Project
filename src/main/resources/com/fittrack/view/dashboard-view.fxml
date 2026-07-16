@@ -1,6 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
+<BorderPane fx:id="rootPane" prefHeight="119.0" prefWidth="192.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<!--            fx:controller="com.fittrack.controller.DashboardController"-->
+            <!-- stylesheets="@../css/dashboard-view.css" -->
+            <!-- styleClass="dashboard-root">-->
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" />
+    <top>
+        <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">
+
+            <!-- Logo / naslov -->
+
+            <Region prefHeight="0.0" prefWidth="192.0" HBox.hgrow="ALWAYS" />
+
+            <!-- Theme, profile, logout -->
+
+        </HBox>
+    </top>
+
+    <left>
+        <VBox styleClass="sidebar">
+
+            <!-- Dashboard -->
+            <!-- Workouts -->
+            <!-- Nutrition -->
+            <!-- Weight -->
+            <!-- Profile -->
+
+        </VBox>
+    </left>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="dashboard-scroll">
+
+            <VBox styleClass="dashboard-content">
+
+                <!-- Welcome sekcija -->
+
+                <HBox styleClass="summary-cards">
+
+                    <!-- Kartice -->
+
+                </HBox>
+
+                <!-- Grafikoni i ostali sadržaj -->
+
+            </VBox>
+
+        </ScrollPane>
+    </center>
+
+</BorderPane>
