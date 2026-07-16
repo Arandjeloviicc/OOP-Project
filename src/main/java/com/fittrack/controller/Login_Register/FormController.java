@@ -1,5 +1,6 @@
-package com.fittrack.controller;
+package com.fittrack.controller.Login_Register;
 
+import com.fittrack.controller.BaseController;
 import com.fittrack.util.AppConstants;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.*;
@@ -86,6 +87,32 @@ public abstract class FormController extends BaseController {
             }
         } else {
             field.getStyleClass().removeAll("error");
+        }
+    }
+
+    // ── Field messages ────────────────────────────────────────────
+    protected void setFieldMessage(Label messageLabel, String message, boolean error, Control... fields) {
+        messageLabel.setText(message);
+        messageLabel.setVisible(true);
+        messageLabel.setManaged(true);
+
+        messageLabel.getStyleClass().removeAll(
+                "helper-label",
+                "error-label"
+        );
+
+        messageLabel.getStyleClass().add(
+                error ? "error-label" : "helper-label"
+        );
+
+        for (Control field : fields) {
+            if (error) {
+                if (!field.getStyleClass().contains("error")) {
+                    field.getStyleClass().add("error");
+                }
+            } else {
+                field.getStyleClass().removeAll("error");
+            }
         }
     }
 

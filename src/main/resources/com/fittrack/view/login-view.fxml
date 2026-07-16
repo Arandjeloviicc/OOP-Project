@@ -18,7 +18,7 @@
         stylesheets="@../css/login-view.css"
         xmlns="http://javafx.com/javafx/22"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.fittrack.controller.LoginController">
+        fx:controller="com.fittrack.controller.Login_Register.LoginController">
 
     <!-- Background image layer -->
     <ImageView fx:id="backgroundImage"
@@ -38,9 +38,6 @@
               maxHeight="-Infinity"
               styleClass="glass-card"
               StackPane.alignment="CENTER">
-
-            <!-- Neon line -->
-            <Pane styleClass="neon-line"/>
 
             <VBox alignment="TOP_CENTER" styleClass="card-inner">
 

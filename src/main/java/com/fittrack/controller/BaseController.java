@@ -7,7 +7,7 @@ public abstract class BaseController {
 
     protected abstract Logger getLogger();
 
-    protected void navigateTo(String fxml) {
-        SceneManager.switchTo(fxml);
+    protected <T> T navigateTo(String fxml) {
+        return SceneManager.switchTo(fxml);
     }
 }

@@ -41,29 +41,6 @@
     -fx-padding: 0;
 }
 
-/* ── Neon accent line ───────────────────────────────────────── */
-.neon-line {
-    -fx-background-color: linear-gradient(
-            to right,
-            transparent 0%,
-            #6a5aff 20%,
-            #7b6bff 50%,
-            #6a5aff 80%,
-            transparent 100%
-    );
-
-    -fx-background-radius: 0.15em;
-    -fx-effect: dropshadow(gaussian, #7b6bff, 12, 0.8, 0, 0);
-
-    -fx-min-width: 0;
-    -fx-pref-width: 20em;
-    -fx-max-width: 20em;
-
-    -fx-min-height: 0.2em;
-    -fx-pref-height: 0.2em;
-    -fx-max-height: 0.2em;
-}
-
 /* ── Card inner padding ─────────────────────────────────────── */
 .card-inner {
     -fx-padding: 2.3em 3.15em 2.6em 3.15em;
@@ -137,6 +114,16 @@
 
 .input-field.error {
     -fx-border-color: rgba(255, 80, 80, 0.70);
+}
+
+.helper-label {
+    -fx-text-fill: rgba(180, 175, 210, 0.65);
+    -fx-font-size: 0.8em;
+    -fx-font-family: "Segoe UI";
+
+    -fx-min-height: 1.45em;
+    -fx-pref-height: 1.45em;
+    -fx-max-height: 1.45em;
 }
 
 .error-label {

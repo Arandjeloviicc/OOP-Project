@@ -1,4 +1,4 @@
-package com.fittrack.controller;
+package com.fittrack.controller.Login_Register;
 
 import com.fittrack.model.User;
 import com.fittrack.service.auth.AuthenticationResult;
@@ -71,13 +71,13 @@ public class LoginController extends FormController implements Initializable {
         boolean valid = true;
 
         if (!isValidEmail(email)) {
-            showEmailError("Enter a valid email address.");
+            showEmailError(AppConstants.Messages.INVALID_EMAIL_MESSAGE);
             shake(emailField);
             valid = false;
         }
 
         if (password.length() < AppConstants.Validation.MIN_PASSWORD_LENGTH) {
-            showPasswordError("Password must be 8 or more characters.");
+            showPasswordError(AppConstants.Messages.INVALID_PASSWORD_MESSAGE);
             shake(passwordShowing ? passwordVisible : passwordField);
             valid = false;
         }
@@ -127,9 +127,13 @@ public class LoginController extends FormController implements Initializable {
     // ── Register action ─────────────────────────────────────────
     @FXML
     private void handleRegister() {
-        // TODO: load register-view.fxml into the current scene
+        String enteredEmail = emailField.getText().trim();
+
         log.info("Navigate to register");
-        navigateTo(AppConstants.Views.REGISTER);
+
+        RegisterController registerController = navigateTo(AppConstants.Views.REGISTER);
+
+        registerController.prefillEmail(enteredEmail);
     }
 
     // ── Email Helpers ─────────────────────────────────────────────────
@@ -140,6 +144,12 @@ public class LoginController extends FormController implements Initializable {
 
     private void clearEmailError() {
         setFieldError(emailField, emailError, false);
+    }
+
+    public void prefillEmail(String email) {
+        if(email != null && !email.isBlank()) {
+            emailField.setText(email);
+        }
     }
 
     // ── Password Helpers ─────────────────────────────────────────────────

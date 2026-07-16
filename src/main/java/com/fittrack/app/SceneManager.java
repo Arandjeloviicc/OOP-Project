@@ -17,7 +17,7 @@ public class SceneManager {
         stage = s;
     }
 
-    public static void switchTo(String fxml) {
+    public static <T> T switchTo(String fxml) {
         try {
             URL resource = SceneManager.class.getResource(
                     "/com/fittrack/view/" + fxml
@@ -31,12 +31,19 @@ public class SceneManager {
             }
 
             FXMLLoader loader = new FXMLLoader(resource);
-
             Parent root = loader.load();
+
+            T controller = loader.getController();
+
             stage.getScene().setRoot(root);
+
+            return controller;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalStateException(
+                    "Failed to load FXML: " + fxml,
+                    e
+            );
         }
     }
 }

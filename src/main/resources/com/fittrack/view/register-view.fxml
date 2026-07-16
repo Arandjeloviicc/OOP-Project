@@ -18,7 +18,7 @@
         stylesheets="@../css/register-view.css"
         xmlns="http://javafx.com/javafx/22"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.fittrack.controller.RegisterController">
+        fx:controller="com.fittrack.controller.Login_Register.RegisterController">
 
     <!-- Background image layer -->
     <ImageView fx:id="backgroundImage"
@@ -39,13 +39,11 @@
               styleClass="glass-card"
               StackPane.alignment="CENTER">
 
-            <!-- Neon accent line at top of card -->
-            <Pane styleClass="neon-line" />
-
             <VBox alignment="TOP_CENTER" styleClass="card-inner">
 
                 <!-- Title -->
-                <Label styleClass="title-label" text="Start your journey" />
+                <Label styleClass="title-label"
+                       text="Start your journey" />
 
                 <!-- Subtitle -->
                 <Label maxWidth="Infinity"
@@ -59,28 +57,32 @@
 
                     <!-- Username -->
                     <VBox styleClass="field-group">
-                        <Label styleClass="field-label" text="Username" />
+                        <Label styleClass="field-label"
+                               text="Username" />
+
                         <TextField fx:id="usernameField"
                                    maxWidth="Infinity"
                                    promptText="Enter your username"
                                    styleClass="input-field" />
-                        <Label fx:id="usernameError"
-                               styleClass="error-label"
-                               text="Please enter a valid username"
-                               visible="false" />
+
+                        <Label fx:id="usernameMessage"
+                               styleClass="helper-label"
+                               text="3–20 characters; start with a letter."/>
                     </VBox>
 
                     <!-- Email -->
                     <VBox styleClass="field-group">
-                        <Label styleClass="field-label" text="Email"/>
+                        <Label styleClass="field-label"
+                               text="Email"/>
+
                         <TextField fx:id="emailField"
                                    maxWidth="Infinity"
                                    promptText="Enter your email"
                                    styleClass="input-field"/>
-                        <Label fx:id="emailError"
-                               styleClass="error-label"
-                               text="Please enter a valid email"
-                               visible="false"/>
+
+                        <Label fx:id="emailMessage"
+                               styleClass="helper-label"
+                               text="Use a valid address, e.g. name@example.com."/>
                     </VBox>
 
                     <!-- Password -->
@@ -109,10 +111,9 @@
                                        visible="false" />
                         </StackPane>
 
-                        <Label fx:id="passwordError"
-                               styleClass="error-label"
-                               text="Password must be at least 8 characters"
-                               visible="false" />
+                        <Label fx:id="passwordMessage"
+                               styleClass="helper-label"
+                               text="At least 8 characters"/>
                     </VBox>
 
                 </VBox>

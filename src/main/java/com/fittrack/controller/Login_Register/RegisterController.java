@@ -1,4 +1,4 @@
-package com.fittrack.controller;
+package com.fittrack.controller.Login_Register;
 
 import com.fittrack.model.User;
 import com.fittrack.service.auth.RegistrationResult;
@@ -29,9 +29,9 @@ public class RegisterController extends FormController implements Initializable 
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordVisible;
-    @FXML private Label usernameError;
-    @FXML private Label emailError;
-    @FXML private Label passwordError;
+    @FXML private Label usernameMessage;
+    @FXML private Label emailMessage;
+    @FXML private Label passwordMessage;
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button registerButton;
@@ -52,10 +52,10 @@ public class RegisterController extends FormController implements Initializable 
         initPasswordToggle(passwordField, passwordVisible);
 
         // Clear errors on type
-        usernameField.textProperty().addListener((obs, old, val) -> clearUsernameError());
-        emailField.textProperty().addListener((obs, old, val) -> clearEmailError());
-        passwordField.textProperty().addListener((obs, old, val) -> clearPasswordError());
-        passwordVisible.textProperty().addListener((obs, old, val) -> clearPasswordError());
+        usernameField.textProperty().addListener((obs, old, val) -> restoreUsernameHelper());
+        emailField.textProperty().addListener((obs, old, val) -> restoreEmailHelper());
+        passwordField.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
+        passwordVisible.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
     }
 
     // ── Toggle password visibility ──────────────────────────────
@@ -76,19 +76,19 @@ public class RegisterController extends FormController implements Initializable 
         boolean valid = true;
 
         if(!isValidUsername(username)) {
-            showUsernameError("Username must contain 3–20 letters, numbers or underscores.");
+            showUsernameMessage(AppConstants.Messages.INVALID_USERNAME_MESSAGE);
             shake(usernameField);
             valid = false;
         }
 
         if (!isValidEmail(email)) {
-            showEmailError("Enter a valid email address.");
+            showEmailMessage(AppConstants.Messages.INVALID_EMAIL_MESSAGE);
             shake(emailField);
             valid = false;
         }
 
         if (password.length() < AppConstants.Validation.MIN_PASSWORD_LENGTH) {
-            showPasswordError();
+            showPasswordMessage(AppConstants.Messages.INVALID_PASSWORD_MESSAGE);
             shake(passwordShowing ? passwordVisible : passwordField);
             valid = false;
         }
@@ -115,13 +115,13 @@ public class RegisterController extends FormController implements Initializable 
                 }
 
                 case USERNAME_TAKEN -> {
-                    showUsernameError("This username is already taken.");
+                    showUsernameMessage("This username is already taken.");
                     shake(usernameField);
                     resetRegisterButton();
                 }
 
                 case EMAIL_TAKEN -> {
-                    showEmailError("An account with this email already exists.");
+                    showEmailMessage("An account with this email already exists.");
                     shake(emailField);
                     resetRegisterButton();
                 }
@@ -138,14 +138,21 @@ public class RegisterController extends FormController implements Initializable 
     //  ── Login action ──────────────────────────────
     @FXML
     public void handleLogin() {
-        // TODO: Logika za pamcenje podataka kada se vratim na login
+        String enteredEmail = emailField.getText().trim();
+
         log.info("Navigate to login");
-        navigateTo(AppConstants.Views.LOGIN);
+
+        LoginController loginController = navigateTo(AppConstants.Views.LOGIN);
+
+        loginController.prefillEmail(enteredEmail);
     }
 
     // ── Helpers ─────────────────────────────────────────────────
     private static final Pattern USERNAME_PATTERN = Pattern.compile(
-            "^[a-zA-Z][a-zA-Z0-9_]{2,19}$"
+            "^[a-zA-Z][a-zA-Z0-9_]{%d,%d}$".formatted(
+                    AppConstants.Validation.MIN_USERNAME_LENGTH - 1,
+                    AppConstants.Validation.MAX_USERNAME_LENGTH - 1
+            )
     );
 
     // ── Username Helpers ─────────────────────────────────────────────────
@@ -154,34 +161,36 @@ public class RegisterController extends FormController implements Initializable 
         return USERNAME_PATTERN.matcher(username).matches();
     }
 
-    private void showUsernameError(String message) {
-        usernameError.setText(message);
-        setFieldError(usernameField, usernameError, true);
+    private void showUsernameMessage(String message) {
+        setFieldMessage(usernameMessage, message, true, usernameField);
     }
 
-    private void clearUsernameError() {
-        setFieldError(usernameField, usernameError, false);
+    private void restoreUsernameHelper() {
+        setFieldMessage(usernameMessage, "%d–%d characters; start with a letter.".formatted(AppConstants.Validation.MIN_USERNAME_LENGTH, AppConstants.Validation.MAX_USERNAME_LENGTH), false, usernameField);
     }
 
     // ── Email Helpers ─────────────────────────────────────────────────
-    private void showEmailError(String message) {
-        emailError.setText(message);
-        setFieldError(emailField, emailError, true);
+    private void showEmailMessage(String message) {
+        setFieldMessage(emailMessage, message, true, emailField);
     }
 
-    private void clearEmailError() {
-        setFieldError(emailField, emailError, false);
+    private void restoreEmailHelper() {
+        setFieldMessage(emailMessage, "Use a valid address, e.g. name@example.com.", false, emailField);
+    }
+
+    public void prefillEmail(String email) {
+        if(email != null && !email.isBlank()) {
+            emailField.setText(email);
+        }
     }
 
     // ── Password Helpers ─────────────────────────────────────────────────
-    private void showPasswordError() {
-        setFieldError(passwordField,   passwordError, true);
-        setFieldError(passwordVisible, passwordError, true);
+    private void showPasswordMessage(String message) {
+        setFieldMessage(passwordMessage, message, true, passwordField, passwordVisible);
     }
 
-    private void clearPasswordError() {
-        setFieldError(passwordField,   passwordError, false);
-        setFieldError(passwordVisible, passwordError, false);
+    private void restorePasswordHelper() {
+        setFieldMessage(passwordMessage, "At least %d characters".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH), false, passwordField, passwordVisible);
     }
 
     // ── Register Button Helpers ─────────────────────────────────────────────────
