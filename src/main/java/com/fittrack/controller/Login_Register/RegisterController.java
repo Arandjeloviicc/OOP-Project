@@ -88,7 +88,7 @@ public class RegisterController extends FormController implements Initializable 
         }
 
         if (password.length() < AppConstants.Validation.MIN_PASSWORD_LENGTH) {
-            showPasswordMessage(AppConstants.Messages.INVALID_PASSWORD_MESSAGE);
+            showPasswordMessage();
             shake(passwordShowing ? passwordVisible : passwordField);
             valid = false;
         }
@@ -106,12 +106,11 @@ public class RegisterController extends FormController implements Initializable 
                 case SUCCESS -> {
                     User user = result.user();
 
-                    // Kasnije:
                     // UserSession.setCurrentUser(user);
 
                     log.info("User registered successfully: {}", user.getEmail());
 
-                    navigateTo(AppConstants.Views.DASHBOARD);
+                    navigateTo(AppConstants.Views.PROFILE_SETUP);
                 }
 
                 case USERNAME_TAKEN -> {
@@ -166,7 +165,7 @@ public class RegisterController extends FormController implements Initializable 
     }
 
     private void restoreUsernameHelper() {
-        setFieldMessage(usernameMessage, "%d–%d characters; start with a letter.".formatted(AppConstants.Validation.MIN_USERNAME_LENGTH, AppConstants.Validation.MAX_USERNAME_LENGTH), false, usernameField);
+        setFieldMessage(usernameMessage, AppConstants.Messages.HELPER_USERNAME_MESSAGE, false, usernameField);
     }
 
     // ── Email Helpers ─────────────────────────────────────────────────
@@ -175,7 +174,7 @@ public class RegisterController extends FormController implements Initializable 
     }
 
     private void restoreEmailHelper() {
-        setFieldMessage(emailMessage, "Use a valid address, e.g. name@example.com.", false, emailField);
+        setFieldMessage(emailMessage, AppConstants.Messages.HELPER_USERNAME_MESSAGE, false, emailField);
     }
 
     public void prefillEmail(String email) {
@@ -185,12 +184,12 @@ public class RegisterController extends FormController implements Initializable 
     }
 
     // ── Password Helpers ─────────────────────────────────────────────────
-    private void showPasswordMessage(String message) {
-        setFieldMessage(passwordMessage, message, true, passwordField, passwordVisible);
+    private void showPasswordMessage() {
+        setFieldMessage(passwordMessage, AppConstants.Messages.INVALID_PASSWORD_MESSAGE, true, passwordField, passwordVisible);
     }
 
     private void restorePasswordHelper() {
-        setFieldMessage(passwordMessage, "At least %d characters".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH), false, passwordField, passwordVisible);
+        setFieldMessage(passwordMessage, AppConstants.Messages.HELPER_PASSWORD_MESSAGE, false, passwordField, passwordVisible);
     }
 
     // ── Register Button Helpers ─────────────────────────────────────────────────

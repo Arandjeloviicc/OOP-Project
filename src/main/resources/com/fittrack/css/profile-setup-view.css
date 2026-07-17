@@ -1,0 +1,158 @@
+@import "base-view.css";
+
+.root {
+    -fx-background-color: #120d2b;
+    -fx-font-size: 14px;
+}
+
+.setup-surface {
+    -fx-background-color: transparent;
+    -fx-padding: 3em 4em;
+}
+
+.setup-form {
+    -fx-spacing: 0.65em;
+    -fx-min-width: 0;
+    -fx-pref-width: 28em;
+    -fx-max-width: 28em;
+}
+
+.setup-title {
+    -fx-text-fill: white;
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+}
+
+.setup-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.65);
+    -fx-font-size: 1em;
+    -fx-padding: 0 0 1.25em 0;
+}
+
+.form-control {
+    -fx-min-height: 3.6em;
+    -fx-pref-height: 3.6em;
+    -fx-max-height: 3.6em;
+
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 0.8em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.45);
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.8em;
+
+    -fx-font-size: 1em;
+}
+
+.step-label {
+    -fx-text-fill: rgba(160, 150, 255, 0.85);
+    -fx-font-size: 0.85em;
+    -fx-font-weight: bold;
+}
+
+/* Date of birth DatePicker */
+.date-picker-field {
+    -fx-padding: 0;
+}
+
+/* Inside text field */
+.date-picker-field > .text-field {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.8em 0 0 0.8em;
+
+    -fx-border-color: transparent;
+    -fx-padding: 0 1.1em;
+
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.38);
+}
+
+/* Button with calendar */
+.date-picker-field > .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 0.8em 0.8em 0;
+    -fx-padding: 0 1em;
+    -fx-cursor: hand;
+}
+
+.date-picker-field > .arrow-button:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.15);
+}
+
+/* Calendar icon */
+.date-picker-field > .arrow-button > .arrow {
+    -fx-background-color: rgba(255, 255, 255, 0.65);
+}
+
+/* On error */
+.date-picker-field.error {
+    -fx-border-color: rgba(255, 80, 80, 0.70);
+}
+
+/* Gender ComboBox */
+.gender-options {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.gender-option {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.35);
+    -fx-border-radius: 0.7em;
+
+    -fx-text-fill: rgba(255, 255, 255, 0.72);
+    -fx-padding: 0.8em 1.4em;
+
+    -fx-cursor: hand;
+}
+
+.gender-option:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.15);
+}
+
+.gender-option:selected {
+    -fx-background-color: #7656d9;
+    -fx-border-color: #987aff;
+    -fx-text-fill: white;
+}
+
+.gender-option.error {
+    -fx-border-color: rgba(255, 80, 80, 0.70);
+}
+
+/* Next step Button */
+.next-step-row {
+    -fx-padding: 1.5em 0 0 0;
+}
+
+/* Back Button */
+.back-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.35);
+    -fx-border-radius: 1em;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: rgba(220, 215, 240, 0.80);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-min-height: 3.375em;
+    -fx-pref-height: 3.375em;
+    -fx-max-height: 3.375em;
+
+    -fx-cursor: hand;
+}
+
+.back-btn:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.12);
+    -fx-border-color: rgba(143, 107, 255, 0.65);
+    -fx-text-fill: white;
+}
+
+.back-btn:pressed {
+    -fx-background-color: rgba(143, 107, 255, 0.20);
+}

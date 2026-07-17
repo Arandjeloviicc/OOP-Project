@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.ScrollPane?>
+
+<StackPane fx:id="rootPane"
+           styleClass="root"
+           stylesheets="@../css/profile-setup-view.css"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.ProfileSetupController">
+
+    <!-- If the window is too small, scroll will be added -->
+    <ScrollPane fitToWidth="true"
+                fitToHeight="true"
+                hbarPolicy="NEVER"
+                styleClass="setup-scroll">
+
+        <StackPane styleClass="setup-scroll-content">
+
+            <StackPane styleClass="setup-surface">
+
+                <VBox fx:id="personalInfoStep"
+                      alignment="CENTER_LEFT"
+                      maxHeight="-Infinity"
+                      styleClass="setup-form">
+
+                    <!-- Step -->
+                    <Label text="Step 1 of 2"
+                           styleClass="step-label"/>
+
+                    <!-- Title -->
+                    <Label text="Personal information"
+                           styleClass="setup-title"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!-- Subtitle -->
+                    <Label text="Fill in your details to set up your profile."
+                           styleClass="setup-subtitle"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!-- First name -->
+                    <Label styleClass="field-label"
+                           text="First name"/>
+
+                    <TextField fx:id="firstNameField"
+                               maxWidth="Infinity"
+                               promptText="Enter your first name"
+                               styleClass="input-field"/>
+
+                    <Label fx:id="firstNameMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!-- Last name -->
+                    <Label styleClass="field-label"
+                           text="Last name"/>
+
+                    <TextField fx:id="lastNameField"
+                               maxWidth="Infinity"
+                               promptText="Enter your last name"
+                               styleClass="input-field"/>
+
+                    <Label fx:id="lastNameMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!-- Date of birth -->
+                    <Label styleClass="field-label"
+                           text="Date of birth"/>
+
+                    <DatePicker fx:id="dateOfBirthPicker"
+                                maxWidth="Infinity"
+                                promptText="Select your date of birth"
+                                styleClass="form-control,date-picker-field"/>
+
+                    <Label fx:id="dateOfBirthMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!-- Gender -->
+                    <Label styleClass="field-label"
+                           text="Gender"/>
+
+                    <fx:define>
+                        <ToggleGroup fx:id="genderGroup"/>
+                    </fx:define>
+
+                    <HBox spacing="10"
+                          styleClass="gender-options">
+
+                        <ToggleButton fx:id="maleButton"
+                                      text="Male"
+                                      userData="MALE"
+                                      toggleGroup="$genderGroup"
+                                      styleClass="gender-option"
+                                      selected="true"/>
+
+                        <ToggleButton fx:id="femaleButton"
+                                      text="Female"
+                                      userData="FEMALE"
+                                      toggleGroup="$genderGroup"
+                                      styleClass="gender-option"/>
+
+                    </HBox>
+
+                    <GridPane maxWidth="Infinity"
+                              styleClass="next-step-row">
+
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <Button fx:id="nextButton"
+                                GridPane.columnIndex="0"
+                                maxWidth="Infinity"
+                                onAction="#handleNext"
+                                styleClass="action-btn"
+                                text="Next step"/>
+
+                    </GridPane>
+
+                </VBox>
+
+                <VBox fx:id="fitnessGoalsStep"
+                      alignment="CENTER_LEFT"
+                      maxHeight="-Infinity"
+                      styleClass="setup-form"
+                      visible="false">
+
+                    <!-- Drugi deo -->
+                    <GridPane maxWidth="Infinity">
+
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="10"/>
+                            <ColumnConstraints percentWidth="90"/>
+                        </columnConstraints>
+
+                        <Button fx:id="backButton"
+                                GridPane.columnIndex="0"
+                                maxWidth="Infinity"
+                                onAction="#handleBack"
+                                styleClass="back-btn"
+                                text="←"/>
+
+                    </GridPane>
+
+                    <!-- Step -->
+                    <Label text="Step 2 of 2"
+                           styleClass="step-label"/>
+
+                    <!-- Title -->
+                    <Label text="Fitness goals"
+                           styleClass="setup-title"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!-- Subtitle -->
+                    <Label text="Set your starting measurements and define your target."
+                           styleClass="setup-subtitle"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
+                    <!--                <Button fx:id="submitButton"-->
+                    <!--                        maxWidth="Infinity"-->
+                    <!--                        onAction="#handleSubmit"-->
+                    <!--                        styleClass="action-btn"-->
+                    <!--                        text="Submit"-->
+                    <!--                        visible="false"/>-->
+
+                </VBox>
+
+            </StackPane>
+
+        </StackPane>
+
+    </ScrollPane>
+
+</StackPane>

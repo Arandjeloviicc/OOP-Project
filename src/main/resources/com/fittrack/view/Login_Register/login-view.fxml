@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.ScrollPane?>
+<StackPane
+        fx:id="rootPane"
+        styleClass="root"
+        stylesheets="@../../css/login-view.css"
+        xmlns="http://javafx.com/javafx/22"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.fittrack.controller.Login_Register.LoginController">
+
+    <!-- Background image layer -->
+    <ImageView fx:id="backgroundImage"
+               styleClass="bg-image"
+               StackPane.alignment="CENTER"/>
+
+    <!-- Dark overlay -->
+    <Pane maxHeight="Infinity"
+          maxWidth="Infinity"
+          styleClass="bg-overlay"
+          StackPane.alignment="CENTER"/>
+
+    <!-- If the window is too small, scroll will be added -->
+    <ScrollPane fitToWidth="true"
+                fitToHeight="true"
+                hbarPolicy="NEVER"
+                styleClass="setup-scroll">
+
+        <StackPane styleClass="setup-scroll-content">
+
+            <StackPane styleClass="content-layer">
+
+                <!-- Glass card -->
+                <VBox alignment="TOP_CENTER"
+                      maxHeight="-Infinity"
+                      styleClass="glass-card"
+                      StackPane.alignment="CENTER">
+
+                    <VBox alignment="TOP_CENTER"
+                          styleClass="card-inner">
+
+                        <!-- Title -->
+                        <Label styleClass="title-label"
+                               wrapText="true"
+                               maxWidth="Infinity"
+                               textAlignment="CENTER"
+                               text="Track your progress"/>
+
+                        <!-- Subtitle -->
+                        <Label maxWidth="Infinity"
+                               styleClass="subtitle-label"
+                               text="Log in to continue your fitness journey."
+                               textAlignment="CENTER"
+                               wrapText="true"/>
+
+                        <!-- Fields -->
+                        <VBox styleClass="fields-wrap">
+
+                            <!-- Email -->
+                            <VBox styleClass="field-group">
+                                <Label styleClass="field-label" text="Email"/>
+                                <TextField fx:id="emailField"
+                                           maxWidth="Infinity"
+                                           promptText="Enter your email"
+                                           styleClass="input-field"/>
+                                <Label fx:id="emailError"
+                                       styleClass="error-label"
+                                       wrapText="true"
+                                       maxWidth="Infinity"
+                                       text="Please enter a valid email"
+                                       visible="false"/>
+                            </VBox>
+
+                            <!-- Password -->
+                            <VBox styleClass="field-group">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label styleClass="field-label" text="Password" HBox.hgrow="ALWAYS"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <HBox alignment="CENTER_RIGHT"
+                                          onMouseClicked="#togglePassword"
+                                          spacing="5"
+                                          styleClass="pw-toggle-wrap">
+                                        <Label fx:id="toggleIcon" styleClass="pw-toggle-icon" text="◉"/>
+                                        <Label fx:id="toggleLabel" styleClass="pw-toggle-text" text="Show"/>
+                                    </HBox>
+                                </HBox>
+
+                                <StackPane>
+                                    <PasswordField fx:id="passwordField"
+                                                   maxWidth="Infinity"
+                                                   promptText="Enter your password"
+                                                   styleClass="input-field"/>
+                                    <TextField fx:id="passwordVisible"
+                                               maxWidth="Infinity"
+                                               managed="false"
+                                               promptText="Enter your password"
+                                               styleClass="input-field"
+                                               visible="false"/>
+                                </StackPane>
+
+                                <Label fx:id="passwordError"
+                                       styleClass="error-label"
+                                       wrapText="true"
+                                       maxWidth="Infinity"
+                                       text="Password must be at least 8 characters"
+                                       visible="false"/>
+                            </VBox>
+
+                        </VBox>
+
+                        <Button fx:id="loginButton"
+                                maxWidth="Infinity"
+                                onAction="#handleLogin"
+                                styleClass="action-btn"
+                                text="Log in"/>
+
+                        <HBox alignment="CENTER" spacing="4" styleClass="bottom-row">
+                            <Label styleClass="bottom-text" text="Don't have an account?"/>
+                            <Hyperlink onAction="#handleRegister"
+                                       styleClass="bottom-link"
+                                       text="Register here"/>
+                        </HBox>
+
+                    </VBox>
+                </VBox>
+
+            </StackPane>
+
+        </StackPane>
+
+    </ScrollPane>
+
+</StackPane>

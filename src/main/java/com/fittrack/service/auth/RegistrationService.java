@@ -27,7 +27,7 @@ public class RegistrationService {
     }
 
     private String hashPassword(String password) {
-        // TODO: BCrypt konvertovanje
+        // TODO: BCrypt convert
         return password;
     }
 }

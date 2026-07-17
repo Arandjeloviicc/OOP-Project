@@ -68,8 +68,6 @@ public abstract class FormController extends BaseController {
                     Objects.requireNonNull(getClass().getResource("/com/fittrack/images/" + AppConstants.Images.LOGIN_REGISTER_BG)).toExternalForm()
             );
             backgroundImage.setImage(bg);
-            backgroundImage.setFitWidth(1280);
-            backgroundImage.setFitHeight(800);
             backgroundImage.setPreserveRatio(false);
         } catch (Exception e) {
             // Background image not found

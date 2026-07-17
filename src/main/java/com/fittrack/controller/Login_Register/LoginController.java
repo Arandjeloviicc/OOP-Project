@@ -23,6 +23,8 @@ public class LoginController extends FormController implements Initializable {
     @Override
     protected Logger getLogger() { return log; }
 
+    @FXML private StackPane rootPane;
+
     @FXML private ImageView backgroundImage;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
@@ -32,7 +34,6 @@ public class LoginController extends FormController implements Initializable {
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button loginButton;
-    @FXML private StackPane rootPane;
 
     private final AuthenticationService authenticationService = new AuthenticationService();
 
@@ -94,12 +95,11 @@ public class LoginController extends FormController implements Initializable {
                 case SUCCESS -> {
                     User user = result.user();
 
-                    // Kasnije:
                     // UserSession.setCurrentUser(user);
 
                     log.info("Logged in successfully: {}", user.getEmail());
 
-                    navigateTo(AppConstants.Views.DASHBOARD);
+                    navigateTo(AppConstants.Views.PROFILE_SETUP);
                 }
 
                 case USER_NOT_FOUND -> {

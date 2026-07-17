@@ -116,24 +116,26 @@
     -fx-border-color: rgba(255, 80, 80, 0.70);
 }
 
-.helper-label {
-    -fx-text-fill: rgba(180, 175, 210, 0.65);
+.helper-label,
+.error-label {
     -fx-font-size: 0.8em;
     -fx-font-family: "Segoe UI";
 
     -fx-min-height: 1.45em;
-    -fx-pref-height: 1.45em;
-    -fx-max-height: 1.45em;
+
+    -fx-wrap-text: true;
+    -fx-text-overrun: clip;
+
+    -fx-text-alignment: LEFT;
+    -fx-alignment: TOP_LEFT;
+}
+
+.helper-label {
+    -fx-text-fill: rgba(180, 175, 210, 0.65);
 }
 
 .error-label {
     -fx-text-fill: #ff7a7a;
-    -fx-font-size: 0.8em;
-    -fx-font-family: "Segoe UI";
-
-    -fx-min-height: 1.45em;
-    -fx-pref-height: 1.45em;
-    -fx-max-height: 1.45em;
 }
 
 /* ── Password toggle ─────────────────────────────────────────── */
@@ -158,7 +160,7 @@
     -fx-text-fill: rgba(160, 150, 255, 1.0);
 }
 
-/* ── Action Button (Login / Register dugme) ──────────────────── */
+/* ── Action Button (Login / Register Button) ──────────────────── */
 .action-btn {
     -fx-background-color: linear-gradient(to right, #4a5fff, #5b6fff);
     -fx-background-radius: 1.75em;
@@ -231,4 +233,27 @@
 
 .bottom-link:hover {
     -fx-text-fill: #ffffff;
+}
+
+/* ScrollPane */
+.setup-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.setup-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.setup-scroll-content {
+    -fx-background-color: transparent;
+}
+
+.setup-scroll > .corner {
+    -fx-background-color: transparent;
+}
+
+.setup-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
 }
