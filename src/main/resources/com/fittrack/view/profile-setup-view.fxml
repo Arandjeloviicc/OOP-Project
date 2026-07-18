@@ -22,14 +22,16 @@
            fx:controller="com.fittrack.controller.ProfileSetupController">
 
     <!-- If the window is too small, scroll will be added -->
-    <ScrollPane fitToWidth="true"
-                fitToHeight="true"
+    <ScrollPane fx:id="setupScroll"
+                fitToWidth="true"
                 hbarPolicy="NEVER"
                 styleClass="setup-scroll">
 
-        <StackPane styleClass="setup-scroll-content">
+        <StackPane fx:id="setupScrollContent"
+                   styleClass="setup-scroll-content">
 
-            <StackPane styleClass="setup-surface">
+            <StackPane alignment="CENTER"
+                       styleClass="setup-surface">
 
                 <VBox fx:id="personalInfoStep"
                       alignment="CENTER_LEFT"
@@ -38,18 +40,24 @@
 
                     <!-- Step -->
                     <Label text="Step 1 of 2"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
                            styleClass="step-label"/>
 
                     <!-- Title -->
                     <Label text="Personal information"
                            styleClass="setup-title"
                            wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
                            maxWidth="Infinity"/>
 
                     <!-- Subtitle -->
                     <Label text="Fill in your details to set up your profile."
                            styleClass="setup-subtitle"
                            wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
                            maxWidth="Infinity"/>
 
                     <!-- First name -->
@@ -64,6 +72,8 @@
                     <Label fx:id="firstNameMessage"
                            styleClass="helper-label"
                            wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
                            maxWidth="Infinity"/>
 
                     <!-- Last name -->
@@ -78,6 +88,8 @@
                     <Label fx:id="lastNameMessage"
                            styleClass="helper-label"
                            wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
                            maxWidth="Infinity"/>
 
                     <!-- Date of birth -->
@@ -92,6 +104,8 @@
                     <Label fx:id="dateOfBirthMessage"
                            styleClass="helper-label"
                            wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
                            maxWidth="Infinity"/>
 
                     <!-- Gender -->
@@ -143,14 +157,15 @@
                       alignment="CENTER_LEFT"
                       maxHeight="-Infinity"
                       styleClass="setup-form"
-                      visible="false">
+                      visible="false"
+                      managed="false">
 
                     <!-- Drugi deo -->
                     <GridPane maxWidth="Infinity">
 
                         <columnConstraints>
-                            <ColumnConstraints percentWidth="10"/>
-                            <ColumnConstraints percentWidth="90"/>
+                            <ColumnConstraints percentWidth="20"/>
+                            <ColumnConstraints percentWidth="70"/>
                         </columnConstraints>
 
                         <Button fx:id="backButton"
@@ -158,7 +173,7 @@
                                 maxWidth="Infinity"
                                 onAction="#handleBack"
                                 styleClass="back-btn"
-                                text="←"/>
+                                text="← Back"/>
 
                     </GridPane>
 

@@ -4,6 +4,7 @@ import com.fittrack.controller.Login_Register.FormController;
 import com.fittrack.util.AppConstants;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -46,8 +47,16 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private VBox personalInfoStep;
     @FXML private VBox fitnessGoalsStep;
 
+    @FXML private ScrollPane setupScroll;
+
+    @FXML private StackPane setupScrollContent;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        setupScrollContent.minHeightProperty().bind(
+                setupScroll.viewportBoundsProperty().map(Bounds::getHeight)
+        );
 
         restoreFirstNameHelper();
         restoreLastNameHelper();

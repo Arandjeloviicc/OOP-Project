@@ -29,6 +29,14 @@
     -fx-padding: 0 0 1.25em 0;
 }
 
+.setup-title,
+.setup-subtitle,
+.helper-label,
+.error-label {
+    -fx-wrap-text: true;
+    -fx-text-overrun: clip;
+}
+
 .form-control {
     -fx-min-height: 3.6em;
     -fx-pref-height: 3.6em;

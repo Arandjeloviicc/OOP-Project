@@ -3,6 +3,7 @@ package com.fittrack.controller.Login_Register;
 import com.fittrack.model.User;
 import com.fittrack.service.auth.AuthenticationResult;
 import com.fittrack.service.auth.AuthenticationService;
+import com.fittrack.session.UserSession;
 import com.fittrack.util.AppConstants;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -95,9 +96,11 @@ public class LoginController extends FormController implements Initializable {
                 case SUCCESS -> {
                     User user = result.user();
 
-                    // UserSession.setCurrentUser(user);
+                    UserSession.getInstance().start(result.user());
 
                     log.info("Logged in successfully: {}", user.getEmail());
+
+                    // TODO: Check if user has any data in the database
 
                     navigateTo(AppConstants.Views.PROFILE_SETUP);
                 }
