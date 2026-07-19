@@ -297,7 +297,8 @@
 
                     </VBox>
 
-                    <GridPane maxWidth="Infinity">
+                    <GridPane maxWidth="Infinity"
+                              styleClass="next-step-row">
 
                         <columnConstraints>
                             <ColumnConstraints percentWidth="50"/>
