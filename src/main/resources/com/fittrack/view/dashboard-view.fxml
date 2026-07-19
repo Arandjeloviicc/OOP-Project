@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
+<!--<?import javafx.scene.control.ScrollPane?>-->
+<!--<?import javafx.scene.layout.HBox?>-->
+<!--<?import javafx.scene.layout.Region?>-->
+<!--<?import javafx.scene.layout.VBox?>-->
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
 
 <BorderPane fx:id="rootPane" prefHeight="119.0" prefWidth="192.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 <!--            fx:controller="com.fittrack.controller.DashboardController"-->
             <!-- stylesheets="@../css/dashboard-view.css" -->
             <!-- styleClass="dashboard-root">-->
 
-    <top>
-        <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">
+<!--    <top>-->
+<!--        <HBox alignment="CENTER_LEFT" styleClass="dashboard-header">-->
 
-            <!-- Logo / naslov -->
+<!--            &lt;!&ndash; Logo / naslov &ndash;&gt;-->
 
-            <Region prefHeight="0.0" prefWidth="192.0" HBox.hgrow="ALWAYS" />
+<!--            <Region prefHeight="0.0" prefWidth="192.0" HBox.hgrow="ALWAYS" />-->
 
-            <!-- Theme, profile, logout -->
+<!--            &lt;!&ndash; Theme, profile, logout &ndash;&gt;-->
 
-        </HBox>
-    </top>
+<!--        </HBox>-->
+<!--    </top>-->
 
-    <left>
-        <VBox styleClass="sidebar">
+<!--    <left>-->
+<!--        <VBox styleClass="sidebar">-->
 
-            <!-- Dashboard -->
-            <!-- Workouts -->
-            <!-- Nutrition -->
-            <!-- Weight -->
-            <!-- Profile -->
+<!--            &lt;!&ndash; Dashboard &ndash;&gt;-->
+<!--            &lt;!&ndash; Workouts &ndash;&gt;-->
+<!--            &lt;!&ndash; Nutrition &ndash;&gt;-->
+<!--            &lt;!&ndash; Weight &ndash;&gt;-->
+<!--            &lt;!&ndash; Profile &ndash;&gt;-->
 
-        </VBox>
-    </left>
+<!--        </VBox>-->
+<!--    </left>-->
 
-    <center>
-        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="dashboard-scroll">
+<!--    <center>-->
+<!--        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="dashboard-scroll">-->
 
-            <VBox styleClass="dashboard-content">
+<!--            <VBox styleClass="dashboard-content">-->
 
-                <!-- Welcome sekcija -->
+<!--                &lt;!&ndash; Welcome sekcija &ndash;&gt;-->
 
-                <HBox styleClass="summary-cards">
+<!--                <HBox styleClass="summary-cards">-->
 
-                    <!-- Kartice -->
+<!--                    &lt;!&ndash; Kartice &ndash;&gt;-->
 
-                </HBox>
+<!--                </HBox>-->
 
-                <!-- Grafikoni i ostali sadržaj -->
+<!--                &lt;!&ndash; Grafikoni i ostali sadržaj &ndash;&gt;-->
 
-            </VBox>
+<!--            </VBox>-->
 
-        </ScrollPane>
-    </center>
+<!--        </ScrollPane>-->
+<!--    </center>-->
 
 </BorderPane>

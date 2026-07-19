@@ -16,7 +16,7 @@ public class UserDAO {
 
         try (
                 Connection connection = DatabaseConnection.connect();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, email);
 
@@ -37,7 +37,7 @@ public class UserDAO {
 
         try (
                 Connection connection = DatabaseConnection.connect();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, username);
 
@@ -102,7 +102,7 @@ public class UserDAO {
 
         try (
                 Connection connection = DatabaseConnection.connect();
-                PreparedStatement statement = connection.prepareStatement(sql);
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
             statement.setString(1, email);
 

@@ -37,28 +37,86 @@
     -fx-text-overrun: clip;
 }
 
-.form-control {
-    -fx-min-height: 3.6em;
-    -fx-pref-height: 3.6em;
-    -fx-max-height: 3.6em;
-
-    -fx-background-color: rgba(255, 255, 255, 0.10);
-    -fx-background-radius: 0.8em;
-
-    -fx-border-color: rgba(143, 107, 255, 0.45);
-    -fx-border-width: 1px;
-    -fx-border-radius: 0.8em;
-
-    -fx-font-size: 1em;
-}
-
 .step-label {
     -fx-text-fill: rgba(160, 150, 255, 0.85);
     -fx-font-size: 0.85em;
     -fx-font-weight: bold;
 }
 
-/* Date of birth DatePicker */
+/* ── Next step Button ──────────────────────────────────────────────────── */
+.next-step-row {
+    -fx-padding: 1.5em 0 0 0;
+}
+
+/* ── Goals ──────────────────────────────────────────────────── */
+.goal-weight-box {
+    -fx-spacing: 0.65em;
+}
+
+/* ── Back Button ──────────────────────────────────────────────────── */
+.back-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.35);
+    -fx-border-radius: 1em;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: rgba(220, 215, 240, 0.80);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-min-height: 3.375em;
+    -fx-pref-height: 3.375em;
+    -fx-max-height: 3.375em;
+
+    -fx-cursor: hand;
+}
+
+.back-btn:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.12);
+    -fx-border-color: rgba(143, 107, 255, 0.65);
+    -fx-text-fill: white;
+}
+
+.back-btn:pressed {
+    -fx-background-color: rgba(143, 107, 255, 0.20);
+}
+
+/* ── Gender Buttons ──────────────────────────────────────────────────── */
+.gender-options {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.gender-option {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.35);
+    -fx-border-radius: 0.7em;
+
+    -fx-text-fill: rgba(255, 255, 255, 0.72);
+    -fx-padding: 0.8em 1.4em;
+
+    -fx-cursor: hand;
+}
+
+.gender-option:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.15);
+}
+
+.gender-option:selected {
+    -fx-background-color: #7656d9;
+    -fx-border-color: #987aff;
+    -fx-text-fill: white;
+}
+
+.gender-option.error {
+    -fx-border-color: rgba(255, 80, 80, 0.70);
+}
+
+/* ── Date of birth DatePicker ──────────────────────────────────────────────────── */
 .date-picker-field {
     -fx-padding: 0;
 }
@@ -92,75 +150,168 @@
     -fx-background-color: rgba(255, 255, 255, 0.65);
 }
 
-/* On error */
-.date-picker-field.error {
-    -fx-border-color: rgba(255, 80, 80, 0.70);
-}
-
-/* Gender ComboBox */
-.gender-options {
-    -fx-alignment: CENTER_LEFT;
-}
-
-.gender-option {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
+.date-picker-popup {
+    -fx-background-color: #211a42;
     -fx-background-radius: 0.7em;
 
-    -fx-border-color: rgba(143, 107, 255, 0.35);
+    -fx-border-color: rgba(143, 107, 255, 0.50);
+    -fx-border-width: 1px;
     -fx-border-radius: 0.7em;
 
-    -fx-text-fill: rgba(255, 255, 255, 0.72);
-    -fx-padding: 0.8em 1.4em;
+    -fx-padding: 0.4em;
+    -fx-effect: none;
+}
 
+/* Month and year */
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: #2b2152;
+    -fx-background-radius: 0.55em;
+    -fx-padding: 0.5em;
+}
+
+/* Month and year Title */
+.date-picker-popup > .month-year-pane .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.90);
+    -fx-font-weight: bold;
+}
+
+/* Arrows for previous/next month */
+.date-picker-popup > .month-year-pane .spinner .button {
+    -fx-background-color: transparent;
     -fx-cursor: hand;
 }
 
-.gender-option:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.15);
+.date-picker-popup > .month-year-pane .spinner .button:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.20);
+    -fx-background-radius: 0.4em;
 }
 
-.gender-option:selected {
-    -fx-background-color: #7656d9;
-    -fx-border-color: #987aff;
+.date-picker-popup > .month-year-pane .spinner .button .left-arrow,
+.date-picker-popup > .month-year-pane .spinner .button .right-arrow {
+    -fx-background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Days */
+.date-picker-popup .calendar-grid {
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.82);
+
+    -fx-background-radius: 0.4em;
+    -fx-border-color: transparent;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.22);
     -fx-text-fill: white;
 }
 
-.gender-option.error {
-    -fx-border-color: rgba(255, 80, 80, 0.70);
+/* Selected date */
+.date-picker-popup .day-cell:selected {
+    -fx-background-color: #7656d9;
+    -fx-text-fill: white;
 }
 
-/* Next step Button */
-.next-step-row {
-    -fx-padding: 1.5em 0 0 0;
+/* Today's date */
+.date-picker-popup .today {
+    -fx-border-color: rgba(160, 140, 255, 0.85);
+    -fx-border-radius: 0.4em;
+    -fx-text-fill: white;
 }
 
-/* Back Button */
-.back-btn {
+/* Days from previous/next month */
+.date-picker-popup .previous-month,
+.date-picker-popup .next-month {
+    -fx-text-fill: rgba(255, 255, 255, 0.30);
+}
+
+.date-picker-popup .day-name-cell {
+    -fx-text-fill: rgba(180, 170, 230, 0.80);
+    -fx-font-weight: bold;
     -fx-background-color: transparent;
-    -fx-background-radius: 1em;
+}
 
-    -fx-border-color: rgba(143, 107, 255, 0.35);
-    -fx-border-radius: 1em;
-    -fx-border-width: 1px;
+.date-picker-popup .week-number-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(180, 170, 230, 0.55);
+}
 
-    -fx-text-fill: rgba(220, 215, 240, 0.80);
+/* ── ComboBox ──────────────────────────────────────────────────── */
+.combo-box-field {
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.combo-box-field > .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
-    -fx-font-weight: bold;
 
-    -fx-min-height: 3.375em;
-    -fx-pref-height: 3.375em;
-    -fx-max-height: 3.375em;
-
-    -fx-cursor: hand;
+    -fx-padding: 0 1.1em;
 }
 
-.back-btn:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.12);
-    -fx-border-color: rgba(143, 107, 255, 0.65);
+.combo-box-field:no-selection > .list-cell {
+    -fx-text-fill: rgba(160, 155, 195, 0.60);
+}
+
+.combo-box-field > .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 0.8em 0.8em 0;
+    -fx-padding: 0 1em;
+}
+
+.combo-box-field > .arrow-button > .arrow {
+    -fx-background-color: rgba(255, 255, 255, 0.65);
+}
+
+/*.combo-box-field:focused,*/
+.combo-box-field:showing {
+    -fx-border-color: rgba(160, 140, 255, 0.40);
+    -fx-background-color: rgba(255, 255, 255, 0.13);
+    -fx-effect: dropshadow(gaussian, rgba(100, 80, 255, 0.30), 8, 0.3, 0, 0);
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-color: #211a42;
+    -fx-border-color: rgba(143, 107, 255, 0.55);
+    -fx-border-width: 1px;
+
+    -fx-background-radius: 0.7em;
+    -fx-border-radius: 0.7em;
+    -fx-padding: 0.3em;
+}
+
+.combo-box-popup > .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+
+    -fx-background-radius: 0.45em;
+    -fx-padding: 0.7em 0.9em;
+}
+
+.combo-box-popup > .list-view .list-cell:filled:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.22);
     -fx-text-fill: white;
 }
 
-.back-btn:pressed {
-    -fx-background-color: rgba(143, 107, 255, 0.20);
+.combo-box-popup > .list-view .list-cell:filled:selected {
+    -fx-background-color: #7656d9;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup > .list-view .list-cell:filled:selected:hover {
+    -fx-background-color: #8666e8;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup > .list-view .list-cell:empty {
+    -fx-background-color: transparent;
 }

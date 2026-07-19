@@ -33,10 +33,17 @@ public final class AppConstants {
         public static final int MAX_USERNAME_LENGTH = 20;
 
         // Profile setup view
+        // Personal info
         public static final int MIN_AGE = 13;
         public static final int MAX_AGE = 120;
         public static final int MIN_NAME_LENGTH = 2;
         public static final int MAX_NAME_LENGTH = 50;
+
+        // Fitness goals
+        public static final int MIN_HEIGHT = 50;
+        public static final int MAX_HEIGHT = 250;
+        public static final int MIN_WEIGHT = 30;
+        public static final int MAX_WEIGHT = 300;
     }
 
     public static final class Messages {
@@ -61,6 +68,7 @@ public final class AppConstants {
         public static final String HELPER_PASSWORD_MESSAGE = "At least %d characters".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH);
 
         // Profile setup view
+        // Personal info
         public static final String INVALID_FIRST_NAME_MESSAGE =
                 "First name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes."
                         .formatted(
@@ -103,5 +111,21 @@ public final class AppConstants {
                                 AppConstants.Validation.MIN_AGE,
                                 AppConstants.Validation.MAX_AGE
                         );
+
+        // Fitness goals
+        public static final String INVALID_HEIGHT_MESSAGE = "Enter a height between %d and %d cm.".formatted(AppConstants.Validation.MIN_HEIGHT, AppConstants.Validation.MAX_HEIGHT);
+        public static final String INVALID_WEIGHT_MESSAGE = "Enter a weight between %d and %d kg.".formatted(AppConstants.Validation.MIN_WEIGHT, AppConstants.Validation.MAX_WEIGHT);
+        public static final String ACTIVITY_NOT_SELECTED_MESSAGE = "Select your activity level.";
+        public static final String GOAL_NOT_SELECTED_MESSAGE = "Select a goal.";
+        public static final String WEEKLY_GOAL_NOT_SELECTED_MESSAGE = "Select a weekly goal.";
+        public static final String INVALID_GOAL_WEIGHT_LOSE_MESSAGE = "Goal weight should be lower than your current weight.";
+        public static final String INVALID_GOAL_WEIGHT_GAIN_MESSAGE = "Goal weight should be higher than your current weight.";
+
+        public static final String HELPER_HEIGHT_MESSAGE = "Height in centimeters.";
+        public static final String HELPER_WEIGHT_MESSAGE = "Current weight in kilograms.";
+        public static final String HELPER_ACTIVITY_MESSAGE = "Your typical activity level.";
+        public static final String HELPER_GOAL_TYPE_MESSAGE = "Your target goal.";
+        public static final String HELPER_GOAL_WEIGHT_MESSAGE = "The weight you're aiming for (optional).";
+        public static final String HELPER_WEEKLY_GOAL_MESSAGE = "Rate at which you want to reach your goal.";
     }
 }

@@ -74,7 +74,7 @@
                                 <TextField fx:id="emailField"
                                            maxWidth="Infinity"
                                            promptText="Enter your email"
-                                           styleClass="input-field"/>
+                                           styleClass="input-field,text-field"/>
                                 <Label fx:id="emailError"
                                        styleClass="error-label"
                                        wrapText="true"
@@ -101,12 +101,12 @@
                                     <PasswordField fx:id="passwordField"
                                                    maxWidth="Infinity"
                                                    promptText="Enter your password"
-                                                   styleClass="input-field"/>
+                                                   styleClass="input-field,text-field"/>
                                     <TextField fx:id="passwordVisible"
                                                maxWidth="Infinity"
                                                managed="false"
                                                promptText="Enter your password"
-                                               styleClass="input-field"
+                                               styleClass="input-field,text-field"
                                                visible="false"/>
                                 </StackPane>
 

@@ -83,6 +83,7 @@
     -fx-font-family: "Segoe UI";
 }
 
+/* ── Input field ─────────────────────────────────────────── */
 .input-field {
     -fx-min-height: 3.15em;
     -fx-pref-height: 3.57em;
@@ -94,12 +95,8 @@
     -fx-border-radius: 0.85em;
     -fx-border-width: 1px;
 
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: rgba(160, 155, 195, 0.60);
-
     -fx-font-size: 1em;
     -fx-font-family: "Segoe UI";
-    -fx-padding: 0.9em 1.15em;
 }
 
 .input-field:focused {
@@ -116,6 +113,14 @@
     -fx-border-color: rgba(255, 80, 80, 0.70);
 }
 
+/* ── Text field ─────────────────────────────────────────── */
+.text-field {
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: rgba(160, 155, 195, 0.60);
+    -fx-padding: 0.9em 1.15em;
+}
+
+/* ── Error/Message label ─────────────────────────────────────────── */
 .helper-label,
 .error-label {
     -fx-font-size: 0.8em;
@@ -235,7 +240,7 @@
     -fx-text-fill: #ffffff;
 }
 
-/* ScrollPane */
+/* ── ScrollPane ─────────────────────────────────────────── */
 .setup-scroll {
     -fx-background-color: transparent;
     -fx-background-insets: 0;

@@ -42,12 +42,12 @@ public final class DatabaseConnection {
                             .toURI()
             );
 
-            // Kada se aplikacija pokreće iz JAR fajla
+            // When the app is run from JAR file
             if (Files.isRegularFile(codeLocation)) {
                 return codeLocation.getParent();
             }
 
-            // Kada se pokreće iz IntelliJ-a ili preko Maven-a
+            // When teh app is run from IntelliJ or Maven
             return Path.of(System.getProperty("user.dir"))
                     .toAbsolutePath()
                     .normalize();

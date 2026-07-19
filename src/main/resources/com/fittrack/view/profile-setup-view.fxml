@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.control.ScrollPane?>
 
+<?import javafx.scene.control.ComboBox?>
 <StackPane fx:id="rootPane"
            styleClass="root"
            stylesheets="@../css/profile-setup-view.css"
@@ -30,9 +31,9 @@
         <StackPane fx:id="setupScrollContent"
                    styleClass="setup-scroll-content">
 
-            <StackPane alignment="CENTER"
-                       styleClass="setup-surface">
+            <StackPane styleClass="setup-surface">
 
+                <!-- Personal info-->
                 <VBox fx:id="personalInfoStep"
                       alignment="CENTER_LEFT"
                       maxHeight="-Infinity"
@@ -67,7 +68,7 @@
                     <TextField fx:id="firstNameField"
                                maxWidth="Infinity"
                                promptText="Enter your first name"
-                               styleClass="input-field"/>
+                               styleClass="input-field,text-field"/>
 
                     <Label fx:id="firstNameMessage"
                            styleClass="helper-label"
@@ -83,7 +84,7 @@
                     <TextField fx:id="lastNameField"
                                maxWidth="Infinity"
                                promptText="Enter your last name"
-                               styleClass="input-field"/>
+                               styleClass="input-field,text-field"/>
 
                     <Label fx:id="lastNameMessage"
                            styleClass="helper-label"
@@ -99,7 +100,7 @@
                     <DatePicker fx:id="dateOfBirthPicker"
                                 maxWidth="Infinity"
                                 promptText="Select your date of birth"
-                                styleClass="form-control,date-picker-field"/>
+                                styleClass="input-field,date-picker-field"/>
 
                     <Label fx:id="dateOfBirthMessage"
                            styleClass="helper-label"
@@ -153,6 +154,7 @@
 
                 </VBox>
 
+                <!-- Fitness goals-->
                 <VBox fx:id="fitnessGoalsStep"
                       alignment="CENTER_LEFT"
                       maxHeight="-Infinity"
@@ -160,7 +162,6 @@
                       visible="false"
                       managed="false">
 
-                    <!-- Drugi deo -->
                     <GridPane maxWidth="Infinity">
 
                         <columnConstraints>
@@ -193,12 +194,123 @@
                            wrapText="true"
                            maxWidth="Infinity"/>
 
-                    <!--                <Button fx:id="submitButton"-->
-                    <!--                        maxWidth="Infinity"-->
-                    <!--                        onAction="#handleSubmit"-->
-                    <!--                        styleClass="action-btn"-->
-                    <!--                        text="Submit"-->
-                    <!--                        visible="false"/>-->
+                    <!-- Height -->
+                    <Label styleClass="field-label"
+                           text="Height (cm)"/>
+
+                    <TextField fx:id="heightField"
+                               maxWidth="Infinity"
+                               promptText="Enter your height"
+                               styleClass="input-field,text-field"/>
+
+                    <Label fx:id="heightMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+
+                    <!-- Weight -->
+                    <Label styleClass="field-label"
+                           text="Weight (kg)"/>
+
+                    <TextField fx:id="weightField"
+                               maxWidth="Infinity"
+                               promptText="Enter your height"
+                               styleClass="input-field,text-field"/>
+
+                    <Label fx:id="weightMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+
+                    <!-- Activity level -->
+                    <Label styleClass="field-label"
+                           text="Activity"/>
+
+                    <ComboBox fx:id="activityLevelComboBox"
+                              maxWidth="Infinity"
+                              promptText="Choose your activity level"
+                              styleClass="input-field,combo-box-field"/>
+
+                    <Label fx:id="activityLevelMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+
+                    <!-- Goal weight -->
+                    <Label styleClass="field-label"
+                           text="Goal"/>
+
+                    <ComboBox fx:id="goalTypeComboBox"
+                               maxWidth="Infinity"
+                               promptText="Choose your weight goal"
+                               styleClass="input-field,combo-box-field"/>
+
+                    <Label fx:id="goalTypeMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+
+
+                    <!-- Goal weight and Weekly goal -->
+                    <VBox fx:id="goalWeightBox"
+                          styleClass="goal-weight-box"
+                          visible="false"
+                          managed="false">
+
+                        <Label styleClass="field-label"
+                               text="Goal weight (kg)"/>
+
+                        <TextField fx:id="goalWeightField"
+                                   maxWidth="Infinity"
+                                   promptText="Enter your height"
+                                   styleClass="input-field, text-field"/>
+
+                        <Label fx:id="goalWeightMessage"
+                               styleClass="helper-label"
+                               wrapText="true"
+                               minHeight="-Infinity"
+                               maxHeight="Infinity"
+                               maxWidth="Infinity"/>
+
+                        <Label styleClass="field-label"
+                               text="Weekly goal (kg)"/>
+
+                        <ComboBox fx:id="weeklyGoalComboBox"
+                                   maxWidth="Infinity"
+                                   promptText="Choose your weekly goal"
+                                   styleClass="input-field, combo-box-field"/>
+
+                        <Label fx:id="weeklyGoalMessage"
+                               styleClass="helper-label"
+                               wrapText="true"
+                               minHeight="-Infinity"
+                               maxHeight="Infinity"
+                               maxWidth="Infinity"/>
+
+                    </VBox>
+
+                    <GridPane maxWidth="Infinity">
+
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <Button fx:id="finishButton"
+                                maxWidth="Infinity"
+                                onAction="#handleFinish"
+                                styleClass="action-btn"
+                                text="Finish"/>
+
+                    </GridPane>
 
                 </VBox>
 
