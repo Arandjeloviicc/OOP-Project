@@ -1,7 +1,8 @@
 package com.fittrack.service.auth;
 
 import com.fittrack.dao.UserDAO;
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
+import com.fittrack.security.PasswordHasher;
 
 import java.util.Optional;
 
@@ -29,7 +30,6 @@ public class AuthenticationService {
     }
 
     private boolean verifyPassword(String password, String passwordHash) {
-        // TODO: BCrypt check
-        return password.equals(passwordHash);
+        return PasswordHasher.matches(password, passwordHash);
     }
 }

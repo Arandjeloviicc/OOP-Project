@@ -23,6 +23,7 @@ public final class DatabaseConnection {
         Connection connection = DriverManager.getConnection(URL);
 
         try (Statement statement = connection.createStatement()) {
+            // Enable foreign key constraints (In SQLLite it's off by default)
             statement.execute("PRAGMA foreign_keys = ON");
         } catch (SQLException e) {
             connection.close();

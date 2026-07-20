@@ -1,7 +1,8 @@
 package com.fittrack.service.auth;
 
 import com.fittrack.dao.UserDAO;
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
+import com.fittrack.security.PasswordHasher;
 
 public class RegistrationService {
     private final UserDAO userDAO;
@@ -27,7 +28,6 @@ public class RegistrationService {
     }
 
     private String hashPassword(String password) {
-        // TODO: BCrypt convert
-        return password;
+        return PasswordHasher.hash(password);
     }
 }

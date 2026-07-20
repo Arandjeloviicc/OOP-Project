@@ -1,4 +1,4 @@
-package com.fittrack.model;
+package com.fittrack.model.user;
 
 public class User {
     private final int id;

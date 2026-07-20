@@ -1,6 +1,6 @@
 package com.fittrack.service.auth;
 
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
 
 public record RegistrationResult(RegistrationStatus status, User user) {
     public static RegistrationResult success(User user) {

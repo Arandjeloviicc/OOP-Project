@@ -1,6 +1,6 @@
-package com.fittrack.controller.Login_Register;
+package com.fittrack.controller.auth;
 
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
 import com.fittrack.service.auth.RegistrationResult;
 import com.fittrack.service.auth.RegistrationService;
 import com.fittrack.session.UserSession;
@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class RegisterController extends FormController implements Initializable {
+public class RegisterController extends AuthFormController implements Initializable {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
@@ -175,7 +175,7 @@ public class RegisterController extends FormController implements Initializable 
     }
 
     private void restoreEmailHelper() {
-        setFieldMessage(emailMessage, AppConstants.Messages.HELPER_USERNAME_MESSAGE, false, emailField);
+        setFieldMessage(emailMessage, AppConstants.Messages.HELPER_EMAIL_MESSAGE, false, emailField);
     }
 
     public void prefillEmail(String email) {

@@ -17,10 +17,10 @@
 <?import javafx.scene.control.ComboBox?>
 <StackPane fx:id="rootPane"
            styleClass="root"
-           stylesheets="@../css/profile-setup-view.css"
+           stylesheets="@../../css/profile/profile-setup-view.css"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.ProfileSetupController">
+           fx:controller="com.fittrack.controller.profile.ProfileSetupController">
 
     <!-- If the window is too small, scroll will be added -->
     <ScrollPane fx:id="setupScroll"

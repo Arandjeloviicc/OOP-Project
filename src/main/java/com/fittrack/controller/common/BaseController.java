@@ -1,6 +1,6 @@
-package com.fittrack.controller;
+package com.fittrack.controller.common;
 
-import com.fittrack.app.SceneManager;
+import com.fittrack.util.SceneManager;
 import org.slf4j.Logger;
 
 public abstract class BaseController {

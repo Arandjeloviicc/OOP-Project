@@ -1,6 +1,7 @@
-package com.fittrack.controller.Login_Register;
+package com.fittrack.controller.auth;
 
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
+import com.fittrack.service.profile.ProfileSetupService;
 import com.fittrack.service.auth.AuthenticationResult;
 import com.fittrack.service.auth.AuthenticationService;
 import com.fittrack.session.UserSession;
@@ -16,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController extends FormController implements Initializable {
+public class LoginController extends AuthFormController implements Initializable {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
@@ -37,6 +38,7 @@ public class LoginController extends FormController implements Initializable {
     @FXML private Button loginButton;
 
     private final AuthenticationService authenticationService = new AuthenticationService();
+    private final ProfileSetupService profileSetupService = new ProfileSetupService();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,14 +97,24 @@ public class LoginController extends FormController implements Initializable {
             switch (result.status()) {
                 case SUCCESS -> {
                     User user = result.user();
+                    UserSession session = UserSession.getInstance();
+                    session.start(user);
 
-                    UserSession.getInstance().start(result.user());
+                    try {
+                        log.info("Logged in successfully: {}", user.getEmail());
 
-                    log.info("Logged in successfully: {}", user.getEmail());
+                        if (profileSetupService.isProfileSetupComplete(user.getId())) {
+                            navigateTo(AppConstants.Views.DASHBOARD);
+                        } else {
+                            navigateTo(AppConstants.Views.PROFILE_SETUP);
+                        }
+                    } catch (IllegalStateException exception) {
+                        session.end();
+                        resetLoginButton();
 
-                    // TODO: Check if user has any data in the database
-
-                    navigateTo(AppConstants.Views.PROFILE_SETUP);
+                        log.error("Login failed: {}", exception.getMessage());
+                        showEmailError("Something went wrong while completing sign in. Please try again.");
+                    }
                 }
 
                 case USER_NOT_FOUND -> {
@@ -121,8 +133,9 @@ public class LoginController extends FormController implements Initializable {
                     loginButton.setText("Log in");
                 }
             }
-        } catch (IllegalArgumentException e) {
-            log.error("Database error during login", e);
+        } catch (IllegalStateException exception) {
+            log.error("Database error during login.", exception);
+            showEmailError("Something went wrong while signing in. Please try again.");
             resetLoginButton();
         }
     }

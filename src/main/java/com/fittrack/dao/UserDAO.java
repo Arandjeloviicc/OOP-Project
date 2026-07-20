@@ -1,7 +1,7 @@
 package com.fittrack.dao;
 
 import com.fittrack.database.DatabaseConnection;
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

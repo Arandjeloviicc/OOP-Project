@@ -16,10 +16,10 @@ public final class AppConstants {
 
         private Views() {}
 
-        public static final String LOGIN = "Login_Register/login-view.fxml";
-        public static final String REGISTER = "Login_Register/register-view.fxml";
-        public static final String DASHBOARD = "dashboard-view.fxml";
-        public static final String PROFILE_SETUP = "profile-setup-view.fxml";
+        public static final String LOGIN = "auth/login-view.fxml";
+        public static final String REGISTER = "auth/register-view.fxml";
+        public static final String PROFILE_SETUP = "profile/profile-setup-view.fxml";
+        public static final String DASHBOARD = "dashboard/dashboard-view.fxml";
     }
 
     public static final class Validation {

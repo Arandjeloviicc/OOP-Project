@@ -1,4 +1,4 @@
-@import "base-view.css";
+@import "../common/base-view.css";
 
 .root {
     -fx-background-color: #120d2b;

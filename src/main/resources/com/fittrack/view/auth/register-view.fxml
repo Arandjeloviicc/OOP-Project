@@ -16,10 +16,10 @@
 <StackPane
         fx:id="rootPane"
         styleClass="root"
-        stylesheets="@../../css/register-view.css"
+        stylesheets="@../../css/auth/register-view.css"
         xmlns="http://javafx.com/javafx/22"
         xmlns:fx="http://javafx.com/fxml/1"
-        fx:controller="com.fittrack.controller.Login_Register.RegisterController">
+        fx:controller="com.fittrack.controller.auth.RegisterController">
 
     <!-- Background image layer -->
     <ImageView fx:id="backgroundImage"

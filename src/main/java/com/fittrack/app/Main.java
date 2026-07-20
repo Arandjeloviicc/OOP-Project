@@ -3,6 +3,7 @@ package com.fittrack.app;
 import com.fittrack.database.DatabaseConnection;
 import com.fittrack.database.DatabaseInitializer;
 import com.fittrack.util.AppConstants;
+import com.fittrack.util.SceneManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/com/fittrack/view/" + AppConstants.Views.PROFILE_SETUP
+                        "/com/fittrack/view/" + AppConstants.Views.LOGIN
                 )
         );
         Scene scene = new Scene(loader.load(), 1280, 800);

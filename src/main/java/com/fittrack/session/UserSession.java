@@ -1,6 +1,6 @@
 package com.fittrack.session;
 
-import com.fittrack.model.User;
+import com.fittrack.model.user.User;
 
 public final class UserSession {
 

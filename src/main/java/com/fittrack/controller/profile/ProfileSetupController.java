@@ -1,8 +1,13 @@
-package com.fittrack.controller;
+package com.fittrack.controller.profile;
 
-import com.fittrack.controller.Login_Register.FormController;
-import com.fittrack.model.ActivityLevel;
-import com.fittrack.model.WeightGoal;
+import com.fittrack.controller.common.FormController;
+import com.fittrack.model.measurement.WeightLog;
+import com.fittrack.model.profile.ActivityLevel;
+import com.fittrack.model.profile.Gender;
+import com.fittrack.model.profile.UserProfile;
+import com.fittrack.model.profile.WeightGoal;
+import com.fittrack.service.profile.ProfileSetupService;
+import com.fittrack.session.UserSession;
 import com.fittrack.util.AppConstants;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -20,7 +25,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ResourceBundle;
 
-import static com.fittrack.model.WeightGoal.*;
+import static com.fittrack.model.profile.WeightGoal.*;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class ProfileSetupController extends FormController implements Initializable {
@@ -70,6 +75,9 @@ public class ProfileSetupController extends FormController implements Initializa
     // Adding PseudoClass to ComboBox (Change text color when nothing is selected)
     private static final PseudoClass NO_SELECTION = PseudoClass.getPseudoClass("no-selection");
 
+    // Service for saving user info
+    private final ProfileSetupService profileSetupService = new ProfileSetupService();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -110,6 +118,10 @@ public class ProfileSetupController extends FormController implements Initializa
         dateOfBirthPicker.getEditor().setEditable(false);
         dateOfBirthPicker.getEditor().addEventFilter(KeyEvent.ANY, KeyEvent::consume);
 
+        // Gender ToggleButton value initialize
+        maleButton.setUserData(Gender.MALE);
+        femaleButton.setUserData(Gender.FEMALE);
+
         // ComboBox fill and PseudoClass add
         activityLevelComboBox.getItems().setAll(ActivityLevel.values());
         activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, activityLevelComboBox.getValue() == null);
@@ -146,9 +158,6 @@ public class ProfileSetupController extends FormController implements Initializa
             weeklyGoalComboBox.pseudoClassStateChanged(NO_SELECTION, newVal == null);
             restoreWeeklyGoalHelper();
         });
-
-        // Get selected gender
-        //String gender = genderGroup.getSelectedToggle().getUserData().toString();
     }
 
     @FXML
@@ -250,7 +259,37 @@ public class ProfileSetupController extends FormController implements Initializa
 
         if(!valid) return;
 
-        log.info("Yes");
+        finishButton.setDisable(true);
+        finishButton.setText("Saving...");
+
+        try {
+            int userId = UserSession.getInstance().requireCurrentUser().getId();
+            String firstName = firstNameField.getText().trim();
+            String lastName = lastNameField.getText().trim();
+            LocalDate dateOfBirth = dateOfBirthPicker.getValue();
+            Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
+            double heightValue = Double.parseDouble(height);
+            double weightValue = Double.parseDouble(weight);
+            Double goalWeightValue = goalWeight.isBlank() ? null : Double.parseDouble(goalWeight);
+            if (goalType == MAINTAIN_WEIGHT) {
+                goalWeightValue = null;
+                weeklyGoal = null;
+            }
+
+            UserProfile userProfile = new UserProfile(userId, firstName, lastName, dateOfBirth, gender, heightValue, activityLevel, goalType, goalWeightValue, weeklyGoal);
+            WeightLog weightLog = new WeightLog(userId, LocalDate.now(), weightValue);
+
+            profileSetupService.completeProfile(userProfile, weightLog);
+
+            log.info("Profile setup completed for user ID: {}", userId);
+
+            navigateTo(AppConstants.Views.DASHBOARD);
+        } catch (IllegalStateException e) {
+            log.error("Failed to complete profile setup.", e);
+
+            finishButton.setDisable(false);
+            finishButton.setText("Finish");
+        }
     }
 
     // ── First name Helpers ─────────────────────────────────────────────────

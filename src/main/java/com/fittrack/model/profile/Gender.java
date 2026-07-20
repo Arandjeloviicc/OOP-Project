@@ -1,4 +1,4 @@
-package com.fittrack.model;
+package com.fittrack.model.profile;
 
 public enum Gender {
     MALE("Male"),

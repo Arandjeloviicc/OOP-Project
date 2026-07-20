@@ -1,4 +1,4 @@
-@import "base-view.css";
+@import "../common/base-view.css";
 
 .glass-card {
     -fx-min-width: 22em;
