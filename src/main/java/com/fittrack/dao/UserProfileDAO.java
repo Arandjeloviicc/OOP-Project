@@ -31,7 +31,7 @@ public class UserProfileDAO {
             statement.setString(2, profile.firstName());
             statement.setString(3, profile.lastName());
             statement.setString(4, profile.dateOfBirth().toString());
-            statement.setString(5, profile.gender().toString());
+            statement.setString(5, profile.gender().getCode());
             statement.setDouble(6, profile.height());
             statement.setString(7, profile.activityLevel().getCode());
             statement.setString(8, profile.goalType().getCode());

@@ -122,14 +122,12 @@
 
                         <ToggleButton fx:id="maleButton"
                                       text="Male"
-                                      userData="MALE"
                                       toggleGroup="$genderGroup"
                                       styleClass="gender-option"
                                       selected="true"/>
 
                         <ToggleButton fx:id="femaleButton"
                                       text="Female"
-                                      userData="FEMALE"
                                       toggleGroup="$genderGroup"
                                       styleClass="gender-option"/>
 
@@ -216,7 +214,7 @@
 
                     <TextField fx:id="weightField"
                                maxWidth="Infinity"
-                               promptText="Enter your height"
+                               promptText="Enter your weight"
                                styleClass="input-field,text-field"/>
 
                     <Label fx:id="weightMessage"
@@ -242,7 +240,7 @@
                            maxHeight="Infinity"
                            maxWidth="Infinity"/>
 
-                    <!-- Goal weight -->
+                    <!-- Goal type -->
                     <Label styleClass="field-label"
                            text="Goal"/>
 
@@ -270,7 +268,7 @@
 
                         <TextField fx:id="goalWeightField"
                                    maxWidth="Infinity"
-                                   promptText="Enter your height"
+                                   promptText="Enter your goal weight"
                                    styleClass="input-field, text-field"/>
 
                         <Label fx:id="goalWeightMessage"

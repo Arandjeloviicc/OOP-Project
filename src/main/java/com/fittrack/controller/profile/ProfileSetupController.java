@@ -270,13 +270,17 @@ public class ProfileSetupController extends FormController implements Initializa
             Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
             double heightValue = Double.parseDouble(height);
             double weightValue = Double.parseDouble(weight);
-            Double goalWeightValue = goalWeight.isBlank() ? null : Double.parseDouble(goalWeight);
+            Double goalWeightValue;
+            Double weeklyGoalValue = weeklyGoal;
+
             if (goalType == MAINTAIN_WEIGHT) {
                 goalWeightValue = null;
-                weeklyGoal = null;
+                weeklyGoalValue = null;
+            } else {
+                goalWeightValue = goalWeight.isBlank() ? null : Double.parseDouble(goalWeight);
             }
 
-            UserProfile userProfile = new UserProfile(userId, firstName, lastName, dateOfBirth, gender, heightValue, activityLevel, goalType, goalWeightValue, weeklyGoal);
+            UserProfile userProfile = new UserProfile(userId, firstName, lastName, dateOfBirth, gender, heightValue, activityLevel, goalType, goalWeightValue, weeklyGoalValue);
             WeightLog weightLog = new WeightLog(userId, LocalDate.now(), weightValue);
 
             profileSetupService.completeProfile(userProfile, weightLog);
@@ -284,7 +288,7 @@ public class ProfileSetupController extends FormController implements Initializa
             log.info("Profile setup completed for user ID: {}", userId);
 
             navigateTo(AppConstants.Views.DASHBOARD);
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             log.error("Failed to complete profile setup.", e);
 
             finishButton.setDisable(false);

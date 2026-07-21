@@ -1,17 +1,24 @@
 package com.fittrack.model.profile;
 
 public enum Gender {
-    MALE("Male"),
-    FEMALE("Female");
+    MALE("male"),
+    FEMALE("female");
 
-    private final String displayName;
+    private final String code;
 
-    Gender(String displayName) {
-        this.displayName = displayName;
+    Gender(String code) {
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     @Override
     public String toString() {
-        return displayName;
+        return switch (this) {
+            case MALE -> "Male";
+            case FEMALE -> "Female";
+        };
     }
 }
