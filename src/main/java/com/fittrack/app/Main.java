@@ -3,18 +3,17 @@ package com.fittrack.app;
 import com.fittrack.database.DatabaseConnection;
 import com.fittrack.database.DatabaseInitializer;
 import com.fittrack.util.AppConstants;
+import com.fittrack.util.AppImages;
 import com.fittrack.util.SceneManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class Main extends Application {
 
@@ -29,23 +28,20 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/com/fittrack/view/" + AppConstants.Views.LOGIN
+                        "/com/fittrack/view/" + AppConstants.Views.MAIN_LAYOUT
                 )
         );
         Scene scene = new Scene(loader.load(), 1280, 800);
 
+        // TODO: Add more logo sizes (16x16, 32x32, 64x64)
         try {
-            Image appIcon = new Image(
-                    Objects.requireNonNull(
-                            getClass().getResourceAsStream(
-                                    "/com/fittrack/images/" + AppConstants.Images.APP_ICON
-                            )
-                    )
+            stage.getIcons().add(AppImages.APP_LOGO);
+
+        } catch (RuntimeException exception) {
+            log.info(
+                    "Logo image not found: {}",
+                    exception.getMessage()
             );
-            stage.getIcons().add(appIcon);
-        }
-        catch (Exception _) {
-            log.info("Logo Image not found");
         }
 
         stage.setTitle("FitTrack");

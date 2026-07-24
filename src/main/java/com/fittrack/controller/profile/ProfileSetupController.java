@@ -287,7 +287,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
             log.info("Profile setup completed for user ID: {}", userId);
 
-            navigateTo(AppConstants.Views.DASHBOARD);
+            navigateTo(AppConstants.Views.MAIN_LAYOUT);
         } catch (Exception e) {
             log.error("Failed to complete profile setup.", e);
 

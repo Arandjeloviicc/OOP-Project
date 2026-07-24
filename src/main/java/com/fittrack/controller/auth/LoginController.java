@@ -104,7 +104,7 @@ public class LoginController extends AuthFormController implements Initializable
                         log.info("Logged in successfully: {}", user.getEmail());
 
                         if (profileSetupService.isProfileSetupComplete(user.getId())) {
-                            navigateTo(AppConstants.Views.DASHBOARD);
+                            navigateTo(AppConstants.Views.MAIN_LAYOUT);
                         } else {
                             navigateTo(AppConstants.Views.PROFILE_SETUP);
                         }

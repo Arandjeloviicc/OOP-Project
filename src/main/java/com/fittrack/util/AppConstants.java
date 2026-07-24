@@ -4,14 +4,6 @@ public final class AppConstants {
 
     private AppConstants() {}
 
-    public static final class Images {
-
-        private Images() {}
-
-        public static final String LOGIN_REGISTER_BG = "login-register-bg-2.png";
-        public static final String APP_ICON = "app-logo-transparent-2.png";
-    }
-
     public static final class Views {
 
         private Views() {}
@@ -19,7 +11,13 @@ public final class AppConstants {
         public static final String LOGIN = "auth/login-view.fxml";
         public static final String REGISTER = "auth/register-view.fxml";
         public static final String PROFILE_SETUP = "profile/profile-setup-view.fxml";
+        public static final String MAIN_LAYOUT = "main/main-layout-view.fxml";
         public static final String DASHBOARD = "dashboard/dashboard-view.fxml";
+        public static final String CALCULATORS = "calculator/calculators-view.fxml";
+        public static final String MEALS = "nutrition/meals-view.fxml";
+        public static final String WORKOUTS = "workout/workouts-view.fxml";
+        public static final String MEASUREMENTS = "";
+        public static final String USER_PROFILE = "profile/user-profile-view.fxml";
     }
 
     public static final class Validation {

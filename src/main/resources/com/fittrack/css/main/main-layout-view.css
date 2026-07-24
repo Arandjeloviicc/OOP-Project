@@ -1,0 +1,322 @@
+/* ── Logo ────────────────────────────────────────────── */
+.logo-bar {
+    -fx-min-height: 4.5em;
+    -fx-pref-height: 4.5em;
+    -fx-max-height: 4.5em;
+
+    -fx-padding: 0 1.4em;
+    -fx-spacing: 0.7em;
+
+    -fx-background-color: #181134;
+    -fx-border-color: transparent transparent rgba(143, 107, 255, 0.15) transparent;
+
+    -fx-border-width: 0 0 1px 0;
+}
+
+.logo-bar-text {
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.45em;
+    -fx-font-weight: bold;
+}
+
+/* ── Main & Center ────────────────────────────────────────────── */
+.main-layout {
+    -fx-background-color: #120d2b;
+}
+
+.main-section {
+    -fx-background-color: #120d2b;
+}
+
+.content-area {
+    -fx-background-color: #120d2b;
+    -fx-padding: 2em;
+}
+
+/* ── Top bar ────────────────────────────────────────────── */
+.top-bar {
+    -fx-min-height: 4.5em;
+    -fx-pref-height: 4.5em;
+    -fx-max-height: 4.5em;
+
+    -fx-padding: 0 1.4em;
+    -fx-background-color: rgba(255, 255, 255, 0.025);
+    -fx-border-color: transparent transparent rgba(143, 107, 255, 0.15) transparent;
+
+    -fx-border-width: 0 0 1px 0;
+}
+
+.top-bar-logo {
+    -fx-spacing: 0.7em;
+    -fx-alignment: center-left;
+}
+
+.greeting-box {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.greeting-label {
+    -fx-text-fill: white;
+    -fx-font-size: 1.55em;
+    -fx-font-weight: bold;
+}
+
+.greeting-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Sidebar ────────────────────────────────────────────── */
+.sidebar {
+    -fx-min-width: 15em;
+    -fx-pref-width: 17em;
+    -fx-max-width: 17em;
+
+    -fx-padding: 0;
+    -fx-spacing: 0;
+
+    -fx-background-color: #181134;
+    -fx-border-color: transparent rgba(143, 107, 255, 0.20) transparent transparent;
+
+    -fx-border-width: 0 1px 0 0;
+}
+
+.sidebar:horizontal {
+    -fx-min-width: -1;
+    -fx-pref-width: -1;
+    -fx-max-width: Infinity;
+
+    -fx-min-height: 4.8em;
+    -fx-pref-height: 4.8em;
+    -fx-max-height: 4.8em;
+
+    -fx-padding: 0;
+
+    -fx-border-color: rgba(143, 107, 255, 0.20) transparent transparent transparent;
+
+    -fx-border-width: 1px 0 0 0;
+}
+
+.sidebar-user-container {
+    -fx-padding: 1.4em;
+    -fx-spacing: 0.45em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.15) transparent transparent transparent;
+}
+
+/* ── Navigation ────────────────────────────────────────────── */
+.navigation-container {
+    -fx-spacing: 0;
+    -fx-fill-width: true;
+
+    -fx-hgap: 0;
+    -fx-vgap: 0;
+    -fx-pref-wrap-length: 3000;
+}
+
+.sidebar:horizontal .navigation-container {
+    -fx-alignment: CENTER;
+    -fx-pref-wrap-length: Infinity;
+}
+
+.navigation-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 0.25em;
+
+    -fx-content-display: left;
+    -fx-alignment: center-left;
+    -fx-graphic-text-gap: 0.8em;
+
+    -fx-padding: 1em 1.4em;
+    -fx-text-fill: rgba(255, 255, 255, 0.68);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.08em;
+
+    -fx-min-height: 3.65em;
+    -fx-pref-height: 3.65em;
+    -fx-max-height: 3.65em;
+
+    -fx-cursor: hand;
+}
+
+.sidebar:horizontal .navigation-button {
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0.25em 0;
+
+    -fx-content-display: top;
+    -fx-alignment: CENTER;
+    -fx-graphic-text-gap: 0.35em;
+
+    -fx-padding: 0.6em 1em;
+    -fx-font-size: 0.85em;
+
+    -fx-min-height: 5.5em;
+    -fx-pref-height: 5.5em;
+    -fx-max-height: 5.5em;
+
+    -fx-min-width: 4.5em;
+}
+
+.navigation-button:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.16);
+    -fx-text-fill: white;
+}
+
+.navigation-button:selected {
+    -fx-background-color: rgba(143, 107, 255, 0.16);
+    -fx-border-color: #8f6bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+
+    -fx-opacity: 1;
+    -fx-cursor: default;
+}
+
+.sidebar:horizontal .navigation-button:selected {
+    -fx-border-color: #8f6bff;
+    -fx-border-width: 0 0 0.25em 0;
+    -fx-border-insets: 0;
+}
+
+.navigation-button:selected:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.22);
+}
+
+.navigation-button:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.16);
+    -fx-text-fill: white;
+}
+
+/* ── Logout section ────────────────────────────────────────────── */
+.sidebar-user-caption {
+    -fx-text-fill: rgba(255, 255, 255, 0.45);
+    -fx-font-size: 0.78em;
+}
+
+.sidebar-username {
+    -fx-text-fill: rgba(255, 255, 255, 0.92);
+    -fx-font-size: 1.05em;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 0.65em 0;
+    -fx-text-overrun: ellipsis;
+}
+
+/* ── Logout Button ────────────────────────────────────────────── */
+.logout-button-compact {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 0.6em;
+
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-radius: 0.6em;
+
+    -fx-text-fill: rgba(255, 255, 255, 0.78);
+    -fx-font-size: 0.85em;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0.5em 1em;
+    -fx-cursor: hand;
+}
+
+.logout-button-compact:hover {
+    -fx-background-color: rgba(255, 85, 85, 0.14);
+    -fx-border-color: rgba(255, 100, 100, 0.35);
+    -fx-text-fill: #ffb0b0;
+}
+
+/* ── Logout Button ────────────────────────────────────────────── */
+.logout-button-base {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-text-fill: rgba(255, 255, 255, 0.78);
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.logout-button-base:hover {
+    -fx-background-color: rgba(255, 85, 85, 0.14);
+    -fx-border-color: rgba(255, 100, 100, 0.35);
+    -fx-text-fill: #ffb0b0;
+}
+
+.logout-button-base:pressed {
+    -fx-background-color: rgba(255, 85, 85, 0.22);
+}
+
+.logout-button-sidebar {
+    -fx-background-radius: 0.65em;
+    -fx-border-radius: 0.65em;
+    -fx-font-size: 0.95em;
+    -fx-padding: 0.75em 1em;
+}
+
+.logout-button-header {
+    -fx-background-radius: 0.6em;
+    -fx-border-radius: 0.6em;
+    -fx-font-size: 0.85em;
+    -fx-padding: 0.5em 1em;
+}
+
+/* ── More Button ────────────────────────────────────────────── */
+.more-button {
+    -fx-font-size: 1.3em;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-border-width: 0;
+    -fx-background-color: rgba(255, 255, 255, 0.04);
+}
+
+.more-button:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.16);
+    -fx-text-fill: white;
+}
+
+.more-button:pressed,
+.more-button:showing {
+    -fx-background-color: rgba(143, 107, 255, 0.28);
+    -fx-text-fill: white;
+}
+
+.more-icon {
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-font-size: 1.35em;
+    -fx-font-weight: bold;
+}
+
+/* ── ContextMenu ────────────────────────────────────────────── */
+.context-menu {
+    -fx-background-color: #181134;
+    -fx-background-radius: 0.7em 0 0 0;
+
+    -fx-border-color: rgba(143, 107, 255, 0.50);
+    -fx-border-width: 1px;
+
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+.context-menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.context-menu-navigation-button {
+    -fx-content-display: left;
+    -fx-alignment: center-left;
+    -fx-graphic-text-gap: 0.8em;
+
+    -fx-min-width: 12em;
+    -fx-pref-width: 12em;
+    -fx-max-width: Infinity;
+
+    -fx-min-height: 4.5em;
+    -fx-pref-height: 4.5em;
+    -fx-max-height: 4.5em;
+
+    -fx-padding: 0 1.2em;
+
+    -fx-font-size: 0.85em;
+}

@@ -2,13 +2,12 @@ package com.fittrack.controller.auth;
 
 import com.fittrack.controller.common.FormController;
 import com.fittrack.util.AppConstants;
+import com.fittrack.util.AppImages;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -64,14 +63,15 @@ public abstract class AuthFormController extends FormController {
     // ── Background init ─────────────────────────────────────────
     protected void setBackgroundImage(ImageView backgroundImage) {
         try {
-            Image bg = new Image(
-                    Objects.requireNonNull(getClass().getResource("/com/fittrack/images/" + AppConstants.Images.LOGIN_REGISTER_BG)).toExternalForm()
-            );
-            backgroundImage.setImage(bg);
+            backgroundImage.setImage(AppImages.LOGIN_REGISTER_BG);
+
             backgroundImage.setPreserveRatio(false);
-        } catch (Exception e) {
-            // Background image not found
-            getLogger().info("Background image not found: {}", e.getMessage());
+
+        } catch (RuntimeException | ExceptionInInitializerError exception) {
+            getLogger().info(
+                    "Background image could not be loaded: {}",
+                    exception.getMessage()
+            );
         }
     }
 }
