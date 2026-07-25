@@ -1,6 +1,7 @@
 package com.fittrack.controller.main;
 
 import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.AppConstants;
 import javafx.application.Platform;
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class MainLayoutController extends BaseController implements Initializable {
+public class MainLayoutController extends BaseController implements Initializable, ResponsiveLayout {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(MainLayoutController.class);
@@ -91,15 +92,8 @@ public class MainLayoutController extends BaseController implements Initializabl
 
         preventNavigationDeselection();
 
-        rootLayout.sceneProperty().addListener((observable, oldScene, newScene) -> {
-                    if (newScene == null) {
-                        return;
-                    }
-
-                    newScene.widthProperty().addListener((o, oldWidth, newWidth) -> updateLayout(newWidth.doubleValue() < NARROW_BREAKPOINT));
-
-                    Platform.runLater(() -> updateLayout(newScene.getWidth() < NARROW_BREAKPOINT));
-        });
+        // Interface implemented method for responsive action
+        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
     }
 
     /* ── Sidebar Buttons ────────────────────────────────────────────── */
@@ -181,7 +175,8 @@ public class MainLayoutController extends BaseController implements Initializabl
     }
 
     // Responsive update
-    private void updateLayout(boolean narrow) {
+    @Override
+    public void updateLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
 
         narrowLayout = narrow;

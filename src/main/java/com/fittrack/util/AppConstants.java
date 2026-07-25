@@ -125,5 +125,9 @@ public final class AppConstants {
         public static final String HELPER_GOAL_TYPE_MESSAGE = "Your target goal.";
         public static final String HELPER_GOAL_WEIGHT_MESSAGE = "The weight you're aiming for (optional).";
         public static final String HELPER_WEEKLY_GOAL_MESSAGE = "Rate at which you want to reach your goal.";
+
+        // Calculators
+        public static final String INVALID_AGE_MESSAGE = "Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
+        public static final String HELPER_AGE_MESSAGE = "Between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
     }
 }

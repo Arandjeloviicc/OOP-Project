@@ -1,0 +1,120 @@
+@import "../profile/profile-setup-view.css";
+
+/* ── Calculators Root ─────────────────────────────────────── */
+.calculators-container {
+    -fx-background-color: #120d2b;
+}
+
+/* ── Calculator Tabs ──────────────────────────────────────── */
+.calculator-tabs {
+    -fx-spacing: 0;
+    -fx-padding: 0 0 1.3em 0;
+    -fx-alignment: CENTER;
+}
+
+/* ── Calculators Tab Button ─────────────────────────────────────── */
+.calculator-tab-button {
+    -fx-min-height: 3.2em;
+    -fx-pref-height: 3.2em;
+    -fx-max-height: 3.2em;
+
+    -fx-max-width: Infinity;
+
+    -fx-background-color: rgba(255, 255, 255, 0.045);
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-radius: 0;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: rgba(255, 255, 255, 0.72);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0.7em 1.4em;
+    -fx-cursor: hand;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.calculator-tab-button:hover {
+    -fx-background-color: rgba(143, 107, 255, 0.20);
+    -fx-border-color: rgba(143, 107, 255, 0.45);
+    -fx-text-fill: white;
+}
+
+.calculator-tab-button:selected {
+    -fx-background-color: rgba(143, 107, 255, 0.22);
+    -fx-border-color: #8f6bff;
+    -fx-text-fill: white;
+
+    -fx-opacity: 1;
+    -fx-cursor: default;
+}
+
+/* ── Form and Result Container ────────────────────────────── */
+.calculator-forms {
+    -fx-hgap: 1.4em;
+    -fx-vgap: 1.4em;
+
+    -fx-alignment: TOP_LEFT;
+    -fx-row-valignment: TOP;
+
+    -fx-padding: 0;
+}
+
+/* ── Shared Panel Style ───────────────────────────────────── */
+.calculator-body-row {
+    -fx-spacing: 1.4em;
+    -fx-alignment: TOP_CENTER;
+}
+
+.calculator-body-col {
+    -fx-spacing: 1.4em;
+}
+
+.form-panel,
+.result-panel {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+    -fx-max-height: -1;
+
+    -fx-background-radius: 0.9em;
+
+    -fx-border-color: rgba(143, 107, 255, 0.18);
+    -fx-border-radius: 0.9em;
+    -fx-border-width: 1px;
+
+    -fx-padding: 1.6em;
+}
+
+/* ── Form panel ───────────────────────────────────── */
+.form-panel {
+    -fx-spacing: 0;
+    -fx-alignment: TOP_CENTER;
+    -fx-max-width: 26em;
+
+    -fx-background-color: rgba(255, 255, 255, 0.035);
+}
+
+.field-group {
+    -fx-padding: 0 0 1.6em 0;
+    -fx-spacing: 0.45em;
+}
+
+.form-panel .input-field {
+    -fx-pref-width: 20em;
+    -fx-max-width: 20em;
+}
+
+/* ── Result panel ───────────────────────────────────── */
+.result-panel {
+    -fx-spacing: 1em;
+    -fx-alignment: CENTER;
+
+    -fx-background-color: #181134;
+}
+

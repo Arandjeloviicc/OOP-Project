@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Button?>
+
+<BorderPane fx:id="rootLayout"
+            xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fittrack.controller.calculator.CalculatorsController"
+            stylesheets="@../../css/calculator/calculators-view.css"
+            styleClass="calculators-container">
+
+    <fx:define>
+        <VBox fx:id="formPanel"
+              maxWidth="Infinity"
+              styleClass="form-panel">
+
+            <!-- Age -->
+            <VBox fx:id="ageGroup"
+                  styleClass="field-group">
+                <Label styleClass="field-label"
+                       text="Age"/>
+
+                <TextField fx:id="ageField"
+                           promptText="Enter your age"
+                           styleClass="input-field,text-field"/>
+
+                <Label fx:id="ageMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Height -->
+            <VBox styleClass="field-group">
+                <Label styleClass="field-label"
+                       text="Height (cm)"/>
+
+                <TextField fx:id="heightField"
+                           promptText="Enter your height"
+                           styleClass="input-field,text-field"/>
+
+                <Label fx:id="heightMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Weight -->
+            <VBox styleClass="field-group">
+                <Label styleClass="field-label"
+                       text="Weight (kg)"/>
+
+                <TextField fx:id="weightField"
+                           promptText="Enter your weight"
+                           styleClass="input-field,text-field"/>
+
+                <Label fx:id="weightMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Calculate -->
+            <Button fx:id="nextButton"
+                    maxWidth="Infinity"
+                    onAction="#handleCalculate"
+                    styleClass="action-btn"
+                    text="Calculate"/>
+<!--            <GridPane maxWidth="Infinity"-->
+<!--                      styleClass="next-step-row">-->
+
+<!--                <columnConstraints>-->
+<!--                    <ColumnConstraints percentWidth="50"/>-->
+<!--                    <ColumnConstraints percentWidth="50"/>-->
+<!--                </columnConstraints>-->
+
+<!--                <Button fx:id="nextButton"-->
+<!--                        maxWidth="Infinity"-->
+<!--                        onAction="#handleCalculate"-->
+<!--                        styleClass="action-btn"-->
+<!--                        text="Calculate"/>-->
+
+<!--            </GridPane>-->
+
+        </VBox>
+
+        <VBox fx:id="resultPanel"
+              maxWidth="Infinity"
+              styleClass="result-panel">
+
+        </VBox>
+    </fx:define>
+
+    <top>
+        <!-- Calculators Button Groups-->
+        <fx:define>
+            <ToggleGroup fx:id="calculatorGroup"/>
+        </fx:define>
+
+        <HBox fx:id="calculatorTabs"
+              maxWidth="Infinity"
+              styleClass="calculator-tabs">
+
+            <ToggleButton fx:id="bmiTab"
+                          text="BMI"
+                          toggleGroup="$calculatorGroup"
+                          styleClass="calculator-tab-button"
+                          selected="true"/>
+
+            <ToggleButton fx:id="bmrTab"
+                          text="BMR"
+                          toggleGroup="$calculatorGroup"
+                          styleClass="calculator-tab-button"/>
+
+            <ToggleButton fx:id="tdeeTab"
+                          text="TDEE"
+                          toggleGroup="$calculatorGroup"
+                          styleClass="calculator-tab-button"/>
+        </HBox>
+    </top>
+
+    <center>
+
+        <StackPane fx:id="calculatorBodyStack">
+
+            <HBox fx:id="wideContainer" styleClass="calculator-body-row"/>
+            <VBox fx:id="narrowContainer" styleClass="calculator-body-col" visible="false" managed="false"/>
+
+        </StackPane>
+    </center>
+
+</BorderPane>

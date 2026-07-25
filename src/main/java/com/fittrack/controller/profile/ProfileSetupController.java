@@ -9,6 +9,7 @@ import com.fittrack.model.profile.WeightGoal;
 import com.fittrack.service.profile.ProfileSetupService;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.AppConstants;
+import com.fittrack.util.FitnessInputValidator;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -213,13 +214,13 @@ public class ProfileSetupController extends FormController implements Initializa
 
         boolean valid = true;
 
-        if(!isHeightValid(height)) {
+        if(!FitnessInputValidator.isHeightValid(height)) {
             showHeightMessage();
             shake(heightField);
             valid = false;
         }
 
-        if(!isWeightValid(weight)) {
+        if(!FitnessInputValidator.isWeightValid(weight)) {
             showWeightMessage();
             shake(weightField);
             valid = false;
@@ -238,7 +239,7 @@ public class ProfileSetupController extends FormController implements Initializa
         }
 
         if((goalType == LOSE_WEIGHT || goalType == GAIN_WEIGHT)
-        && isWeightValid(weight)
+        && FitnessInputValidator.isWeightValid(weight)
         && !isGoalWeightValid(goalWeight, weight, goalType)) {
 
             String message = goalType == LOSE_WEIGHT
@@ -333,8 +334,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
         int age = Period.between(dateOfBirth, today).getYears();
 
-        if(age < AppConstants.Validation.MIN_AGE
-        || age > AppConstants.Validation.MAX_AGE) {
+        if(!FitnessInputValidator.isAgeValid(age)) {
             showDateOfBirthMessage();
             return false;
         }
@@ -352,14 +352,6 @@ public class ProfileSetupController extends FormController implements Initializa
     }
 
     // ── Height Helpers ─────────────────────────────────────────────────
-    private boolean isHeightValid(String height) {
-        if (height == null || !height.trim().matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
-            return false;
-        }
-        double value = Double.parseDouble(height.trim());
-        return value >= AppConstants.Validation.MIN_HEIGHT && value <= AppConstants.Validation.MAX_HEIGHT;
-    }
-
     private void showHeightMessage() {
         setFieldMessage(heightMessage, AppConstants.Messages.INVALID_HEIGHT_MESSAGE, true, heightField);
     }
@@ -369,14 +361,6 @@ public class ProfileSetupController extends FormController implements Initializa
     }
 
     // ── Weight Helpers ─────────────────────────────────────────────────
-    private boolean isWeightValid(String weight) {
-        if (weight == null || !weight.trim().matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
-            return false;
-        }
-        double value = Double.parseDouble(weight.trim());
-        return value >= AppConstants.Validation.MIN_WEIGHT && value <= AppConstants.Validation.MAX_WEIGHT;
-    }
-
     private void showWeightMessage() {
         setFieldMessage(weightMessage, AppConstants.Messages.INVALID_WEIGHT_MESSAGE, true, weightField);
     }
@@ -436,7 +420,7 @@ public class ProfileSetupController extends FormController implements Initializa
     private boolean isGoalWeightValid(String goalWeightText, String currentWeightText, WeightGoal goalType) {
         if (goalWeightText.isEmpty()) return true; // It's optional
 
-        if (!isWeightValid(goalWeightText)) return false;
+        if (!FitnessInputValidator.isWeightValid(goalWeightText)) return false;
 
         double goalWeight = Double.parseDouble(goalWeightText);
         double currentWeight = Double.parseDouble(currentWeightText);
