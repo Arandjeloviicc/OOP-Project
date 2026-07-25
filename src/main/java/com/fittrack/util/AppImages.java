@@ -6,10 +6,17 @@ import java.net.URL;
 
 public final class AppImages {
 
-    // Not used currently
-    public static final Image LOGIN_REGISTER_BG = load("/com/fittrack/images/login-register-bg-2.png");
-    public static final Image APP_LOGO = load("/com/fittrack/images/app-logo-transparent-2.png");
+    // Logos
+    public static final Image APP_LOGO = load("/com/fittrack/images/logos/app-logo.png");
+    public static final Image APP_LOGO_16 = load("/com/fittrack/images/logos/app-logo-16.png");
+    public static final Image APP_LOGO_32 = load("/com/fittrack/images/logos/app-logo-32.png");
+    public static final Image APP_LOGO_64 = load("/com/fittrack/images/logos/app-logo-64.png");
 
+    // Background
+    public static final Image LOGIN_REGISTER_BG = load("/com/fittrack/images/login-register-bg-darker.png");
+
+    // TODO: Find copyright free icons
+    // Sidebar Icons
     public static final Image DASHBOARD_ICON = load("/com/fittrack/images/icons/dashboard.png");
     public static final Image CALCULATORS_ICON = load("/com/fittrack/images/icons/calculators.png");
     public static final Image MEALS_ICON = load("/com/fittrack/images/icons/meals.png");
@@ -30,5 +37,4 @@ public final class AppImages {
 
         return new Image(resource.toExternalForm());
     }
-
 }
