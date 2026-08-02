@@ -1,3 +1,5 @@
+@import "../theme.css";
+
 /* ── Logo ────────────────────────────────────────────── */
 .logo-bar {
     -fx-min-height: 4.5em;
@@ -7,14 +9,14 @@
     -fx-padding: 0 1.4em;
     -fx-spacing: 0.7em;
 
-    -fx-background-color: #181134;
-    -fx-border-color: transparent transparent rgba(143, 107, 255, 0.15) transparent;
+    -fx-background-color: -app-surface;
+    -fx-border-color: transparent transparent -app-border-soft transparent;
 
     -fx-border-width: 0 0 1px 0;
 }
 
 .logo-bar-text {
-    -fx-text-fill: white;
+    -fx-text-fill: -app-text-primary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1.45em;
     -fx-font-weight: bold;
@@ -22,15 +24,15 @@
 
 /* ── Main & Center ────────────────────────────────────────────── */
 .main-layout {
-    -fx-background-color: #120d2b;
+    -fx-background-color: -app-background;
 }
 
 .main-section {
-    -fx-background-color: #120d2b;
+    -fx-background-color: -app-background;
 }
 
 .content-area {
-    -fx-background-color: #120d2b;
+    -fx-background-color: -app-background;
     -fx-padding: 2em;
 }
 
@@ -41,8 +43,8 @@
     -fx-max-height: 4.5em;
 
     -fx-padding: 0 1.4em;
-    -fx-background-color: rgba(255, 255, 255, 0.025);
-    -fx-border-color: transparent transparent rgba(143, 107, 255, 0.15) transparent;
+    -fx-background-color: -app-surface;
+    -fx-border-color: transparent transparent -app-border-soft transparent;
 
     -fx-border-width: 0 0 1px 0;
 }
@@ -57,13 +59,13 @@
 }
 
 .greeting-label {
-    -fx-text-fill: white;
+    -fx-text-fill: -app-text-primary;
     -fx-font-size: 1.55em;
     -fx-font-weight: bold;
 }
 
 .greeting-subtitle {
-    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-text-fill: -app-text-muted;
 }
 
 /* ── Sidebar ────────────────────────────────────────────── */
@@ -75,8 +77,8 @@
     -fx-padding: 0;
     -fx-spacing: 0;
 
-    -fx-background-color: #181134;
-    -fx-border-color: transparent rgba(143, 107, 255, 0.20) transparent transparent;
+    -fx-background-color: -app-surface;
+    -fx-border-color: transparent -app-border transparent transparent;
 
     -fx-border-width: 0 1px 0 0;
 }
@@ -92,7 +94,7 @@
 
     -fx-padding: 0;
 
-    -fx-border-color: rgba(143, 107, 255, 0.20) transparent transparent transparent;
+    -fx-border-color: -app-border transparent transparent transparent;
 
     -fx-border-width: 1px 0 0 0;
 }
@@ -101,7 +103,7 @@
     -fx-padding: 1.4em;
     -fx-spacing: 0.45em;
 
-    -fx-border-color: rgba(143, 107, 255, 0.15) transparent transparent transparent;
+    -fx-border-color: -app-border-soft transparent transparent transparent;
 }
 
 /* ── Navigation ────────────────────────────────────────────── */
@@ -132,7 +134,7 @@
     -fx-graphic-text-gap: 0.8em;
 
     -fx-padding: 1em 1.4em;
-    -fx-text-fill: rgba(255, 255, 255, 0.68);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1.08em;
 
@@ -162,14 +164,14 @@
 }
 
 .navigation-button:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.16);
-    -fx-text-fill: white;
+    -fx-background-color: -app-hover;
+    -fx-text-fill: -app-text-primary;
 }
 
 .navigation-button:selected {
-    -fx-background-color: rgba(143, 107, 255, 0.16);
-    -fx-border-color: #8f6bff;
-    -fx-text-fill: white;
+    -fx-background-color: -app-selected;
+    -fx-border-color: -app-primary-light;
+    -fx-text-fill: -app-text-primary;
     -fx-font-weight: bold;
 
     -fx-opacity: 1;
@@ -177,28 +179,23 @@
 }
 
 .sidebar:horizontal .navigation-button:selected {
-    -fx-border-color: #8f6bff;
+    -fx-border-color: -app-primary-light;
     -fx-border-width: 0 0 0.25em 0;
     -fx-border-insets: 0;
 }
 
 .navigation-button:selected:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.22);
-}
-
-.navigation-button:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.16);
-    -fx-text-fill: white;
+    -fx-background-color: -app-selected;
 }
 
 /* ── Logout section ────────────────────────────────────────────── */
 .sidebar-user-caption {
-    -fx-text-fill: rgba(255, 255, 255, 0.45);
+    -fx-text-fill: -app-text-muted;
     -fx-font-size: 0.78em;
 }
 
 .sidebar-username {
-    -fx-text-fill: rgba(255, 255, 255, 0.92);
+    -fx-text-fill: -app-text-primary;
     -fx-font-size: 1.05em;
     -fx-font-weight: bold;
     -fx-padding: 0 0 0.65em 0;
@@ -207,13 +204,13 @@
 
 /* ── Logout Button ────────────────────────────────────────────── */
 .logout-button-compact {
-    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-color: -app-control-background;
     -fx-background-radius: 0.6em;
 
-    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-color: -app-control-border;
     -fx-border-radius: 0.6em;
 
-    -fx-text-fill: rgba(255, 255, 255, 0.78);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-size: 0.85em;
     -fx-font-weight: bold;
 
@@ -222,28 +219,28 @@
 }
 
 .logout-button-compact:hover {
-    -fx-background-color: rgba(255, 85, 85, 0.14);
-    -fx-border-color: rgba(255, 100, 100, 0.35);
-    -fx-text-fill: #ffb0b0;
+    -fx-background-color: -app-danger-background;
+    -fx-border-color: -app-danger-border;
+    -fx-text-fill: -app-danger-text;
 }
 
 /* ── Logout Button ────────────────────────────────────────────── */
 .logout-button-base {
-    -fx-background-color: rgba(255, 255, 255, 0.06);
-    -fx-border-color: rgba(255, 255, 255, 0.10);
-    -fx-text-fill: rgba(255, 255, 255, 0.78);
+    -fx-background-color: -app-control-background;
+    -fx-border-color: -app-control-border;
+    -fx-text-fill: -app-text-secondary;
     -fx-font-weight: bold;
     -fx-cursor: hand;
 }
 
 .logout-button-base:hover {
-    -fx-background-color: rgba(255, 85, 85, 0.14);
-    -fx-border-color: rgba(255, 100, 100, 0.35);
-    -fx-text-fill: #ffb0b0;
+    -fx-background-color: -app-danger-background;
+    -fx-border-color: -app-danger-border;
+    -fx-text-fill: -app-danger-text;
 }
 
 .logout-button-base:pressed {
-    -fx-background-color: rgba(255, 85, 85, 0.22);
+    -fx-background-color: -app-danger-background-pressed;
 }
 
 .logout-button-sidebar {
@@ -264,34 +261,34 @@
 .more-button {
     -fx-font-size: 1.3em;
     -fx-font-weight: bold;
-    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-text-fill: -app-text-muted;
     -fx-border-width: 0;
-    -fx-background-color: rgba(255, 255, 255, 0.04);
+    -fx-background-color: -app-control-background-soft;
 }
 
 .more-button:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.16);
+    -fx-background-color: -app-hover;
     -fx-text-fill: white;
 }
 
 .more-button:pressed,
 .more-button:showing {
-    -fx-background-color: rgba(143, 107, 255, 0.28);
-    -fx-text-fill: white;
+    -fx-background-color: -app-hover-strong;
+    -fx-text-fill: -app-text-primary;
 }
 
 .more-icon {
-    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-size: 1.35em;
     -fx-font-weight: bold;
 }
 
 /* ── ContextMenu ────────────────────────────────────────────── */
 .context-menu {
-    -fx-background-color: #181134;
+    -fx-background-color: -app-surface;
     -fx-background-radius: 0.7em 0 0 0;
 
-    -fx-border-color: rgba(143, 107, 255, 0.50);
+    -fx-border-color: -app-border-strong;
     -fx-border-width: 1px;
 
     -fx-padding: 0;

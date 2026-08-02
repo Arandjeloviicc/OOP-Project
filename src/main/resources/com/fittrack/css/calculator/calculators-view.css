@@ -1,8 +1,24 @@
+@import "../theme.css";
+@import "../common/base-view.css";
 @import "../profile/profile-setup-view.css";
 
 /* ── Calculators Root ─────────────────────────────────────── */
 .calculators-container {
-    -fx-background-color: #120d2b;
+    -fx-background-color: -app-background;
+}
+
+/* Narrow */
+.calculators-container:narrow .form-panel {
+    -fx-padding: 1.2em 1.5em 2em 1.5em;
+}
+
+.calculators-container:narrow .calculator-form-content {
+    -fx-pref-width: -1;
+    -fx-max-width: Infinity;
+}
+
+.calculators-container:narrow .calculator-body-col {
+    -fx-padding: 0 0.8em;
 }
 
 /* ── Calculator Tabs ──────────────────────────────────────── */
@@ -10,6 +26,19 @@
     -fx-spacing: 0;
     -fx-padding: 0 0 1.3em 0;
     -fx-alignment: CENTER;
+}
+
+.calculator-body-row {
+    -fx-spacing: 1.4em;
+    -fx-alignment: TOP_CENTER;
+    -fx-padding: 0 0.8em 2em 0.8em;
+}
+
+.calculator-body-col {
+    -fx-spacing: 1.4em;
+    -fx-alignment: TOP_CENTER;
+    -fx-fill-width: true;
+    -fx-padding: 0 1.5em 2em 1.5em;
 }
 
 /* ── Calculators Tab Button ─────────────────────────────────────── */
@@ -20,15 +49,15 @@
 
     -fx-max-width: Infinity;
 
-    -fx-background-color: rgba(255, 255, 255, 0.045);
+    -fx-background-color: -app-control-background-soft;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
 
-    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-color: -app-control-border;
     -fx-border-radius: 0;
     -fx-border-width: 1px;
 
-    -fx-text-fill: rgba(255, 255, 255, 0.72);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
@@ -41,80 +70,326 @@
 }
 
 .calculator-tab-button:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.20);
-    -fx-border-color: rgba(143, 107, 255, 0.45);
-    -fx-text-fill: white;
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-border-strong;
+    -fx-text-fill: -app-text-primary;
 }
 
 .calculator-tab-button:selected {
-    -fx-background-color: rgba(143, 107, 255, 0.22);
-    -fx-border-color: #8f6bff;
-    -fx-text-fill: white;
+    -fx-background-color: -app-selected;
+    -fx-border-color: -app-primary-light;
+    -fx-text-fill: -app-text-primary;
 
     -fx-opacity: 1;
     -fx-cursor: default;
 }
 
-/* ── Form and Result Container ────────────────────────────── */
-.calculator-forms {
-    -fx-hgap: 1.4em;
-    -fx-vgap: 1.4em;
-
-    -fx-alignment: TOP_LEFT;
-    -fx-row-valignment: TOP;
-
-    -fx-padding: 0;
-}
-
-/* ── Shared Panel Style ───────────────────────────────────── */
-.calculator-body-row {
-    -fx-spacing: 1.4em;
-    -fx-alignment: TOP_CENTER;
-}
-
-.calculator-body-col {
-    -fx-spacing: 1.4em;
-}
-
-.form-panel,
-.result-panel {
-    -fx-min-width: 0;
-    -fx-max-width: Infinity;
-    -fx-max-height: -1;
-
-    -fx-background-radius: 0.9em;
-
-    -fx-border-color: rgba(143, 107, 255, 0.18);
-    -fx-border-radius: 0.9em;
-    -fx-border-width: 1px;
-
-    -fx-padding: 1.6em;
-}
-
 /* ── Form panel ───────────────────────────────────── */
 .form-panel {
-    -fx-spacing: 0;
-    -fx-alignment: TOP_CENTER;
-    -fx-max-width: 26em;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
 
-    -fx-background-color: rgba(255, 255, 255, 0.035);
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+
+    -fx-padding: 1.2em 1em 2em 1em;
+    -fx-alignment: TOP_CENTER;
 }
 
 .field-group {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+
     -fx-padding: 0 0 1.6em 0;
     -fx-spacing: 0.45em;
 }
 
-.form-panel .input-field {
-    -fx-pref-width: 20em;
-    -fx-max-width: 20em;
+.calculator-form-content {
+    -fx-min-width: 0;
+    -fx-pref-width: 32em;
+    -fx-max-width: 32em;
+
+    -fx-spacing: 0;
+    -fx-alignment: TOP_LEFT;
+}
+
+.calculator-form-content .field-group {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.calculator-form-content .input-field,
+.calculator-form-content .action-btn {
+    -fx-max-width: Infinity;
 }
 
 /* ── Result panel ───────────────────────────────────── */
 .result-panel {
-    -fx-spacing: 1em;
-    -fx-alignment: CENTER;
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
 
-    -fx-background-color: #181134;
+    -fx-background-color: -app-surface;
+    -fx-background-radius: 0.9em;
+
+    -fx-border-color: -app-border;
+    -fx-border-radius: 0.9em;
+    -fx-border-width: 1px;
+
+    -fx-padding: 1.6em;
+    -fx-spacing: 3em;
+    -fx-alignment: TOP_CENTER;
 }
 
+/* ── BMI Result ───────────────────────────────────────────── */
+.result-title {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.6em;
+    -fx-font-weight: bold;
+    -fx-alignment: TOP_LEFT;
+}
+
+.result-main-row {
+    -fx-spacing: 0.5em;
+    -fx-padding: 0.2em 0 0.2em 0;
+}
+
+.result-main-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 4.2em;
+    -fx-font-weight: bold;
+}
+
+.result-main-unit {
+    -fx-text-fill: -app-text-muted;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.4em;
+    -fx-padding: 1.6em 0 0 0;
+}
+
+/* ── BMI Status Badge ─────────────────────────────────────── */
+.bmi-status-badge {
+    -fx-background-color: transparent;
+    -fx-background-radius: 1.2em;
+
+    -fx-border-radius: 1.2em;
+    -fx-border-width: 1px;
+
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0.45em 1.2em;
+}
+
+.bmi-status-underweight {
+    -fx-text-fill: #f2c94c;
+    -fx-border-color: rgba(242, 201, 76, 0.65);
+    -fx-background-color: rgba(242, 201, 76, 0.08);
+}
+
+.bmi-status-normal {
+    -fx-text-fill: #59d77d;
+    -fx-border-color: rgba(89, 215, 125, 0.65);
+    -fx-background-color: rgba(89, 215, 125, 0.08);
+}
+
+.bmi-status-overweight {
+    -fx-text-fill: #f0ad4e;
+    -fx-border-color: rgba(240, 173, 78, 0.65);
+    -fx-background-color: rgba(240, 173, 78, 0.08);
+}
+
+.bmi-status-obese {
+    -fx-text-fill: #ef6464;
+    -fx-border-color: rgba(239, 100, 100, 0.65);
+    -fx-background-color: rgba(239, 100, 100, 0.08);
+}
+
+/* ── BMI Detail Rows ──────────────────────────────────────── */
+.result-details {
+    -fx-max-width: Infinity;
+    -fx-spacing: 0.75em;
+    -fx-padding: 1.4em 0 0 0;
+}
+
+.result-detail-row {
+    -fx-min-height: 3.3em;
+    -fx-pref-height: 3.3em;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.65em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-radius: 0.65em;
+    -fx-border-width: 1px;
+
+    -fx-padding: 0 1em;
+}
+
+.result-detail-label {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+}
+
+.result-detail-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.2em;
+    -fx-font-weight: bold;
+}
+
+/* ── BMI Categories ─────────────────────────────────────── */
+.bmi-categories {
+    -fx-max-width: Infinity;
+    -fx-spacing: 0.6em;
+    -fx-padding: 1.2em 0 0 0;
+}
+
+.bmi-categories-title {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.3em;
+    -fx-font-weight: bold;
+}
+
+.bmi-categories-list {
+    -fx-max-width: Infinity;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.65em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-radius: 0.65em;
+    -fx-border-width: 1px;
+}
+
+.bmi-category-row {
+    -fx-min-height: 2.9em;
+    -fx-pref-height: 2.9em;
+
+    -fx-background-color: transparent;
+
+    -fx-border-color: transparent transparent -app-border-soft transparent;
+    -fx-border-width: 0 0 1px 0;
+
+    -fx-padding: 0 1em 0 1em;
+}
+
+.bmi-category-row-last {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.bmi-category-name {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.95em;
+    -fx-font-weight: bold;
+}
+
+.bmi-category-range {
+    -fx-text-fill: -app-text-muted;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.92em;
+}
+
+.bmi-category-active {
+    -fx-background-color: -app-hover;
+    -fx-border-color: transparent transparent -app-border-soft -app-primary-light;
+    -fx-border-width: 0 0 1px 0.25em;
+}
+
+.bmi-category-row-last.bmi-category-active {
+    -fx-border-color: transparent transparent transparent -app-primary-light;
+    -fx-border-width: 0 0 0 0.25em;
+}
+
+.bmi-category-active .bmi-category-name,
+.bmi-category-active .bmi-category-range {
+    -fx-text-fill: -app-text-primary;
+}
+
+.result-detail-row.bmi-category-underweight {
+    -fx-border-color: rgba(242, 201, 76, 0.65);
+    -fx-background-color: rgba(242, 201, 76, 0.08);
+}
+
+.result-detail-row.bmi-category-underweight .label {
+    -fx-text-fill: #f2c94c;
+}
+
+.result-detail-row.bmi-category-normal {
+    -fx-border-color: rgba(89, 215, 125, 0.65);
+    -fx-background-color: rgba(89, 215, 125, 0.08);
+}
+
+.result-detail-row.bmi-category-normal .label {
+    -fx-text-fill: #59d77d;
+}
+
+.result-detail-row.bmi-category-overweight {
+    -fx-border-color: rgba(240, 173, 78, 0.65);
+    -fx-background-color: rgba(240, 173, 78, 0.08);
+}
+
+.result-detail-row.bmi-category-overweight .label {
+    -fx-text-fill: #f0ad4e;
+}
+
+.result-detail-row.bmi-category-obese {
+    -fx-border-color: rgba(239, 100, 100, 0.65);
+    -fx-background-color: rgba(239, 100, 100, 0.08);
+}
+
+.result-detail-row.bmi-category-obese .label {
+    -fx-text-fill: #ef6464;
+}
+
+/* ── Tooltip ──────────────────────────────────────── */
+.info-button {
+    -fx-min-width: 1.45em;
+    -fx-pref-width: 1.45em;
+    -fx-max-width: 1.45em;
+
+    -fx-min-height: 1.45em;
+    -fx-pref-height: 1.45em;
+    -fx-max-height: 1.45em;
+
+    -fx-padding: 0;
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+
+    -fx-border-color: -app-text-muted;
+    -fx-border-radius: 50%;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: -app-text-muted;
+    -fx-font-size: 0.75em;
+    -fx-font-weight: bold;
+
+    -fx-cursor: hand;
+}
+
+.info-button:hover {
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-primary-light;
+    -fx-text-fill: -app-text-primary;
+}
+
+.tooltip {
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.6em;
+
+    -fx-border-color: -app-border;
+    -fx-border-radius: 0.6em;
+
+    -fx-text-fill: -app-text-primary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.9em;
+
+    -fx-padding: 0.8em 1em;
+}

@@ -4,4 +4,5 @@
     -fx-min-width: 22em;
     -fx-pref-width: 31.5em;
     -fx-max-width: 31.5em;
+    -fx-padding: 0 0.8em;
 }

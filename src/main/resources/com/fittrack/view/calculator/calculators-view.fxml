@@ -12,6 +12,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.control.Button?>
 
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tooltip?>
 <BorderPane fx:id="rootLayout"
             xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -20,99 +23,308 @@
             styleClass="calculators-container">
 
     <fx:define>
+        <!-- Calculators Button Group -->
+        <ToggleGroup fx:id="calculatorGroup"/>
+
+        <!-- Gender Button Group -->
+        <ToggleGroup fx:id="genderGroup"/>
+
+        <!-- Form panel -->
         <VBox fx:id="formPanel"
               maxWidth="Infinity"
               styleClass="form-panel">
 
-            <!-- Age -->
-            <VBox fx:id="ageGroup"
-                  styleClass="field-group">
-                <Label styleClass="field-label"
-                       text="Age"/>
+            <VBox fx:id="formContent"
+                  styleClass="calculator-form-content">
 
-                <TextField fx:id="ageField"
-                           promptText="Enter your age"
-                           styleClass="input-field,text-field"/>
+                <!-- Age -->
+                <VBox fx:id="ageGroup"
+                      styleClass="field-group">
+                    <Label styleClass="field-label"
+                           text="Age"/>
 
-                <Label fx:id="ageMessage"
-                       styleClass="helper-label"
-                       wrapText="true"
-                       minHeight="-Infinity"
-                       maxHeight="Infinity"
-                       maxWidth="Infinity"/>
+                    <TextField fx:id="ageField"
+                               promptText="Enter your age"
+                               styleClass="input-field,text-field"/>
+
+                    <Label fx:id="ageMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Gender -->
+                <VBox styleClass="field-group">
+                    <Label styleClass="field-label"
+                           text="Gender"/>
+
+                    <HBox spacing="10"
+                          styleClass="gender-options">
+
+                        <ToggleButton fx:id="maleButton"
+                                      text="Male"
+                                      toggleGroup="$genderGroup"
+                                      styleClass="gender-option"
+                                      selected="true"/>
+
+                        <ToggleButton fx:id="femaleButton"
+                                      text="Female"
+                                      toggleGroup="$genderGroup"
+                                      styleClass="gender-option"/>
+                    </HBox>
+                </VBox>
+
+
+                <!-- Height -->
+                <VBox styleClass="field-group">
+                    <Label styleClass="field-label"
+                           text="Height (cm)"/>
+
+                    <TextField fx:id="heightField"
+                               promptText="Enter your height"
+                               styleClass="input-field,text-field"/>
+
+                    <Label fx:id="heightMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Weight -->
+                <VBox styleClass="field-group">
+                    <Label styleClass="field-label"
+                           text="Weight (kg)"/>
+
+                    <TextField fx:id="weightField"
+                               promptText="Enter your weight"
+                               styleClass="input-field,text-field"/>
+
+                    <Label fx:id="weightMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Calculate -->
+                <Button fx:id="nextButton"
+                        maxWidth="Infinity"
+                        onAction="#handleCalculate"
+                        styleClass="action-btn"
+                        text="Calculate"/>
+
             </VBox>
-
-            <!-- Height -->
-            <VBox styleClass="field-group">
-                <Label styleClass="field-label"
-                       text="Height (cm)"/>
-
-                <TextField fx:id="heightField"
-                           promptText="Enter your height"
-                           styleClass="input-field,text-field"/>
-
-                <Label fx:id="heightMessage"
-                       styleClass="helper-label"
-                       wrapText="true"
-                       minHeight="-Infinity"
-                       maxHeight="Infinity"
-                       maxWidth="Infinity"/>
-            </VBox>
-
-            <!-- Weight -->
-            <VBox styleClass="field-group">
-                <Label styleClass="field-label"
-                       text="Weight (kg)"/>
-
-                <TextField fx:id="weightField"
-                           promptText="Enter your weight"
-                           styleClass="input-field,text-field"/>
-
-                <Label fx:id="weightMessage"
-                       styleClass="helper-label"
-                       wrapText="true"
-                       minHeight="-Infinity"
-                       maxHeight="Infinity"
-                       maxWidth="Infinity"/>
-            </VBox>
-
-            <!-- Calculate -->
-            <Button fx:id="nextButton"
-                    maxWidth="Infinity"
-                    onAction="#handleCalculate"
-                    styleClass="action-btn"
-                    text="Calculate"/>
-<!--            <GridPane maxWidth="Infinity"-->
-<!--                      styleClass="next-step-row">-->
-
-<!--                <columnConstraints>-->
-<!--                    <ColumnConstraints percentWidth="50"/>-->
-<!--                    <ColumnConstraints percentWidth="50"/>-->
-<!--                </columnConstraints>-->
-
-<!--                <Button fx:id="nextButton"-->
-<!--                        maxWidth="Infinity"-->
-<!--                        onAction="#handleCalculate"-->
-<!--                        styleClass="action-btn"-->
-<!--                        text="Calculate"/>-->
-
-<!--            </GridPane>-->
 
         </VBox>
 
+        <!-- Result panel -->
         <VBox fx:id="resultPanel"
               maxWidth="Infinity"
               styleClass="result-panel">
+
+            <VBox maxWidth="Infinity"
+                  alignment="TOP_CENTER">
+
+                <!-- BMI Title -->
+                <Label text="BMI Result"
+                       maxWidth="Infinity"
+                       styleClass="result-title"/>
+
+                <!-- Main result -->
+                <HBox alignment="CENTER"
+                      styleClass="result-main-row">
+
+                    <Label fx:id="bmiValueLabel"
+                           text="20.1"
+                           styleClass="result-main-value"/>
+
+                    <Label text="kg/m²"
+                           styleClass="result-main-unit"/>
+
+                </HBox>
+
+                <Label fx:id="bmiStatusLabel"
+                       text="Normal"
+                       visible="false"
+                       managed="false"
+                       styleClass="bmi-status-badge, bmi-status-normal"/>
+
+                <!-- Result details -->
+                <VBox maxWidth="Infinity"
+                      styleClass="result-details">
+
+                    <HBox alignment="CENTER_LEFT"
+                          styleClass="result-detail-row">
+
+                        <Label text="Healthy BMI range"
+                               styleClass="result-detail-label"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label text="18.5 – 24.9"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT"
+                          styleClass="result-detail-row">
+
+                        <Label text="Healthy weight range"
+                               styleClass="result-detail-label"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label fx:id="healthyWeightRangeLabel"
+                               text="—"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT"
+                          styleClass="result-detail-row">
+
+                        <HBox alignment="CENTER_LEFT"
+                              spacing="6">
+
+                            <Label text="BMI Prime"
+                                   styleClass="result-detail-label"/>
+
+                            <Button text="?"
+                                    focusTraversable="false"
+                                    styleClass="info-button">
+
+                                <tooltip>
+                                    <Tooltip fx:id="bmiPrimeTooltip"
+                                             text="Your BMI divided by 25. A value of 1.00 corresponds to the upper limit of the normal BMI range."
+                                             wrapText="true"
+                                             maxWidth="280"/>
+                                </tooltip>
+
+                            </Button>
+
+                        </HBox>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label fx:id="bmiPrimeLabel"
+                               text="—"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT"
+                          styleClass="result-detail-row">
+
+                        <HBox alignment="CENTER_LEFT"
+                              spacing="6">
+
+                            <Label text="Ponderal Index"
+                                   styleClass="result-detail-label"/>
+
+                            <Button text="?"
+                                    focusTraversable="false"
+                                    styleClass="info-button">
+
+                                <tooltip>
+                                    <Tooltip fx:id="bmiPonderalIndexTooltip"
+                                             text="A height-adjusted measure of body mass calculated by dividing weight by height cubed."
+                                             wrapText="true"
+                                             maxWidth="280"/>
+                                </tooltip>
+
+                            </Button>
+
+                        </HBox>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label fx:id="ponderalIndexLabel"
+                               text="—"
+                               styleClass="result-detail-value"/>
+                    </HBox>
+
+                </VBox>
+            </VBox>
+
+            <!-- Categories -->
+            <VBox maxWidth="Infinity">
+                <Label text="BMI Categories"
+                       maxWidth="Infinity"
+                       styleClass="bmi-categories-title"/>
+
+                <VBox maxWidth="Infinity"
+                      styleClass="result-details">
+
+                    <HBox fx:id="underweightCategoryRow"
+                          alignment="CENTER_LEFT"
+                          styleClass="result-detail-row, bmi-category-underweight">
+
+                        <Label text="Underweight"
+                               styleClass="result-detail-label"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label text="Below 18.5"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                    <HBox fx:id="normalCategoryRow"
+                          alignment="CENTER_LEFT"
+                          styleClass="result-detail-row, bmi-category-normal">
+
+                        <Label text="Normal"
+                               styleClass="result-detail-label"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label text="18.5 – 24.9"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                    <HBox fx:id="overweightCategoryRow"
+                          alignment="CENTER_LEFT"
+                          styleClass="result-detail-row, bmi-category-overweight">
+
+                        <Label text="Overweight"
+                               styleClass="result-detail-label"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label text="25.0 – 29.9"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                    <HBox fx:id="obeseCategoryRow"
+                          alignment="CENTER_LEFT"
+                          styleClass="result-detail-row, bmi-category-obese">
+
+                        <Label text="Obese"
+                               styleClass="result-detail-label"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label text="30.0 and above"
+                               styleClass="result-detail-value"/>
+
+                    </HBox>
+
+                </VBox>
+            </VBox>
+
+
 
         </VBox>
     </fx:define>
 
     <top>
-        <!-- Calculators Button Groups-->
-        <fx:define>
-            <ToggleGroup fx:id="calculatorGroup"/>
-        </fx:define>
-
         <HBox fx:id="calculatorTabs"
               maxWidth="Infinity"
               styleClass="calculator-tabs">
@@ -137,12 +349,28 @@
 
     <center>
 
-        <StackPane fx:id="calculatorBodyStack">
+        <!-- If the window is too small, scroll will be added -->
+        <ScrollPane fx:id="setupScroll"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    styleClass="setup-scroll">
 
-            <HBox fx:id="wideContainer" styleClass="calculator-body-row"/>
-            <VBox fx:id="narrowContainer" styleClass="calculator-body-col" visible="false" managed="false"/>
+            <StackPane fx:id="calculatorBodyStack"
+                       maxWidth="Infinity">
 
-        </StackPane>
+                <HBox fx:id="wideContainer"
+                      maxWidth="Infinity"
+                      styleClass="calculator-body-row"/>
+
+                <VBox fx:id="narrowContainer"
+                      maxWidth="Infinity"
+                      visible="false"
+                      managed="false"
+                      styleClass="calculator-body-col"/>
+
+            </StackPane>
+
+        </ScrollPane>
     </center>
 
 </BorderPane>

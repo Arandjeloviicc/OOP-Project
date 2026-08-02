@@ -1,0 +1,30 @@
+.root {
+    -app-background: #100c29;
+    -app-surface: #100c29;
+    -app-surface-light: #1f1b37;
+
+    -app-primary: #6b4bbb;
+    -app-primary-light: #8b6cf6;
+    -app-primary-dark: #261c51;
+
+    -app-border: rgba(139, 108, 246, 0.20);
+    -app-border-soft: rgba(139, 108, 246, 0.15);
+    -app-border-strong: rgba(139, 108, 246, 0.45);
+
+    -app-hover: rgba(107, 75, 187, 0.22);
+    -app-hover-strong: rgba(107, 75, 187, 0.35);
+    -app-selected: #261c51;
+
+    -app-text-primary: white;
+    -app-text-secondary: rgba(255, 255, 255, 0.72);
+    -app-text-muted: rgba(255, 255, 255, 0.48);
+
+    -app-control-background: rgba(255, 255, 255, 0.06);
+    -app-control-background-soft: rgba(255, 255, 255, 0.04);
+    -app-control-border: rgba(255, 255, 255, 0.10);
+
+    -app-danger-background: rgba(255, 85, 85, 0.14);
+    -app-danger-background-pressed: rgba(255, 85, 85, 0.22);
+    -app-danger-border: rgba(255, 100, 100, 0.35);
+    -app-danger-text: #ffb0b0;
+}
