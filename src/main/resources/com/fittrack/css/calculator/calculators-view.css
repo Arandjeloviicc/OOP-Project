@@ -136,8 +136,12 @@
     -fx-border-width: 1px;
 
     -fx-padding: 1.6em;
-    -fx-spacing: 3em;
+    -fx-spacing: 1em;
     -fx-alignment: TOP_CENTER;
+}
+
+.calculator-result-view {
+    -fx-spacing: 3em;
 }
 
 /* ── BMI Result ───────────────────────────────────────────── */
@@ -147,6 +151,10 @@
     -fx-font-size: 1.6em;
     -fx-font-weight: bold;
     -fx-alignment: TOP_LEFT;
+}
+
+.result-section-title {
+    -fx-padding: 1.2em 0 0.2em 0;
 }
 
 .result-main-row {
@@ -392,4 +400,56 @@
     -fx-font-size: 0.9em;
 
     -fx-padding: 0.8em 1em;
+}
+
+/* ── BMR Result Description ──────────────────────────────────────── */
+.result-description {
+    -fx-max-width: Infinity;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.65em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-radius: 0.65em;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+
+    -fx-padding: 1em 1.1em;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.result-description-highlight {
+    -fx-border-color: -app-primary-light;
+    -fx-background-color: -app-selected;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ── BMR / TDEE Body fat toggle ──────────────────────────────────────── */
+.optional-field-toggle {
+    -fx-text-fill: -app-primary-light;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.95em;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.optional-field-toggle:hover {
+    -fx-text-fill: -app-text-primary;
+    -fx-underline: true;
+}
+
+/* ── TDEE Weight goals ──────────────────────────────────────── */
+.result-detail-row.calorie-goal-loss {
+    -fx-border-color: rgba(242, 201, 76, 0.55);
+}
+
+.result-detail-row.calorie-goal-maintain {
+    -fx-border-color: rgba(89, 215, 125, 0.55);
+}
+
+.result-detail-row.calorie-goal-gain {
+    -fx-border-color: rgba(139, 108, 246, 0.55);
 }

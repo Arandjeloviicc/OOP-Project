@@ -42,6 +42,12 @@ public final class AppConstants {
         public static final int MAX_HEIGHT = 250;
         public static final int MIN_WEIGHT = 30;
         public static final int MAX_WEIGHT = 300;
+
+        // Calculators
+        public static final int MIN_BODY_FAT_PERCENTAGE = 2;
+        public static final int MAX_BODY_FAT_PERCENTAGE = 70;
+        public static final int WEIGHT_LOSS_CALORIE_DEFICIT = 500;
+        public static final int WEIGHT_GAIN_CALORIE_SURPLUS = 300;
     }
 
     public static final class Messages {
@@ -128,6 +134,19 @@ public final class AppConstants {
 
         // Calculators
         public static final String INVALID_AGE_MESSAGE = "Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
+        public static final String INVALID_BODY_FAT_MESSAGE =
+                "Body fat must be between %d%% and %d%%."
+                        .formatted(
+                                AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE,
+                                AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE
+                        );
+
         public static final String HELPER_AGE_MESSAGE = "Between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
+        public static final String HELPER_BODY_FAT_MESSAGE =
+                "Optional. Between %d%% and %d%%."
+                        .formatted(
+                                AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE,
+                                AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE
+                        );
     }
 }

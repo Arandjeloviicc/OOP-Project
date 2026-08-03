@@ -110,6 +110,8 @@
     -fx-background-color: #7656d9;
     -fx-border-color: #987aff;
     -fx-text-fill: white;
+
+    -fx-cursor: default;
 }
 
 .gender-option.error {

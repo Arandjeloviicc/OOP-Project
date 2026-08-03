@@ -1,21 +1,25 @@
 package com.fittrack.model.profile;
 
 public enum ActivityLevel {
-    SEDENTARY("sedentary"),
-    LIGHT("light"),
-    MODERATE("moderate"),
-    HEAVY("heavy"),
-    ATHLETE("athlete");
+    SEDENTARY("sedentary", 1.2),
+    LIGHT("light", 1.375),
+    MODERATE("moderate", 1.55),
+    HEAVY("heavy", 1.725),
+    ATHLETE("athlete", 1.9);
 
     private final String code;
+    private final double multiplier;
 
-    ActivityLevel(String code) {
+    ActivityLevel(String code, double multiplier) {
         this.code = code;
+        this.multiplier = multiplier;
     }
 
     public String getCode() {
         return code;
     }
+
+    public double getMultiplier() { return multiplier; }
 
     @Override
     public String toString() {

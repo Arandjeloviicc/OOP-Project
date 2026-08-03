@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.ComboBox?>
 <BorderPane fx:id="rootLayout"
             xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -39,7 +40,10 @@
 
                 <!-- Age -->
                 <VBox fx:id="ageGroup"
+                      visible="false"
+                      managed="false"
                       styleClass="field-group">
+
                     <Label styleClass="field-label"
                            text="Age"/>
 
@@ -56,7 +60,11 @@
                 </VBox>
 
                 <!-- Gender -->
-                <VBox styleClass="field-group">
+                <VBox fx:id="genderGroupContainer"
+                      visible="false"
+                      managed="false"
+                      styleClass="field-group">
+
                     <Label styleClass="field-label"
                            text="Gender"/>
 
@@ -111,6 +119,61 @@
                            maxWidth="Infinity"/>
                 </VBox>
 
+                <!-- Activity level -->
+                <VBox fx:id="activityLevelGroup"
+                      visible="false"
+                      managed="false"
+                      styleClass="field-group">
+
+                    <Label styleClass="field-label"
+                           text="Activity level"/>
+
+                    <ComboBox fx:id="activityLevelComboBox"
+                              maxWidth="Infinity"
+                              promptText="Choose your activity level"
+                              styleClass="input-field,combo-box-field"/>
+
+                    <Label fx:id="activityLevelMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Bodyfat -->
+                <VBox fx:id="bodyFatSettingsGroup"
+                      visible="false"
+                      managed="false"
+                      styleClass="field-group">
+
+                    <Label fx:id="bodyFatToggleLabel"
+                           text="+ Add body fat percentage"
+                           onMouseClicked="#handleBodyFatToggle"
+                           styleClass="optional-field-toggle"/>
+
+                    <VBox fx:id="bodyFatFieldGroup"
+                          visible="false"
+                          managed="false"
+                          styleClass="field-group">
+
+                        <Label text="Body fat (%)"
+                               styleClass="field-label"/>
+
+                        <TextField fx:id="bodyFatField"
+                                   promptText="Enter your body fat percentage"
+                                   styleClass="input-field, text-field"/>
+
+                        <Label fx:id="bodyFatMessage"
+                               text="Optional. Used for a more personalized BMR estimate."
+                               wrapText="true"
+                               maxWidth="Infinity"
+                               styleClass="helper-label"/>
+
+                    </VBox>
+
+                </VBox>
+
                 <!-- Calculate -->
                 <Button fx:id="nextButton"
                         maxWidth="Infinity"
@@ -125,201 +188,420 @@
         <!-- Result panel -->
         <VBox fx:id="resultPanel"
               maxWidth="Infinity"
+              maxHeight="-Infinity"
               styleClass="result-panel">
 
-            <VBox maxWidth="Infinity"
-                  alignment="TOP_CENTER">
+            <!-- BMI -->
+            <VBox fx:id="bmiResultView"
+                  maxWidth="Infinity"
+                  styleClass="calculator-result-view">
 
-                <!-- BMI Title -->
-                <Label text="BMI Result"
-                       maxWidth="Infinity"
-                       styleClass="result-title"/>
-
-                <!-- Main result -->
-                <HBox alignment="CENTER"
-                      styleClass="result-main-row">
-
-                    <Label fx:id="bmiValueLabel"
-                           text="20.1"
-                           styleClass="result-main-value"/>
-
-                    <Label text="kg/m²"
-                           styleClass="result-main-unit"/>
-
-                </HBox>
-
-                <Label fx:id="bmiStatusLabel"
-                       text="Normal"
-                       visible="false"
-                       managed="false"
-                       styleClass="bmi-status-badge, bmi-status-normal"/>
-
-                <!-- Result details -->
+                <!-- Result -->
                 <VBox maxWidth="Infinity"
-                      styleClass="result-details">
+                      alignment="TOP_CENTER">
 
-                    <HBox alignment="CENTER_LEFT"
-                          styleClass="result-detail-row">
+                    <!-- Title -->
+                    <Label text="BMI Result"
+                           maxWidth="Infinity"
+                           styleClass="result-title"/>
 
-                        <Label text="Healthy BMI range"
-                               styleClass="result-detail-label"/>
+                    <!-- Main -->
+                    <HBox alignment="CENTER"
+                          styleClass="result-main-row">
 
-                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="bmiValueLabel"
+                               text="-"
+                               styleClass="result-main-value"/>
 
-                        <Label text="18.5 – 24.9"
-                               styleClass="result-detail-value"/>
-
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT"
-                          styleClass="result-detail-row">
-
-                        <Label text="Healthy weight range"
-                               styleClass="result-detail-label"/>
-
-                        <Region HBox.hgrow="ALWAYS"/>
-
-                        <Label fx:id="healthyWeightRangeLabel"
-                               text="—"
-                               styleClass="result-detail-value"/>
+                        <Label text="kg/m²"
+                               styleClass="result-main-unit"/>
 
                     </HBox>
 
-                    <HBox alignment="CENTER_LEFT"
-                          styleClass="result-detail-row">
+                    <!-- Status -->
+                    <Label fx:id="bmiStatusLabel"
+                           text="Normal"
+                           visible="false"
+                           managed="false"
+                           styleClass="bmi-status-badge, bmi-status-normal"/>
 
+                    <!-- Details -->
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <!-- Healthy BMI range -->
                         <HBox alignment="CENTER_LEFT"
-                              spacing="6">
+                              styleClass="result-detail-row">
 
-                            <Label text="BMI Prime"
+                            <Label text="Healthy BMI range"
                                    styleClass="result-detail-label"/>
 
-                            <Button text="?"
-                                    focusTraversable="false"
-                                    styleClass="info-button">
+                            <Region HBox.hgrow="ALWAYS"/>
 
-                                <tooltip>
-                                    <Tooltip fx:id="bmiPrimeTooltip"
-                                             text="Your BMI divided by 25. A value of 1.00 corresponds to the upper limit of the normal BMI range."
-                                             wrapText="true"
-                                             maxWidth="280"/>
-                                </tooltip>
-
-                            </Button>
+                            <Label text="18.5 – 24.9"
+                                   styleClass="result-detail-value"/>
 
                         </HBox>
 
-                        <Region HBox.hgrow="ALWAYS"/>
-
-                        <Label fx:id="bmiPrimeLabel"
-                               text="—"
-                               styleClass="result-detail-value"/>
-
-                    </HBox>
-
-                    <HBox alignment="CENTER_LEFT"
-                          styleClass="result-detail-row">
-
+                        <!-- Healthy Weight range -->
                         <HBox alignment="CENTER_LEFT"
-                              spacing="6">
+                              styleClass="result-detail-row">
 
-                            <Label text="Ponderal Index"
+                            <Label text="Healthy weight range"
                                    styleClass="result-detail-label"/>
 
-                            <Button text="?"
-                                    focusTraversable="false"
-                                    styleClass="info-button">
+                            <Region HBox.hgrow="ALWAYS"/>
 
-                                <tooltip>
-                                    <Tooltip fx:id="bmiPonderalIndexTooltip"
-                                             text="A height-adjusted measure of body mass calculated by dividing weight by height cubed."
-                                             wrapText="true"
-                                             maxWidth="280"/>
-                                </tooltip>
-
-                            </Button>
+                            <Label fx:id="healthyWeightRangeLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
 
                         </HBox>
 
-                        <Region HBox.hgrow="ALWAYS"/>
+                        <!-- BMI Prime -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
 
-                        <Label fx:id="ponderalIndexLabel"
-                               text="—"
-                               styleClass="result-detail-value"/>
-                    </HBox>
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="6">
+
+                                <Label text="BMI Prime"
+                                       styleClass="result-detail-label"/>
+
+                                <Button text="?"
+                                        focusTraversable="false"
+                                        styleClass="info-button">
+
+                                    <tooltip>
+                                        <Tooltip fx:id="bmiPrimeTooltip"
+                                                 text="Your BMI divided by 25. A value of 1.00 corresponds to the upper limit of the normal BMI range."
+                                                 wrapText="true"
+                                                 maxWidth="280"/>
+                                    </tooltip>
+
+                                </Button>
+
+                            </HBox>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="bmiPrimeLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Ponderal index -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="6">
+
+                                <Label text="Ponderal Index"
+                                       styleClass="result-detail-label"/>
+
+                                <Button text="?"
+                                        focusTraversable="false"
+                                        styleClass="info-button">
+
+                                    <tooltip>
+                                        <Tooltip fx:id="bmiPonderalIndexTooltip"
+                                                 text="A height-adjusted measure of body mass calculated by dividing weight by height cubed."
+                                                 wrapText="true"
+                                                 maxWidth="280"/>
+                                    </tooltip>
+
+                                </Button>
+
+                            </HBox>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="ponderalIndexLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+                        </HBox>
+
+                    </VBox>
+                </VBox>
+
+                <!-- Categories -->
+                <VBox maxWidth="Infinity">
+
+                    <!-- Title -->
+                    <Label text="BMI Categories"
+                           maxWidth="Infinity"
+                           styleClass="bmi-categories-title"/>
+
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <!-- Underweight -->
+                        <HBox fx:id="underweightCategoryRow"
+                              alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, bmi-category-underweight">
+
+                            <Label text="Underweight"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label text="Below 18.5"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Normal -->
+                        <HBox fx:id="normalCategoryRow"
+                              alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, bmi-category-normal">
+
+                            <Label text="Normal"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label text="18.5 – 24.9"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Overweight -->
+                        <HBox fx:id="overweightCategoryRow"
+                              alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, bmi-category-overweight">
+
+                            <Label text="Overweight"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label text="25.0 – 29.9"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Obese -->
+                        <HBox fx:id="obeseCategoryRow"
+                              alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, bmi-category-obese">
+
+                            <Label text="Obese"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label text="30.0 and above"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                    </VBox>
 
                 </VBox>
+
             </VBox>
 
-            <!-- Categories -->
-            <VBox maxWidth="Infinity">
-                <Label text="BMI Categories"
-                       maxWidth="Infinity"
-                       styleClass="bmi-categories-title"/>
+            <!-- BMR -->
+            <VBox fx:id="bmrResultView"
+                  maxWidth="Infinity"
+                  visible="false"
+                  managed="false"
+                  styleClass="calculator-result-view">
 
+                <!-- Result -->
                 <VBox maxWidth="Infinity"
-                      styleClass="result-details">
+                      alignment="TOP_CENTER">
 
-                    <HBox fx:id="underweightCategoryRow"
-                          alignment="CENTER_LEFT"
-                          styleClass="result-detail-row, bmi-category-underweight">
+                    <!-- Title -->
+                    <Label text="BMR Result"
+                           maxWidth="Infinity"
+                           styleClass="result-title"/>
 
-                        <Label text="Underweight"
-                               styleClass="result-detail-label"/>
+                    <!-- Main -->
+                    <HBox alignment="CENTER"
+                          styleClass="result-main-row">
 
-                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="bmrValueLabel"
+                               text="-"
+                               styleClass="result-main-value"/>
 
-                        <Label text="Below 18.5"
-                               styleClass="result-detail-value"/>
-
-                    </HBox>
-
-                    <HBox fx:id="normalCategoryRow"
-                          alignment="CENTER_LEFT"
-                          styleClass="result-detail-row, bmi-category-normal">
-
-                        <Label text="Normal"
-                               styleClass="result-detail-label"/>
-
-                        <Region HBox.hgrow="ALWAYS"/>
-
-                        <Label text="18.5 – 24.9"
-                               styleClass="result-detail-value"/>
+                        <Label text="kcal/day"
+                               styleClass="result-main-unit"/>
 
                     </HBox>
 
-                    <HBox fx:id="overweightCategoryRow"
-                          alignment="CENTER_LEFT"
-                          styleClass="result-detail-row, bmi-category-overweight">
+                    <!-- Details -->
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
 
-                        <Label text="Overweight"
-                               styleClass="result-detail-label"/>
+                        <Label text="Your BMR is the estimated number of calories your body needs each day to maintain essential functions while at complete rest."
+                               maxWidth="Infinity"
+                               wrapText="true"
+                               styleClass="result-description"/>
 
-                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="What does this include?"
+                               maxWidth="Infinity"
+                               styleClass="bmi-categories-title, result-section-title"/>
 
-                        <Label text="25.0 – 29.9"
-                               styleClass="result-detail-value"/>
+                        <Label text="Breathing, circulation, body temperature regulation, brain function and other essential processes your body performs at rest."
+                               maxWidth="Infinity"
+                               wrapText="true"
+                               styleClass="result-description"/>
 
-                    </HBox>
+                        <Label text="Your actual daily calorie needs will be higher because BMR does not include walking, exercise, work or other daily activity. Use the TDEE calculator for a more realistic daily estimate."
+                               maxWidth="Infinity"
+                               wrapText="true"
+                               styleClass="result-description, result-description-highlight"/>
 
-                    <HBox fx:id="obeseCategoryRow"
-                          alignment="CENTER_LEFT"
-                          styleClass="result-detail-row, bmi-category-obese">
-
-                        <Label text="Obese"
-                               styleClass="result-detail-label"/>
-
-                        <Region HBox.hgrow="ALWAYS"/>
-
-                        <Label text="30.0 and above"
-                               styleClass="result-detail-value"/>
-
-                    </HBox>
+                    </VBox>
 
                 </VBox>
+
             </VBox>
 
+            <!-- TDEE -->
+            <VBox fx:id="tdeeResultView"
+                  maxWidth="Infinity"
+                  visible="false"
+                  managed="false"
+                  styleClass="calculator-result-view">
 
+                <!-- Main Result -->
+                <VBox maxWidth="Infinity"
+                      alignment="TOP_CENTER">
+
+                    <!-- Title -->
+                    <Label text="TDEE Result"
+                           maxWidth="Infinity"
+                           styleClass="result-title"/>
+
+                    <!-- Main -->
+                    <HBox alignment="CENTER"
+                          styleClass="result-main-row">
+
+                        <Label fx:id="tdeeValueLabel"
+                               text="-"
+                               styleClass="result-main-value"/>
+
+                        <Label text="kcal/day"
+                               styleClass="result-main-unit"/>
+
+                    </HBox>
+
+                    <!-- Details -->
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <Label text="Estimated daily calories needed to maintain your current weight at the selected activity level."
+                               maxWidth="Infinity"
+                               wrapText="true"
+                               styleClass="result-description"/>
+
+                    </VBox>
+
+                </VBox>
+
+                <!-- Calculation summary -->
+                <VBox maxWidth="Infinity">
+
+                    <Label text="Calculation Summary"
+                           maxWidth="Infinity"
+                           styleClass="bmi-categories-title"/>
+
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <Label text="Activity level"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="tdeeActivityLevelLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <Label text="Estimated BMR"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="tdeeBmrValueLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                    </VBox>
+
+                </VBox>
+
+                <!-- Daily goals -->
+                <VBox maxWidth="Infinity">
+
+                    <Label text="Daily Calorie Goals"
+                           maxWidth="Infinity"
+                           styleClass="bmi-categories-title"/>
+
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, calorie-goal-loss">
+
+                            <Label text="Weight loss"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="weightLossCaloriesLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, calorie-goal-maintain">
+
+                            <Label text="Maintain weight"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="maintenanceCaloriesLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, calorie-goal-gain">
+
+                            <Label text="Weight gain"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="weightGainCaloriesLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
 
         </VBox>
     </fx:define>
