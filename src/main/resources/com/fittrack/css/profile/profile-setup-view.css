@@ -67,9 +67,9 @@
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 
-    -fx-min-height: 3em;
-    -fx-pref-height: 3em;
-    -fx-max-height: 3em;
+    -fx-min-height: 48px;
+    -fx-pref-height: 48px;
+    -fx-max-height: 48px;
 
     -fx-cursor: hand;
 }
@@ -77,13 +77,13 @@
 .root:narrow .back-btn {
     -fx-font-size: 1.5em;
 
-    -fx-min-width: 4em;
-    -fx-pref-width: 4em;
-    -fx-max-width: 4em;
+    -fx-min-height: 48px;
+    -fx-pref-height: 48px;
+    -fx-max-height: 48px;
 
-    -fx-min-height: 3em;
-    -fx-pref-height: 3em;
-    -fx-max-height: 3em;
+    -fx-min-width: 60px;
+    -fx-pref-width: 60px;
+    -fx-max-width: 60px;
 
     -fx-padding: 0;
 }
@@ -286,12 +286,14 @@
 }
 
 .combo-box-field:showing {
-    -fx-border-color: rgba(139, 108, 246, 0.45);
+    -fx-border-color: rgba(120, 100, 255, 0.70);
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-effect: dropshadow(gaussian, rgba(100, 80, 255, 0.30), 8, 0.3, 0, 0);
 }
 
 .combo-box-popup > .list-view {
-    -fx-background-color: #211a42;
-    -fx-border-color: rgba(139, 108, 246, 0.38);
+    -fx-background-color: #171229;
+    -fx-border-color: rgba(139, 108, 246, 0.30);
     -fx-border-width: 1px;
 
     -fx-background-radius: 0.7em;
@@ -311,11 +313,9 @@
 }
 
 .combo-box-popup > .list-view .list-cell:filled:hover {
-    -fx-background-color: rgba(107, 75, 187, 0.22);
+    -fx-background-color: #291e49;
     -fx-text-fill: white;
 }
-
-
 
 .combo-box-popup > .list-view .list-cell:empty {
     -fx-background-color: transparent;
