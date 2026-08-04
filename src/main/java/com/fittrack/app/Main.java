@@ -35,9 +35,9 @@ public class Main extends Application {
         Scene scene = new Scene(loader.load(), 1280, 800);
 
         try {
-            Image icon16 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/fittrack/images/logos/app-logo-16.png")));
-            Image icon32 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/fittrack/images/logos/app-logo-32.png")));
-            Image icon64 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/fittrack/images/logos/app-logo-64.png")));
+            Image icon16 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/fittrack/images/logo/app-logo-16.png")));
+            Image icon32 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/fittrack/images/logo/app-logo-32.png")));
+            Image icon64 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/fittrack/images/logo/app-logo-64.png")));
 
             stage.getIcons().addAll(icon16, icon32, icon64);
 
