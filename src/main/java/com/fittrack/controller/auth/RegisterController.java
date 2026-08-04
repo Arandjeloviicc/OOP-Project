@@ -25,7 +25,9 @@ public class RegisterController extends AuthFormController implements Initializa
     @Override
     protected Logger getLogger() { return log; }
 
+    @FXML private StackPane rootLayout;
     @FXML private ImageView backgroundImage;
+
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
@@ -36,27 +38,26 @@ public class RegisterController extends AuthFormController implements Initializa
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button registerButton;
-    @FXML private StackPane rootPane;
+
 
     private final RegistrationService registrationService = new RegistrationService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Load background image
-        setBackgroundImage(backgroundImage);
 
-        backgroundImage.fitWidthProperty().bind(rootPane.widthProperty());
-        backgroundImage.fitHeightProperty().bind(rootPane.heightProperty());
-        backgroundImage.setPreserveRatio(false);
+        // Initialize all controls and images
+        initializeAuthControls(rootLayout, backgroundImage, passwordField, passwordVisible);
 
-        // Sync password fields on type
-        initPasswordToggle(passwordField, passwordVisible);
+        // Responsive initialize
+        initializeAuthResponsiveLayout(rootLayout);
 
-        // Clear errors on type
-        usernameField.textProperty().addListener((obs, old, val) -> restoreUsernameHelper());
-        emailField.textProperty().addListener((obs, old, val) -> restoreEmailHelper());
-        passwordField.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
-        passwordVisible.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
+        // Initialize input messages
+        restoreUsernameHelper();
+        restoreEmailHelper();
+        restorePasswordHelper();
+
+        // Listeners
+        addListeners();
     }
 
     // ── Toggle password visibility ──────────────────────────────
@@ -97,7 +98,7 @@ public class RegisterController extends AuthFormController implements Initializa
         if (!valid) return;
 
         registerButton.setDisable(true);
-        registerButton.setText("Registering in...");
+        registerButton.setText("Registering...");
 
         try {
 
@@ -154,6 +155,14 @@ public class RegisterController extends AuthFormController implements Initializa
                     AppConstants.Validation.MAX_USERNAME_LENGTH - 1
             )
     );
+
+    // ── Initialize Helpers ─────────────────────────────────────────────────
+    private void addListeners() {
+        usernameField.textProperty().addListener((obs, old, val) -> restoreUsernameHelper());
+        emailField.textProperty().addListener((obs, old, val) -> restoreEmailHelper());
+        passwordField.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
+        passwordVisible.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
+    }
 
     // ── Username Helpers ─────────────────────────────────────────────────
     private boolean isValidUsername(String username) {

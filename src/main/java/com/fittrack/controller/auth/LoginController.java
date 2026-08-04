@@ -25,14 +25,14 @@ public class LoginController extends AuthFormController implements Initializable
     @Override
     protected Logger getLogger() { return log; }
 
-    @FXML private StackPane rootPane;
+    @FXML private StackPane rootLayout;
 
     @FXML private ImageView backgroundImage;
     @FXML private TextField emailField;
+    @FXML private Label emailMessage;
     @FXML private PasswordField passwordField;
     @FXML private TextField passwordVisible;
-    @FXML private Label emailError;
-    @FXML private Label passwordError;
+    @FXML private Label passwordMessage;
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button loginButton;
@@ -42,20 +42,19 @@ public class LoginController extends AuthFormController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Load background image
-        setBackgroundImage(backgroundImage);
 
-        backgroundImage.fitWidthProperty().bind(rootPane.widthProperty());
-        backgroundImage.fitHeightProperty().bind(rootPane.heightProperty());
-        backgroundImage.setPreserveRatio(false);
+        // Initialize all controls and images
+        initializeAuthControls(rootLayout, backgroundImage, passwordField, passwordVisible);
 
-        // Sync password fields on type
-        initPasswordToggle(passwordField, passwordVisible);
+        // Responsive initialize
+        initializeAuthResponsiveLayout(rootLayout);
 
-        // Clear errors on type
-        emailField.textProperty().addListener((obs, old, val) -> clearEmailError());
-        passwordField.textProperty().addListener((obs, old, val) -> clearPasswordError());
-        passwordVisible.textProperty().addListener((obs, old, val) -> clearPasswordError());
+        // Initialize input messages
+        restoreEmailHelper();
+        restorePasswordHelper();
+
+        // Listeners
+        addListeners();
     }
 
     // ── Toggle password visibility ──────────────────────────────
@@ -75,13 +74,13 @@ public class LoginController extends AuthFormController implements Initializable
         boolean valid = true;
 
         if (!isValidEmail(email)) {
-            showEmailError(AppConstants.Messages.INVALID_EMAIL_MESSAGE);
+            showEmailMessage(AppConstants.Messages.INVALID_EMAIL_MESSAGE);
             shake(emailField);
             valid = false;
         }
 
         if (password.length() < AppConstants.Validation.MIN_PASSWORD_LENGTH) {
-            showPasswordError(AppConstants.Messages.INVALID_PASSWORD_MESSAGE);
+            showPasswordMessage(AppConstants.Messages.INVALID_PASSWORD_MESSAGE);
             shake(passwordShowing ? passwordVisible : passwordField);
             valid = false;
         }
@@ -113,12 +112,12 @@ public class LoginController extends AuthFormController implements Initializable
                         resetLoginButton();
 
                         log.error("Login failed: {}", exception.getMessage());
-                        showEmailError("Something went wrong while completing sign in. Please try again.");
+                        showEmailMessage("Something went wrong while completing sign in. Please try again.");
                     }
                 }
 
                 case USER_NOT_FOUND -> {
-                    showEmailError("No account exists with this email.");
+                    showEmailMessage("No account exists with this email.");
                     shake(emailField);
 
                     loginButton.setDisable(false);
@@ -126,7 +125,7 @@ public class LoginController extends AuthFormController implements Initializable
                 }
 
                 case WRONG_PASSWORD -> {
-                    showPasswordError("Incorrect password.");
+                    showPasswordMessage("Incorrect password.");
                     shake(passwordShowing ? passwordVisible : passwordField);
 
                     loginButton.setDisable(false);
@@ -135,7 +134,7 @@ public class LoginController extends AuthFormController implements Initializable
             }
         } catch (IllegalStateException exception) {
             log.error("Database error during login.", exception);
-            showEmailError("Something went wrong while signing in. Please try again.");
+            showEmailMessage("Something went wrong while signing in. Please try again.");
             resetLoginButton();
         }
     }
@@ -152,14 +151,20 @@ public class LoginController extends AuthFormController implements Initializable
         registerController.prefillEmail(enteredEmail);
     }
 
-    // ── Email Helpers ─────────────────────────────────────────────────
-    private void showEmailError(String message) {
-        emailError.setText(message);
-        setFieldError(emailField, emailError, true);
+    // ── Initialize Helpers ─────────────────────────────────────────────────
+    private void addListeners() {
+        emailField.textProperty().addListener((obs, old, val) -> restoreEmailHelper());
+        passwordField.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
+        passwordVisible.textProperty().addListener((obs, old, val) -> restorePasswordHelper());
     }
 
-    private void clearEmailError() {
-        setFieldError(emailField, emailError, false);
+    // ── Email Helpers ─────────────────────────────────────────────────
+    private void showEmailMessage(String message) {
+        setFieldMessage(emailMessage, message, true, emailField);
+    }
+
+    private void restoreEmailHelper() {
+        setFieldMessage(emailMessage, "", false, emailField);
     }
 
     public void prefillEmail(String email) {
@@ -169,15 +174,12 @@ public class LoginController extends AuthFormController implements Initializable
     }
 
     // ── Password Helpers ─────────────────────────────────────────────────
-    private void showPasswordError(String message) {
-        passwordError.setText(message);
-        setFieldError(passwordField,   passwordError, true);
-        setFieldError(passwordVisible, passwordError, true);
+    private void showPasswordMessage(String message) {
+        setFieldMessage(passwordMessage, message, true, passwordField, passwordVisible);
     }
 
-    private void clearPasswordError() {
-        setFieldError(passwordField,   passwordError, false);
-        setFieldError(passwordVisible, passwordError, false);
+    private void restorePasswordHelper() {
+        setFieldMessage(passwordMessage, "", false, passwordField, passwordVisible);
     }
 
     // ── Login Button Helpers ─────────────────────────────────────────────────

@@ -1,17 +1,62 @@
 package com.fittrack.controller.auth;
 
 import com.fittrack.controller.common.FormController;
+import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.util.AppConstants;
 import com.fittrack.util.AppImages;
+import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-public abstract class AuthFormController extends FormController {
+public abstract class AuthFormController extends FormController implements ResponsiveLayout {
+
+    // Responsive breakpoint
+    private static final int NARROW_BREAKPOINT = 450;
+
+    // Is Narrow
+    private Boolean narrowLayout;
+
+    // PseudoClass for Narrow screen size
+    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
+
+    // Root StackPane
+    private StackPane authRootPane;
+
+    // ── Initialize Helpers ──────────────────────────────────────────────
+    protected void initializeAuthControls(StackPane rootLayout, ImageView backgroundImage, PasswordField passwordField, TextField passwordVisible) {
+        // Load background image
+        setBackgroundImage(backgroundImage);
+
+        // Background size initialize
+        backgroundImage.fitWidthProperty().bind(rootLayout.widthProperty());
+        backgroundImage.fitHeightProperty().bind(rootLayout.heightProperty());
+        backgroundImage.setPreserveRatio(false);
+
+        // Sync password fields on type
+        initPasswordToggle(passwordField, passwordVisible);
+    }
+
+    // ── Responsive Helpers ──────────────────────────────────────────────
+    protected void initializeAuthResponsiveLayout(StackPane rootPane) {
+        authRootPane = rootPane;
+        initializeResponsiveLayout(authRootPane, NARROW_BREAKPOINT);
+    }
+
+    @Override
+    public void updateLayout(boolean narrow) {
+        if (Objects.equals(narrowLayout, narrow)) return;
+
+        narrowLayout = narrow;
+
+        authRootPane.pseudoClassStateChanged(NARROW, narrow);
+    }
 
     // ── Validation ──────────────────────────────────────────────
     private static final Pattern EMAIL_PATTERN = Pattern.compile(

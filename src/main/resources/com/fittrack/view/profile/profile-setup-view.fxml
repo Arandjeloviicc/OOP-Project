@@ -15,7 +15,7 @@
 <?import javafx.scene.control.ScrollPane?>
 
 <?import javafx.scene.control.ComboBox?>
-<StackPane fx:id="rootPane"
+<StackPane fx:id="rootLayout"
            styleClass="root"
            stylesheets="@../../css/profile/profile-setup-view.css"
            xmlns="http://javafx.com/javafx/22"
@@ -141,8 +141,7 @@
                             <ColumnConstraints percentWidth="50"/>
                         </columnConstraints>
 
-                        <Button fx:id="nextButton"
-                                GridPane.columnIndex="0"
+                        <Button GridPane.columnIndex="0"
                                 maxWidth="Infinity"
                                 onAction="#handleNext"
                                 styleClass="action-btn"
@@ -231,7 +230,7 @@
                     <ComboBox fx:id="activityLevelComboBox"
                               maxWidth="Infinity"
                               promptText="Choose your activity level"
-                              styleClass="input-field,combo-box-field"/>
+                              styleClass="input-field, combo-box-field"/>
 
                     <Label fx:id="activityLevelMessage"
                            styleClass="helper-label"
@@ -247,7 +246,7 @@
                     <ComboBox fx:id="goalTypeComboBox"
                                maxWidth="Infinity"
                                promptText="Choose your weight goal"
-                               styleClass="input-field,combo-box-field"/>
+                               styleClass="input-field, combo-box-field"/>
 
                     <Label fx:id="goalTypeMessage"
                            styleClass="helper-label"

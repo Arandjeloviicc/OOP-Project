@@ -1,11 +1,8 @@
-/* ============================================================
-   FitTrack — Base View CSS
-   ============================================================
- */
+@import "../theme.css";
 
 /* ── Root / Screen ─────────────────────────────────────────── */
 .root {
-    -fx-background-color: #0d0b1a;
+    -fx-background-color: -app-background;
     -fx-font-size: 14px;
 }
 
@@ -181,14 +178,6 @@
     -fx-max-height: 3.375em;
 
     -fx-padding: 0;
-    -fx-effect: dropshadow(
-            gaussian,
-            rgba(74, 95, 255, 0.55),
-            20,
-            0.3,
-            0,
-            4
-    );
 
     -fx-border-color: transparent;
     -fx-border-width: 0;
@@ -196,14 +185,12 @@
 
 .action-btn:hover {
     -fx-background-color: linear-gradient(to right, #5566ff, #6677ff);
-    -fx-effect: dropshadow(gaussian, rgba(74, 95, 255, 0.75), 28, 0.4, 0, 6);
 }
 
 .action-btn:pressed {
     -fx-background-color: linear-gradient(to right, #3a4fee, #4a5fee);
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
-    -fx-effect: dropshadow(gaussian, rgba(74, 95, 255, 0.40), 12, 0.2, 0, 2);
 }
 
 .action-btn:disabled {

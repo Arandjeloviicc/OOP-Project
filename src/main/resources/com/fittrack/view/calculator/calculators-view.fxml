@@ -16,6 +16,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.ComboBox?>
+
 <BorderPane fx:id="rootLayout"
             xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -607,8 +608,7 @@
     </fx:define>
 
     <top>
-        <HBox fx:id="calculatorTabs"
-              maxWidth="Infinity"
+        <HBox maxWidth="Infinity"
               styleClass="calculator-tabs">
 
             <ToggleButton fx:id="bmiTab"

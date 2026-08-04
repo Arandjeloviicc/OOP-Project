@@ -1,7 +1,32 @@
 @import "../common/base-view.css";
 
 .glass-card {
-    -fx-min-width: 24em;
+    -fx-min-width: 0;
     -fx-pref-width: 37.15em;
     -fx-max-width: 37.15em;
+    -fx-padding: 0 0.8em;
+}
+
+/* ── Narrow ───────────────────────────────────────────────── */
+.root:narrow .content-layer {
+    -fx-padding: 1em;
+}
+
+.root:narrow .glass-card {
+    -fx-min-width: 0;
+    -fx-pref-width: 100%;
+    -fx-max-width: Infinity;
+    -fx-padding: 0;
+}
+
+.root:narrow .card-inner {
+    -fx-padding: 1.8em 1.4em 2em 1.4em;
+}
+
+.root:narrow .title-label {
+    -fx-font-size: 1.7em;
+}
+
+.root:narrow .subtitle-label {
+    -fx-padding: 0 0 1.5em 0;
 }

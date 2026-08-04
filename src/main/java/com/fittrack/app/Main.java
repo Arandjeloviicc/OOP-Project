@@ -29,7 +29,7 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
-                        "/com/fittrack/view/" + AppConstants.Views.MAIN_LAYOUT
+                        "/com/fittrack/view/" + AppConstants.Views.PROFILE_SETUP
                 )
         );
         Scene scene = new Scene(loader.load(), 1280, 800);

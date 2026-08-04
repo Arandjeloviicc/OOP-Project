@@ -1,6 +1,7 @@
 package com.fittrack.controller.profile;
 
 import com.fittrack.controller.common.FormController;
+import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.measurement.WeightLog;
 import com.fittrack.model.profile.ActivityLevel;
 import com.fittrack.model.profile.Gender;
@@ -24,12 +25,13 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static com.fittrack.model.profile.WeightGoal.*;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-public class ProfileSetupController extends FormController implements Initializable {
+public class ProfileSetupController extends FormController implements Initializable, ResponsiveLayout {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(ProfileSetupController.class);
@@ -38,7 +40,7 @@ public class ProfileSetupController extends FormController implements Initializa
     protected Logger getLogger() { return log; }
 
     // Root and Scroll
-    @FXML private StackPane rootPane;
+    @FXML private StackPane rootLayout;
     @FXML private ScrollPane setupScroll;
     @FXML private StackPane setupScrollContent;
 
@@ -53,7 +55,6 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private ToggleGroup genderGroup;
     @FXML private ToggleButton maleButton;
     @FXML private ToggleButton femaleButton;
-    @FXML private Button nextButton;
 
     // Fitness goals step
     @FXML private VBox goalWeightBox;
@@ -79,6 +80,15 @@ public class ProfileSetupController extends FormController implements Initializa
     // Service for saving user info
     private final ProfileSetupService profileSetupService = new ProfileSetupService();
 
+    // Responsive breakpoint
+    private static final int NARROW_BREAKPOINT = 460;
+
+    // PseudoClass for Narrow screen size
+    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
+
+    // Is Narrow
+    private Boolean narrowLayout;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -87,11 +97,16 @@ public class ProfileSetupController extends FormController implements Initializa
                 setupScroll.viewportBoundsProperty().map(Bounds::getHeight)
         );
 
+        // Initialize all form controls
+        initializeProfileSetupControls();
+
+        // Responsive initialize
+        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
+
         // Initialize input messages
         restoreFirstNameHelper();
         restoreLastNameHelper();
         restoreDateOfBirthHelper();
-
         restoreHeightHelper();
         restoreWeightHelper();
         restoreActivityLevelHelper();
@@ -99,66 +114,8 @@ public class ProfileSetupController extends FormController implements Initializa
         restoreGoalWeightHelper();
         restoreWeeklyGoalHelper();
 
-        // DatePicker initialize
-        dateOfBirthPicker.setDayCellFactory(picker -> new DateCell() {
-
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-
-                setDisable(
-                        empty || date.isAfter(LocalDate.now())
-                );
-            }
-        });
-        dateOfBirthPicker.setValue(null);
-        dateOfBirthPicker.setShowWeekNumbers(false);
-        // Opens date menu on click, not just on date icon
-        dateOfBirthPicker.getEditor().setOnMouseClicked(event -> dateOfBirthPicker.show());
-        // Disable manual date input
-        dateOfBirthPicker.getEditor().setEditable(false);
-        dateOfBirthPicker.getEditor().addEventFilter(KeyEvent.ANY, KeyEvent::consume);
-
-        // Gender ToggleButton value initialize
-        maleButton.setUserData(Gender.MALE);
-        femaleButton.setUserData(Gender.FEMALE);
-
-        // ComboBox fill and PseudoClass add
-        activityLevelComboBox.getItems().setAll(ActivityLevel.values());
-        activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, activityLevelComboBox.getValue() == null);
-        goalTypeComboBox.getItems().setAll(WeightGoal.values());
-        goalTypeComboBox.pseudoClassStateChanged(NO_SELECTION, goalTypeComboBox.getValue() == null);
-        weeklyGoalComboBox.getItems().setAll(0.25, 0.5, 0.75, 1.0);
-        weeklyGoalComboBox.pseudoClassStateChanged(NO_SELECTION, weeklyGoalComboBox.getValue() == null);
-
         // Listeners
-        firstNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreFirstNameHelper());
-        lastNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreLastNameHelper());
-        dateOfBirthPicker.valueProperty().addListener((obs, oldValue, newValue) -> restoreDateOfBirthHelper());
-        genderGroup.selectedToggleProperty().addListener(
-                (obs, oldToggle, newToggle) -> {
-                    if (newToggle == null && oldToggle != null) {
-                        genderGroup.selectToggle(oldToggle);
-                    }
-                }
-        );
-
-        heightField.textProperty().addListener((obs, oldValue, newValue) -> restoreHeightHelper());
-        weightField.textProperty().addListener((obs, oldValue, newValue) -> restoreWeightHelper());
-        activityLevelComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, newVal == null);
-            restoreActivityLevelHelper();
-        });
-        goalTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            goalTypeComboBox.pseudoClassStateChanged(NO_SELECTION, newVal == null);
-            restoreGoalTypeHelper();
-            updateGoalWeightBoxVisibility();
-        });
-        goalWeightField.textProperty().addListener((obs, oldValue, newValue) -> restoreGoalWeightHelper());
-        weeklyGoalComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            weeklyGoalComboBox.pseudoClassStateChanged(NO_SELECTION, newVal == null);
-            restoreWeeklyGoalHelper();
-        });
+        addListeners();
     }
 
     @FXML
@@ -289,12 +246,90 @@ public class ProfileSetupController extends FormController implements Initializa
             log.info("Profile setup completed for user ID: {}", userId);
 
             navigateTo(AppConstants.Views.MAIN_LAYOUT);
-        } catch (Exception e) {
-            log.error("Failed to complete profile setup.", e);
+        } catch (IllegalStateException | IllegalArgumentException exception) {
+            log.error("Failed to complete profile setup.", exception);
 
             finishButton.setDisable(false);
             finishButton.setText("Finish");
         }
+    }
+
+    // ── Initialize Helpers ─────────────────────────────────────────────────
+    private void addListeners() {
+        firstNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreFirstNameHelper());
+        lastNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreLastNameHelper());
+        dateOfBirthPicker.valueProperty().addListener((obs, oldValue, newValue) -> restoreDateOfBirthHelper());
+        genderGroup.selectedToggleProperty().addListener(
+                (obs, oldToggle, newToggle) -> {
+                    if (newToggle == null && oldToggle != null) {
+                        genderGroup.selectToggle(oldToggle);
+                    }
+                }
+        );
+
+        heightField.textProperty().addListener((obs, oldValue, newValue) -> restoreHeightHelper());
+        weightField.textProperty().addListener((obs, oldValue, newValue) -> restoreWeightHelper());
+        activityLevelComboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+            activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, newValue == null);
+            restoreActivityLevelHelper();
+        });
+        goalTypeComboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+            goalTypeComboBox.pseudoClassStateChanged(NO_SELECTION, newValue == null);
+            restoreGoalTypeHelper();
+            updateGoalWeightBoxVisibility();
+        });
+        goalWeightField.textProperty().addListener((obs, oldValue, newValue) -> restoreGoalWeightHelper());
+        weeklyGoalComboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+            weeklyGoalComboBox.pseudoClassStateChanged(NO_SELECTION, newValue == null);
+            restoreWeeklyGoalHelper();
+        });
+    }
+
+    private void initializeProfileSetupControls() {
+        // DatePicker initialize
+        dateOfBirthPicker.setDayCellFactory(picker -> new DateCell() {
+
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                setDisable(
+                        empty || date.isAfter(LocalDate.now())
+                );
+            }
+        });
+        dateOfBirthPicker.setValue(null);
+        dateOfBirthPicker.setShowWeekNumbers(false);
+        // Opens date menu on click, not just on date icon
+        dateOfBirthPicker.getEditor().setOnMouseClicked(event -> dateOfBirthPicker.show());
+        // Disable manual date input
+        dateOfBirthPicker.getEditor().setEditable(false);
+        dateOfBirthPicker.getEditor().addEventFilter(KeyEvent.ANY, KeyEvent::consume);
+
+        // Gender ToggleButton value initialize
+        maleButton.setUserData(Gender.MALE);
+        femaleButton.setUserData(Gender.FEMALE);
+        genderGroup.selectToggle(maleButton);
+
+        // ComboBox fill and PseudoClass add
+        activityLevelComboBox.getItems().setAll(ActivityLevel.values());
+        activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, activityLevelComboBox.getValue() == null);
+        goalTypeComboBox.getItems().setAll(WeightGoal.values());
+        goalTypeComboBox.pseudoClassStateChanged(NO_SELECTION, goalTypeComboBox.getValue() == null);
+        weeklyGoalComboBox.getItems().setAll(0.25, 0.5, 0.75, 1.0);
+        weeklyGoalComboBox.pseudoClassStateChanged(NO_SELECTION, weeklyGoalComboBox.getValue() == null);
+    }
+
+    // ── Responsive Helpers ─────────────────────────────────────────────────
+    @Override
+    public void updateLayout(boolean narrow) {
+        if (Objects.equals(narrowLayout, narrow)) return;
+
+        narrowLayout = narrow;
+
+        rootLayout.pseudoClassStateChanged(NARROW, narrow);
+
+        backButton.setText(narrow ? "←" : "← Back");
     }
 
     // ── First name Helpers ─────────────────────────────────────────────────

@@ -74,22 +74,12 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //String username = UserSession.getInstance().requireCurrentUser().getUsername();
-        //greetingLabel.setText("Hello, " + username);
-        //sidebarUsernameLabel.setText(username);
 
-        greetingLabel.setText("Hello, username");
-        sidebarUsernameLabel.setText("username");
+        // Initialize all form controls
+        initializeMainLayoutControls();
 
-        // List of all Sidebar buttons
-        navButtons = List.of(dashboardButton, calculatorsButton, mealsButton, workoutsButton, measurementsButton, profileButton);
-
-        // Default view - Dashboard
-        navigationGroup.selectToggle(dashboardButton);
+        // Initialize navigation
         initializeNavigationButtonState();
-        currentView = AppConstants.Views.DASHBOARD;
-        loadContent(currentView);
-
         preventNavigationDeselection();
 
         // Interface implemented method for responsive action
@@ -133,7 +123,26 @@ public class MainLayoutController extends BaseController implements Initializabl
         navigateTo(AppConstants.Views.LOGIN);
     }
 
-    /* ── Helpers ────────────────────────────────────────────── */
+    /* ── Initialize Helpers ────────────────────────────────────────────── */
+    private void initializeMainLayoutControls() {
+        //String username = UserSession.getInstance().requireCurrentUser().getUsername();
+        //greetingLabel.setText("Hello, " + username);
+        //sidebarUsernameLabel.setText(username);
+
+        greetingLabel.setText("Hello, username");
+        sidebarUsernameLabel.setText("username");
+
+        // List of all Sidebar buttons
+        navButtons = List.of(dashboardButton, calculatorsButton, mealsButton, workoutsButton, measurementsButton, profileButton);
+
+        // Default view - Dashboard
+        navigationGroup.selectToggle(dashboardButton);
+
+        currentView = AppConstants.Views.DASHBOARD;
+        loadContent(currentView);
+    }
+
+    /* ── View Helpers ────────────────────────────────────────────── */
     // Switch scenes in the content area
     private void loadContent(String fxml) {
         try {
@@ -164,17 +173,16 @@ public class MainLayoutController extends BaseController implements Initializabl
     private void showContent(ToggleButton button, String view) {
         if(view.equals(currentView)) return;
 
-        navigationGroup.selectToggle(button);
         try {
             loadContent(view);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            navigationGroup.selectToggle(button);
+            currentView = view;
+        } catch (IllegalArgumentException | IllegalStateException exception) {
+            log.error("Failed to open view: {}", view, exception);
         }
-
-        currentView = view;
     }
 
-    // Responsive update
+    // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
     public void updateLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
@@ -274,7 +282,7 @@ public class MainLayoutController extends BaseController implements Initializabl
         updateButtonWidths(narrow, visible, !overflow.isEmpty());
     }
 
-    // Toggle button - Make width max
+    // ── Toggle Button Helpers ─────────────────────────────────────────────────
     private void updateButtonWidths(boolean narrow, List<ToggleButton> visible, boolean hasMore) {
         int count = visible.size() + (hasMore ? 1 : 0);
 
@@ -293,7 +301,7 @@ public class MainLayoutController extends BaseController implements Initializabl
         }
     }
 
-    // ContextMenu - Action
+    // ── ContextMenu Helpers ─────────────────────────────────────────────────
     private void showContextMenu(List<ToggleButton> buttons) {
         ContextMenu menu = new ContextMenu();
         menu.getStyleClass().add("context-menu");

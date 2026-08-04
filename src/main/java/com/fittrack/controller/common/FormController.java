@@ -6,19 +6,6 @@ import javafx.util.Duration;
 
 public abstract class FormController extends BaseController {
 
-    // ── Field errors ────────────────────────────────────────────
-    protected void setFieldError(Control field, Label errorLabel, boolean show) {
-        errorLabel.setVisible(show);
-
-        if (show) {
-            if(!field.getStyleClass().contains("error")) {
-                field.getStyleClass().add("error");
-            }
-        } else {
-            field.getStyleClass().removeAll("error");
-        }
-    }
-
     // ── Field messages ────────────────────────────────────────────
     protected void setFieldMessage(Label messageLabel, String message, boolean error, Control... fields) {
         messageLabel.setText(message);

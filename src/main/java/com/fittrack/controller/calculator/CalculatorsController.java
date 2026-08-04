@@ -7,7 +7,6 @@ import com.fittrack.model.profile.ActivityLevel;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.util.AppConstants;
 import com.fittrack.util.FitnessInputValidator;
-import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -36,7 +35,6 @@ public class CalculatorsController extends FormController implements Initializab
 
     // Layouts
     @FXML private BorderPane rootLayout;
-    @FXML private HBox calculatorTabs;
     @FXML private ScrollPane setupScroll;
     @FXML private StackPane calculatorBodyStack;
 
@@ -122,7 +120,7 @@ public class CalculatorsController extends FormController implements Initializab
 
         // Responsive initialize
         updateTabsLayout();
-        setRootResponsiveRules();
+        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
 
         // ToolTip delay after hovering
         setToolTipDelay();
@@ -308,22 +306,6 @@ public class CalculatorsController extends FormController implements Initializab
         }
     }
 
-    private void setRootResponsiveRules() {
-        rootLayout.widthProperty().addListener((obs, oldW, newW) -> {
-            double width = newW.doubleValue();
-            if (width > 50) {
-                updateLayout(width < NARROW_BREAKPOINT);
-            }
-        });
-
-        Platform.runLater(() -> {
-            double width = rootLayout.getWidth();
-            if (width > 50) {
-                updateLayout(width < NARROW_BREAKPOINT);
-            }
-        });
-    }
-
     private void updatePanelWidths(boolean narrow) {
         formPanel.prefWidthProperty().unbind();
         resultPanel.prefWidthProperty().unbind();
@@ -376,7 +358,6 @@ public class CalculatorsController extends FormController implements Initializab
     private void initializeCalculatorControls() {
         tabButtons = List.of(bmiTab, bmrTab, tdeeTab);
 
-
         bmiTab.setUserData(CalculatorType.BMI);
         bmrTab.setUserData(CalculatorType.BMR);
         tdeeTab.setUserData(CalculatorType.TDEE);
@@ -388,6 +369,8 @@ public class CalculatorsController extends FormController implements Initializab
 
         activityLevelComboBox.getItems().setAll(ActivityLevel.values());
         activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, activityLevelComboBox.getValue() == null);
+
+        updateCalculatorForm(CalculatorType.BMI);
     }
 
     // ── Calculator Helpers ─────────────────────────────────────────────────
