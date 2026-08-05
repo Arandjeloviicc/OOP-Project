@@ -1,6 +1,8 @@
 @import "../theme.css";
 @import "../common/base-view.css";
 @import "../profile/profile-setup-view.css";
+@import "../common/form-controls.css";
+@import "../common/scroll.css";
 
 /* ── Calculators Root ─────────────────────────────────────── */
 .calculators-container {

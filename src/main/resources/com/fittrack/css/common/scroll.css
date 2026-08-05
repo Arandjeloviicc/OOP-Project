@@ -1,0 +1,48 @@
+/* ── ScrollPane ─────────────────────────────────────────── */
+.app-scroll {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.app-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+}
+
+.app-scroll-content {
+    -fx-background-color: transparent;
+}
+
+.app-scroll > .corner {
+    -fx-background-color: transparent;
+}
+
+.app-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.app-scroll .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.app-scroll .scroll-bar:vertical .increment-button,
+.app-scroll .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.app-scroll .scroll-bar:vertical .increment-arrow,
+.app-scroll .scroll-bar:vertical .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}

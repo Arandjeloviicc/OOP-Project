@@ -26,10 +26,10 @@
     <ScrollPane fx:id="setupScroll"
                 fitToWidth="true"
                 hbarPolicy="NEVER"
-                styleClass="setup-scroll">
+                styleClass="app-scroll">
 
         <StackPane fx:id="setupScrollContent"
-                   styleClass="setup-scroll-content">
+                   styleClass="app-scroll-content">
 
             <StackPane styleClass="setup-surface">
 

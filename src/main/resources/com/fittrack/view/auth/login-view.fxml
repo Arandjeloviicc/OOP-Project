@@ -36,9 +36,9 @@
     <ScrollPane fitToWidth="true"
                 fitToHeight="true"
                 hbarPolicy="NEVER"
-                styleClass="setup-scroll">
+                styleClass="app-scroll">
 
-        <StackPane styleClass="setup-scroll-content">
+        <StackPane styleClass="app-scroll-content">
 
             <StackPane styleClass="content-layer">
 
