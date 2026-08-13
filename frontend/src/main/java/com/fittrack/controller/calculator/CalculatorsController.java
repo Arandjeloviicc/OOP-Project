@@ -1,10 +1,13 @@
 package com.fittrack.controller.calculator;
 
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.calculators.CalculatorType;
-import com.fittrack.model.profile.ActivityLevel;
+import com.fittrack.model.calculators.EnergyMode;
 import com.fittrack.model.profile.Gender;
+import com.fittrack.service.calculator.CalculationService;
 import com.fittrack.util.AppConstants;
 import com.fittrack.util.FitnessInputValidator;
 import javafx.beans.binding.DoubleBinding;
@@ -12,8 +15,6 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +48,8 @@ public class CalculatorsController extends FormController implements Initializab
     // Calculator type Toggle Buttons
     @FXML private ToggleGroup calculatorGroup;
     @FXML private ToggleButton bmiTab;
-    @FXML private ToggleButton bmrTab;
     @FXML private ToggleButton tdeeTab;
+    @FXML private ToggleButton bodyFatTab;
 
     // Form
     @FXML private VBox ageGroup;
@@ -63,7 +64,7 @@ public class CalculatorsController extends FormController implements Initializab
     @FXML private TextField weightField;
     @FXML private Label weightMessage;
     @FXML private VBox activityLevelGroup;
-    @FXML private ComboBox<ActivityLevel> activityLevelComboBox;
+    @FXML private ComboBox<EnergyMode> activityLevelComboBox;
     @FXML private Label activityLevelMessage;
     @FXML private VBox bodyFatSettingsGroup;
     @FXML private Label bodyFatToggleLabel;
@@ -82,17 +83,23 @@ public class CalculatorsController extends FormController implements Initializab
     @FXML private Tooltip bmiPonderalIndexTooltip;
 
     // BMR
-    @FXML private VBox bmrResultView;
-    @FXML private Label bmrValueLabel;
+    @FXML private Label bmrTitleLabel;
+    @FXML private Label bmrDetailsLabel;
 
     // TDEE
+    @FXML private Label tdeeTitleLabel;
+    @FXML private Label tdeeDetailsLabel;
     @FXML private VBox tdeeResultView;
     @FXML private Label tdeeValueLabel;
+    @FXML private VBox calculationSummaryGroup;
     @FXML private Label tdeeActivityLevelLabel;
     @FXML private Label tdeeBmrValueLabel;
+    @FXML private VBox calorieTargetsGroup;
     @FXML private Label weightLossCaloriesLabel;
     @FXML private Label maintenanceCaloriesLabel;
     @FXML private Label weightGainCaloriesLabel;
+
+    // Body Fat
 
     // Constants
     private static final int NARROW_BREAKPOINT = 550;
@@ -134,6 +141,8 @@ public class CalculatorsController extends FormController implements Initializab
 
         // Listeners
         addListeners();
+
+        bodyFatTab.setDisable(true);
     }
 
     private boolean validateInputs() {
@@ -142,7 +151,7 @@ public class CalculatorsController extends FormController implements Initializab
         String height = heightField.getText().trim();
         String weight = weightField.getText().trim();
         String bodyFat = bodyFatField.getText().trim();
-        ActivityLevel activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
+        EnergyMode activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
 
         boolean valid = true;
 
@@ -189,13 +198,16 @@ public class CalculatorsController extends FormController implements Initializab
 
         switch (calculatorType) {
             case BMI -> handleBMI();
-            case BMR -> handleBMR();
             case TDEE -> handleTDEE();
+            case BODY_FAT -> handleBodyFat();
         }
     }
 
     private void handleBMI() {
-        if(!validateInputs()) return;
+        if(!validateInputs()) {
+            hideResults();
+            return;
+        }
 
         String height = heightField.getText().trim();
         String weight = weightField.getText().trim();
@@ -207,34 +219,17 @@ public class CalculatorsController extends FormController implements Initializab
         showResult(CalculatorType.BMI);
     }
 
-    private void handleBMR() {
-        if(!validateInputs()) return;
-
-        String age = ageField.getText().trim();
-        Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
-        String height = heightField.getText().trim();
-        String weight = weightField.getText().trim();
-        String bodyFatText = bodyFatField.getText().trim();
-
-        int ageInt = Integer.parseInt(age);
-        double heightCm = Double.parseDouble(height);
-        double weightKg = Double.parseDouble(weight);
-        Double bodyFatPercentage = bodyFatText.isEmpty()
-                ? null
-                : Double.parseDouble(bodyFatText);
-
-        setBmrResult(ageInt, gender, heightCm, weightKg, bodyFatPercentage);
-        showResult(CalculatorType.BMR);
-    }
-
     private void handleTDEE() {
-        if(!validateInputs()) return;
+        if (!validateInputs()) {
+            hideResults();
+            return;
+        }
 
         String age = ageField.getText().trim();
         Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
         String height = heightField.getText().trim();
         String weight = weightField.getText().trim();
-        ActivityLevel activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
+        EnergyMode activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
         String bodyFatText = bodyFatField.getText().trim();
 
         int ageInt = Integer.parseInt(age);
@@ -246,6 +241,10 @@ public class CalculatorsController extends FormController implements Initializab
 
         setTdeeResult(ageInt, gender, heightCm, weightKg, activityLevel, bodyFatPercentage);
         showResult(CalculatorType.TDEE);
+    }
+
+    private void handleBodyFat() {
+        System.out.println("Body fat");
     }
 
     @FXML
@@ -344,6 +343,12 @@ public class CalculatorsController extends FormController implements Initializab
                     (CalculatorType) newToggle.getUserData();
 
             updateCalculatorForm(calculatorType);
+
+            if (areRequiredFieldsFilled(calculatorType)) {
+                handleCalculate();
+            } else {
+                hideResults();
+            }
         });
 
         genderGroup.selectedToggleProperty().addListener(
@@ -356,18 +361,18 @@ public class CalculatorsController extends FormController implements Initializab
     }
 
     private void initializeCalculatorControls() {
-        tabButtons = List.of(bmiTab, bmrTab, tdeeTab);
+        tabButtons = List.of(bmiTab, tdeeTab, bodyFatTab);
 
         bmiTab.setUserData(CalculatorType.BMI);
-        bmrTab.setUserData(CalculatorType.BMR);
         tdeeTab.setUserData(CalculatorType.TDEE);
+        bodyFatTab.setUserData(CalculatorType.BODY_FAT);
         calculatorGroup.selectToggle(bmiTab);
 
         maleButton.setUserData(Gender.MALE);
         femaleButton.setUserData(Gender.FEMALE);
         genderGroup.selectToggle(maleButton);
 
-        activityLevelComboBox.getItems().setAll(ActivityLevel.values());
+        activityLevelComboBox.getItems().setAll(EnergyMode.values());
         activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, activityLevelComboBox.getValue() == null);
 
         updateCalculatorForm(CalculatorType.BMI);
@@ -375,17 +380,17 @@ public class CalculatorsController extends FormController implements Initializab
 
     // ── Calculator Helpers ─────────────────────────────────────────────────
     private void updateCalculatorForm(CalculatorType calculatorType) {
-        boolean isBmi = calculatorType == CalculatorType.BMI;
         boolean isTdee = calculatorType == CalculatorType.TDEE;
+        boolean isBodyFat = calculatorType == CalculatorType.BODY_FAT;
 
-        ageGroup.setVisible(!isBmi);
-        ageGroup.setManaged(!isBmi);
+        ageGroup.setVisible(isTdee);
+        ageGroup.setManaged(isTdee);
 
-        genderGroupContainer.setVisible(!isBmi);
-        genderGroupContainer.setManaged(!isBmi);
+        genderGroupContainer.setVisible(isTdee || isBodyFat);
+        genderGroupContainer.setManaged(isTdee || isBodyFat);
 
-        bodyFatSettingsGroup.setVisible(!isBmi);
-        bodyFatSettingsGroup.setManaged(!isBmi);
+        bodyFatSettingsGroup.setVisible(isTdee);
+        bodyFatSettingsGroup.setManaged(isTdee);
 
         activityLevelGroup.setVisible(isTdee);
         activityLevelGroup.setManaged(isTdee);
@@ -393,14 +398,10 @@ public class CalculatorsController extends FormController implements Initializab
 
     private void showResult(CalculatorType calculatorType) {
         boolean showBmi = calculatorType == CalculatorType.BMI;
-        boolean showBmr = calculatorType == CalculatorType.BMR;
         boolean showTdee = calculatorType == CalculatorType.TDEE;
 
         bmiResultView.setVisible(showBmi);
         bmiResultView.setManaged(showBmi);
-
-        bmrResultView.setVisible(showBmr);
-        bmrResultView.setManaged(showBmr);
 
         tdeeResultView.setVisible(showTdee);
         tdeeResultView.setManaged(showTdee);
@@ -408,13 +409,26 @@ public class CalculatorsController extends FormController implements Initializab
 
     // ── BMI Helpers ─────────────────────────────────────────────────
     private void setBmiResult(double heightMeters, double weightKg) {
-        double heightSquared = heightMeters * heightMeters;
-        double heightCubed = heightSquared * heightMeters;
-
-        double exactBmi = weightKg / heightSquared;
-        double bmi = Math.round(exactBmi * 10.0) / 10.0;
+        double bmi = CalculationService.calculateBmi(heightMeters, weightKg);
         bmiValueLabel.setText(String.format(Locale.US, "%.1f", bmi));
 
+        setBmiStatus(bmi);
+
+        bmiStatusLabel.setVisible(true);
+        bmiStatusLabel.setManaged(true);
+
+        double minHealthyWeight = CalculationService.calculateHealthyWeightMin(heightMeters);
+        double maxHealthyWeight = CalculationService.calculateHealthyWeightMax(heightMeters);
+        healthyWeightRangeLabel.setText(String.format(Locale.US, "%.1f kg – %.1f kg", minHealthyWeight, maxHealthyWeight));
+
+        double bmiPrime = CalculationService.calculateBmiPrime(bmi);
+        bmiPrimeLabel.setText(String.format(Locale.US, "%.1f", bmiPrime));
+
+        double ponderalIndex = CalculationService.calculatePonderalIndex(heightMeters, weightKg);
+        ponderalIndexLabel.setText(String.format(Locale.US, "%.1f kg/m³", ponderalIndex));
+    }
+
+    private void setBmiStatus(double bmi) {
         bmiStatusLabel.getStyleClass().removeAll(
                 "bmi-status-underweight",
                 "bmi-status-normal",
@@ -435,19 +449,6 @@ public class CalculatorsController extends FormController implements Initializab
             bmiStatusLabel.setText("Obese");
             bmiStatusLabel.getStyleClass().add("bmi-status-obese");
         }
-
-        bmiStatusLabel.setVisible(true);
-        bmiStatusLabel.setManaged(true);
-
-        double minHealthyWeight = 18.5 * heightSquared;
-        double maxHealthyWeight = 24.9 * heightSquared;
-        healthyWeightRangeLabel.setText(String.format(Locale.US, "%.1f kg – %.1f kg", minHealthyWeight, maxHealthyWeight));
-
-        double bmiPrime = bmi / 25;
-        bmiPrimeLabel.setText(String.format(Locale.US, "%.1f", bmiPrime));
-
-        double ponderalIndex = weightKg / heightCubed;
-        ponderalIndexLabel.setText(String.format(Locale.US, "%.1f kg/m³", ponderalIndex));
     }
 
     private void setToolTipDelay() {
@@ -461,55 +462,102 @@ public class CalculatorsController extends FormController implements Initializab
     }
 
     // ── BMR Helpers ─────────────────────────────────────────────────
-    private void setBmrResult(int age, Gender gender, double heightCm, double weightKg, Double bodyFatPercentage) {
+    private void showBmrResult() {
+        // Hide TDEE
+        tdeeTitleLabel.setVisible(false);
+        tdeeTitleLabel.setManaged(false);
+        tdeeDetailsLabel.setVisible(false);
+        tdeeDetailsLabel.setManaged(false);
 
-        double bmr = calculateBmr(age, gender, heightCm, weightKg, bodyFatPercentage);
+        calculationSummaryGroup.setVisible(false);
+        calculationSummaryGroup.setManaged(false);
 
-        int bmrRounded = (int) Math.round(bmr);
+        calorieTargetsGroup.setVisible(false);
+        calorieTargetsGroup.setManaged(false);
 
-        bmrValueLabel.setText(String.valueOf(bmrRounded));
-    }
-
-    private double calculateBmr(int age, Gender gender, double heightCm, double weightKg, Double bodyFatPercentage) {
-        if (bodyFatPercentage != null) {
-            return calculateBmrWithBodyFat(weightKg, bodyFatPercentage);
-        }
-
-        return calculateStandardBmr(age, gender, heightCm, weightKg);
-    }
-
-    private double calculateBmrWithBodyFat(double weightKg, double bodyFatPercentage) {
-        double leanBodyMass = weightKg * (1 - bodyFatPercentage / 100.0);
-
-        return 370 + 21.6 * leanBodyMass;
-    }
-
-    private double calculateStandardBmr(int age, Gender gender, double heightCm, double weightKg) {
-        double bmrBase = 10*weightKg + 6.25*heightCm - 5*age;
-
-        return (gender == Gender.MALE)
-                ? bmrBase + 5
-                : bmrBase - 161;
+        // Show BMR
+        bmrTitleLabel.setVisible(true);
+        bmrTitleLabel.setManaged(true);
+        bmrDetailsLabel.setVisible(true);
+        bmrDetailsLabel.setManaged(true);
     }
 
     // ── TDEE Helpers ─────────────────────────────────────────────────
-    private void setTdeeResult(int age, Gender gender, double heightCm, double weightKg, ActivityLevel activityLevel, Double bodyFatPercentage) {
+    private void setTdeeResult(int age, Gender gender, double heightCm, double weightKg, EnergyMode mode, Double bodyFatPercentage) {
 
-        double bmr = calculateBmr(age, gender, heightCm, weightKg, bodyFatPercentage);
-        double tdee = bmr * activityLevel.getMultiplier();
-
+        double bmr = CalculationService.calculateBmr(age, gender, heightCm, weightKg, bodyFatPercentage);
         int bmrRounded = (int) Math.round(bmr);
+
+        if (mode.isBmr()) {
+            showBmrResult();
+
+            tdeeValueLabel.setText(String.valueOf(bmrRounded));
+            tdeeActivityLevelLabel.setText("BMR");
+            tdeeBmrValueLabel.setText(String.format("%d kcal/day", bmrRounded));
+
+            return;
+        }
+
+        showTdeeResult();
+
+        double tdee = CalculationService.calculateTdee(bmr, mode.getActivityLevel());
         int tdeeRounded = (int) Math.round(tdee);
 
-        int weightLossCalories = tdeeRounded - AppConstants.Validation.WEIGHT_LOSS_CALORIE_DEFICIT;
-        int weightGainCalories = tdeeRounded + AppConstants.Validation.WEIGHT_GAIN_CALORIE_SURPLUS;
+        int weightLossCalories = CalculationService.calculateWeightLossCalories(tdeeRounded);
+        int weightGainCalories = CalculationService.calculateWeightGainCalories(tdeeRounded);
 
         tdeeValueLabel.setText(String.valueOf(tdeeRounded));
-        tdeeActivityLevelLabel.setText(activityLevel.toString());
+        tdeeActivityLevelLabel.setText(mode.getShortName());
         tdeeBmrValueLabel.setText(String.format("%d kcal/day", bmrRounded));
         weightLossCaloriesLabel.setText(String.format("%d kcal/day", weightLossCalories));
         maintenanceCaloriesLabel.setText(String.format("%d kcal/day", tdeeRounded));
         weightGainCaloriesLabel.setText(String.format("%d kcal/day", weightGainCalories));
+    }
+
+    private void showTdeeResult() {
+        // Hide BMR
+        bmrTitleLabel.setVisible(false);
+        bmrTitleLabel.setManaged(false);
+        bmrDetailsLabel.setVisible(false);
+        bmrDetailsLabel.setManaged(false);
+
+        // Show TDEE
+        tdeeTitleLabel.setVisible(true);
+        tdeeTitleLabel.setManaged(true);
+        tdeeDetailsLabel.setVisible(true);
+        tdeeDetailsLabel.setManaged(true);
+
+        calculationSummaryGroup.setVisible(true);
+        calculationSummaryGroup.setManaged(true);
+
+        calorieTargetsGroup.setVisible(true);
+        calorieTargetsGroup.setManaged(true);
+    }
+
+    // ── Body Fat Helpers ─────────────────────────────────────────────────
+
+
+    // ── Result Helpers ─────────────────────────────────────────────────
+    private void hideResults() {
+        bmiResultView.setVisible(false);
+        bmiResultView.setManaged(false);
+
+        tdeeResultView.setVisible(false);
+        tdeeResultView.setManaged(false);
+    }
+
+    private boolean areRequiredFieldsFilled(CalculatorType calculatorType) {
+        if (heightField.getText().isBlank()
+                || weightField.getText().isBlank()) {
+            return false;
+        }
+
+        if (calculatorType == CalculatorType.TDEE) {
+            return !ageField.getText().isBlank()
+                    && activityLevelComboBox.getValue() != null;
+        }
+
+        return true;
     }
 
     // ── Age Helpers ─────────────────────────────────────────────────
@@ -548,7 +596,7 @@ public class CalculatorsController extends FormController implements Initializab
         setFieldMessage(activityLevelMessage, AppConstants.Messages.HELPER_ACTIVITY_MESSAGE, false, activityLevelComboBox);
     }
 
-    // ── Body Fat Helpers ─────────────────────────────────────────────────
+    // ── Body Fat Field Helpers ─────────────────────────────────────────────────
     private void showBodyFatMessage() {
         setFieldMessage(bodyFatMessage, AppConstants.Messages.INVALID_BODY_FAT_MESSAGE, true, bodyFatField);
     }

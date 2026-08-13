@@ -1,6 +1,7 @@
 package com.fittrack.backend.controller.auth;
 
 import com.fittrack.backend.dto.auth.*;
+import org.springframework.web.bind.annotation.*;
 import com.fittrack.backend.service.auth.LoginResult;
 import com.fittrack.backend.service.auth.LoginService;
 import org.jspecify.annotations.NonNull;
@@ -8,7 +9,6 @@ import com.fittrack.backend.entity.user.User;
 import com.fittrack.backend.service.auth.RegistrationResult;
 import com.fittrack.backend.service.auth.RegistrationService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -47,14 +47,14 @@ public class AuthController {
                 );
             }
 
-            case USER_NOT_FOUND -> ResponseEntity.badRequest().body(
+            case USER_NOT_FOUND -> ResponseEntity.ok(
                     new LoginResponse(
                             "USER_NOT_FOUND",
                             null
                     )
             );
 
-            case WRONG_PASSWORD -> ResponseEntity.badRequest().body(
+            case WRONG_PASSWORD -> ResponseEntity.ok(
                     new LoginResponse(
                             "WRONG_PASSWORD",
                             null
@@ -89,14 +89,14 @@ public class AuthController {
                 );
             }
 
-            case USERNAME_TAKEN -> ResponseEntity.badRequest().body(
+            case USERNAME_TAKEN -> ResponseEntity.ok(
                     new RegisterResponse(
                             "USERNAME_TAKEN",
                             null
                     )
             );
 
-            case EMAIL_TAKEN -> ResponseEntity.badRequest().body(
+            case EMAIL_TAKEN -> ResponseEntity.ok(
                     new RegisterResponse(
                             "EMAIL_TAKEN",
                             null

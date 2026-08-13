@@ -1,5 +1,6 @@
 package com.fittrack.controller.auth;
 
+import javafx.scene.control.*;
 import com.fittrack.api.auth.LoginApi;
 import com.fittrack.api.profile.ProfileSetupApi;
 import com.fittrack.model.user.User;
@@ -8,7 +9,6 @@ import com.fittrack.util.AppConstants;
 import com.fittrack.util.AsyncTaskRunner;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.slf4j.Logger;
@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@SuppressWarnings("squid:S5411")
 public class LoginController extends AuthFormController implements Initializable {
 
     // Custom console messages
@@ -56,6 +57,11 @@ public class LoginController extends AuthFormController implements Initializable
 
         // Listeners
         addListeners();
+
+        // For testing
+        emailField.setText("petar.arandjelovic@gmail.com");
+        passwordField.setText("petar123");
+        handleLogin();
     }
 
     // ── Toggle password visibility ──────────────────────────────

@@ -404,65 +404,7 @@
 
             </VBox>
 
-            <!-- BMR -->
-            <VBox fx:id="bmrResultView"
-                  maxWidth="Infinity"
-                  visible="false"
-                  managed="false"
-                  styleClass="calculator-result-view">
-
-                <!-- Result -->
-                <VBox maxWidth="Infinity"
-                      alignment="TOP_CENTER">
-
-                    <!-- Title -->
-                    <Label text="BMR Result"
-                           maxWidth="Infinity"
-                           styleClass="result-title"/>
-
-                    <!-- Main -->
-                    <HBox alignment="CENTER"
-                          styleClass="result-main-row">
-
-                        <Label fx:id="bmrValueLabel"
-                               text="-"
-                               styleClass="result-main-value"/>
-
-                        <Label text="kcal/day"
-                               styleClass="result-main-unit"/>
-
-                    </HBox>
-
-                    <!-- Details -->
-                    <VBox maxWidth="Infinity"
-                          styleClass="result-details">
-
-                        <Label text="Your BMR is the estimated number of calories your body needs each day to maintain essential functions while at complete rest."
-                               maxWidth="Infinity"
-                               wrapText="true"
-                               styleClass="result-description"/>
-
-                        <Label text="What does this include?"
-                               maxWidth="Infinity"
-                               styleClass="bmi-categories-title, result-section-title"/>
-
-                        <Label text="Breathing, circulation, body temperature regulation, brain function and other essential processes your body performs at rest."
-                               maxWidth="Infinity"
-                               wrapText="true"
-                               styleClass="result-description"/>
-
-                        <Label text="Your actual daily calorie needs will be higher because BMR does not include walking, exercise, work or other daily activity. Use the TDEE calculator for a more realistic daily estimate."
-                               maxWidth="Infinity"
-                               wrapText="true"
-                               styleClass="result-description, result-description-highlight"/>
-
-                    </VBox>
-
-                </VBox>
-
-            </VBox>
-
-            <!-- TDEE -->
+            <!-- TDEE & BMR -->
             <VBox fx:id="tdeeResultView"
                   maxWidth="Infinity"
                   visible="false"
@@ -474,18 +416,28 @@
                       alignment="TOP_CENTER">
 
                     <!-- Title -->
-                    <Label text="TDEE Result"
+                    <Label fx:id="tdeeTitleLabel"
+                           text="TDEE Result"
                            maxWidth="Infinity"
+                           styleClass="result-title"/>
+
+                    <Label fx:id="bmrTitleLabel"
+                           text="BMR Result"
+                           maxWidth="Infinity"
+                           visible="false"
+                           managed="false"
                            styleClass="result-title"/>
 
                     <!-- Main -->
                     <HBox alignment="CENTER"
                           styleClass="result-main-row">
 
+                        <!-- TDEE Title -->
                         <Label fx:id="tdeeValueLabel"
                                text="-"
                                styleClass="result-main-value"/>
 
+                        <!-- BMR Title -->
                         <Label text="kcal/day"
                                styleClass="result-main-unit"/>
 
@@ -495,9 +447,20 @@
                     <VBox maxWidth="Infinity"
                           styleClass="result-details">
 
-                        <Label text="Estimated daily calories needed to maintain your current weight at the selected activity level."
+                        <!-- TDEE Details -->
+                        <Label fx:id="tdeeDetailsLabel"
+                               text="Estimated daily calories needed to maintain your current weight at the selected activity level."
                                maxWidth="Infinity"
                                wrapText="true"
+                               styleClass="result-description"/>
+
+                        <!-- BMR Details -->
+                        <Label fx:id="bmrDetailsLabel"
+                               text="Your BMR is the estimated number of calories your body needs each day to maintain essential functions while at complete rest."
+                               maxWidth="Infinity"
+                               wrapText="true"
+                               visible="false"
+                               managed="false"
                                styleClass="result-description"/>
 
                     </VBox>
@@ -505,7 +468,8 @@
                 </VBox>
 
                 <!-- Calculation summary -->
-                <VBox maxWidth="Infinity">
+                <VBox fx:id="calculationSummaryGroup"
+                      maxWidth="Infinity">
 
                     <Label text="Calculation Summary"
                            maxWidth="Infinity"
@@ -547,7 +511,8 @@
                 </VBox>
 
                 <!-- Daily goals -->
-                <VBox maxWidth="Infinity">
+                <VBox fx:id="calorieTargetsGroup"
+                      maxWidth="Infinity">
 
                     <Label text="Daily Calorie Goals"
                            maxWidth="Infinity"
@@ -617,13 +582,13 @@
                           styleClass="calculator-tab-button"
                           selected="true"/>
 
-            <ToggleButton fx:id="bmrTab"
-                          text="BMR"
+            <ToggleButton fx:id="tdeeTab"
+                          text="TDEE"
                           toggleGroup="$calculatorGroup"
                           styleClass="calculator-tab-button"/>
 
-            <ToggleButton fx:id="tdeeTab"
-                          text="TDEE"
+            <ToggleButton fx:id="bodyFatTab"
+                          text="Body Fat"
                           toggleGroup="$calculatorGroup"
                           styleClass="calculator-tab-button"/>
         </HBox>

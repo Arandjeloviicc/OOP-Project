@@ -87,7 +87,10 @@ public final class AppConstants {
                                 AppConstants.Validation.MAX_NAME_LENGTH
                         );
 
-        public static final String INVALID_DATE_OF_BIRTH_MESSAGE =
+        public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE =
+                "Date must be in dd.MM.yyyy format.";
+
+        public static final String INVALID_DATE_OF_BIRTH_AGE_MESSAGE =
                 "Date of birth must indicate an age between %d and %d years."
                         .formatted(
                                 AppConstants.Validation.MIN_AGE,
@@ -110,7 +113,7 @@ public final class AppConstants {
                         );
 
         public static final String HELPER_DATE_OF_BIRTH_MESSAGE =
-                "Age must be between %d and %d years."
+                "Use dd.MM.yyyy format. Age must be between %d and %d years."
                         .formatted(
                                 AppConstants.Validation.MIN_AGE,
                                 AppConstants.Validation.MAX_AGE

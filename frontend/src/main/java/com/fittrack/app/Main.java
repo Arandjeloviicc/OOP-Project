@@ -57,5 +57,8 @@ public class Main extends Application {
         System.out.println("FitTrack application stopped.");
     }
 
-    public static void main(String[] args) { launch(args); }
+    public static void main(String[] args) {
+        System.out.println("FitTrack application started.");
+        launch(args);
+    }
 }

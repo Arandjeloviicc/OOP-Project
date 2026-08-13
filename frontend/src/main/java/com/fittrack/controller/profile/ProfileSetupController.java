@@ -1,5 +1,6 @@
 package com.fittrack.controller.profile;
 
+import javafx.scene.control.*;
 import com.fittrack.api.profile.ProfileSetupApi;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
@@ -15,16 +16,17 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -74,11 +76,12 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private Label weeklyGoalMessage;
     @FXML private Button finishButton;
 
+    // Constants
+    private static final DateTimeFormatter DATE_OF_BIRTH_INPUT_FORMATTER = DateTimeFormatter.ofPattern("d.M.uuuu");
+    private static final DateTimeFormatter DATE_OF_BIRTH_DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.uuuu");
+
     // Adding PseudoClass to ComboBox (Change text color when nothing is selected)
     private static final PseudoClass NO_SELECTION = PseudoClass.getPseudoClass("no-selection");
-
-    // API
-    private final ProfileSetupApi profileSetupApi = new ProfileSetupApi();
 
     // Responsive breakpoint
     private static final int NARROW_BREAKPOINT = 460;
@@ -88,6 +91,9 @@ public class ProfileSetupController extends FormController implements Initializa
 
     // Is Narrow
     private Boolean narrowLayout;
+
+    // API
+    private final ProfileSetupApi profileSetupApi = new ProfileSetupApi();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -275,7 +281,7 @@ public class ProfileSetupController extends FormController implements Initializa
     private void addListeners() {
         firstNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreFirstNameHelper());
         lastNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreLastNameHelper());
-        dateOfBirthPicker.valueProperty().addListener((obs, oldValue, newValue) -> restoreDateOfBirthHelper());
+        dateOfBirthPicker.getEditor().textProperty().addListener((obs, oldValue, newValue) -> restoreDateOfBirthHelper());
         genderGroup.selectedToggleProperty().addListener(
                 (obs, oldToggle, newToggle) -> {
                     if (newToggle == null && oldToggle != null) {
@@ -304,6 +310,8 @@ public class ProfileSetupController extends FormController implements Initializa
 
     private void initializeProfileSetupControls() {
         // DatePicker initialize
+        LocalDate latestAllowedDateOfBirth = LocalDate.now().minusYears(AppConstants.Validation.MIN_AGE);
+
         dateOfBirthPicker.setDayCellFactory(picker -> new DateCell() {
 
             @Override
@@ -311,17 +319,40 @@ public class ProfileSetupController extends FormController implements Initializa
                 super.updateItem(date, empty);
 
                 setDisable(
-                        empty || date.isAfter(LocalDate.now())
+                        empty || date.isAfter(latestAllowedDateOfBirth)
                 );
+            }
+        });
+
+        dateOfBirthPicker.setConverter(new StringConverter<>() {
+
+            @Override
+            public String toString(LocalDate date) {
+                if (date == null) {
+                    return "";
+                }
+
+                return date.format(DATE_OF_BIRTH_DISPLAY_FORMATTER);
+            }
+
+            @Override
+            public LocalDate fromString(String text) {
+                if (text == null || text.isBlank()) {
+                    return dateOfBirthPicker.getValue();
+                }
+
+                try {
+                    return LocalDate.parse(
+                            text.trim(),
+                            DATE_OF_BIRTH_INPUT_FORMATTER
+                    );
+                } catch (DateTimeParseException _) {
+                    return dateOfBirthPicker.getValue();
+                }
             }
         });
         dateOfBirthPicker.setValue(null);
         dateOfBirthPicker.setShowWeekNumbers(false);
-        // Opens date menu on click, not just on date icon
-        dateOfBirthPicker.getEditor().setOnMouseClicked(event -> dateOfBirthPicker.show());
-        // Disable manual date input
-        dateOfBirthPicker.getEditor().setEditable(false);
-        dateOfBirthPicker.getEditor().addEventFilter(KeyEvent.ANY, KeyEvent::consume);
 
         // Gender ToggleButton value initialize
         maleButton.setUserData(Gender.MALE);
@@ -375,28 +406,53 @@ public class ProfileSetupController extends FormController implements Initializa
 
     // ── Date of birth Helpers ─────────────────────────────────────────────────
     private boolean validateDateOfBirth() {
-        LocalDate dateOfBirth = dateOfBirthPicker.getValue();
+        String enteredDate = dateOfBirthPicker.getEditor().getText().trim();
 
-        if(dateOfBirth == null) {
-            showDateOfBirthMessage();
+        if (enteredDate.isEmpty()) {
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
             return false;
         }
 
-        LocalDate today = LocalDate.now();
+        LocalDate dateOfBirth;
 
-        int age = Period.between(dateOfBirth, today).getYears();
-
-        if(!FitnessInputValidator.isAgeValid(age)) {
-            showDateOfBirthMessage();
+        try {
+            dateOfBirth = LocalDate.parse(
+                    enteredDate,
+                    DATE_OF_BIRTH_INPUT_FORMATTER
+            );
+        } catch (DateTimeParseException _) {
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
             return false;
         }
+
+        LocalDate latestAllowedDateOfBirth = LocalDate.now().minusYears(AppConstants.Validation.MIN_AGE);
+
+        if (dateOfBirth.isAfter(latestAllowedDateOfBirth)) {
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_AGE_MESSAGE);
+            return false;
+        }
+
+        int age = Period.between(
+                dateOfBirth,
+                LocalDate.now()
+        ).getYears();
+
+        if (!FitnessInputValidator.isAgeValid(age)) {
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_AGE_MESSAGE);
+            return false;
+        }
+
+        dateOfBirthPicker.setValue(dateOfBirth);
+        dateOfBirthPicker.getEditor().setText(
+                dateOfBirth.format(DATE_OF_BIRTH_DISPLAY_FORMATTER)
+        );
 
         restoreDateOfBirthHelper();
         return true;
     }
 
-    private void showDateOfBirthMessage() {
-        setFieldMessage(dateOfBirthMessage, AppConstants.Messages.INVALID_DATE_OF_BIRTH_MESSAGE, true, dateOfBirthPicker);
+    private void showDateOfBirthMessage(String message) {
+        setFieldMessage(dateOfBirthMessage, message, true, dateOfBirthPicker);
     }
 
     private void restoreDateOfBirthHelper() {
