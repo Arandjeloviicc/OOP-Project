@@ -1,7 +1,9 @@
 package com.fittrack.controller.main;
 
 import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
+import com.fittrack.model.view.ViewInstance;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.AppConstants;
 import javafx.application.Platform;
@@ -28,6 +30,9 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(MainLayoutController.class);
+
+    // Saves the data from the controllers and views
+    private final Map<String, ViewInstance> contentCache = new HashMap<>();
 
     @FXML private BorderPane rootLayout;
     @FXML private HBox headerBox;
@@ -146,26 +151,48 @@ public class MainLayoutController extends BaseController implements Initializabl
     // Switch scenes in the content area
     private void loadContent(String fxml) {
         try {
-            URL resource = getClass().getResource(
-                    "/com/fittrack/view/" + fxml
-            );
+            ViewInstance viewInstance = contentCache.get(fxml);
 
-            if (resource == null) {
-                throw new IllegalArgumentException(
-                        "FXML resource not found: " + fxml
+            if (viewInstance == null) {
+                URL resource = getClass().getResource(
+                        "/com/fittrack/view/" + fxml
                 );
+
+                if (resource == null) {
+                    throw new IllegalArgumentException(
+                            "FXML resource not found: " + fxml
+                    );
+                }
+
+                FXMLLoader loader = new FXMLLoader(resource);
+                Parent content = loader.load();
+                Object controller = loader.getController();
+
+                viewInstance = new ViewInstance(content, controller);
+                contentCache.put(fxml, viewInstance);
             }
 
-            FXMLLoader loader = new FXMLLoader(resource);
-            Parent content = loader.load();
-
-            contentArea.getChildren().setAll(content);
+            contentArea.getChildren().setAll(viewInstance.root());
 
         } catch (IOException exception) {
             throw new IllegalStateException(
                     "Failed to load content: " + fxml,
                     exception
             );
+        }
+    }
+
+    public void refreshContent(String fxml) {
+        ViewInstance viewInstance = contentCache.get(fxml);
+
+        if (viewInstance == null) {
+            return;
+        }
+
+        Object controller = viewInstance.controller();
+
+        if (controller instanceof Refreshable refreshable) {
+            refreshable.refresh();
         }
     }
 
