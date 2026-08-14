@@ -5,20 +5,21 @@ public final class FitnessInputValidator {
 
     private FitnessInputValidator() {}
 
-    public static boolean isHeightValid(String height) {
-        if (height == null || !height.trim().matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
+    private static boolean isDecimalMeasurementValid(String value, double min, double max) {
+        if (value == null || !value.trim().matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
             return false;
         }
-        double value = Double.parseDouble(height.trim());
-        return value >= AppConstants.Validation.MIN_HEIGHT && value <= AppConstants.Validation.MAX_HEIGHT;
+
+        double parsedValue = Double.parseDouble(value.trim());
+        return parsedValue >= min && parsedValue <= max;
+    }
+
+    public static boolean isHeightValid(String height) {
+       return isDecimalMeasurementValid(height, AppConstants.Validation.MIN_HEIGHT, AppConstants.Validation.MAX_HEIGHT);
     }
 
     public static boolean isWeightValid(String weight) {
-        if (weight == null || !weight.trim().matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
-            return false;
-        }
-        double value = Double.parseDouble(weight.trim());
-        return value >= AppConstants.Validation.MIN_WEIGHT && value <= AppConstants.Validation.MAX_WEIGHT;
+        return isDecimalMeasurementValid(weight, AppConstants.Validation.MIN_WEIGHT, AppConstants.Validation.MAX_WEIGHT);
     }
 
     public static boolean isAgeValid(String age) {
@@ -37,13 +38,22 @@ public final class FitnessInputValidator {
     }
 
     public static boolean isBodyFatValid(String bodyFat) {
-        if (bodyFat == null || !bodyFat.matches("[1-9]\\d"))  {
-            return false;
-        }
+        return isDecimalMeasurementValid(bodyFat, AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE, AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE);
+    }
 
-        int bodyFatPercentage = Integer.parseInt(bodyFat);
+    public static boolean isNeckValid(String neck) {
+        return isDecimalMeasurementValid(neck, AppConstants.Validation.MIN_NECK_CIRCUMFERENCE, AppConstants.Validation.MAX_NECK_CIRCUMFERENCE);
+    }
 
-        return bodyFatPercentage >= AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE
-                && bodyFatPercentage <= AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE;
+    public static boolean isWaistValid(String waist) {
+        return isDecimalMeasurementValid(waist, AppConstants.Validation.MIN_WAIST_CIRCUMFERENCE, AppConstants.Validation.MAX_WAIST_CIRCUMFERENCE);
+    }
+
+    public static boolean isHipValid(String hip) {
+        return isDecimalMeasurementValid(hip, AppConstants.Validation.MIN_HIP_CIRCUMFERENCE, AppConstants.Validation.MAX_HIP_CIRCUMFERENCE);
+    }
+
+    public static boolean isNeckWaistRelationValid(double neck, double waist) {
+        return neck < waist;
     }
 }

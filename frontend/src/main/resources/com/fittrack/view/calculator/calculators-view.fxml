@@ -142,7 +142,7 @@
                            maxWidth="Infinity"/>
                 </VBox>
 
-                <!-- Bodyfat -->
+                <!-- Optional body fat for TDEE -->
                 <VBox fx:id="bodyFatSettingsGroup"
                       visible="false"
                       managed="false"
@@ -175,6 +175,69 @@
 
                 </VBox>
 
+                <!-- Bodyfat Fat Calculator Inputs -->
+                <VBox fx:id="bodyFatInputFields"
+                      maxWidth="Infinity"
+                      visible="false"
+                      managed="false">
+
+                    <!-- Neck -->
+                    <VBox styleClass="field-group">
+                        <Label styleClass="field-label"
+                               text="Neck (cm)"/>
+
+                        <TextField fx:id="neckField"
+                                   promptText="Enter your nect circumference"
+                                   styleClass="input-field,text-field"/>
+
+                        <Label fx:id="neckMessage"
+                               styleClass="helper-label"
+                               wrapText="true"
+                               minHeight="-Infinity"
+                               maxHeight="Infinity"
+                               maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Waist -->
+                    <VBox styleClass="field-group">
+                        <Label styleClass="field-label"
+                               text="Waist (cm)"/>
+
+                        <TextField fx:id="waistField"
+                                   promptText="Enter your waist circumference"
+                                   styleClass="input-field,text-field"/>
+
+                        <Label fx:id="waistMessage"
+                               styleClass="helper-label"
+                               wrapText="true"
+                               minHeight="-Infinity"
+                               maxHeight="Infinity"
+                               maxWidth="Infinity"/>
+                    </VBox>
+
+                    <!-- Hip -->
+                    <VBox fx:id="hipGroup"
+                          styleClass="field-group"
+                          visible="false"
+                          managed="false">
+
+                        <Label styleClass="field-label"
+                               text="Hip (cm)"/>
+
+                        <TextField fx:id="hipField"
+                                   promptText="Enter your hip circumference"
+                                   styleClass="input-field,text-field"/>
+
+                        <Label fx:id="hipMessage"
+                               styleClass="helper-label"
+                               wrapText="true"
+                               minHeight="-Infinity"
+                               maxHeight="Infinity"
+                               maxWidth="Infinity"/>
+                    </VBox>
+
+                </VBox>
+
                 <!-- Calculate -->
                 <Button fx:id="nextButton"
                         maxWidth="Infinity"
@@ -190,11 +253,14 @@
         <VBox fx:id="resultPanel"
               maxWidth="Infinity"
               maxHeight="-Infinity"
+              visible="false"
               styleClass="result-panel">
 
             <!-- BMI -->
             <VBox fx:id="bmiResultView"
                   maxWidth="Infinity"
+                  visible="false"
+                  managed="false"
                   styleClass="calculator-result-view">
 
                 <!-- Result -->
@@ -221,10 +287,9 @@
 
                     <!-- Status -->
                     <Label fx:id="bmiStatusLabel"
-                           text="Normal"
                            visible="false"
                            managed="false"
-                           styleClass="bmi-status-badge, bmi-status-normal"/>
+                           styleClass="result-category-badge"/>
 
                     <!-- Details -->
                     <VBox maxWidth="Infinity"
@@ -559,6 +624,193 @@
 
                             <Label fx:id="weightGainCaloriesLabel"
                                    text="—"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+
+            <!-- Body Fat -->
+            <VBox fx:id="bodyFatResultView"
+                  maxWidth="Infinity"
+                  visible="false"
+                  managed="false"
+                  styleClass="calculator-result-view">
+
+                <!-- Result -->
+                <VBox maxWidth="Infinity"
+                      alignment="TOP_CENTER">
+
+                    <!-- Title -->
+                    <Label text="Body Fat Result"
+                           maxWidth="Infinity"
+                           styleClass="result-title"/>
+
+                    <!-- Main -->
+                    <HBox alignment="CENTER"
+                          styleClass="result-main-row">
+
+                        <Label fx:id="bodyFatValueLabel"
+                               text="-"
+                               styleClass="result-main-value"/>
+
+                        <Label text="\%"
+                               styleClass="result-main-unit"/>
+
+                    </HBox>
+
+                    <!-- Category -->
+                    <HBox alignment="CENTER">
+                        <Label fx:id="bodyFatCategoryLabel"
+                               styleClass="result-category-badge"/>
+                    </HBox>
+
+                    <!-- Details -->
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <!-- Body Fat Mass -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <Label text="Body Fat Mass"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="bodyFatMassLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+                        </HBox>
+
+                        <!-- Lean Body Mass -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <Label text="Lean Body Mass"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="leanBodyMassLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+                        </HBox>
+
+                        <!-- Ideal Body Fat -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <Label text="Ideal Body Fat"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="idealBodyFatLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+                        </HBox>
+
+                        <!-- Body Fat to Reach Ideal -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row">
+
+                            <Label fx:id="weightChangeTitleLabel"
+                                   text="Weight to"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="weightChangeLabel"
+                                   text="—"
+                                   styleClass="result-detail-value"/>
+                        </HBox>
+
+                    </VBox>
+
+                </VBox>
+
+                <!-- Categories -->
+                <VBox maxWidth="Infinity">
+
+                    <!-- Title -->
+                    <Label text="Body Fat Categories"
+                           maxWidth="Infinity"
+                           styleClass="bmi-categories-title"/>
+
+                    <VBox maxWidth="Infinity"
+                          styleClass="result-details">
+
+                        <!-- Essential fat -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, body-fat-category-essential">
+
+                            <Label text="Essential fat"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="essentialBodyFatLabel"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Athletes -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, body-fat-category-athletes">
+
+                            <Label text="Athletes"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="athletesBodyFatLabel"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Fitness -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, body-fat-category-fitness">
+
+                            <Label text="Fitness"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="fitnessBodyFatLabel"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Average -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, body-fat-category-average">
+
+                            <Label text="Average"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="averageBodyFatLabel"
+                                   styleClass="result-detail-value"/>
+
+                        </HBox>
+
+                        <!-- Obese -->
+                        <HBox alignment="CENTER_LEFT"
+                              styleClass="result-detail-row, body-fat-category-obese">
+
+                            <Label text="Obese"
+                                   styleClass="result-detail-label"/>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label fx:id="obeseBodyFatLabel"
                                    styleClass="result-detail-value"/>
 
                         </HBox>

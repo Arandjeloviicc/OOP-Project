@@ -48,6 +48,12 @@ public final class AppConstants {
         public static final int MAX_BODY_FAT_PERCENTAGE = 70;
         public static final int WEIGHT_LOSS_CALORIE_DEFICIT = 500;
         public static final int WEIGHT_GAIN_CALORIE_SURPLUS = 300;
+        public static final int MIN_NECK_CIRCUMFERENCE = 20;
+        public static final int MAX_NECK_CIRCUMFERENCE = 70;
+        public static final int MIN_WAIST_CIRCUMFERENCE = 40;
+        public static final int MAX_WAIST_CIRCUMFERENCE = 250;
+        public static final int MIN_HIP_CIRCUMFERENCE = 50;
+        public static final int MAX_HIP_CIRCUMFERENCE = 250;
     }
 
     public static final class Messages {
@@ -136,20 +142,65 @@ public final class AppConstants {
         public static final String HELPER_WEEKLY_GOAL_MESSAGE = "Rate at which you want to reach your goal.";
 
         // Calculators
-        public static final String INVALID_AGE_MESSAGE = "Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
+        // Invalid
+        public static final String INVALID_AGE_MESSAGE =
+                "Age must be between %d and %d years."
+                        .formatted(
+                                AppConstants.Validation.MIN_AGE,
+                                AppConstants.Validation.MAX_AGE
+                        );
         public static final String INVALID_BODY_FAT_MESSAGE =
                 "Body fat must be between %d%% and %d%%."
                         .formatted(
                                 AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE,
                                 AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE
                         );
+        public static final String INVALID_NECK_MESSAGE =
+                "Neck circumference must be between %d and %d cm."
+                        .formatted(
+                                Validation.MIN_NECK_CIRCUMFERENCE,
+                                Validation.MAX_NECK_CIRCUMFERENCE
+                        );
+        public static final String INVALID_NECK_WAIST_RELATION_MESSAGE =
+                "Neck circumference must be smaller than waist circumference.";
+        public static final String INVALID_WAIST_MESSAGE =
+                "Waist circumference must be between %d and %d cm."
+                        .formatted(
+                                Validation.MIN_WAIST_CIRCUMFERENCE,
+                                Validation.MAX_WAIST_CIRCUMFERENCE
+                        );
+        public static final String INVALID_HIP_MESSAGE =
+                "Hip circumference must be between %d and %d cm."
+                        .formatted(
+                                Validation.MIN_HIP_CIRCUMFERENCE,
+                                Validation.MAX_HIP_CIRCUMFERENCE
+                        );
 
+        // Helpers
         public static final String HELPER_AGE_MESSAGE = "Between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
         public static final String HELPER_BODY_FAT_MESSAGE =
                 "Optional. Between %d%% and %d%%."
                         .formatted(
                                 AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE,
                                 AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE
+                        );
+        public static final String HELPER_NECK_MESSAGE =
+                "Enter a neck circumference between %d and %d cm."
+                        .formatted(
+                                Validation.MIN_NECK_CIRCUMFERENCE,
+                                Validation.MAX_NECK_CIRCUMFERENCE
+                        );
+        public static final String HELPER_WAIST_MESSAGE =
+                "Enter a waist circumference between %d and %d cm."
+                        .formatted(
+                                Validation.MIN_WAIST_CIRCUMFERENCE,
+                                Validation.MAX_WAIST_CIRCUMFERENCE
+                        );
+        public static final String HELPER_HIP_MESSAGE =
+                "Enter a hip circumference between %d and %d cm."
+                        .formatted(
+                                Validation.MIN_HIP_CIRCUMFERENCE,
+                                Validation.MAX_HIP_CIRCUMFERENCE
                         );
     }
 }

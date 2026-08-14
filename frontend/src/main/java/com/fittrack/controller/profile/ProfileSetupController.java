@@ -150,20 +150,20 @@ public class ProfileSetupController extends FormController implements Initializa
 
         if(!valid) return;
 
-        personalInfoStep.setVisible(false);
-        personalInfoStep.setManaged(false);
+        // Hide Step 1 page
+        setVisible(personalInfoStep, false);
 
-        fitnessGoalsStep.setVisible(true);
-        fitnessGoalsStep.setManaged(true);
+        // Show Step 2 page
+        setVisible(fitnessGoalsStep, true);
     }
 
     @FXML
     public void handleBack() {
-        fitnessGoalsStep.setVisible(false);
-        fitnessGoalsStep.setManaged(false);
+        // Hide Step 2 page
+        setVisible(fitnessGoalsStep, false);
 
-        personalInfoStep.setVisible(true);
-        personalInfoStep.setManaged(true);
+        // Show Step 1 page
+        setVisible(personalInfoStep, true);
     }
 
     @FXML
@@ -497,14 +497,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
     private void updateGoalWeightBoxVisibility() {
         WeightGoal selectedGoal = goalTypeComboBox.getSelectionModel().getSelectedItem();
-        if(selectedGoal == MAINTAIN_WEIGHT || selectedGoal == null) {
-            goalWeightBox.setVisible(false);
-            goalWeightBox.setManaged(false);
-        }
-        else {
-            goalWeightBox.setVisible(true);
-            goalWeightBox.setManaged(true);
-        }
+        setVisible(goalWeightBox, selectedGoal != MAINTAIN_WEIGHT && selectedGoal != null);
     }
 
     // ── Goal weight Helpers ─────────────────────────────────────────────────

@@ -55,7 +55,7 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     // Constants
     private static final int NARROW_BREAKPOINT = 900;
-    private static final int MAX_VISIBLE_NARROW = 5;
+    private static final int MAX_VISIBLE_NARROW = 4;
 
     // Adding PseudoClass for specific css styles
     private static final PseudoClass HORIZONTAL = PseudoClass.getPseudoClass("horizontal");
@@ -201,23 +201,17 @@ public class MainLayoutController extends BaseController implements Initializabl
             navigationContainer.setOrientation(Orientation.VERTICAL);
         }
 
-        topBar.setVisible(narrow);
-        topBar.setManaged(narrow);
+        setVisible(topBar, narrow);
 
-        logoTopBar.setVisible(narrow);
-        logoTopBar.setManaged(narrow);
+        setVisible(logoTopBar, narrow);
 
-        logoutButtonHeader.setVisible(narrow);
-        logoutButtonHeader.setManaged(narrow);
+        setVisible(logoutButtonHeader, narrow);
 
-        logoSidebar.setVisible(!narrow);
-        logoSidebar.setManaged(!narrow);
+        setVisible(logoSidebar, !narrow);
 
-        headerBox.setVisible(!narrow);
-        headerBox.setManaged(!narrow);
+        setVisible(headerBox, !narrow);
 
-        sidebarUserContainer.setVisible(!narrow);
-        sidebarUserContainer.setManaged(!narrow);
+        setVisible(sidebarUserContainer, !narrow);
 
         sidebar.pseudoClassStateChanged(HORIZONTAL, narrow);
 

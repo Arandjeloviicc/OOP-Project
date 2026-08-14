@@ -146,6 +146,21 @@
     -fx-spacing: 3em;
 }
 
+/* BMI Status and Body Fat Category */
+.result-category-badge {
+    -fx-background-color: transparent;
+    -fx-background-radius: 1.2em;
+
+    -fx-border-radius: 1.2em;
+    -fx-border-width: 1px;
+
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0.45em 1.2em;
+}
+
 /* ── BMI Result ───────────────────────────────────────────── */
 .result-title {
     -fx-text-fill: -app-text-secondary;
@@ -179,20 +194,6 @@
 }
 
 /* ── BMI Status Badge ─────────────────────────────────────── */
-.bmi-status-badge {
-    -fx-background-color: transparent;
-    -fx-background-radius: 1.2em;
-
-    -fx-border-radius: 1.2em;
-    -fx-border-width: 1px;
-
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 1em;
-    -fx-font-weight: bold;
-
-    -fx-padding: 0.45em 1.2em;
-}
-
 .bmi-status-underweight {
     -fx-text-fill: #f2c94c;
     -fx-border-color: rgba(242, 201, 76, 0.65);
@@ -454,4 +455,55 @@
 
 .result-detail-row.calorie-goal-gain {
     -fx-border-color: rgba(139, 108, 246, 0.55);
+}
+
+/* ── Body Fat ──────────────────────────────────────── */
+.body-fat-category-essential {
+    -fx-text-fill: #ef6464;
+    -fx-border-color: rgba(239, 100, 100, 0.65);
+    -fx-background-color: rgba(239, 100, 100, 0.08);
+}
+
+.result-detail-row.body-fat-category-essential .label {
+    -fx-text-fill: #ef6464;
+}
+
+.body-fat-category-athletes {
+    -fx-text-fill: #59d77d;
+    -fx-border-color: rgba(89, 215, 125, 0.65);
+    -fx-background-color: rgba(89, 215, 125, 0.08);
+}
+
+.result-detail-row.body-fat-category-athletes .label {
+    -fx-text-fill: #59d77d;
+}
+
+.body-fat-category-fitness {
+    -fx-text-fill: #34d399;
+    -fx-border-color: rgba(52, 211, 153, 0.65);
+    -fx-background-color: rgba(52, 211, 153, 0.08);
+}
+
+.result-detail-row.body-fat-category-fitness .label {
+    -fx-text-fill: #34d399;
+}
+
+.body-fat-category-average {
+    -fx-text-fill: #f2c94c;
+    -fx-border-color: rgba(242, 201, 76, 0.65);
+    -fx-background-color: rgba(242, 201, 76, 0.08);
+}
+
+.result-detail-row.body-fat-category-average .label {
+    -fx-text-fill: #f2c94c;
+}
+
+.body-fat-category-obese {
+    -fx-text-fill: #ef6464;
+    -fx-border-color: rgba(239, 100, 100, 0.65);
+    -fx-background-color: rgba(239, 100, 100, 0.08);
+}
+
+.result-detail-row.body-fat-category-obese .label {
+    -fx-text-fill: #ef6464;
 }
