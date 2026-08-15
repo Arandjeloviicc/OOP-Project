@@ -134,9 +134,6 @@ public class MainLayoutController extends BaseController implements Initializabl
         greetingLabel.setText("Hello, " + username);
         sidebarUsernameLabel.setText(username);
 
-        greetingLabel.setText("Hello, username");
-        sidebarUsernameLabel.setText("username");
-
         // List of all Sidebar buttons
         navButtons = List.of(dashboardButton, calculatorsButton, mealsButton, workoutsButton, measurementsButton, profileButton);
 

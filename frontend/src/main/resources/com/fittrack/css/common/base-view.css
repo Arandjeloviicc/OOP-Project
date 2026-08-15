@@ -12,7 +12,7 @@
 }
 
 .bg-overlay {
-    -fx-background-color: rgba(8, 6, 20, 0.25);
+    -fx-background-color: -app-overlay-background;
 }
 
 /* ── Around Glass Card ────────────────────────────────────────────── */
@@ -22,19 +22,15 @@
 
 /* ── Glass Card ─────────────────────────────────────────────── */
 .glass-card {
-    -fx-background-color: rgba(20, 16, 48, 0.55);
+    -fx-background-color: -app-glass-background;
     -fx-background-radius: 1.4em;
-    -fx-border-color: rgba(140, 120, 255, 0.30);
+
+    -fx-border-color: -app-glass-border;
     -fx-border-radius: 1.4em;
     -fx-border-width: 1px;
-    -fx-effect: dropshadow(
-            gaussian,
-            rgba(80, 60, 200, 0.35),
-            60,
-            0.2,
-            0,
-            8
-    );
+
+    -fx-effect: dropshadow(gaussian, -app-glass-shadow, 60, 0.2, 0, 8);
+
     -fx-padding: 0;
 }
 
@@ -46,7 +42,7 @@
 
 /* ── Typography ─────────────────────────────────────────────── */
 .title-label {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -app-text-primary;
     -fx-font-size: 2em;
     -fx-font-weight: bold;
     -fx-font-family: "Segoe UI";
@@ -55,7 +51,7 @@
 }
 
 .subtitle-label {
-    -fx-text-fill: rgba(200, 195, 230, 0.80);
+    -fx-text-fill: -app-subtitle-text;
     -fx-font-size: 1em;
     -fx-font-family: "Segoe UI";
     -fx-padding: 0 0 2em 0;
@@ -75,7 +71,7 @@
 }
 
 .field-label {
-    -fx-text-fill: rgba(220, 215, 240, 0.90);
+    -fx-text-fill: -app-field-label-text;
     -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
 }
@@ -86,9 +82,9 @@
     -fx-pref-height: 3.57em;
     -fx-max-height: 3.57em;
 
-    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-color: -app-input-background;
     -fx-background-radius: 0.85em;
-    -fx-border-color: rgba(160, 140, 255, 0.20);
+    -fx-border-color: -app-input-border;
     -fx-border-radius: 0.85em;
     -fx-border-width: 1px;
 
@@ -97,23 +93,23 @@
 }
 
 .input-field:focused {
-    -fx-border-color: rgba(120, 100, 255, 0.70);
-    -fx-background-color: rgba(255, 255, 255, 0.12);
-    -fx-effect: dropshadow(gaussian, rgba(100, 80, 255, 0.30), 8, 0.3, 0, 0);
+    -fx-border-color: -app-input-border-focused;
+    -fx-background-color: -app-input-background-focused;
+    -fx-effect: dropshadow(gaussian, -app-input-focus-glow, 8, 0.3, 0, 0);
 }
 
 .input-field:hover {
-    -fx-border-color: rgba(160, 140, 255, 0.40);
+    -fx-border-color: -app-input-border-hover;
 }
 
 .input-field.error {
-    -fx-border-color: rgba(255, 80, 80, 0.70);
+    -fx-border-color: -app-danger-border;
 }
 
 /* ── Text field ─────────────────────────────────────────── */
 .text-field {
-    -fx-text-fill: #ffffff;
-    -fx-prompt-text-fill: rgba(160, 155, 195, 0.60);
+    -fx-text-fill: -app-input-text;
+    -fx-prompt-text-fill: -app-input-prompt;
     -fx-padding: 0.9em 1.15em;
 }
 
@@ -133,11 +129,11 @@
 }
 
 .helper-label {
-    -fx-text-fill: rgba(180, 175, 210, 0.65);
+    -fx-text-fill: -app-helper-text;
 }
 
 .error-label {
-    -fx-text-fill: #ff7a7a;
+    -fx-text-fill: -app-error-text;
 }
 
 /* ── Password toggle ─────────────────────────────────────────── */
@@ -147,26 +143,26 @@
 }
 
 .pw-toggle-icon {
-    -fx-text-fill: rgba(120, 110, 200, 0.85);
+    -fx-text-fill: -app-accent-text;
     -fx-font-size: 1em;
 }
 
 .pw-toggle-text {
-    -fx-text-fill: rgba(120, 110, 200, 0.85);
+    -fx-text-fill: -app-accent-text;
     -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
 }
 
 .pw-toggle-wrap:hover .pw-toggle-text,
 .pw-toggle-wrap:hover .pw-toggle-icon {
-    -fx-text-fill: rgba(160, 150, 255, 1.0);
+    -fx-text-fill: -app-accent-text-hover;
 }
 
 /* ── Action Button (Login / Register Button) ──────────────────── */
 .action-btn {
-    -fx-background-color: linear-gradient(to right, #4a5fff, #5b6fff);
+    -fx-background-color: linear-gradient(to right, -app-button-gradient-start, -app-button-gradient-end);
     -fx-background-radius: 1.75em;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -app-text-primary;
 
     -fx-font-size: 1.14em;
     -fx-font-weight: bold;
@@ -184,18 +180,18 @@
 }
 
 .action-btn:hover {
-    -fx-background-color: linear-gradient(to right, #5566ff, #6677ff);
+    -fx-background-color: linear-gradient(to right, -app-button-gradient-hover-start, -app-button-gradient-hover-end);
 }
 
 .action-btn:pressed {
-    -fx-background-color: linear-gradient(to right, #3a4fee, #4a5fee);
+    -fx-background-color: linear-gradient(to right, -app-button-gradient-pressed-start, -app-button-gradient-pressed-end);
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
 }
 
 .action-btn:disabled {
-    -fx-background-color: rgba(74, 95, 255, 0.35);
-    -fx-text-fill: rgba(255, 255, 255, 0.45);
+    -fx-background-color: -app-button-disabled-background;
+    -fx-text-fill: -app-button-disabled-text;
     -fx-cursor: default;
     -fx-effect: none;
     -fx-opacity: 1;
@@ -208,13 +204,13 @@
 }
 
 .bottom-text {
-    -fx-text-fill: rgba(200, 195, 230, 0.75);
+    -fx-text-fill: -app-bottom-text;
     -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
 }
 
 .bottom-link {
-    -fx-text-fill: rgba(160, 150, 255, 0.95);
+    -fx-text-fill: -app-link-text;
     -fx-font-size: 0.93em;
     -fx-font-family: "Segoe UI";
     -fx-border-color: transparent;
@@ -224,5 +220,5 @@
 }
 
 .bottom-link:hover {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: -app-link-text-hover;
 }

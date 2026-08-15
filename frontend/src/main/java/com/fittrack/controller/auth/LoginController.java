@@ -59,9 +59,9 @@ public class LoginController extends AuthFormController implements Initializable
         addListeners();
 
         // For testing
-        emailField.setText("petar.arandjelovic@gmail.com");
-        passwordField.setText("petar123");
-        handleLogin();
+//        emailField.setText("petar.arandjelovic@gmail.com");
+//        passwordField.setText("petar123");
+//        handleLogin();
     }
 
     // ── Toggle password visibility ──────────────────────────────

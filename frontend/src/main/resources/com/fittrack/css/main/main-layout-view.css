@@ -285,7 +285,7 @@
 
 /* ── ContextMenu ────────────────────────────────────────────── */
 .context-menu {
-    -fx-background-color: -app-surface;
+    -fx-background-color: -app-surface-light;
     -fx-background-radius: 0.7em 0 0 0;
 
     -fx-border-color: -app-border-strong;
