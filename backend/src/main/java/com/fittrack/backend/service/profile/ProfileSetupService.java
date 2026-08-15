@@ -1,8 +1,8 @@
 package com.fittrack.backend.service.profile;
 import com.fittrack.backend.entity.measurement.WeightLog;
 import com.fittrack.backend.entity.profile.UserProfile;
-import com.fittrack.backend.repository.UserProfileRepository;
-import com.fittrack.backend.repository.WeightLogRepository;
+import com.fittrack.backend.repository.profile.UserProfileRepository;
+import com.fittrack.backend.repository.measurement.WeightLogRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

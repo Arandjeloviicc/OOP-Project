@@ -1,4 +1,4 @@
-package com.fittrack.backend.repository;
+package com.fittrack.backend.repository.user;
 
 import org.jspecify.annotations.NonNull;
 import com.fittrack.backend.entity.user.User;

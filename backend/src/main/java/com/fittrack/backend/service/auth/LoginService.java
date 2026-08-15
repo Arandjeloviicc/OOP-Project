@@ -1,7 +1,7 @@
 package com.fittrack.backend.service.auth;
 
 import com.fittrack.backend.entity.user.User;
-import com.fittrack.backend.repository.UserRepository;
+import com.fittrack.backend.repository.user.UserRepository;
 import com.fittrack.backend.security.PasswordHasher;
 import org.springframework.stereotype.Service;
 

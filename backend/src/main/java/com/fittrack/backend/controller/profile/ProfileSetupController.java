@@ -4,7 +4,7 @@ import com.fittrack.backend.dto.profile.ProfileSetupRequest;
 import com.fittrack.backend.entity.measurement.WeightLog;
 import com.fittrack.backend.entity.profile.UserProfile;
 import com.fittrack.backend.entity.user.User;
-import com.fittrack.backend.repository.UserRepository;
+import com.fittrack.backend.repository.user.UserRepository;
 import com.fittrack.backend.service.profile.ProfileSetupService;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.ResponseEntity;
