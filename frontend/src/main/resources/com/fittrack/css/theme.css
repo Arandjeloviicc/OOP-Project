@@ -1,160 +1,182 @@
+/* ========================================================== */
+/* == THEME PACK ============================================ */
+/* ========================================================== */
+
 .root {
-    /* PURPLE */
-    /*-app-background: #100c29;*/
-    /*-app-surface: #100c29;*/
-    /*-app-surface-light: #1f1b37;*/
+    /* ========================================================== */
+    /* == CORE PALETTE ========================================== */
+    /* ========================================================== */
 
-    /* PURPLE */
-    /*-app-primary: #6b4bbb;*/
-    /*-app-primary-light: #8b6cf6;*/
-    /*-app-primary-dark: #261c51;*/
-
-    /*-app-border: rgba(139, 108, 246, 0.20);*/
-    /*-app-border-soft: rgba(139, 108, 246, 0.15);*/
-    /*-app-border-strong: rgba(139, 108, 246, 0.45);*/
-
-    /*-app-hover: rgba(107, 75, 187, 0.22);*/
-    /*-app-hover-strong: rgba(107, 75, 187, 0.35);*/
-    /*-app-selected: #261c51;*/
-
-
-    /* MIXED */
+    /* Backgrounds / Surfaces */
     -app-background: #0D0A24;
     -app-surface: #0D0A24;
     -app-surface-light: #17163A;
 
+    /* Primary Accent */
     -app-primary: #536DFE;
     -app-primary-light: #7C8FFF;
     -app-primary-dark: #2E3F9F;
 
-    -app-border: rgba(124, 143, 255, 0.20);
-    -app-border-soft: rgba(124, 143, 255, 0.15);
-    -app-border-strong: rgba(124, 143, 255, 0.45);
-
-    -app-hover: rgba(83, 109, 254, 0.20);
-    -app-hover-strong: rgba(83, 109, 254, 0.33);
-    -app-selected: #202A5A;
-
-
-
+    /* ========================================================== */
+    /* == TYPOGRAPHY ============================================ */
+    /* ========================================================== */
 
     -app-text-primary: white;
     -app-text-secondary: rgba(255, 255, 255, 0.72);
     -app-text-muted: rgba(255, 255, 255, 0.48);
 
+    -app-field-label-text: rgba(220, 215, 240, 0.90);
+    -app-helper-text: rgba(180, 175, 210, 0.65);
+    -app-error-text: #ff7a7a;
+
+    -app-accent-text: rgba(124, 143, 255, 0.85);
+    -app-accent-text-hover: #9AA8FF;
+
+    /* ========================================================== */
+    /* == BORDERS & INTERACTION STATES ========================== */
+    /* ========================================================== */
+
+    /* Borders */
+    -app-border: rgba(124, 143, 255, 0.20);
+    -app-border-soft: rgba(124, 143, 255, 0.15);
+    -app-border-strong: rgba(124, 143, 255, 0.45);
+
+    /* Hover / Selected */
+    -app-hover: rgba(83, 109, 254, 0.20);
+    -app-hover-strong: rgba(83, 109, 254, 0.33);
+    -app-selected: #202A5A;
+
+    /* ========================================================== */
+    /* == GENERIC CONTROLS ====================================== */
+    /* ========================================================== */
+
+    /* Generic Backgrounds / Borders */
     -app-control-background: rgba(255, 255, 255, 0.06);
     -app-control-background-soft: rgba(255, 255, 255, 0.04);
     -app-control-border: rgba(255, 255, 255, 0.10);
 
-    /* ── Input Fields ────────────────────────────── */
+    /* Choice / Gender Buttons */
+    -app-choice-background: rgba(255, 255, 255, 0.08);
+    -app-choice-border: rgba(124, 143, 255, 0.35);
+    -app-choice-text: rgba(255, 255, 255, 0.72);
+    -app-choice-hover: rgba(83, 109, 254, 0.15);
+
+    -app-choice-selected-background: #536DFE;
+    -app-choice-selected-border: #7C8FFF;
+
+    /* ========================================================== */
+    /* == INPUT FIELDS ========================================== */
+    /* ========================================================== */
+
+    /* Background */
     -app-input-background: rgba(255, 255, 255, 0.08);
     -app-input-background-focused: rgba(255, 255, 255, 0.12);
 
-    -app-input-border: rgba(117, 131, 240, 0.20);
-    -app-input-border-hover: rgba(117, 131, 240, 0.40);
-    -app-input-border-focused: rgba(117, 131, 240, 0.70);
+    /* Border */
+    -app-input-border: rgba(124, 143, 255, 0.20);
+    -app-input-border-hover: rgba(124, 143, 255, 0.40);
+    -app-input-border-focused: rgba(124, 143, 255, 0.70);
 
+    /* Text */
     -app-input-text: #ffffff;
     -app-input-prompt: rgba(160, 155, 195, 0.60);
 
-    -app-input-focus-glow: rgba(79, 95, 213, 0.30);
+    /* Focus Effect */
+    -app-input-focus-glow: rgba(83, 109, 254, 0.30);
 
-    /* ── Accent ────────────────────────────── */
-    -app-accent-text: rgba(117, 131, 240, 0.85);
-    -app-accent-text-hover: #8f9bff;
+    /* ========================================================== */
+    /* == BUTTONS =============================================== */
+    /* ========================================================== */
 
-    /* ── Buttons ────────────────────────────── */
-    -app-button-gradient-start: #4a5fff;
-    -app-button-gradient-end: #5b6fff;
+    /* Default */
+    -app-button-gradient-start: #536DFE;
+    -app-button-gradient-end: #667CFF;
 
-    -app-button-gradient-hover-start: #5566ff;
-    -app-button-gradient-hover-end: #6677ff;
+    /* Hover */
+    -app-button-gradient-hover-start: #6078FF;
+    -app-button-gradient-hover-end: #7C8FFF;
 
-    -app-button-gradient-pressed-start: #3a4fee;
-    -app-button-gradient-pressed-end: #4a5fee;
+    /* Pressed */
+    -app-button-gradient-pressed-start: #455BD8;
+    -app-button-gradient-pressed-end: #536DFE;
 
-    -app-button-disabled-background: rgba(74, 95, 255, 0.35);
+    /* Disabled */
+    -app-button-disabled-background: rgba(83, 109, 254, 0.35);
     -app-button-disabled-text: rgba(255, 255, 255, 0.45);
 
-    /* ── Danger (Error on Input Fields) ────────────────────────────── */
+    /* Secondary / Back Button */
+    -app-secondary-button-border: rgba(124, 143, 255, 0.35);
+    -app-secondary-button-text: rgba(220, 215, 240, 0.80);
+
+    -app-secondary-button-hover: rgba(83, 109, 254, 0.12);
+    -app-secondary-button-border-hover: rgba(124, 143, 255, 0.65);
+    -app-secondary-button-pressed: rgba(83, 109, 254, 0.20);
+
+    /* ========================================================== */
+    /* == SEMANTIC STATES ======================================= */
+    /* ========================================================== */
+
     -app-danger-background: rgba(255, 85, 85, 0.14);
     -app-danger-background-pressed: rgba(255, 85, 85, 0.22);
     -app-danger-border: rgba(255, 80, 80, 0.70);
     -app-danger-text: #ffb0b0;
 
-    /* ── Helper / Error text ────────────────────────────── */
-    -app-helper-text: rgba(180, 175, 210, 0.65);
-    -app-error-text: #ff7a7a;
+    /* ========================================================== */
+    /* == AUTH - LOGIN / REGISTER =============================== */
+    /* ========================================================== */
 
-    /* =========================================================== */
-    /* =========================================================== */
-    /* =========================================================== */
-
-    /* == LOGIN / REGISTER ============================== */
-    /* ── Login / Register Overlay ────────────────────────────── */
+    /* Background Overlay */
     -app-overlay-background: rgba(8, 6, 20, 0.25);
 
-    /* ── Auth / glass card ────────────────────────────── */
+    /* Glass Card */
     -app-glass-background: rgba(20, 16, 48, 0.55);
-    -app-glass-border: rgba(117, 131, 240, 0.30);
-    -app-glass-shadow: rgba(79, 95, 213, 0.35);
+    -app-glass-border: rgba(124, 143, 255, 0.30);
+    -app-glass-shadow: rgba(83, 109, 254, 0.35);
 
+    /* Text */
     -app-subtitle-text: rgba(200, 195, 230, 0.80);
-    -app-field-label-text: rgba(220, 215, 240, 0.90);
 
-    /* ── Login here / Register here text ────────────────────────────── */
+    /* Bottom Navigation */
     -app-bottom-text: rgba(200, 195, 230, 0.75);
-    -app-link-text: rgba(127, 140, 240, 0.95);
+    -app-link-text: rgba(124, 143, 255, 0.95);
     -app-link-text-hover: #ffffff;
 
-    /* =========================================================== */
-    /* =========================================================== */
-    /* =========================================================== */
+    /* ========================================================== */
+    /* == POPUP CONTROLS ======================================== */
+    /* ========================================================== */
 
-    /* == PROFILE SETUP ============================== */
-    /*-app-control-text: #ffffff;*/
-    /*-app-control-prompt: rgba(255, 255, 255, 0.42);*/
-    /*-app-control-icon: rgba(255, 255, 255, 0.62);*/
-
-    /*-app-control-accent-hover: rgba(79, 95, 213, 0.18);*/
-
-    /*-app-popup-background: #17152b;*/
-    /*-app-popup-header-background: #211f3a;*/
-
-    /*-app-popup-border: rgba(117, 131, 240, 0.38);*/
-
-    /*-app-popup-hover: #29274a;*/
-    /*-app-popup-selected: #4f5fd5;*/
-
-    /*-app-popup-title-text: rgba(255, 255, 255, 0.90);*/
-    /*-app-popup-text: rgba(255, 255, 255, 0.78);*/
-    /*-app-popup-text-muted: rgba(255, 255, 255, 0.26);*/
-
-    /*-app-popup-day-name-text: rgba(210, 205, 235, 0.72);*/
-    /*-app-popup-week-number-text: rgba(210, 205, 235, 0.42);*/
-
-    /*-app-popup-today-border: rgba(117, 131, 240, 0.68);*/
-
+    /* Control */
     -app-control-text: #ffffff;
     -app-control-prompt: rgba(255, 255, 255, 0.42);
     -app-control-icon: rgba(255, 255, 255, 0.62);
+    -app-control-accent-hover: rgba(83, 109, 254, 0.16);
 
-    -app-control-accent-hover: rgba(75, 86, 190, 0.20);
+    /* Popup Surface */
+    -app-popup-background: #13102D;
+    -app-popup-header-background: #1A1738;
 
-    -app-popup-background: #16172f;
-    -app-popup-header-background: #202244;
+    /* Popup Border */
+    -app-popup-border: rgba(124, 143, 255, 0.30);
 
-    -app-popup-border: rgba(112, 122, 225, 0.38);
+    /* Popup States */
+    -app-popup-hover: #211D46;
+    -app-popup-selected: #2D3673;
 
-    -app-popup-hover: #272a52;
-    -app-popup-selected: #4f5fd5;
-
+    /* Popup Text */
     -app-popup-title-text: rgba(255, 255, 255, 0.90);
     -app-popup-text: rgba(255, 255, 255, 0.78);
     -app-popup-text-muted: rgba(255, 255, 255, 0.26);
 
-    -app-popup-day-name-text: rgba(205, 207, 235, 0.72);
-    -app-popup-week-number-text: rgba(205, 207, 235, 0.42);
+    /* DatePicker Specific */
+    -app-popup-day-name-text: rgba(210, 205, 235, 0.72);
+    -app-popup-week-number-text: rgba(210, 205, 235, 0.42);
+    -app-popup-today-border: rgba(124, 143, 255, 0.68);
 
-    -app-popup-today-border: rgba(117, 131, 240, 0.68);
+    /* ========================================================== */
+    /* == PROFILE SETUP ========================================= */
+    /* ========================================================== */
+
+    /* Text */
+    -app-setup-subtitle: rgba(255, 255, 255, 0.65);
+    -app-setup-step-text: rgba(124, 143, 255, 0.85);
 }

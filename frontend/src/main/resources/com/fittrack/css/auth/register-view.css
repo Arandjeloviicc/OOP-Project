@@ -1,5 +1,5 @@
+@import "auth-view.css";
 @import "../common/base-view.css";
-@import "auth-card.css";
 @import "../common/scroll.css";
 
 .glass-card {

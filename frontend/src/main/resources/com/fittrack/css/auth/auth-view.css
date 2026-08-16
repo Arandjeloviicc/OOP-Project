@@ -1,0 +1,157 @@
+@import "../theme.css";
+@import "../common/form-controls.css";
+
+/* ========================================================== */
+/* == BACKGROUND ============================================ */
+/* ========================================================== */
+
+.bg-image {
+    -fx-opacity: 1.0;
+}
+
+.bg-overlay {
+    -fx-background-color: -app-overlay-background;
+}
+
+/* ========================================================== */
+/* == GLASS CARD ============================================ */
+/* ========================================================== */
+
+/* ── Around Glass Card ────────────────────────────────────────────── */
+.content-layer {
+    -fx-padding: 2em;
+}
+
+/* ── Glass Card ─────────────────────────────────────────────── */
+.glass-card {
+    -fx-background-color: -app-glass-background;
+    -fx-background-radius: 1.4em;
+
+    -fx-border-color: -app-glass-border;
+    -fx-border-radius: 1.4em;
+    -fx-border-width: 1px;
+
+    -fx-effect: dropshadow(gaussian, -app-glass-shadow, 60, 0.2, 0, 8);
+
+    -fx-padding: 0;
+}
+
+/* ── Card inner padding ─────────────────────────────────────── */
+.card-inner {
+    -fx-padding: 2.3em 3.15em 2.6em 3.15em;
+    -fx-spacing: 0;
+}
+
+/* ========================================================== */
+/* == TITLE / SUBTITLE ====================================== */
+/* ========================================================== */
+
+.title-label {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI";
+    -fx-padding: 0.65em 0 0.2em 0;
+    -fx-alignment: CENTER;
+}
+
+.subtitle-label {
+    -fx-text-fill: -app-subtitle-text;
+    -fx-font-size: 1em;
+    -fx-font-family: "Segoe UI";
+    -fx-padding: 0 0 2em 0;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+}
+
+/* ========================================================== */
+/* == FIELDS ================================================= */
+/* ========================================================== */
+
+/* ── Fields ─────────────────────────────────────────────────── */
+.fields-wrap {
+    -fx-padding: 0 0 0.6em 0;
+    -fx-spacing: 0;
+}
+
+/* ========================================================== */
+/* == PASSWORD TOGGLE ======================================= */
+/* ========================================================== */
+
+.pw-toggle-wrap {
+    -fx-cursor: hand;
+    -fx-padding: 0 0 0 0.55em;
+}
+
+.pw-toggle-icon {
+    -fx-text-fill: -app-accent-text;
+    -fx-font-size: 1em;
+}
+
+.pw-toggle-text {
+    -fx-text-fill: -app-accent-text;
+    -fx-font-size: 0.93em;
+    -fx-font-family: "Segoe UI";
+}
+
+.pw-toggle-wrap:hover .pw-toggle-text,
+.pw-toggle-wrap:hover .pw-toggle-icon {
+    -fx-text-fill: -app-accent-text-hover;
+}
+
+/* ========================================================== */
+/* == BOTTOM ROW ============================================ */
+/* ========================================================== */
+
+/* ── Bottom navigation row (Register here / Back to login) ───── */
+.bottom-row {
+    -fx-padding: 1.4em 0 0 0;
+    -fx-alignment: CENTER;
+}
+
+.bottom-text {
+    -fx-text-fill: -app-bottom-text;
+    -fx-font-size: 0.93em;
+    -fx-font-family: "Segoe UI";
+}
+
+.bottom-link {
+    -fx-text-fill: -app-link-text;
+    -fx-font-size: 0.93em;
+    -fx-font-family: "Segoe UI";
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.bottom-link:hover {
+    -fx-text-fill: -app-link-text-hover;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.root:narrow .content-layer {
+    -fx-padding: 1em;
+}
+
+.root:narrow .glass-card {
+    -fx-min-width: 0;
+    -fx-pref-width: 100%;
+    -fx-max-width: Infinity;
+    -fx-padding: 0;
+}
+
+.root:narrow .card-inner {
+    -fx-padding: 1.8em 1.4em 2em 1.4em;
+}
+
+.root:narrow .title-label {
+    -fx-font-size: 1.7em;
+}
+
+.root:narrow .subtitle-label {
+    -fx-padding: 0 0 1.5em 0;
+}

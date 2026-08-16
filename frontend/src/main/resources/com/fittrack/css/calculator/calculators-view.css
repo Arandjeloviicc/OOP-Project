@@ -1,8 +1,11 @@
 @import "../theme.css";
 @import "../common/base-view.css";
-@import "../profile/profile-setup-view.css";
 @import "../common/form-controls.css";
 @import "../common/scroll.css";
+
+/* ========================================================== */
+/* == ROOT ================================================== */
+/* ========================================================== */
 
 /* ── Calculators Root ─────────────────────────────────────── */
 .calculators-container {
@@ -23,6 +26,10 @@
     -fx-padding: 0 0.8em;
 }
 
+/* ========================================================== */
+/* == TABS ================================================== */
+/* ========================================================== */
+
 /* ── Calculator Tabs ──────────────────────────────────────── */
 .calculator-tabs {
     -fx-spacing: 0;
@@ -42,6 +49,10 @@
     -fx-fill-width: true;
     -fx-padding: 0 1.5em 2em 1.5em;
 }
+
+/* ========================================================== */
+/* == TAB BUTTON ============================================ */
+/* ========================================================== */
 
 /* ── Calculators Tab Button ─────────────────────────────────────── */
 .calculator-tab-button {
@@ -86,7 +97,59 @@
     -fx-cursor: default;
 }
 
-/* ── Form panel ───────────────────────────────────── */
+/* ========================================================== */
+/* == TOOLTIP =============================================== */
+/* ========================================================== */
+
+.info-button {
+    -fx-min-width: 1.45em;
+    -fx-pref-width: 1.45em;
+    -fx-max-width: 1.45em;
+
+    -fx-min-height: 1.45em;
+    -fx-pref-height: 1.45em;
+    -fx-max-height: 1.45em;
+
+    -fx-padding: 0;
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 50%;
+
+    -fx-border-color: -app-text-muted;
+    -fx-border-radius: 50%;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: -app-text-muted;
+    -fx-font-size: 0.75em;
+    -fx-font-weight: bold;
+
+    -fx-cursor: hand;
+}
+
+.info-button:hover {
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-primary-light;
+    -fx-text-fill: -app-text-primary;
+}
+
+.tooltip {
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.6em;
+
+    -fx-border-color: -app-border;
+    -fx-border-radius: 0.6em;
+
+    -fx-text-fill: -app-text-primary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.9em;
+
+    -fx-padding: 0.8em 1em;
+}
+
+/* ========================================================== */
+/* == FORM PANEL ============================================ */
+/* ========================================================== */
+
 .form-panel {
     -fx-min-width: 0;
     -fx-max-width: Infinity;
@@ -125,7 +188,10 @@
     -fx-max-width: Infinity;
 }
 
-/* ── Result panel ───────────────────────────────────── */
+/* ========================================================== */
+/* == RESULT PANEL ========================================== */
+/* ========================================================== */
+
 .result-panel {
     -fx-min-width: 0;
     -fx-max-width: Infinity;
@@ -146,6 +212,10 @@
     -fx-spacing: 3em;
 }
 
+/* ========================================================== */
+/* == STATUS / CATEGORY ===================================== */
+/* ========================================================== */
+
 /* BMI Status and Body Fat Category */
 .result-category-badge {
     -fx-background-color: transparent;
@@ -161,7 +231,10 @@
     -fx-padding: 0.45em 1.2em;
 }
 
-/* ── BMI Result ───────────────────────────────────────────── */
+/* ========================================================== */
+/* == BMI =================================================== */
+/* ========================================================== */
+
 .result-title {
     -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
@@ -197,7 +270,7 @@
 .bmi-status-underweight {
     -fx-text-fill: #f2c94c;
     -fx-border-color: rgba(242, 201, 76, 0.65);
-    -fx-background-color: rgba(242, 201, 76, 0.08);
+    -fx-background-color:  rgba(242, 201, 76, 0.08);
 }
 
 .bmi-status-normal {
@@ -359,51 +432,9 @@
     -fx-text-fill: #ef6464;
 }
 
-/* ── Tooltip ──────────────────────────────────────── */
-.info-button {
-    -fx-min-width: 1.45em;
-    -fx-pref-width: 1.45em;
-    -fx-max-width: 1.45em;
-
-    -fx-min-height: 1.45em;
-    -fx-pref-height: 1.45em;
-    -fx-max-height: 1.45em;
-
-    -fx-padding: 0;
-
-    -fx-background-color: transparent;
-    -fx-background-radius: 50%;
-
-    -fx-border-color: -app-text-muted;
-    -fx-border-radius: 50%;
-    -fx-border-width: 1px;
-
-    -fx-text-fill: -app-text-muted;
-    -fx-font-size: 0.75em;
-    -fx-font-weight: bold;
-
-    -fx-cursor: hand;
-}
-
-.info-button:hover {
-    -fx-background-color: -app-hover;
-    -fx-border-color: -app-primary-light;
-    -fx-text-fill: -app-text-primary;
-}
-
-.tooltip {
-    -fx-background-color: -app-surface-light;
-    -fx-background-radius: 0.6em;
-
-    -fx-border-color: -app-border;
-    -fx-border-radius: 0.6em;
-
-    -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 0.9em;
-
-    -fx-padding: 0.8em 1em;
-}
+/* ========================================================== */
+/* == BMR / TDEE =================================================== */
+/* ========================================================== */
 
 /* ── BMR Result Description ──────────────────────────────────────── */
 .result-description {
@@ -429,6 +460,10 @@
     -fx-background-color: -app-selected;
     -fx-text-fill: -app-text-primary;
 }
+
+/* ========================================================== */
+/* == TDEE ================================================== */
+/* ========================================================== */
 
 /* ── BMR / TDEE Body fat toggle ──────────────────────────────────────── */
 .optional-field-toggle {
@@ -456,6 +491,10 @@
 .result-detail-row.calorie-goal-gain {
     -fx-border-color: rgba(139, 108, 246, 0.55);
 }
+
+/* ========================================================== */
+/* == BODY FAT ============================================== */
+/* ========================================================== */
 
 /* ── Body Fat ──────────────────────────────────────── */
 .body-fat-category-essential {

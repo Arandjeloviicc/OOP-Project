@@ -1,5 +1,52 @@
 @import "../theme.css";
 
+/* ========================================================== */
+/* == INPUT FIELD =========================================== */
+/* ========================================================== */
+
+.input-field {
+    -fx-min-height: 3.15em;
+    -fx-pref-height: 3.57em;
+    -fx-max-height: 3.57em;
+
+    -fx-background-color: -app-input-background;
+    -fx-background-radius: 0.85em;
+    -fx-border-color: -app-input-border;
+    -fx-border-radius: 0.85em;
+    -fx-border-width: 1px;
+
+    -fx-font-size: 1em;
+    -fx-font-family: "Segoe UI";
+}
+
+.input-field:focused {
+    -fx-border-color: -app-input-border-focused;
+    -fx-background-color: -app-input-background-focused;
+    -fx-effect: dropshadow(gaussian, -app-input-focus-glow, 8, 0.3, 0, 0);
+}
+
+.input-field:hover {
+    -fx-border-color: -app-input-border-hover;
+}
+
+.input-field.error {
+    -fx-border-color: -app-danger-border;
+}
+
+/* ========================================================== */
+/* == TEXT FIELD ============================================ */
+/* ========================================================== */
+
+.text-field {
+    -fx-text-fill: -app-input-text;
+    -fx-prompt-text-fill: -app-input-prompt;
+    -fx-padding: 0.9em 1.15em;
+}
+
+/* ========================================================== */
+/* == DATEPICKER ============================================ */
+/* ========================================================== */
+
 /* ── Date of birth DatePicker ──────────────────────────────────────────────────── */
 .date-picker-field {
     -fx-padding: 0;
@@ -123,7 +170,10 @@
     -fx-text-fill: -app-popup-week-number-text;
 }
 
-/* ── ComboBox ──────────────────────────────────────────────────── */
+/* ========================================================== */
+/* == COMBOBOX ============================================== */
+/* ========================================================== */
+
 .combo-box-field {
     -fx-padding: 0;
     -fx-cursor: hand;
@@ -156,7 +206,7 @@
 .combo-box-field:showing {
     -fx-border-color: -app-input-border-focused;
     -fx-background-color: -app-input-background-focused;
-    -fx-effect: dropshadow(gaussian,  -app-input-focus-glow, 8, 0.3, 0, 0);
+    -fx-effect: dropshadow(gaussian, -app-input-focus-glow, 8, 0.3, 0, 0);
 }
 
 .combo-box-popup > .list-view {
@@ -182,9 +232,46 @@
 
 .combo-box-popup > .list-view .list-cell:filled:hover {
     -fx-background-color: -app-popup-hover;
-    -fx-text-fill: white;
+    -fx-text-fill: -app-text-primary;
 }
 
 .combo-box-popup > .list-view .list-cell:empty {
     -fx-background-color: transparent;
+}
+
+/* ========================================================== */
+/* == GENDER CHOICE ============================================ */
+/* ========================================================== */
+
+.gender-options {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.gender-option {
+    -fx-background-color: -app-choice-background;
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: -app-choice-border;
+    -fx-border-radius: 0.7em;
+
+    -fx-text-fill: -app-choice-text;
+    -fx-padding: 0.8em 1.4em;
+
+    -fx-cursor: hand;
+}
+
+.gender-option:hover {
+    -fx-background-color: -app-choice-hover;
+}
+
+.gender-option:selected {
+    -fx-background-color: -app-choice-selected-background;
+    -fx-border-color: -app-choice-selected-border;
+    -fx-text-fill: -app-text-primary;
+
+    -fx-cursor: default;
+}
+
+.gender-option.error {
+    -fx-border-color: -app-danger-border;
 }

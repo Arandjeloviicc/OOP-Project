@@ -1,11 +1,20 @@
+@import "../theme.css";
 @import "../common/base-view.css";
 @import "../common/form-controls.css";
 @import "../common/scroll.css";
 
+/* ========================================================== */
+/* == ROOT ================================================== */
+/* ========================================================== */
+
 .root {
-    -fx-background-color: #100c29;
+    -fx-background-color: -app-background;
     -fx-font-size: 14px;
 }
+
+/* ========================================================== */
+/* == SETUP ================================================= */
+/* ========================================================== */
 
 .setup-surface {
     -fx-background-color: transparent;
@@ -20,13 +29,13 @@
 }
 
 .setup-title {
-    -fx-text-fill: white;
+    -fx-text-fill: -app-text-primary;
     -fx-font-size: 2em;
     -fx-font-weight: bold;
 }
 
 .setup-subtitle {
-    -fx-text-fill: rgba(255, 255, 255, 0.65);
+    -fx-text-fill: -app-setup-subtitle;
     -fx-font-size: 1em;
     -fx-padding: 0 0 1.25em 0;
 }
@@ -40,10 +49,14 @@
 }
 
 .step-label {
-    -fx-text-fill: rgba(160, 150, 255, 0.85);
+    -fx-text-fill: -app-setup-step-text;
     -fx-font-size: 0.85em;
     -fx-font-weight: bold;
 }
+
+/* ========================================================== */
+/* == OTHER ================================================== */
+/* ========================================================== */
 
 /* ── Next step Button ──────────────────────────────────────────────────── */
 .next-step-row {
@@ -53,83 +66,4 @@
 /* ── Goals ──────────────────────────────────────────────────── */
 .goal-weight-box {
     -fx-spacing: 0.65em;
-}
-
-/* ── Back Button ──────────────────────────────────────────────────── */
-.back-btn {
-    -fx-background-color: transparent;
-    -fx-background-radius: 1em;
-
-    -fx-border-color: rgba(143, 107, 255, 0.35);
-    -fx-border-radius: 1em;
-    -fx-border-width: 1px;
-
-    -fx-text-fill: rgba(220, 215, 240, 0.80);
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 1em;
-    -fx-font-weight: bold;
-
-    -fx-min-height: 48px;
-    -fx-pref-height: 48px;
-    -fx-max-height: 48px;
-
-    -fx-cursor: hand;
-}
-
-.root:narrow .back-btn {
-    -fx-font-size: 1.5em;
-
-    -fx-min-height: 48px;
-    -fx-pref-height: 48px;
-    -fx-max-height: 48px;
-
-    -fx-min-width: 60px;
-    -fx-pref-width: 60px;
-    -fx-max-width: 60px;
-
-    -fx-padding: 0;
-}
-
-.back-btn:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.12);
-    -fx-border-color: rgba(143, 107, 255, 0.65);
-    -fx-text-fill: white;
-}
-
-.back-btn:pressed {
-    -fx-background-color: rgba(143, 107, 255, 0.20);
-}
-
-/* ── Gender Buttons ──────────────────────────────────────────────────── */
-.gender-options {
-    -fx-alignment: CENTER_LEFT;
-}
-
-.gender-option {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
-    -fx-background-radius: 0.7em;
-
-    -fx-border-color: rgba(143, 107, 255, 0.35);
-    -fx-border-radius: 0.7em;
-
-    -fx-text-fill: rgba(255, 255, 255, 0.72);
-    -fx-padding: 0.8em 1.4em;
-
-    -fx-cursor: hand;
-}
-
-.gender-option:hover {
-    -fx-background-color: rgba(143, 107, 255, 0.15);
-}
-
-.gender-option:selected {
-    -fx-background-color: #7656d9;
-    -fx-border-color: #987aff;
-    -fx-text-fill: white;
-
-    -fx-cursor: default;
-}
-
-.gender-option.error {
-    -fx-border-color: rgba(255, 80, 80, 0.70);
 }

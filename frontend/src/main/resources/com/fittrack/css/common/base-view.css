@@ -1,68 +1,12 @@
 @import "../theme.css";
 
-/* ── Root / Screen ─────────────────────────────────────────── */
+/* ========================================================== */
+/* == ROOT ================================================== */
+/* ========================================================== */
+
 .root {
     -fx-background-color: -app-background;
     -fx-font-size: 14px;
-}
-
-/* ── Background ────────────────────────────────────────────── */
-.bg-image {
-    -fx-opacity: 1.0;
-}
-
-.bg-overlay {
-    -fx-background-color: -app-overlay-background;
-}
-
-/* ── Around Glass Card ────────────────────────────────────────────── */
-.content-layer {
-    -fx-padding: 2em;
-}
-
-/* ── Glass Card ─────────────────────────────────────────────── */
-.glass-card {
-    -fx-background-color: -app-glass-background;
-    -fx-background-radius: 1.4em;
-
-    -fx-border-color: -app-glass-border;
-    -fx-border-radius: 1.4em;
-    -fx-border-width: 1px;
-
-    -fx-effect: dropshadow(gaussian, -app-glass-shadow, 60, 0.2, 0, 8);
-
-    -fx-padding: 0;
-}
-
-/* ── Card inner padding ─────────────────────────────────────── */
-.card-inner {
-    -fx-padding: 2.3em 3.15em 2.6em 3.15em;
-    -fx-spacing: 0;
-}
-
-/* ── Typography ─────────────────────────────────────────────── */
-.title-label {
-    -fx-text-fill: -app-text-primary;
-    -fx-font-size: 2em;
-    -fx-font-weight: bold;
-    -fx-font-family: "Segoe UI";
-    -fx-padding: 0.65em 0 0.2em 0;
-    -fx-alignment: CENTER;
-}
-
-.subtitle-label {
-    -fx-text-fill: -app-subtitle-text;
-    -fx-font-size: 1em;
-    -fx-font-family: "Segoe UI";
-    -fx-padding: 0 0 2em 0;
-    -fx-alignment: CENTER;
-    -fx-text-alignment: CENTER;
-}
-
-/* ── Fields ─────────────────────────────────────────────────── */
-.fields-wrap {
-    -fx-padding: 0 0 0.6em 0;
-    -fx-spacing: 0;
 }
 
 .field-group {
@@ -76,44 +20,10 @@
     -fx-font-family: "Segoe UI";
 }
 
-/* ── Input field ─────────────────────────────────────────── */
-.input-field {
-    -fx-min-height: 3.15em;
-    -fx-pref-height: 3.57em;
-    -fx-max-height: 3.57em;
+/* ========================================================== */
+/* == ERROR / HELPER ======================================== */
+/* ========================================================== */
 
-    -fx-background-color: -app-input-background;
-    -fx-background-radius: 0.85em;
-    -fx-border-color: -app-input-border;
-    -fx-border-radius: 0.85em;
-    -fx-border-width: 1px;
-
-    -fx-font-size: 1em;
-    -fx-font-family: "Segoe UI";
-}
-
-.input-field:focused {
-    -fx-border-color: -app-input-border-focused;
-    -fx-background-color: -app-input-background-focused;
-    -fx-effect: dropshadow(gaussian, -app-input-focus-glow, 8, 0.3, 0, 0);
-}
-
-.input-field:hover {
-    -fx-border-color: -app-input-border-hover;
-}
-
-.input-field.error {
-    -fx-border-color: -app-danger-border;
-}
-
-/* ── Text field ─────────────────────────────────────────── */
-.text-field {
-    -fx-text-fill: -app-input-text;
-    -fx-prompt-text-fill: -app-input-prompt;
-    -fx-padding: 0.9em 1.15em;
-}
-
-/* ── Error/Message label ─────────────────────────────────────────── */
 .helper-label,
 .error-label {
     -fx-font-size: 0.8em;
@@ -136,27 +46,9 @@
     -fx-text-fill: -app-error-text;
 }
 
-/* ── Password toggle ─────────────────────────────────────────── */
-.pw-toggle-wrap {
-    -fx-cursor: hand;
-    -fx-padding: 0 0 0 0.55em;
-}
-
-.pw-toggle-icon {
-    -fx-text-fill: -app-accent-text;
-    -fx-font-size: 1em;
-}
-
-.pw-toggle-text {
-    -fx-text-fill: -app-accent-text;
-    -fx-font-size: 0.93em;
-    -fx-font-family: "Segoe UI";
-}
-
-.pw-toggle-wrap:hover .pw-toggle-text,
-.pw-toggle-wrap:hover .pw-toggle-icon {
-    -fx-text-fill: -app-accent-text-hover;
-}
+/* ========================================================== */
+/* == ACTION BUTTON ========================================= */
+/* ========================================================== */
 
 /* ── Action Button (Login / Register Button) ──────────────────── */
 .action-btn {
@@ -197,28 +89,50 @@
     -fx-opacity: 1;
 }
 
-/* ── Bottom navigation row (Register here / Back to login) ───── */
-.bottom-row {
-    -fx-padding: 1.4em 0 0 0;
-    -fx-alignment: CENTER;
-}
+/* ========================================================== */
+/* == BACK BUTTON =========================================== */
+/* ========================================================== */
 
-.bottom-text {
-    -fx-text-fill: -app-bottom-text;
-    -fx-font-size: 0.93em;
-    -fx-font-family: "Segoe UI";
-}
+.back-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 1em;
 
-.bottom-link {
-    -fx-text-fill: -app-link-text;
-    -fx-font-size: 0.93em;
+    -fx-border-color: -app-secondary-button-border;
+    -fx-border-radius: 1em;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: -app-secondary-button-text;
     -fx-font-family: "Segoe UI";
-    -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-underline: true;
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-min-height: 48px;
+    -fx-pref-height: 48px;
+    -fx-max-height: 48px;
+
     -fx-cursor: hand;
 }
 
-.bottom-link:hover {
-    -fx-text-fill: -app-link-text-hover;
+.root:narrow .back-btn {
+    -fx-font-size: 1.5em;
+
+    -fx-min-height: 48px;
+    -fx-pref-height: 48px;
+    -fx-max-height: 48px;
+
+    -fx-min-width: 60px;
+    -fx-pref-width: 60px;
+    -fx-max-width: 60px;
+
+    -fx-padding: 0;
+}
+
+.back-btn:hover {
+    -fx-background-color: -app-secondary-button-hover;
+    -fx-border-color: -app-secondary-button-border-hover;
+    -fx-text-fill: -app-text-primary;
+}
+
+.back-btn:pressed {
+    -fx-background-color: -app-secondary-button-pressed;
 }
