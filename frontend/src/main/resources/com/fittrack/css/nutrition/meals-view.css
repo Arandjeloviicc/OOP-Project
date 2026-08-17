@@ -1,0 +1,173 @@
+@import "../theme.css";
+@import "../common/base-view.css";
+@import "../common/form-controls.css";
+@import "../common/scroll.css";
+
+/* ========================================================== */
+/* == ROOT ================================================== */
+/* ========================================================== */
+
+.meals-container {
+    -fx-background-color: -app-background;
+}
+
+.meals-content {
+    -fx-background-color: -app-background;
+    -fx-padding: 0 0 2em 0;
+}
+
+/* ========================================================== */
+/* == DATE NAVIGATION ======================================= */
+/* ========================================================== */
+
+.meals-date-navigation {
+    -fx-spacing: 1em;
+    -fx-alignment: CENTER;
+}
+
+.meals-container:narrow .meals-date-navigation {
+    -fx-max-width: Infinity;
+    -fx-padding: 0 1em;
+}
+
+.meals-date-picker {
+    -fx-min-width: 13em;
+    -fx-pref-width: 26em;
+    -fx-max-width: 26em;
+}
+
+.meals-container:narrow .meals-date-picker {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.meals-date-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: -app-border;
+    -fx-border-radius: 0.7em;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
+
+    -fx-min-width: 2.4em;
+    -fx-pref-width: 2.4em;
+    -fx-max-width: 2.4em;
+
+    -fx-min-height: 2.4em;
+    -fx-pref-height: 2.4em;
+    -fx-max-height: 2.4em;
+
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.meals-date-button:hover {
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-border-strong;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meals-date-button:pressed {
+    -fx-background-color: -app-hover-strong;
+}
+
+.meals-container:narrow .meals-date-button {
+    -fx-min-width: 3em;
+    -fx-pref-width: 3em;
+    -fx-max-width: 3em;
+}
+
+/* ========================================================== */
+/* == RESPONSIVE LAYOUT ===================================== */
+/* ========================================================== */
+
+.meals-wide-container {
+    -fx-max-width: Infinity;
+
+    -fx-spacing: 1.5em;
+    -fx-alignment: TOP_CENTER;
+
+    -fx-padding: 0 2em;
+}
+
+.meals-narrow-container {
+    -fx-max-width: Infinity;
+
+    -fx-spacing: 2.5em;
+    -fx-alignment: TOP_CENTER;
+
+    -fx-padding: 0 1em;
+}
+
+/* ========================================================== */
+/* == SUMMARY + DIARY ======================================= */
+/* ========================================================== */
+
+.meals-body-stack {
+    -fx-padding: 1.5em 0 0 0;
+}
+
+/* ========================================================== */
+/* == SUMMARY =============================================== */
+/* ========================================================== */
+
+.summary-container {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+
+    -fx-spacing: 1em;
+    -fx-alignment: TOP_CENTER;
+
+    -fx-background-color: transparent;
+}
+
+.macros-wide-container {
+    -fx-max-width: Infinity;
+    -fx-spacing: 1em;
+    -fx-alignment: TOP_CENTER;
+}
+
+.macros-wide-container > .nutrition-progress-card {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.macros-narrow-container {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+
+    -fx-spacing: 0;
+    -fx-padding: 0.7em;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: rgba(124, 143, 255, 0.18);
+    -fx-border-radius: 1em;
+    -fx-border-width: 1px;
+
+    -fx-alignment: TOP_CENTER;
+}
+
+/* ========================================================== */
+/* == DIARY ================================================= */
+/* ========================================================== */
+
+.diary-container {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+
+    -fx-spacing: 0.9em;
+    -fx-alignment: TOP_CENTER;
+
+    -fx-background-color: transparent;
+}
+
+.diary-container .section-title {
+    -fx-padding: 0.4em 0 0.1em 0;
+}

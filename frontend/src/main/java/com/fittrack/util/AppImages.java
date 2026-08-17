@@ -24,6 +24,8 @@ public final class AppImages {
     public static final Image MEASUREMENTS_ICON = load("/com/fittrack/images/icons/measurements.png");
     public static final Image USER_PROFILE_ICON = load("/com/fittrack/images/icons/profile.png");
 
+    // Meal Types
+
     private AppImages() {}
 
     private static Image load(String path) {

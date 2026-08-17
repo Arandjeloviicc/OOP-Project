@@ -8,8 +8,7 @@ public final class UserSession {
 
     private User currentUser;
 
-    private UserSession() {
-    }
+    private UserSession() {}
 
     public static UserSession getInstance() {
         return INSTANCE;

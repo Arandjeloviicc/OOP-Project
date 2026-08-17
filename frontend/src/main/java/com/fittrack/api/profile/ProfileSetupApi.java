@@ -19,6 +19,7 @@ public class ProfileSetupApi {
 
     public void completeProfile(ProfileSetupRequest profileSetupRequest) {
         try {
+
             String requestBody = objectMapper.writeValueAsString(profileSetupRequest);
 
             HttpRequest request = HttpRequest.newBuilder()

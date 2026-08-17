@@ -20,6 +20,13 @@ public final class AppConstants {
         public static final String USER_PROFILE = "profile/user-profile-view.fxml";
     }
 
+    public static final class Components {
+        private Components() {}
+
+        public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
+        public static final String MEAL_CARD = "nutrition/components/meal-card.fxml";
+    }
+
     public static final class Validation {
 
         private Validation() {}
@@ -78,7 +85,7 @@ public final class AppConstants {
         public static final String HELPER_PASSWORD_MESSAGE = "At least %d characters".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH);
 
         // Profile setup view
-        // Personal info
+        // Invalid
         public static final String INVALID_FIRST_NAME_MESSAGE =
                 "First name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes."
                         .formatted(
@@ -104,6 +111,7 @@ public final class AppConstants {
                         );
         public static final String INVALID_GENDER_MESSAGE = "Please select your gender.";
 
+        // Helper
         public static final String HELPER_FIRST_NAME_MESSAGE =
                 "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed."
                         .formatted(
@@ -126,6 +134,7 @@ public final class AppConstants {
                         );
 
         // Fitness goals
+        // Invalid
         public static final String INVALID_HEIGHT_MESSAGE = "Enter a height between %d and %d cm.".formatted(AppConstants.Validation.MIN_HEIGHT, AppConstants.Validation.MAX_HEIGHT);
         public static final String INVALID_WEIGHT_MESSAGE = "Enter a weight between %d and %d kg.".formatted(AppConstants.Validation.MIN_WEIGHT, AppConstants.Validation.MAX_WEIGHT);
         public static final String ACTIVITY_NOT_SELECTED_MESSAGE = "Select your activity level.";
@@ -134,6 +143,7 @@ public final class AppConstants {
         public static final String INVALID_GOAL_WEIGHT_LOSE_MESSAGE = "Goal weight should be lower than your current weight.";
         public static final String INVALID_GOAL_WEIGHT_GAIN_MESSAGE = "Goal weight should be higher than your current weight.";
 
+        // Helpers
         public static final String HELPER_HEIGHT_MESSAGE = "Height in centimeters.";
         public static final String HELPER_WEIGHT_MESSAGE = "Current weight in kilograms.";
         public static final String HELPER_ACTIVITY_MESSAGE = "Your typical activity level.";

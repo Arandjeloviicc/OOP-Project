@@ -1,0 +1,167 @@
+@import "../../theme.css";
+
+/* ========================================================== */
+/* == MEAL CARD ============================================== */
+/* ========================================================== */
+
+.meal-card {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+
+    -fx-spacing: 1.15em;
+    -fx-padding: 1.25em 1.4em 1.35em 1.4em;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: rgba(124, 143, 255, 0.24);
+    -fx-border-radius: 1em;
+    -fx-border-width: 1px;
+
+    -fx-cursor: hand;
+}
+
+.meal-card:hover {
+    -fx-background-color: #101A33;
+    -fx-border-color: rgba(124, 143, 255, 0.18);
+}
+
+/* ========================================================== */
+/* == HEADER ================================================= */
+/* ========================================================== */
+
+.meal-card-header {
+    -fx-spacing: 0.7em;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.meal-card-title {
+    -fx-text-fill: #E4E8FF;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+}
+
+/* ========================================================== */
+/* == CONTENT ================================================ */
+/* ========================================================== */
+
+.meal-card-content {
+    -fx-spacing: 1em;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.meal-card-info {
+    -fx-spacing: 0.3em;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.meal-card-food-preview {
+    -fx-spacing: 0.3em;
+    -fx-alignment: BASELINE_LEFT;
+}
+
+.meal-card-first-food {
+    -fx-text-fill: rgba(255, 255, 255, 0.88);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+}
+
+.meal-card-more-foods {
+    -fx-text-fill: #86A8FF;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.9em;
+    -fx-opcity: 0.70;
+}
+
+.meal-card-calories {
+    -fx-text-fill: rgba(180, 190, 235, 0.72);
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.88em;
+}
+
+/* ========================================================== */
+/* == ICON =================================================== */
+/* ========================================================== */
+
+.meal-card-icon-container {
+    -fx-min-width: 3.1em;
+    -fx-pref-width: 3.1em;
+    -fx-max-width: 3.1em;
+
+    -fx-min-height: 3.1em;
+    -fx-pref-height: 3.1em;
+    -fx-max-height: 3.1em;
+
+    -fx-alignment: CENTER;
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.85em;
+}
+
+/* ========================================================== */
+/* == LOG BUTTON ============================================= */
+/* ========================================================== */
+
+.meal-card-log-button {
+    -fx-background-color: linear-gradient(to right, -app-button-gradient-start, -app-button-gradient-end);
+    -fx-background-radius: 0.7em;
+
+    -fx-border-radius: 0.7em;
+
+    -fx-text-fill: -app-text-primary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 0.95em;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0.55em 1.2em;
+
+    -fx-cursor: hand;
+}
+
+.meal-card-log-button:hover {
+    -fx-background-color: #6F86FF;
+}
+
+.meal-card-log-button:pressed {
+    -fx-background-color: #4058D8;
+}
+
+/* ========================================================== */
+/* == MENU BUTTON ============================================ */
+/* ========================================================== */
+
+.meal-card-menu-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: transparent;
+    -fx-border-radius: 0.7em;
+
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+
+    -fx-min-width: 2.4em;
+    -fx-pref-width: 2.4em;
+    -fx-max-width: 2.4em;
+
+    -fx-min-height: 2.4em;
+    -fx-pref-height: 2.4em;
+    -fx-max-height: 2.4em;
+
+    -fx-padding: 0;
+
+    -fx-cursor: hand;
+}
+
+.meal-card-menu-button:hover {
+    -fx-background-color: -app-hover;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-card-menu-button:pressed {
+    -fx-background-color: -app-hover-strong;
+}

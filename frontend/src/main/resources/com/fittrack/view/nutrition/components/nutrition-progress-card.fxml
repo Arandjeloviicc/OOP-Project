@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.fittrack.controller.nutrition.components.NutritionProgressCardController"
+      stylesheets="@../../../css/nutrition/components/nutrition-progress-card.css"
+      styleClass="nutrition-progress-card">
+
+    <Label fx:id="titleLabel"
+           styleClass="nutrition-progress-title"
+           text="Calories"/>
+
+    <HBox styleClass="nutrition-progress-values">
+
+        <HBox alignment="BASELINE_LEFT"
+              styleClass="nutrition-progress-value-group">
+            <Label fx:id="currentValueLabel"
+                   styleClass="nutrition-progress-current-value"/>
+
+            <Label fx:id="unitLabel"
+                   styleClass="nutrition-progress-unit"/>
+
+            <Label fx:id="goalValueLabel"
+                   styleClass="nutrition-progress-goal-value"/>
+        </HBox>
+
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <HBox fx:id="remainingContainer"
+              alignment="BASELINE_RIGHT"
+              styleClass="nutrition-progress-remaining-group">
+
+            <Label fx:id="remainingValueLabel"
+                   styleClass="nutrition-progress-remaining-value"/>
+
+            <Label fx:id="remainingStatusLabel"
+                   styleClass="nutrition-progress-secondary-value"/>
+
+        </HBox>
+    </HBox>
+
+    <ProgressBar fx:id="progressBar"
+                 progress="0"
+                 maxWidth="Infinity"
+                 styleClass="nutrition-progress-bar"/>
+
+</VBox>

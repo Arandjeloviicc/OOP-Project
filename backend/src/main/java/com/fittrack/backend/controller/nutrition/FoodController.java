@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,18 +28,28 @@ public class FoodController {
 
     @GetMapping
     public List<FoodResponse> searchFoods(@RequestParam String search) {
-        return foodService.searchFoods(search)
-                .stream()
-                .map(foodService::toResponse)
-                .toList();
+        List<Food> foods = foodService.searchFoods(search);
+
+        List<FoodResponse> responses = new ArrayList<>();
+
+        for (Food food : foods) {
+            responses.add(foodService.toResponse(food));
+        }
+
+        return responses;
     }
 
     @GetMapping("/mine/{userId}")
     public List<FoodResponse> getMyFoods(@PathVariable Integer userId) {
-        return foodService.getFoodsCreatedByUser(userId)
-                .stream()
-                .map(foodService::toResponse)
-                .toList();
+        List<Food> foods = foodService.getFoodsCreatedByUser(userId);
+
+        List<FoodResponse> responses = new ArrayList<>();
+
+        for (Food food : foods) {
+            responses.add(foodService.toResponse(food));
+        }
+
+        return responses;
     }
 
     @PostMapping("/user/{userId}")

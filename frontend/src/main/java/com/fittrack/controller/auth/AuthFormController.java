@@ -32,7 +32,7 @@ public abstract class AuthFormController extends FormController implements Respo
     // ── Initialize Helpers ──────────────────────────────────────────────
     protected void initializeAuthControls(StackPane rootLayout, ImageView backgroundImage, PasswordField passwordField, TextField passwordVisible) {
         // Load background image
-        setBackgroundImage(backgroundImage);
+        //setBackgroundImage(backgroundImage);
 
         // Background size initialize
         backgroundImage.fitWidthProperty().bind(rootLayout.widthProperty());
