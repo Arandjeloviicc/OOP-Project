@@ -16,205 +16,217 @@
 
 <?import javafx.scene.layout.FlowPane?>
 
-<BorderPane fx:id="rootLayout"
-            xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.fittrack.controller.main.MainLayoutController"
-            stylesheets="@../../css/main/main-layout-view.css"
-            styleClass="main-layout">
+<StackPane fx:id="rootStack"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.main.MainLayoutController"
+           stylesheets="@../../css/main/main-layout-view.css">
 
-    <!-- ── Top bar - Only on narrow screens ─────────────────────────────────────────── -->
-    <top>
-        <HBox fx:id="topBar" alignment="CENTER_LEFT" styleClass="top-bar" visible="false" managed="false">
+    <!-- App -->
+    <BorderPane fx:id="rootLayout"
 
-            <!-- Logo -->
-            <HBox fx:id="logoTopBar"
-                  alignment="CENTER_LEFT"
-                  styleClass="top-bar-logo"
-                  visible="false"
-                  managed="false">
-                <ImageView fitWidth="48" fitHeight="48" preserveRatio="true">
-                    <AppImages fx:constant="APP_LOGO"/>
-                </ImageView>
-                <Label text="FitTrack" styleClass="logo-bar-text"/>
-            </HBox>
+                styleClass="main-layout">
 
-            <Region HBox.hgrow="ALWAYS"/>
+        <!-- ── Top bar - Only on narrow screens ─────────────────────────────────────────── -->
+        <top>
+            <HBox fx:id="topBar" alignment="CENTER_LEFT" styleClass="top-bar" visible="false" managed="false">
 
-            <!-- Logout Button -->
-            <Button fx:id="logoutButtonHeader"
-                    text="Log out"
-                    onAction="#handleLogout"
-                    styleClass="logout-button-base, logout-button-header"
-                    visible="false"
-                    managed="false"/>
-        </HBox>
-    </top>
+                <!-- Logo -->
+                <HBox fx:id="logoTopBar"
+                      alignment="CENTER_LEFT"
+                      styleClass="top-bar-logo"
+                      visible="false"
+                      managed="false">
+                    <ImageView fitWidth="48" fitHeight="48" preserveRatio="true">
+                        <AppImages fx:constant="APP_LOGO"/>
+                    </ImageView>
+                    <Label text="FitTrack" styleClass="logo-bar-text"/>
+                </HBox>
 
-    <!-- ── Sidebar ─────────────────────────────────────────── -->
-    <left>
-        <VBox fx:id="sidebar"
-              styleClass="sidebar">
+                <Region HBox.hgrow="ALWAYS"/>
 
-            <!-- Logo - Only on wide screens -->
-            <HBox fx:id="logoSidebar" alignment="CENTER_LEFT" styleClass="logo-bar">
-                <ImageView fitWidth="48" fitHeight="48" preserveRatio="true">
-                    <AppImages fx:constant="APP_LOGO"/>
-                </ImageView>
-                <Label text="FitTrack" styleClass="logo-bar-text"/>
-            </HBox>
-
-            <fx:define>
-                <ToggleGroup fx:id="navigationGroup"/>
-
-                <Button fx:id="moreButton"
-                        text="More"
-                        styleClass="navigation-button, more-button">
-                    <graphic>
-                        <Label text="•••"
-                               styleClass="more-icon"/>
-                    </graphic>
-                </Button>
-            </fx:define>
-
-            <!-- Navigation -->
-            <FlowPane fx:id="navigationContainer"
-                    styleClass="navigation-container">
-
-                <ToggleButton fx:id="dashboardButton"
-                              text="Dashboard"
-                              maxWidth="Infinity"
-                              toggleGroup="$navigationGroup"
-                              onAction="#handleDashboard"
-                              styleClass="navigation-button">
-                    <graphic>
-                        <ImageView fitWidth="20"
-                                   fitHeight="20"
-                                   preserveRatio="true">
-                            <AppImages fx:constant="DASHBOARD_ICON"/>
-                        </ImageView>
-                    </graphic>
-                </ToggleButton>
-
-                <ToggleButton fx:id="calculatorsButton"
-                              text="Calculators"
-                              maxWidth="Infinity"
-                              toggleGroup="$navigationGroup"
-                              onAction="#handleCalculators"
-                              styleClass="navigation-button">
-                    <graphic>
-                        <ImageView fitWidth="20"
-                                   fitHeight="20"
-                                   preserveRatio="true">
-                            <AppImages fx:constant="CALCULATORS_ICON"/>
-                        </ImageView>
-                    </graphic>
-                </ToggleButton>
-
-                <ToggleButton fx:id="mealsButton"
-                              text="Meals"
-                              maxWidth="Infinity"
-                              toggleGroup="$navigationGroup"
-                              onAction="#handleMeals"
-                              styleClass="navigation-button">
-                    <graphic>
-                        <ImageView fitWidth="20"
-                                   fitHeight="20"
-                                   preserveRatio="true">
-                            <AppImages fx:constant="MEALS_ICON"/>
-                        </ImageView>
-                    </graphic>
-                </ToggleButton>
-
-                <ToggleButton fx:id="workoutsButton"
-                              text="Workouts"
-                              maxWidth="Infinity"
-                              toggleGroup="$navigationGroup"
-                              onAction="#handleWorkouts"
-                              styleClass="navigation-button">
-                    <graphic>
-                        <ImageView fitWidth="20"
-                                   fitHeight="20"
-                                   preserveRatio="true">
-                            <AppImages fx:constant="WORKOUTS_ICON"/>
-                        </ImageView>
-                    </graphic>
-                </ToggleButton>
-
-                <ToggleButton fx:id="measurementsButton"
-                              text="Measurements"
-                              maxWidth="Infinity"
-                              toggleGroup="$navigationGroup"
-                              onAction="#handleMeasurements"
-                              styleClass="navigation-button">
-                    <graphic>
-                        <ImageView fitWidth="20"
-                                   fitHeight="20"
-                                   preserveRatio="true">
-                            <AppImages fx:constant="MEASUREMENTS_ICON"/>
-                        </ImageView>
-                    </graphic>
-                </ToggleButton>
-
-                <ToggleButton fx:id="profileButton"
-                              text="Profile"
-                              maxWidth="Infinity"
-                              toggleGroup="$navigationGroup"
-                              onAction="#handleProfile"
-                              styleClass="navigation-button">
-                    <graphic>
-                        <ImageView fitWidth="20"
-                                   fitHeight="20"
-                                   preserveRatio="true">
-                            <AppImages fx:constant="USER_PROFILE_ICON"/>
-                        </ImageView>
-                    </graphic>
-                </ToggleButton>
-
-            </FlowPane>
-
-            <Region VBox.vgrow="ALWAYS"/>
-
-            <!-- Logged-in user - Only on wide screens -->
-            <VBox fx:id="sidebarUserContainer"
-                  styleClass="sidebar-user-container">
-
-                <Label text="Signed in as"
-                       styleClass="sidebar-user-caption"/>
-
-                <Label fx:id="sidebarUsernameLabel"
-                       text="username"
-                       styleClass="sidebar-username"/>
-
-                <Button fx:id="logoutButtonSideBar" text="Log out"
-                        maxWidth="Infinity"
+                <!-- Logout Button -->
+                <Button fx:id="logoutButtonHeader"
+                        text="Log out"
                         onAction="#handleLogout"
-                        styleClass="logout-button-base, logout-button-sidebar"/>
+                        styleClass="logout-button-base, logout-button-header"
+                        visible="false"
+                        managed="false"/>
+            </HBox>
+        </top>
+
+        <!-- ── Sidebar ─────────────────────────────────────────── -->
+        <left>
+            <VBox fx:id="sidebar"
+                  styleClass="sidebar">
+
+                <!-- Logo - Only on wide screens -->
+                <HBox fx:id="logoSidebar" alignment="CENTER_LEFT" styleClass="logo-bar">
+                    <ImageView fitWidth="48" fitHeight="48" preserveRatio="true">
+                        <AppImages fx:constant="APP_LOGO"/>
+                    </ImageView>
+                    <Label text="FitTrack" styleClass="logo-bar-text"/>
+                </HBox>
+
+                <fx:define>
+                    <ToggleGroup fx:id="navigationGroup"/>
+
+                    <Button fx:id="moreButton"
+                            text="More"
+                            styleClass="navigation-button, more-button">
+                        <graphic>
+                            <Label text="•••"
+                                   styleClass="more-icon"/>
+                        </graphic>
+                    </Button>
+                </fx:define>
+
+                <!-- Navigation -->
+                <FlowPane fx:id="navigationContainer"
+                          styleClass="navigation-container">
+
+                    <ToggleButton fx:id="dashboardButton"
+                                  text="Dashboard"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleDashboard"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="DASHBOARD_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="calculatorsButton"
+                                  text="Calculators"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleCalculators"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="CALCULATORS_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="mealsButton"
+                                  text="Meals"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleMeals"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="MEALS_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="workoutsButton"
+                                  text="Workouts"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleWorkouts"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="WORKOUTS_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="measurementsButton"
+                                  text="Measurements"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleMeasurements"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="MEASUREMENTS_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="profileButton"
+                                  text="Profile"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleProfile"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="USER_PROFILE_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                </FlowPane>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <!-- Logged-in user - Only on wide screens -->
+                <VBox fx:id="sidebarUserContainer"
+                      styleClass="sidebar-user-container">
+
+                    <Label text="Signed in as"
+                           styleClass="sidebar-user-caption"/>
+
+                    <Label fx:id="sidebarUsernameLabel"
+                           text="username"
+                           styleClass="sidebar-username"/>
+
+                    <Button fx:id="logoutButtonSideBar" text="Log out"
+                            maxWidth="Infinity"
+                            onAction="#handleLogout"
+                            styleClass="logout-button-base, logout-button-sidebar"/>
+                </VBox>
+
+            </VBox>
+        </left>
+
+        <!-- ── Main ─────────────────────────────── -->
+        <center>
+
+            <VBox styleClass="main-section">
+
+                <!-- Greeting message - Only on wide screens -->
+                <HBox fx:id="headerBox" alignment="CENTER_LEFT" styleClass="top-bar">
+                    <VBox styleClass="greeting-box">
+                        <Label fx:id="greetingLabel" text="Hello, username" styleClass="greeting-label"/>
+                        <Label text="Welcome back to FitTrack." styleClass="greeting-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Area where all other fxml files are shown -->
+                <StackPane fx:id="contentArea"
+                           styleClass="content-area"
+                           VBox.vgrow="ALWAYS"/>
+
             </VBox>
 
-        </VBox>
-    </left>
+        </center>
 
-    <!-- ── Main ─────────────────────────────── -->
-    <center>
+    </BorderPane>
 
-        <VBox styleClass="main-section">
+    <!-- Popup -->
+    <StackPane fx:id="overlayContainer"
+               visible="false"
+               managed="false"
+               styleClass="overlay-container"/>
 
-            <!-- Greeting message - Only on wide screens -->
-            <HBox fx:id="headerBox" alignment="CENTER_LEFT" styleClass="top-bar">
-                <VBox styleClass="greeting-box">
-                    <Label fx:id="greetingLabel" text="Hello, username" styleClass="greeting-label"/>
-                    <Label text="Welcome back to FitTrack." styleClass="greeting-subtitle"/>
-                </VBox>
-            </HBox>
-
-            <!-- Area where all other fxml files are shown -->
-            <StackPane fx:id="contentArea"
-                       styleClass="content-area"
-                       VBox.vgrow="ALWAYS"/>
-
-        </VBox>
-
-    </center>
-
-</BorderPane>
+</StackPane>

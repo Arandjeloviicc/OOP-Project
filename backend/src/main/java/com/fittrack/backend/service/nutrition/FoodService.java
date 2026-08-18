@@ -22,7 +22,7 @@ public class FoodService {
     public List<Food> searchFoods(String search) {
 
         if (search == null || search.isBlank()) {
-            return List.of();
+            return foodRepository.findTop20ByOrderByNameAsc();
         }
 
         return foodRepository.findTop20ByNameContainingIgnoreCaseOrderByNameAsc(search.trim());

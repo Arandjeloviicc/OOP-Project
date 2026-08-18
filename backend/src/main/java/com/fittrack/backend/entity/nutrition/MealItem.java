@@ -16,13 +16,13 @@ public class MealItem {
     private Integer id;
 
     // Foreign key
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Meal meal;
 
     // Foreign key
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Food food;

@@ -8,6 +8,7 @@ public final class AppConstants {
 
         private Views() {}
 
+        // Main Views
         public static final String LOGIN = "auth/login-view.fxml";
         public static final String REGISTER = "auth/register-view.fxml";
         public static final String PROFILE_SETUP = "profile/profile-setup-view.fxml";
@@ -18,13 +19,20 @@ public final class AppConstants {
         public static final String WORKOUTS = "workout/workouts-view.fxml";
         public static final String MEASUREMENTS = "";
         public static final String USER_PROFILE = "profile/user-profile-view.fxml";
+
+
+        // PopUp Views
+        public static final String ADD_FOOD = "nutrition/add-food-view.fxml";
     }
 
     public static final class Components {
+
         private Components() {}
 
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
         public static final String MEAL_CARD = "nutrition/components/meal-card.fxml";
+        public static final String FOOD_LIST_ITEM = "nutrition/components/food-list-item.fxml";
+        public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
     }
 
     public static final class Validation {

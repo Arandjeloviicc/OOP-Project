@@ -1,0 +1,125 @@
+@import "../theme.css";
+@import "../common/base-view.css";
+@import "../common/form-controls.css";
+
+.add-food-root {
+    -fx-background-color: rgba(5, 7, 18, 0.65);
+    -fx-alignment: center;
+}
+
+.add-food-dialog {
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 18px;
+
+    -fx-pref-width: 640px;
+    -fx-pref-height: 620px;
+    -fx-max-width: 760px;
+    -fx-max-height: 680px;
+
+    -fx-padding: 24px;
+    -fx-spacing: 18px;
+
+    -fx-border-color: rgba(124, 143, 255, 0.20);
+    -fx-border-width: 1px;
+    -fx-border-radius: 18px;
+}
+
+.add-food-header {
+    -fx-spacing: 12px;
+}
+
+.add-food-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+.add-food-close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}
+
+.add-food-search {
+    -fx-pref-height: 44px;
+}
+
+.add-food-tabs {
+    -fx-spacing: 8px;
+}
+
+.add-food-tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: -app-text-secondary;
+    -fx-cursor: hand;
+}
+
+.add-food-tab:selected {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: white;
+}
+
+.add-food-items {
+    -fx-spacing: 8px;
+}
+
+.add-food-placeholder {
+    -fx-text-fill: -app-text-secondary;
+}
+
+
+
+.add-food-details {
+    -fx-background-color: -app-background;
+    -fx-background-radius: 18px;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-radius: 18px;
+    -fx-border-width: 1px;
+
+    -fx-max-width: 520px;
+    -fx-max-height: 560px;
+
+    -fx-padding: 24px;
+    -fx-spacing: 14px;
+}
+
+
+/* Header */
+
+.add-food-details-header {
+    -fx-padding: 0 0 4px 0;
+}
+
+.add-food-details-caption {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-primary-light;
+}
+
+.add-food-details-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+
+/* Serving */
+
+.add-food-serving-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: -app-text-secondary;
+    -fx-opacity: 0.75;
+    -fx-translate-y: -6px;
+}
+
+/* Actions */
+.add-food-details-actions {
+    -fx-padding: 8px 0 0 0;
+    -fx-alignment: center;
+}
+
+.add-food-details-button {
+    -fx-pref-height: 40px;
+}

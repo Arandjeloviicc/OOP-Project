@@ -1,30 +1,25 @@
 package com.fittrack.api.nutrition;
 
-import com.fittrack.api.JsonMapper;
+import com.fittrack.api.common.BaseApi;
+import com.fittrack.dto.nutrition.AddMealItemRequest;
+import com.fittrack.dto.nutrition.MealItemResponse;
 import com.fittrack.dto.nutrition.MealResponse;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MealApi {
+public class MealApi extends BaseApi {
 
-    private static final String BASE_URL = "http://localhost:8080/api/nutrition";
-
-    private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final ObjectMapper objectMapper = JsonMapper.getMapper();
+    private static final String API_URL = NUTRITION_URL + "/meals";
 
     public List<MealResponse> getMealsFromDate(Integer userId, LocalDate mealDate) {
         try {
-            long start = System.currentTimeMillis();
-
-            String url = BASE_URL + "/user/" + userId + "?date=" + mealDate;
+            String url = API_URL + "/user/" + userId + "?date=" + mealDate;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -35,10 +30,6 @@ public class MealApi {
                     request,
                     HttpResponse.BodyHandlers.ofString()
             );
-
-            long end = System.currentTimeMillis();
-
-            System.out.println("Meal API request: " + (end - start) + " ms");
 
             if (response.statusCode() != 200) {
                 throw new IllegalStateException(
@@ -62,6 +53,49 @@ public class MealApi {
 
             throw new IllegalStateException(
                     "Meal request was interrupted.",
+                    exception
+            );
+        }
+    }
+
+    public MealItemResponse addMealItem(Integer userId, AddMealItemRequest requestData) {
+        try {
+            String url = API_URL + "/user/" + userId + "/items";
+
+            String requestBody = objectMapper.writeValueAsString(requestData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() != 201) {
+                throw new IllegalStateException(
+                        "Failed to add meal item."
+                );
+            }
+
+            return objectMapper.readValue(
+                    response.body(),
+                    MealItemResponse.class
+            );
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Could not communicate with the FitTrack server.",
+                    exception
+            );
+
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+
+            throw new IllegalStateException(
+                    "Meal item request was interrupted.",
                     exception
             );
         }

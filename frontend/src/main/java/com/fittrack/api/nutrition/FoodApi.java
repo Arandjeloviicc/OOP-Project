@@ -1,56 +1,30 @@
-package com.fittrack.api.profile;
+package com.fittrack.api.nutrition;
 
 import com.fittrack.api.common.BaseApi;
-import com.fittrack.dto.profile.ProfileSetupRequest;
+import com.fittrack.dto.nutrition.FoodResponse;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
-public class ProfileSetupApi extends BaseApi {
+public class FoodApi extends BaseApi {
 
-    public void completeProfile(ProfileSetupRequest profileSetupRequest) {
+    private static final String API_URL = NUTRITION_URL + "/foods";
+
+    public List<FoodResponse> searchFoods(String search) {
         try {
-            String url = PROFILE_URL + "/setup";
+            String encodedSearch =
+                    URLEncoder.encode(
+                            search,
+                            StandardCharsets.UTF_8
+                    );
 
-            String requestBody = objectMapper.writeValueAsString(profileSetupRequest);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(
-                    request,
-                    HttpResponse.BodyHandlers.ofString()
-            );
-
-            if (response.statusCode() != 200) {
-                throw new IllegalStateException(
-                        "Failed to complete profile setup."
-                );
-            }
-        } catch (IOException exception) {
-            throw new IllegalStateException(
-                    "Could not communicate with the FitTrack server.",
-                    exception
-            );
-
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-
-            throw new IllegalStateException(
-                    "Profile setup request was interrupted.",
-                    exception
-            );
-        }
-    }
-
-    public boolean isProfileSetupComplete(int userId) {
-        try {
-            String url = PROFILE_URL + "/" + userId + "/setup-complete";
+            String url = API_URL + "?search=" + encodedSearch;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -64,23 +38,65 @@ public class ProfileSetupApi extends BaseApi {
 
             if (response.statusCode() != 200) {
                 throw new IllegalStateException(
-                        "Failed to check profile setup status."
+                        "Failed to load foods."
                 );
             }
 
-            return Boolean.parseBoolean(response.body());
+            return objectMapper.readValue(
+                    response.body(),
+                    new TypeReference<>() {}
+            );
 
         } catch (IOException exception) {
             throw new IllegalStateException(
                     "Could not communicate with the FitTrack server.",
                     exception
             );
-
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
 
             throw new IllegalStateException(
-                    "Profile status request was interrupted.",
+                    "Food request was interrupted.",
+                    exception
+            );
+        }
+    }
+
+    public List<FoodResponse> getMyFoods(Integer userId) {
+        try {
+            String url = API_URL + "/mine/" + userId;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() != 200) {
+                throw new IllegalStateException(
+                        "Failed to load user foods."
+                );
+            }
+
+            return objectMapper.readValue(
+                    response.body(),
+                    new TypeReference<>() {}
+            );
+
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Could not communicate with the FitTrack server.",
+                    exception
+            );
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+
+            throw new IllegalStateException(
+                    "Food request was interrupted.",
                     exception
             );
         }

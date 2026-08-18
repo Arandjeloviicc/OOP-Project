@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.AddFoodController"
+           stylesheets="@../../css/nutrition/add-food-view.css"
+           styleClass="add-food-root">
+
+    <VBox fx:id="foodListContainer">
+
+        <VBox fx:id="dialogContainer"
+              styleClass="add-food-dialog">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT"
+                  styleClass="add-food-header">
+
+                <Label fx:id="titleLabel"
+                       text="Add Food"
+                       styleClass="add-food-title"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="✕"
+                        onAction="#handleClose"
+                        styleClass="add-food-close-button"/>
+            </HBox>
+
+            <!-- Search -->
+            <TextField fx:id="searchField"
+                       promptText="Search foods..."
+                       styleClass="add-food-search"/>
+
+            <!-- Tabs -->
+            <fx:define>
+                <ToggleGroup fx:id="foodCategoryGroup"/>
+            </fx:define>
+
+            <HBox styleClass="add-food-tabs">
+
+                <ToggleButton fx:id="allFoodsButton"
+                              text="All"
+                              toggleGroup="$foodCategoryGroup"
+                              selected="true"
+                              styleClass="add-food-tab"/>
+
+                <ToggleButton fx:id="myFoodsButton"
+                              text="My Foods"
+                              toggleGroup="$foodCategoryGroup"
+                              styleClass="add-food-tab"/>
+
+                <ToggleButton fx:id="myMealsButton"
+                              text="My Meals"
+                              toggleGroup="$foodCategoryGroup"
+                              styleClass="add-food-tab"/>
+
+            </HBox>
+
+            <!-- Later: actual list -->
+            <VBox fx:id="itemsContainer"
+                  styleClass="add-food-items"
+                  VBox.vgrow="ALWAYS">
+
+                <Label text="Food list will be shown here."
+                       styleClass="add-food-placeholder"/>
+
+            </VBox>
+
+        </VBox>
+
+    </VBox>
+
+    <VBox fx:id="foodDetailsContainer"
+          visible="false"
+          managed="false"
+          styleClass="add-food-details">
+
+        <!-- Header -->
+        <HBox alignment="TOP_CENTER"
+              styleClass="add-food-details-header">
+
+            <VBox spacing="3">
+                <Label text="Add food"
+                       styleClass="add-food-details-caption"/>
+
+                <Label fx:id="selectedFoodTitleLabel"
+                       text="Food name"
+                       styleClass="add-food-details-title"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="✕"
+                    onAction="#handleCancelFoodDetails"
+                    styleClass="add-food-close-button"/>
+        </HBox>
+
+
+        <!-- Meal -->
+        <VBox styleClass="field-group">
+            <Label text="Meal"
+                   styleClass="field-label"/>
+
+            <ComboBox fx:id="mealComboBox"
+                      maxWidth="Infinity"
+                      styleClass="input-field, combo-box-field"/>
+        </VBox>
+
+
+        <!-- Quantity + Unit -->
+        <HBox spacing="10">
+
+            <VBox styleClass="field-group"
+                  HBox.hgrow="ALWAYS">
+
+                <Label text="Quantity"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="quantityField"
+                           promptText="Quantity"
+                           maxWidth="Infinity"
+                           styleClass="input-field, text-field"/>
+            </VBox>
+
+            <VBox prefWidth="90"
+                  styleClass="field-group">
+
+                <Label text="Unit"
+                       styleClass="field-label"/>
+
+                <ComboBox fx:id="unitComboBox"
+                          maxWidth="Infinity"
+                          styleClass="input-field, combo-box-field"/>
+            </VBox>
+
+        </HBox>
+
+        <Label fx:id="defaultServingLabel"
+               text="Default serving: 100 g"
+               styleClass="add-food-serving-hint"/>
+
+        <!-- Nutrition preview -->
+        <VBox fx:id="nutrientPreview">
+
+        </VBox>
+
+        <!-- Actions -->
+        <HBox spacing="10"
+              styleClass="add-food-details-actions">
+
+            <Button text="Cancel"
+                    maxWidth="Infinity"
+                    HBox.hgrow="ALWAYS"
+                    onAction="#handleCancelFoodDetails"
+                    styleClass="back-btn, add-food-details-button"/>
+
+            <Button text="Add to meal"
+                    maxWidth="Infinity"
+                    HBox.hgrow="ALWAYS"
+                    onAction="#handleConfirmAddFood"
+                    styleClass="action-btn, add-food-details-button"/>
+
+        </HBox>
+
+    </VBox>
+
+</StackPane>

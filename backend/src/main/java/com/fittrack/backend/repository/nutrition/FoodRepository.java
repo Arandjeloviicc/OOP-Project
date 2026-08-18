@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface FoodRepository extends JpaRepository<@NonNull Food, @NonNull Integer> {
 
+    List<Food> findTop20ByOrderByNameAsc();
+
     List<Food> findTop20ByNameContainingIgnoreCaseOrderByNameAsc(String name);
 
     List<Food> findByCreatedByUser_IdOrderByNameAsc(Integer userId);

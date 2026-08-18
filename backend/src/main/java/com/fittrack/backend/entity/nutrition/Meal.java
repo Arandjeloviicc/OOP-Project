@@ -7,6 +7,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "meals")
@@ -18,7 +20,7 @@ public class Meal {
     private Integer id;
 
     // Foreign key
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
@@ -35,6 +37,10 @@ public class Meal {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "meal")
+    @OrderBy("id ASC")
+    private List<MealItem> items = new ArrayList<>();
 
     // Constructor
     protected Meal() {}
@@ -79,5 +85,9 @@ public class Meal {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public List<MealItem> getItems() {
+        return items;
     }
 }

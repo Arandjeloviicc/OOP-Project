@@ -1,0 +1,64 @@
+.macro-preview-card {
+    -fx-alignment: center-left;
+    -fx-spacing: 18px;
+    -fx-padding: 16px 18px;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 14px;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-radius: 14px;
+    -fx-border-width: 1px;
+}
+
+.macro-preview-chart-wrap {
+    -fx-min-width: 110px;
+    -fx-min-height: 110px;
+    -fx-pref-width: 110px;
+    -fx-pref-height: 110px;
+}
+
+.macro-preview-calories-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.macro-preview-calories-unit {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.macro-preview-legend {
+    -fx-spacing: 10px;
+    -fx-fill-width: true;
+}
+
+.macro-preview-row {
+    -fx-alignment: center-left;
+    -fx-spacing: 8px;
+}
+
+.macro-preview-name {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 14px;
+}
+
+.macro-preview-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.macro-dot-carbs {
+    -fx-fill: #F6C453;
+}
+
+.macro-dot-fat {
+    -fx-fill: #69D37D;
+}
+
+.macro-dot-protein {
+    -fx-fill: #FF6B6B;
+}

@@ -23,6 +23,7 @@ public class MealCardController {
     // Button Action
     private Runnable onLogAction;
 
+    // ── Button Actions ─────────────────────────────────────────────────
     @FXML
     public void handleLog() {
         if (onLogAction != null) {
@@ -30,6 +31,7 @@ public class MealCardController {
         }
     }
 
+    // ── Helpers ─────────────────────────────────────────────────
     public void setData(String title, String firstFood, Integer otherFoodsCount, double calories) {
         titleLabel.setText(title);
 
@@ -56,5 +58,4 @@ public class MealCardController {
     public void setOnLogAction(Runnable action) {
         this.onLogAction = action;
     }
-
 }

@@ -1,4 +1,4 @@
-package com.fittrack.api;
+package com.fittrack.api.common;
 
 import tools.jackson.databind.ObjectMapper;
 

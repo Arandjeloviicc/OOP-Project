@@ -37,7 +37,7 @@ public class Food {
     @Column(name = "fat_per_serving", nullable = false)
     private double fatPerServing;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User createdByUser;

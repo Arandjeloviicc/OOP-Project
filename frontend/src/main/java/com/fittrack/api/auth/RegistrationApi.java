@@ -1,42 +1,32 @@
 package com.fittrack.api.auth;
 
-import com.fittrack.api.JsonMapper;
+import com.fittrack.api.common.BaseApi;
 import com.fittrack.dto.auth.RegisterRequest;
 import com.fittrack.dto.auth.RegisterResponse;
 import com.fittrack.dto.auth.UserResponse;
 import com.fittrack.model.user.User;
-import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class RegistrationApi {
+public class RegistrationApi extends BaseApi {
 
-    private static final String BASE_URL = "http://localhost:8080/api/auth";
-
-    private final HttpClient httpClient;
-    private final ObjectMapper objectMapper = JsonMapper.getMapper();
-
-    public RegistrationApi() {
-        this.httpClient = HttpClient.newHttpClient();
-    }
+    private static final String API_URL = AUTH_URL + "/register";
 
     public RegistrationResult register(String username, String email, String password) {
-
-        RegisterRequest registerRequest = new RegisterRequest(username, email, password);
-
-        String requestBody = objectMapper.writeValueAsString(registerRequest);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/register"))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
-
         try {
+            RegisterRequest registerRequest = new RegisterRequest(username, email, password);
+
+            String requestBody = objectMapper.writeValueAsString(registerRequest);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
             HttpResponse<String> response = httpClient.send(
                     request,
                     HttpResponse.BodyHandlers.ofString()

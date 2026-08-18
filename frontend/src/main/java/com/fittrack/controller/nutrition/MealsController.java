@@ -2,11 +2,13 @@ package com.fittrack.controller.nutrition;
 
 import com.fittrack.api.nutrition.MealApi;
 import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.MealCardController;
 import com.fittrack.controller.nutrition.components.NutritionProgressCardController;
-import com.fittrack.dto.nutrition.MealItemResponse;
 import com.fittrack.dto.nutrition.MealResponse;
+import com.fittrack.model.nutrition.DailyNutritionTotals;
+import com.fittrack.service.nutrition.MealService;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.*;
 import javafx.beans.binding.DoubleBinding;
@@ -32,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class MealsController extends BaseController implements Initializable, ResponsiveLayout {
+public class MealsController extends BaseController implements Initializable, ResponsiveLayout, Refreshable {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(MealsController.class);
@@ -64,6 +66,17 @@ public class MealsController extends BaseController implements Initializable, Re
     @FXML private VBox wideMacrosContainer;
     @FXML private HBox narrowMacrosContainer;
 
+    // Summary cards
+    private NutritionProgressCardController caloriesCard;
+
+    private NutritionProgressCardController wideCarbsCard;
+    private NutritionProgressCardController wideFatCard;
+    private NutritionProgressCardController wideProteinCard;
+
+    private NutritionProgressCardController narrowCarbsCard;
+    private NutritionProgressCardController narrowFatCard;
+    private NutritionProgressCardController narrowProteinCard;
+
     // Diary
     @FXML private VBox diaryContent;
     private LoadedComponent<MealCardController> breakfastCard;
@@ -90,45 +103,20 @@ public class MealsController extends BaseController implements Initializable, Re
                 mealsScroll.viewportBoundsProperty().map(Bounds::getHeight)
         );
 
-        loadSummary();
+        // Initialize Summary and Diary Cards
+        initializeSummaryCards();
         initializeMealCards();
 
+        // Initialize Responsive
         initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
 
-        datePicker.setConverter(new StringConverter<>() {
+        // Initialize Controls
+        initializeMealsControls();
+    }
 
-            @Override
-            public String toString(LocalDate date) {
-                if (date == null) {
-                    return "";
-                }
-
-                return date.format(DATE_FORMATTER);
-            }
-
-            @Override
-            public LocalDate fromString(String text) {
-                if (text == null || text.isBlank()) {
-                    return datePicker.getValue();
-                }
-
-                try {
-                    return LocalDate.parse(
-                            text.trim(),
-                            DATE_FORMATTER
-                    );
-                } catch (DateTimeParseException _) {
-                    return datePicker.getValue();
-                }
-            }
-        });
-
-        datePicker.valueProperty().addListener((observable, oldDate, newDate) -> {
-            if (newDate != null) {
-                loadMealsForDate();
-            }
-        });
-        datePicker.setValue(LocalDate.now());
+    @Override
+    public void refresh() {
+        loadMealsForDate();
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -150,6 +138,40 @@ public class MealsController extends BaseController implements Initializable, Re
         } else {
             datePicker.setValue(LocalDate.now().plusDays(1));
         }
+    }
+
+    // ── Load Data ─────────────────────────────────────────────────
+    private void loadMealsForDate() {
+        LocalDate currentDate = datePicker.getValue();
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+
+        AsyncTaskRunner.run(
+                () -> mealApi.getMealsFromDate(userId, currentDate),
+
+                meals -> {
+
+                    if (!currentDate.equals(datePicker.getValue())) {
+                        return;
+                    }
+
+                    // Update Summary Cards
+                    DailyNutritionTotals totals = MealService.calculateDailyNutritionTotals(meals);
+                    updateSummary(totals);
+
+                    // Update Diary Cards
+                    MealResponse breakfast = findMealByName(meals, "Breakfast");
+                    MealResponse lunch = findMealByName(meals, "Lunch");
+                    MealResponse dinner = findMealByName(meals, "Dinner");
+                    MealResponse snacks = findMealByName(meals, "Snacks");
+
+                    loadMealCard("Breakfast", breakfast, breakfastCard);
+                    loadMealCard("Lunch", lunch, lunchCard);
+                    loadMealCard("Dinner", dinner, dinnerCard);
+                    loadMealCard("Snacks", snacks, snacksCard);
+                },
+
+                exception -> log.error("Failed to load meals for date: {}", currentDate, exception)
+        );
     }
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
@@ -211,75 +233,120 @@ public class MealsController extends BaseController implements Initializable, Re
     }
 
     // ── Initialize Helpers ─────────────────────────────────────────────────
-    private void initializeMealCards() {
-        breakfastCard = createMealCard(
-                "Breakfast",
-                null,
-                0,
-                0,
-                AppImages.USER_PROFILE_ICON
+    private void initializeMealsControls() {
+        datePicker.setConverter(new StringConverter<>() {
+
+            @Override
+            public String toString(LocalDate date) {
+                if (date == null) {
+                    return "";
+                }
+
+                return date.format(DATE_FORMATTER);
+            }
+
+            @Override
+            public LocalDate fromString(String text) {
+                if (text == null || text.isBlank()) {
+                    return datePicker.getValue();
+                }
+
+                try {
+                    return LocalDate.parse(
+                            text.trim(),
+                            DATE_FORMATTER
+                    );
+                } catch (DateTimeParseException _) {
+                    return datePicker.getValue();
+                }
+            }
+        });
+
+        datePicker.valueProperty().addListener((observable, oldDate, newDate) -> {
+            if (newDate != null) {
+                loadMealsForDate();
+            }
+        });
+        datePicker.setValue(LocalDate.now());
+    }
+
+    // ── Summary Helpers ─────────────────────────────────────────────────
+    private void updateSummary(DailyNutritionTotals totals) {
+        caloriesCard.setData(
+                "Calories",
+                totals.calories(),
+                2200,
+                "cal",
+                true
         );
 
-        lunchCard = createMealCard(
-                "Lunch",
-                null,
-                0,
-                0,
-                AppImages.USER_PROFILE_ICON
+        wideCarbsCard.setData(
+                "Carbs",
+                totals.carbs(),
+                250,
+                "g",
+                false
         );
 
-        dinnerCard = createMealCard(
-                "Dinner",
-                null,
-                0,
-                0,
-                AppImages.USER_PROFILE_ICON
+        wideFatCard.setData(
+                "Fat",
+                totals.fat(),
+                70,
+                "g",
+                false
         );
 
-        snacksCard = createMealCard(
-                "Snacks",
-                null,
-                0,
-                0,
-                AppImages.USER_PROFILE_ICON
+        wideProteinCard.setData(
+                "Protein",
+                totals.protein(),
+                160,
+                "g",
+                false
         );
 
-        diaryContent.getChildren().addAll(
-                breakfastCard.root(),
-                lunchCard.root(),
-                dinnerCard.root(),
-                snacksCard.root()
+        narrowCarbsCard.setData(
+                "Carbs",
+                totals.carbs(),
+                250,
+                "g",
+                false
+        );
+
+        narrowFatCard.setData(
+                "Fat",
+                totals.fat(),
+                70,
+                "g",
+                false
+        );
+
+        narrowProteinCard.setData(
+                "Protein",
+                totals.protein(),
+                160,
+                "g",
+                false
         );
     }
 
-    private void loadSummary() {
-        loadCaloriesCard();
+    private void initializeSummaryCards() {
+        initializeCalorieCard();
         loadWideMacros();
         loadNarrowMacros();
     }
 
-    private void loadCaloriesCard() {
-        LoadedComponent<NutritionProgressCardController> calories =
-                createNutritionCard(
-                        "Calories",
-                        1640,
-                        2200,
-                        "cal",
-                        true
-                );
+    private void initializeCalorieCard() {
+        LoadedComponent<NutritionProgressCardController> calories = createNutritionCard("Calories", "cal", true);
+
+        caloriesCard = calories.controller();
 
         caloriesContainer.getChildren().setAll(calories.root());
     }
 
     private void loadNarrowMacros() {
-        LoadedComponent<NutritionProgressCardController> carbs =
-                createNutritionCard("Carbs", 180, 250, "g", false);
-
-        LoadedComponent<NutritionProgressCardController> fat =
-                createNutritionCard("Fat", 52, 70, "g", false);
-
-        LoadedComponent<NutritionProgressCardController> protein =
-                createNutritionCard("Protein", 132, 160, "g", false);
+        LoadedComponent<NutritionProgressCardController> carbs = createNutritionCard("Carbs", "g", false);
+        LoadedComponent<NutritionProgressCardController> fat = createNutritionCard("Fat", "g", false);
+        LoadedComponent<NutritionProgressCardController> protein = createNutritionCard("Protein", "g", false);
 
         carbs.controller().setProgressStyle("progress-carbs");
         fat.controller().setProgressStyle("progress-fat");
@@ -293,6 +360,10 @@ public class MealsController extends BaseController implements Initializable, Re
         HBox.setHgrow(fat.root(), Priority.ALWAYS);
         HBox.setHgrow(protein.root(), Priority.ALWAYS);
 
+        narrowCarbsCard = carbs.controller();
+        narrowFatCard = fat.controller();
+        narrowProteinCard = protein.controller();
+
         narrowMacrosContainer.getChildren().setAll(
                 carbs.root(),
                 fat.root(),
@@ -301,18 +372,17 @@ public class MealsController extends BaseController implements Initializable, Re
     }
 
     private void loadWideMacros() {
-        LoadedComponent<NutritionProgressCardController> carbs =
-                createNutritionCard("Carbs", 180, 250, "g", false);
-
-        LoadedComponent<NutritionProgressCardController> fat =
-                createNutritionCard("Fat", 52, 70, "g", false);
-
-        LoadedComponent<NutritionProgressCardController> protein =
-                createNutritionCard("Protein", 132, 160, "g", false);
+        LoadedComponent<NutritionProgressCardController> carbs = createNutritionCard("Carbs", "g", false);
+        LoadedComponent<NutritionProgressCardController> fat = createNutritionCard("Fat", "g", false);
+        LoadedComponent<NutritionProgressCardController> protein = createNutritionCard("Protein", "g", false);
 
         carbs.controller().setProgressStyle("progress-carbs");
         fat.controller().setProgressStyle("progress-fat");
         protein.controller().setProgressStyle("progress-protein");
+
+        wideCarbsCard = carbs.controller();
+        wideFatCard = fat.controller();
+        wideProteinCard = protein.controller();
 
         wideMacrosContainer.getChildren().setAll(
                 carbs.root(),
@@ -321,61 +391,47 @@ public class MealsController extends BaseController implements Initializable, Re
         );
     }
 
-    private LoadedComponent<MealCardController> createMealCard(String title, String firstFood, Integer otherFoodsCount, double calories, Image icon) {
-        LoadedComponent<MealCardController> component = FxmlComponentLoader.load(AppConstants.Components.MEAL_CARD);
-
-        component.controller().setData(title, firstFood, otherFoodsCount, calories);
-        component.controller().setIcon(icon);
-
-        return component;
-    }
-
-    private LoadedComponent<NutritionProgressCardController> createNutritionCard(String title, double current, double goal, String unit, boolean showRemaining) {
+    private LoadedComponent<NutritionProgressCardController> createNutritionCard(String title, String unit, boolean showRemaining) {
         LoadedComponent<NutritionProgressCardController> component = FxmlComponentLoader.load(AppConstants.Components.NUTRITION_PROGRESS_CARD);
 
-        component.controller().setData(title, current, goal, unit, showRemaining);
+        component.controller().setData(title, 0, 0, unit, showRemaining);
 
         return component;
     }
 
-    private void loadMealsForDate() {
-        LocalDate currentDate = datePicker.getValue();
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
+    // ── Diary Helpers ─────────────────────────────────────────────────
+    private void initializeMealCards() {
+        breakfastCard = createMealCard("Breakfast", AppImages.USER_PROFILE_ICON);
+        lunchCard = createMealCard("Lunch", AppImages.DASHBOARD_ICON);
+        dinnerCard = createMealCard("Dinner", AppImages.CALCULATORS_ICON);
 
-        AsyncTaskRunner.run(
-                () -> mealApi.getMealsFromDate(userId, currentDate),
+        snacksCard = createMealCard("Snacks", AppImages.MEASUREMENTS_ICON);
 
-                meals -> {
-                    System.out.println("Meals for date: " + currentDate);
-
-                    for (MealResponse meal : meals) {
-                        System.out.println(
-                                "Meal: " + meal.name()
-                                        + ", date: " + meal.mealDate()
-                                        + ", items: " + meal.items().size()
-                        );
-
-                        for (MealItemResponse item : meal.items()) {
-                            System.out.println(
-                                    "    Food: " + item.foodName()
-                                            + ", quantity: " + item.quantityGrams() + "g"
-                            );
-                        }
-                    }
-
-                    MealResponse breakfast = findMealByName(meals, "Breakfast");
-                    MealResponse lunch = findMealByName(meals, "Lunch");
-                    MealResponse dinner = findMealByName(meals, "Dinner");
-                    MealResponse snacks = findMealByName(meals, "Snacks");
-
-                    loadMealCard("Breakfast", breakfast, breakfastCard);
-                    loadMealCard("Lunch", lunch, lunchCard);
-                    loadMealCard("Dinner", dinner, dinnerCard);
-                    loadMealCard("Snacks", snacks, snacksCard);
-                },
-
-                exception -> log.error("Failed to load meals for date: {}", currentDate, exception)
+        diaryContent.getChildren().addAll(
+                breakfastCard.root(),
+                lunchCard.root(),
+                dinnerCard.root(),
+                snacksCard.root()
         );
+    }
+
+    private LoadedComponent<MealCardController> createMealCard(String title, Image icon) {
+        LoadedComponent<MealCardController> component = FxmlComponentLoader.load(AppConstants.Components.MEAL_CARD);
+
+        component.controller().setData(title, null, 0, 0);
+        component.controller().setIcon(icon);
+
+        component.controller().setOnLogAction(() -> {
+            LoadedComponent<AddFoodController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_FOOD);
+
+            addFood.controller().setContext(title, datePicker.getValue());
+
+            addFood.controller().setOnCloseAction(this::refresh);
+
+            OverlayManager.show(addFood.root());
+        });
+
+        return component;
     }
 
     private MealResponse findMealByName(List<MealResponse> meals, String name) {
@@ -386,17 +442,6 @@ public class MealsController extends BaseController implements Initializable, Re
         }
 
         return null;
-    }
-
-    private int calculateMealCalories(MealResponse meal) {
-        double totalCalories = 0;
-
-        for (MealItemResponse item : meal.items()) {
-            double servings = item.quantityGrams() / item.servingSizeGrams();
-            totalCalories += servings * item.caloriesPerServing();
-        }
-
-        return (int) Math.round(totalCalories);
     }
 
     private void loadMealCard(String mealName, MealResponse meal, LoadedComponent<MealCardController> card) {
@@ -413,7 +458,7 @@ public class MealsController extends BaseController implements Initializable, Re
 
         String firstFoodName = meal.items().getFirst().foodName();
         int otherFoodsCount = meal.items().size() - 1;
-        int calories = calculateMealCalories(meal);
+        int calories = MealService.calculateMealCalories(meal);
 
         card.controller().setData(
                 mealName,
@@ -422,8 +467,4 @@ public class MealsController extends BaseController implements Initializable, Re
                 calories
         );
     }
-
-
-
-
 }

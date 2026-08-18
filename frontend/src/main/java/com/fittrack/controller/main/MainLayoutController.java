@@ -6,6 +6,7 @@ import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.view.ViewInstance;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.AppConstants;
+import com.fittrack.util.OverlayManager;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -34,7 +35,12 @@ public class MainLayoutController extends BaseController implements Initializabl
     // Saves the data from the controllers and views
     private final Map<String, ViewInstance> contentCache = new HashMap<>();
 
+    // Root
+    @FXML private StackPane rootStack;
+    @FXML private StackPane overlayContainer;
     @FXML private BorderPane rootLayout;
+
+    // Top
     @FXML private HBox headerBox;
     @FXML private FlowPane navigationContainer;
     @FXML private VBox sidebarUserContainer;
@@ -87,8 +93,11 @@ public class MainLayoutController extends BaseController implements Initializabl
         initializeNavigationButtonState();
         preventNavigationDeselection();
 
+        // Initialize Popup Field (Used for child views to show popups)
+        OverlayManager.initialize(overlayContainer);
+
         // Interface implemented method for responsive action
-        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
+        initializeResponsiveLayout(rootStack, NARROW_BREAKPOINT);
     }
 
     /* ── Sidebar Buttons ────────────────────────────────────────────── */
