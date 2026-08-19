@@ -2,16 +2,21 @@ package com.fittrack.controller.nutrition;
 
 import com.fittrack.api.nutrition.FoodApi;
 import com.fittrack.api.nutrition.MealApi;
-import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.FormController;
+import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.FoodListItemController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
 import com.fittrack.dto.nutrition.AddMealItemRequest;
 import com.fittrack.dto.nutrition.FoodResponse;
+import com.fittrack.model.nutrition.MealType;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.*;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -22,7 +27,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class AddFoodController extends BaseController implements Initializable {
+public class AddFoodController extends FormController implements Initializable, ResponsiveLayout {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(AddFoodController.class);
@@ -47,19 +52,29 @@ public class AddFoodController extends BaseController implements Initializable {
     // Details
     @FXML private VBox foodDetailsContainer;
     @FXML private Label selectedFoodTitleLabel;
-    @FXML private ComboBox<String> mealComboBox;
-    @FXML private TextField quantityField;
-    @FXML private ComboBox<String> unitComboBox;
-    @FXML private Label defaultServingLabel;
+    @FXML private ComboBox<MealType> mealComboBox;
+    @FXML private HBox servingRow;
+    @FXML private VBox servingSizeContainer;
+    @FXML private VBox servingsContainer;
+    @FXML private ComboBox<String> servingSizeComboBox;
+    @FXML private TextField servingsField;
+    @FXML private Label servingsMessage;
     @FXML private VBox nutrientPreview;
 
     // Attributes
-    private String mealName;
+    private MealType mealType;
     private LocalDate mealDate;
     private Runnable onCloseAction;
     private boolean dataChanged;
 
     private FoodResponse selectedFood;
+    private NutritionMacroPreviewController nutritionMacroPreviewController;
+
+    // Responsive Helpers
+    private static final int NARROW_BREAKPOINT = 760;
+    private static final int SHORT_BREAKPOINT = 650;
+    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
+    private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
 
     // Api
     private final FoodApi foodApi = new FoodApi();
@@ -67,15 +82,61 @@ public class AddFoodController extends BaseController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        mealComboBox.getItems().setAll(
-                "Breakfast",
-                "Lunch",
-                "Dinner",
-                "Snacks"
+
+        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
+        initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
+
+        initializeServingLayout();
+
+        mealComboBox.getItems().setAll(MealType.values());
+
+        servingsField.setText("1");
+
+        TextFieldValidators.applyDecimalFilter(servingsField);
+        servingsField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateNutrientsInfo();
+            restoreServingsHelper();
+        });
+
+        servingSizeComboBox.valueProperty().addListener(
+                (observable, oldValue, newValue) -> updateNutrientsInfo()
         );
 
-        unitComboBox.getItems().setAll("g");
-        unitComboBox.setValue("g");
+        restoreServingsHelper();
+    }
+
+    @Override
+    public void updateWidthLayout(boolean narrow) {
+        rootLayout.pseudoClassStateChanged(NARROW, narrow);
+
+        if (narrow) {
+            dialogContainer.prefWidthProperty().bind(rootLayout.widthProperty());
+            dialogContainer.prefHeightProperty().bind(rootLayout.heightProperty());
+
+            foodDetailsContainer.prefWidthProperty().bind(rootLayout.widthProperty());
+            foodDetailsContainer.prefHeightProperty().bind(rootLayout.heightProperty());
+        } else {
+            dialogContainer.prefWidthProperty().unbind();
+            dialogContainer.prefHeightProperty().unbind();
+
+            foodDetailsContainer.prefWidthProperty().unbind();
+            foodDetailsContainer.prefHeightProperty().unbind();
+
+            dialogContainer.setPrefSize(
+                    Region.USE_COMPUTED_SIZE,
+                    Region.USE_COMPUTED_SIZE
+            );
+
+            foodDetailsContainer.setPrefSize(
+                    Region.USE_COMPUTED_SIZE,
+                    Region.USE_COMPUTED_SIZE
+            );
+        }
+    }
+
+    @Override
+    public void updateHeightLayout(boolean shortLayout) {
+        rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -91,6 +152,13 @@ public class AddFoodController extends BaseController implements Initializable {
     @FXML
     private void handleCancelFoodDetails() {
         selectedFood = null;
+        nutritionMacroPreviewController = null;
+
+        servingsField.clear();
+        servingsField.setText("1");
+        restoreServingsHelper();
+
+        servingSizeComboBox.getItems().clear();
 
         setVisible(foodDetailsContainer, false);
         setVisible(foodListContainer, true);
@@ -98,15 +166,57 @@ public class AddFoodController extends BaseController implements Initializable {
 
     @FXML
     private void handleConfirmAddFood() {
-        log.info("Confirm Add Food");
+        String servingsText = servingsField.getText();
+
+        if (servingsText.isEmpty()) {
+            showServingsMessage();
+            shake(servingsField);
+            return;
+        }
+
+        double numberOfServings;
+
+        try {
+            numberOfServings = NumberUtils.parseDecimal(servingsText);
+        } catch (NumberFormatException _) {
+            showServingsMessage();
+            shake(servingsField);
+            return;
+        }
+
+        if (numberOfServings <= 0) {
+            showServingsMessage();
+            shake(servingsField);
+            return;
+        }
+
+        double servingSizeGrams = getSelectedServingSizeGrams();
+
+        double quantityGrams = servingSizeGrams * numberOfServings;
+
+        addFoodToMeal(quantityGrams);
     }
 
-    public void setContext(String mealName, LocalDate mealDate) {
-        this.mealName = mealName;
+    private void initializeServingLayout() {
+        servingSizeContainer.prefWidthProperty().bind(
+                servingRow.widthProperty()
+                        .subtract(servingRow.getSpacing())
+                        .multiply(0.4)
+        );
+
+        servingsContainer.prefWidthProperty().bind(
+                servingRow.widthProperty()
+                        .subtract(servingRow.getSpacing())
+                        .multiply(0.6)
+        );
+    }
+
+    public void setContext(MealType mealType, LocalDate mealDate) {
+        this.mealType = mealType;
         this.mealDate = mealDate;
         this.dataChanged = false;
 
-        titleLabel.setText("Add to " + mealName);
+        titleLabel.setText("Add to " + mealType.getName());
 
         loadAllFoods("");
     }
@@ -153,15 +263,15 @@ public class AddFoodController extends BaseController implements Initializable {
         selectedFood = food;
 
         selectedFoodTitleLabel.setText(food.name());
-        mealComboBox.setValue(mealName);
-        quantityField.setText(String.valueOf(Math.round(food.servingSizeGrams())));
-        defaultServingLabel.setText(
-                "Default serving: "
-                        + Math.round(food.servingSizeGrams())
-                        + " g"
+        mealComboBox.setValue(mealType);
+        servingSizeComboBox.getItems().setAll(
+                Math.round(food.servingSizeGrams()) + " g"
         );
 
+        servingSizeComboBox.getSelectionModel().selectFirst();
+
         LoadedComponent<NutritionMacroPreviewController> nutrients = FxmlComponentLoader.load(AppConstants.Components.NUTRITION_MACRO_PREVIEW);
+        nutritionMacroPreviewController = nutrients.controller();
         nutrients.controller().setData(
                 food.caloriesPerServing(),
                 food.carbsPerServing(),
@@ -175,16 +285,19 @@ public class AddFoodController extends BaseController implements Initializable {
         setVisible(foodDetailsContainer, true);
     }
 
-    private void addFoodToMeal(FoodResponse food) {
+    private void addFoodToMeal(double quantityGrams) {
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
-        AddMealItemRequest request = new AddMealItemRequest(mealDate, mealName, food.id(), food.servingSizeGrams());
+        MealType selectedMeal = mealComboBox.getValue();
+
+        AddMealItemRequest request = new AddMealItemRequest(mealDate, selectedMeal.getName(), selectedFood.id(), quantityGrams);
 
         AsyncTaskRunner.run(
                 () -> mealApi.addMealItem(userId, request),
 
                 response -> {
                     dataChanged = true;
+                    handleCancelFoodDetails();
                 },
 
                 exception -> log.error(
@@ -192,5 +305,57 @@ public class AddFoodController extends BaseController implements Initializable {
                         exception
                 )
         );
+    }
+
+    private void updateNutrientsInfo() {
+        if (selectedFood == null
+                || nutritionMacroPreviewController == null
+                || servingSizeComboBox.getValue() == null) {
+            return;
+        }
+
+        double numberOfServings;
+        try {
+            numberOfServings = NumberUtils.parseDecimal(servingsField.getText());
+        } catch (NumberFormatException _) {
+            return;
+        }
+
+        if (numberOfServings <= 0) {
+            return;
+        }
+
+        double selectedServingSize = getSelectedServingSizeGrams();
+        double baseServingSize = selectedFood.servingSizeGrams();
+
+        if (baseServingSize <= 0) {
+            return;
+        }
+
+        double quantityGrams =
+                selectedServingSize * numberOfServings;
+
+        double ratio = quantityGrams / baseServingSize;
+
+        double calories = selectedFood.caloriesPerServing() * ratio;
+        double carbs = selectedFood.carbsPerServing() * ratio;
+        double fat = selectedFood.fatPerServing() * ratio;
+        double protein = selectedFood.proteinPerServing() * ratio;
+
+        nutritionMacroPreviewController.setData(calories, carbs, fat, protein);
+
+    }
+
+    private double getSelectedServingSizeGrams() {
+        return selectedFood.servingSizeGrams();
+    }
+
+    // ── Quantity Helpers ─────────────────────────────────────────────────
+    private void showServingsMessage() {
+        setFieldMessage(servingsMessage, AppConstants.Messages.INVALID_SERVINGS_MESSAGE, true, servingsField);
+    }
+
+    private void restoreServingsHelper() {
+        setFieldMessage(servingsMessage, "", false, servingsField);
     }
 }

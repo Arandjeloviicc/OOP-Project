@@ -46,11 +46,11 @@ public abstract class AuthFormController extends FormController implements Respo
     // ── Responsive Helpers ──────────────────────────────────────────────
     protected void initializeAuthResponsiveLayout(StackPane rootPane) {
         authRootPane = rootPane;
-        initializeResponsiveLayout(authRootPane, NARROW_BREAKPOINT);
+        initializeResponsiveWidthLayout(authRootPane, NARROW_BREAKPOINT);
     }
 
     @Override
-    public void updateLayout(boolean narrow) {
+    public void updateWidthLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
 
         narrowLayout = narrow;

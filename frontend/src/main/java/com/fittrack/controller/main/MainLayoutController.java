@@ -97,7 +97,7 @@ public class MainLayoutController extends BaseController implements Initializabl
         OverlayManager.initialize(overlayContainer);
 
         // Interface implemented method for responsive action
-        initializeResponsiveLayout(rootStack, NARROW_BREAKPOINT);
+        initializeResponsiveWidthLayout(rootStack, NARROW_BREAKPOINT);
     }
 
     /* ── Sidebar Buttons ────────────────────────────────────────────── */
@@ -217,7 +217,7 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
-    public void updateLayout(boolean narrow) {
+    public void updateWidthLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
 
         narrowLayout = narrow;

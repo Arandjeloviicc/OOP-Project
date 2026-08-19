@@ -413,7 +413,7 @@
 
                             <Region HBox.hgrow="ALWAYS"/>
 
-                            <Label text="Below 18.5"
+                            <Label fx:id="underweightBmiCategoryLabel"
                                    styleClass="result-detail-value"/>
 
                         </HBox>
@@ -428,7 +428,7 @@
 
                             <Region HBox.hgrow="ALWAYS"/>
 
-                            <Label text="18.5 – 24.9"
+                            <Label fx:id="normalBmiCategoryLabel"
                                    styleClass="result-detail-value"/>
 
                         </HBox>
@@ -443,7 +443,7 @@
 
                             <Region HBox.hgrow="ALWAYS"/>
 
-                            <Label text="25.0 – 29.9"
+                            <Label fx:id="overweightBmiCategoryLabel"
                                    styleClass="result-detail-value"/>
 
                         </HBox>
@@ -458,7 +458,7 @@
 
                             <Region HBox.hgrow="ALWAYS"/>
 
-                            <Label text="30.0 and above"
+                            <Label fx:id="obeseBmiCategoryLabel"
                                    styleClass="result-detail-value"/>
 
                         </HBox>

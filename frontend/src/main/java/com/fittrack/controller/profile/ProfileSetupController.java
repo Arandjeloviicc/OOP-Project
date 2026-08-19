@@ -1,5 +1,6 @@
 package com.fittrack.controller.profile;
 
+import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import com.fittrack.api.profile.ProfileSetupApi;
 import com.fittrack.controller.common.FormController;
@@ -107,7 +108,7 @@ public class ProfileSetupController extends FormController implements Initializa
         initializeProfileSetupControls();
 
         // Responsive initialize
-        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
+        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
 
         // Initialize input messages
         restoreFirstNameHelper();
@@ -231,8 +232,8 @@ public class ProfileSetupController extends FormController implements Initializa
         String lastName = lastNameField.getText().trim();
         LocalDate dateOfBirth = dateOfBirthPicker.getValue();
         Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
-        double heightValue = Double.parseDouble(height);
-        double weightValue = Double.parseDouble(weight);
+        double heightValue = NumberUtils.parseDecimal(height);
+        double weightValue = NumberUtils.parseDecimal(weight);
         Double goalWeightValue;
         Double weeklyGoalValue = weeklyGoal;
 
@@ -240,7 +241,7 @@ public class ProfileSetupController extends FormController implements Initializa
             goalWeightValue = null;
             weeklyGoalValue = null;
         } else {
-            goalWeightValue = goalWeight.isBlank() ? null : Double.parseDouble(goalWeight);
+            goalWeightValue = goalWeight.isBlank() ? null : NumberUtils.parseDecimal(goalWeight);
         }
 
         ProfileSetupRequest profileSetupRequest = new ProfileSetupRequest(
@@ -370,7 +371,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
-    public void updateLayout(boolean narrow) {
+    public void updateWidthLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
 
         narrowLayout = narrow;
@@ -523,8 +524,8 @@ public class ProfileSetupController extends FormController implements Initializa
 
         if (!FitnessInputValidator.isWeightValid(goalWeightText)) return false;
 
-        double goalWeight = Double.parseDouble(goalWeightText);
-        double currentWeight = Double.parseDouble(currentWeightText);
+        double goalWeight = NumberUtils.parseDecimal(goalWeightText);
+        double currentWeight = NumberUtils.parseDecimal(currentWeightText);
 
         return switch (goalType) {
             case LOSE_WEIGHT -> goalWeight < currentWeight;

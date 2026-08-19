@@ -1,5 +1,6 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -35,11 +36,11 @@ public class NutritionMacroPreviewController {
     }
 
     public void setData(double calories, double carbs, double fat, double protein) {
-        caloriesValueLabel.setText(String.valueOf(Math.round(calories)));
+        caloriesValueLabel.setText(NumberUtils.formatWhole(Math.round(calories)));
 
-        carbsLabel.setText(Math.round(carbs) + " g");
-        fatLabel.setText(Math.round(fat) + " g");
-        proteinLabel.setText(Math.round(protein) + " g");
+        carbsLabel.setText(NumberUtils.formatWhole(Math.round(carbs)) + " g");
+        fatLabel.setText(NumberUtils.formatWhole(Math.round(fat)) + " g");
+        proteinLabel.setText(NumberUtils.formatWhole(Math.round(protein)) + " g");
 
         this.lastCarbs = carbs;
         this.lastFat = fat;

@@ -1,5 +1,6 @@
 package com.fittrack.controller.calculator;
 
+import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import com.fittrack.controller.common.FormController;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -89,6 +89,10 @@ public class CalculatorsController extends FormController implements Initializab
     @FXML private Tooltip bmiPrimeTooltip;
     @FXML private Label ponderalIndexLabel;
     @FXML private Tooltip bmiPonderalIndexTooltip;
+    @FXML private Label underweightBmiCategoryLabel;
+    @FXML private Label normalBmiCategoryLabel;
+    @FXML private Label overweightBmiCategoryLabel;
+    @FXML private Label obeseBmiCategoryLabel;
 
     // BMR
     @FXML private Label bmrTitleLabel;
@@ -148,7 +152,7 @@ public class CalculatorsController extends FormController implements Initializab
 
         // Responsive initialize
         updateTabsLayout();
-        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
+        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
 
         // ToolTip delay after hovering
         setToolTipDelay();
@@ -188,8 +192,8 @@ public class CalculatorsController extends FormController implements Initializab
         String height = heightField.getText().trim();
         String weight = weightField.getText().trim();
 
-        double heightMeters = Double.parseDouble(height) / 100.0;
-        double weightKg = Double.parseDouble(weight);
+        double heightMeters = NumberUtils.parseDecimal(height) / 100.0;
+        double weightKg = NumberUtils.parseDecimal(weight);
 
         setBmiResult(heightMeters, weightKg);
         showResult(CalculatorType.BMI);
@@ -209,11 +213,11 @@ public class CalculatorsController extends FormController implements Initializab
         String bodyFatText = bodyFatField.getText().trim();
 
         int ageInt = Integer.parseInt(age);
-        double heightCm = Double.parseDouble(height);
-        double weightKg = Double.parseDouble(weight);
+        double heightCm = NumberUtils.parseDecimal(height);
+        double weightKg = NumberUtils.parseDecimal(weight);
         Double bodyFatPercentage =
                 bodyFatFieldGroup.isVisible() && !bodyFatText.isEmpty()
-                        ? Double.parseDouble(bodyFatText)
+                        ? NumberUtils.parseDecimal(bodyFatText)
                         : null;
 
         setTdeeResult(ageInt, gender, heightCm, weightKg, activityLevel, bodyFatPercentage);
@@ -235,11 +239,11 @@ public class CalculatorsController extends FormController implements Initializab
         Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
 
         int ageInt = Integer.parseInt(age);
-        double heightCm = Double.parseDouble(height);
-        double weightKg = Double.parseDouble(weight);
-        double neckCm = Double.parseDouble(neck);
-        double waistCm = Double.parseDouble(waist);
-        Double hipCm = (gender == Gender.FEMALE) ? Double.parseDouble(hip) : null;
+        double heightCm = NumberUtils.parseDecimal(height);
+        double weightKg = NumberUtils.parseDecimal(weight);
+        double neckCm = NumberUtils.parseDecimal(neck);
+        double waistCm = NumberUtils.parseDecimal(waist);
+        Double hipCm = (gender == Gender.FEMALE) ? NumberUtils.parseDecimal(hip) : null;
 
         setBodyFatResult(ageInt, gender, heightCm, weightKg, neckCm, waistCm, hipCm);
         showResult(CalculatorType.BODY_FAT);
@@ -366,8 +370,8 @@ public class CalculatorsController extends FormController implements Initializab
         }
 
         if (neckValid && waistValid) {
-            double neckValue = Double.parseDouble(neck);
-            double waistValue = Double.parseDouble(waist);
+            double neckValue = NumberUtils.parseDecimal(neck);
+            double waistValue = NumberUtils.parseDecimal(waist);
 
             if (!FitnessInputValidator.isNeckWaistRelationValid(neckValue, waistValue)) {
                 showNeckMessage(AppConstants.Messages.INVALID_NECK_WAIST_RELATION_MESSAGE);
@@ -381,7 +385,7 @@ public class CalculatorsController extends FormController implements Initializab
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
-    public void updateLayout(boolean narrow) {
+    public void updateWidthLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
 
         narrowLayout = narrow;
@@ -534,8 +538,10 @@ public class CalculatorsController extends FormController implements Initializab
 
     // ── BMI Helpers ─────────────────────────────────────────────────
     private void setBmiResult(double heightMeters, double weightKg) {
+        setBmiCategories();
+
         double bmi = CalculationService.calculateBmi(heightMeters, weightKg);
-        bmiValueLabel.setText(String.format(Locale.US, "%.1f", bmi));
+        bmiValueLabel.setText(NumberUtils.format("%.1f", bmi));
 
         setBmiStatus(bmi);
 
@@ -543,13 +549,25 @@ public class CalculatorsController extends FormController implements Initializab
 
         double minHealthyWeight = CalculationService.calculateHealthyWeightMin(heightMeters);
         double maxHealthyWeight = CalculationService.calculateHealthyWeightMax(heightMeters);
-        healthyWeightRangeLabel.setText(String.format(Locale.US, "%.1f kg – %.1f kg", minHealthyWeight, maxHealthyWeight));
+        healthyWeightRangeLabel.setText(NumberUtils.format("%.1f kg – %.1f kg", minHealthyWeight, maxHealthyWeight));
 
         double bmiPrime = CalculationService.calculateBmiPrime(bmi);
-        bmiPrimeLabel.setText(String.format(Locale.US, "%.1f", bmiPrime));
+        bmiPrimeLabel.setText(NumberUtils.format("%.1f", bmiPrime));
 
         double ponderalIndex = CalculationService.calculatePonderalIndex(heightMeters, weightKg);
-        ponderalIndexLabel.setText(String.format(Locale.US, "%.1f kg/m³", ponderalIndex));
+        ponderalIndexLabel.setText(NumberUtils.format("%.1f kg/m³", ponderalIndex));
+    }
+
+    private void setBmiCategories() {
+        String underweight = NumberUtils.format("Below %.1f", 18.5);
+        String normal = NumberUtils.formatRange(18.5, 24.9);
+        String overweight = NumberUtils.formatRange(25.0, 29.9);
+        String obese = NumberUtils.format("%.1f and above", 30.0);
+
+        underweightBmiCategoryLabel.setText(underweight);
+        normalBmiCategoryLabel.setText(normal);
+        overweightBmiCategoryLabel.setText(overweight);
+        obeseBmiCategoryLabel.setText(obese);
     }
 
     private void setBmiStatus(double bmi) {
@@ -653,30 +671,30 @@ public class CalculatorsController extends FormController implements Initializab
 
         double displayedBodyFat = Math.round(bodyFat * 10.0) / 10.0;
 
-        bodyFatValueLabel.setText(String.format(Locale.US, "%.1f", displayedBodyFat));
+        bodyFatValueLabel.setText(NumberUtils.format("%.1f", displayedBodyFat));
 
         // Set Body Fat field in TDEE Calculator
-        bodyFatField.setText(String.format(Locale.US, "%.1f", displayedBodyFat));
+        bodyFatField.setText(NumberUtils.format("%.1f", displayedBodyFat));
 
         setBodyFatCategory(gender, displayedBodyFat);
         updateBodyFatCategoryRanges(gender);
 
         double fatMassKg = CalculationService.calculateFatMass(bodyFat, weightKg);
-        bodyFatMassLabel.setText(String.format(Locale.US, "%.1f kg", fatMassKg));
+        bodyFatMassLabel.setText(NumberUtils.format("%.1f kg", fatMassKg));
 
         double leanMassKg = CalculationService.calculateLeanMass(weightKg, fatMassKg);
-        leanBodyMassLabel.setText(String.format(Locale.US, "%.1f kg", leanMassKg));
+        leanBodyMassLabel.setText(NumberUtils.format("%.1f kg", leanMassKg));
 
         double idealBodyFat = CalculationService.calculateIdealBodyFat(age, gender);
-        idealBodyFatLabel.setText(String.format(Locale.US, "%.1f %%", idealBodyFat));
+        idealBodyFatLabel.setText(NumberUtils.format("%.1f %%", idealBodyFat));
 
         double bodyFatChange = CalculationService.calculateBodyFatChange(weightKg, bodyFat, idealBodyFat);
         if (bodyFatChange > 0) {
             weightChangeTitleLabel.setText("Weight to Lose");
-            weightChangeLabel.setText(String.format(Locale.US, "%.1f kg", bodyFatChange));
+            weightChangeLabel.setText(NumberUtils.format("%.1f kg", bodyFatChange));
         } else if (bodyFatChange < 0) {
             weightChangeTitleLabel.setText("Weight to Gain");
-            weightChangeLabel.setText(String.format(Locale.US, "%.1f kg", Math.abs(bodyFatChange)));
+            weightChangeLabel.setText(NumberUtils.format("%.1f kg", Math.abs(bodyFatChange)));
         } else {
             weightChangeTitleLabel.setText("Weight Change");
             weightChangeLabel.setText("0.0 kg");
@@ -744,18 +762,18 @@ public class CalculatorsController extends FormController implements Initializab
         String obese;
 
         if (gender == Gender.MALE) {
-            essential = "2.0 - 5.0%";
-            athletes = "5.1 - 13.0%";
-            fitness = "13.1 - 17.0%";
-            average = "17.1 - 25.0%";
-            obese = "25.1% and above";
+            essential = NumberUtils.formatRange(2.0, 5.0) + "%";
+            athletes = NumberUtils.formatRange(5.1, 13.0) + "%";
+            fitness = NumberUtils.formatRange(13.1, 17.0) + "%";
+            average = NumberUtils.formatRange(17.1, 25.0) + "%";
+            obese = NumberUtils.format("%.1f", 25.1) + "% and above";
         }
         else {
-            essential = "10.1 - 13.0%";
-            athletes = "13.1 - 20.0%";
-            fitness = "20.1 - 24.0%";
-            average = "24.1 - 32%";
-            obese = "32.1% and above";
+            essential = NumberUtils.formatRange(10.1, 13.0) + "%";
+            athletes = NumberUtils.formatRange(13.1, 20.0) + "%";
+            fitness = NumberUtils.formatRange(20.1, 24.0) + "%";
+            average = NumberUtils.formatRange(24.1, 32.0) + "%";
+            obese = NumberUtils.format("%.1f", 32.1) + "% and above";
         }
 
         essentialBodyFatLabel.setText(essential);

@@ -1,12 +1,10 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
-
-import java.text.NumberFormat;
-import java.util.Locale;
 
 public class NutritionProgressCardController {
 
@@ -19,15 +17,12 @@ public class NutritionProgressCardController {
     @FXML private Label remainingStatusLabel;
     @FXML ProgressBar progressBar;
 
-    // Number format
-    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance(Locale.forLanguageTag("sr-RS"));
-
     public void setData(String title, double current, double goal, String unit, boolean showRemaining) {
         titleLabel.setText(title);
 
-        currentValueLabel.setText(formatValue(current));
+        currentValueLabel.setText(NumberUtils.formatWhole(current));
         unitLabel.setText(unit);
-        goalValueLabel.setText(" / " + formatValue(goal));
+        goalValueLabel.setText(" / " + NumberUtils.formatWhole(goal));
 
         updateProgress(current, goal);
         updateRemaining(current, goal, showRemaining);
@@ -57,16 +52,12 @@ public class NutritionProgressCardController {
 
         int difference = (int) Math.abs(goal - current);
 
-        remainingValueLabel.setText(formatValue(difference));
+        remainingValueLabel.setText(NumberUtils.formatWhole(difference));
 
         if (current <= goal) {
             remainingStatusLabel.setText("left");
         } else {
             remainingStatusLabel.setText("over");
         }
-    }
-
-    private String formatValue(double value) {
-        return NUMBER_FORMAT.format(Math.round(value));
     }
 }

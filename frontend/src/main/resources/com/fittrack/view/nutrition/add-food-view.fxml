@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ComboBox?>
 
+<?import javafx.scene.control.ScrollPane?>
 <StackPane fx:id="rootLayout"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -18,7 +19,10 @@
            stylesheets="@../../css/nutrition/add-food-view.css"
            styleClass="add-food-root">
 
-    <VBox fx:id="foodListContainer">
+    <!-- Food list -->
+    <VBox fx:id="foodListContainer"
+          alignment="CENTER"
+          styleClass="add-food-list-container">
 
         <VBox fx:id="dialogContainer"
               styleClass="add-food-dialog">
@@ -27,9 +31,14 @@
             <HBox alignment="CENTER_LEFT"
                   styleClass="add-food-header">
 
-                <Label fx:id="titleLabel"
-                       text="Add Food"
-                       styleClass="add-food-title"/>
+                <VBox spacing="2">
+                    <Label text="Nutrition"
+                           styleClass="add-food-caption"/>
+
+                    <Label fx:id="titleLabel"
+                           text="Add Food"
+                           styleClass="add-food-title"/>
+                </VBox>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
@@ -41,7 +50,7 @@
             <!-- Search -->
             <TextField fx:id="searchField"
                        promptText="Search foods..."
-                       styleClass="add-food-search"/>
+                       styleClass="input-field, text-field, add-food-search"/>
 
             <!-- Tabs -->
             <fx:define>
@@ -68,111 +77,122 @@
 
             </HBox>
 
-            <!-- Later: actual list -->
-            <VBox fx:id="itemsContainer"
-                  styleClass="add-food-items"
-                  VBox.vgrow="ALWAYS">
+            <!-- List -->
+            <ScrollPane fitToWidth="true"
+                        hbarPolicy="NEVER"
+                        VBox.vgrow="ALWAYS"
+                        styleClass="app-scroll">
 
-                <Label text="Food list will be shown here."
-                       styleClass="add-food-placeholder"/>
+                <VBox fx:id="itemsContainer"
+                      styleClass="add-food-items">
 
-            </VBox>
+                    <Label text="Food list will be shown here."
+                           styleClass="add-food-placeholder"/>
+                </VBox>
+
+            </ScrollPane>
 
         </VBox>
 
     </VBox>
 
+    <!-- Add food to a meal -->
     <VBox fx:id="foodDetailsContainer"
           visible="false"
           managed="false"
-          styleClass="add-food-details">
+          styleClass="add-food-details-container">
 
-        <!-- Header -->
-        <HBox alignment="TOP_CENTER"
-              styleClass="add-food-details-header">
+        <VBox styleClass="add-food-details">
 
-            <VBox spacing="3">
-                <Label text="Add food"
-                       styleClass="add-food-details-caption"/>
+            <!-- Header -->
+            <HBox alignment="TOP_CENTER"
+                  styleClass="add-food-details-header">
 
-                <Label fx:id="selectedFoodTitleLabel"
-                       text="Food name"
-                       styleClass="add-food-details-title"/>
-            </VBox>
+                <VBox spacing="3">
+                    <Label text="Add food"
+                           styleClass="add-food-details-caption"/>
 
-            <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="selectedFoodTitleLabel"
+                           text="Food name"
+                           styleClass="add-food-details-title"/>
+                </VBox>
 
-            <Button text="✕"
-                    onAction="#handleCancelFoodDetails"
-                    styleClass="add-food-close-button"/>
-        </HBox>
+                <Region HBox.hgrow="ALWAYS"/>
 
+            </HBox>
 
-        <!-- Meal -->
-        <VBox styleClass="field-group">
-            <Label text="Meal"
-                   styleClass="field-label"/>
-
-            <ComboBox fx:id="mealComboBox"
-                      maxWidth="Infinity"
-                      styleClass="input-field, combo-box-field"/>
-        </VBox>
-
-
-        <!-- Quantity + Unit -->
-        <HBox spacing="10">
-
-            <VBox styleClass="field-group"
-                  HBox.hgrow="ALWAYS">
-
-                <Label text="Quantity"
+            <!-- Meal -->
+            <VBox styleClass="field-group">
+                <Label text="Meal"
                        styleClass="field-label"/>
 
-                <TextField fx:id="quantityField"
-                           promptText="Quantity"
-                           maxWidth="Infinity"
-                           styleClass="input-field, text-field"/>
-            </VBox>
-
-            <VBox prefWidth="90"
-                  styleClass="field-group">
-
-                <Label text="Unit"
-                       styleClass="field-label"/>
-
-                <ComboBox fx:id="unitComboBox"
+                <ComboBox fx:id="mealComboBox"
                           maxWidth="Infinity"
                           styleClass="input-field, combo-box-field"/>
             </VBox>
 
-        </HBox>
+            <!-- Servings -->
+            <HBox fx:id="servingRow"
+                  spacing="10">
 
-        <Label fx:id="defaultServingLabel"
-               text="Default serving: 100 g"
-               styleClass="add-food-serving-hint"/>
+                <!-- Serving size -->
+                <VBox fx:id="servingSizeContainer"
+                      styleClass="field-group">
 
-        <!-- Nutrition preview -->
-        <VBox fx:id="nutrientPreview">
+                    <Label text="Serving size"
+                           styleClass="field-label"/>
+
+                    <ComboBox fx:id="servingSizeComboBox"
+                              maxWidth="Infinity"
+                              styleClass="input-field, combo-box-field"/>
+                </VBox>
+
+                <!-- Number of servings -->
+                <VBox fx:id="servingsContainer"
+                      styleClass="field-group">
+
+                    <Label text="Number of servings"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="servingsField"
+                               promptText="Enter a number of servings"
+                               maxWidth="Infinity"
+                               styleClass="input-field, text-field"/>
+
+                    <Label fx:id="servingsMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- Nutrition preview -->
+            <VBox fx:id="nutrientPreview">
+
+            </VBox>
+
+            <!-- Actions -->
+            <HBox spacing="10"
+                  styleClass="add-food-details-actions">
+
+                <Button text="Cancel"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"
+                        onAction="#handleCancelFoodDetails"
+                        styleClass="back-btn, add-food-details-button"/>
+
+                <Button text="Add to meal"
+                        maxWidth="Infinity"
+                        HBox.hgrow="ALWAYS"
+                        onAction="#handleConfirmAddFood"
+                        styleClass="action-btn, add-food-details-button"/>
+
+            </HBox>
 
         </VBox>
-
-        <!-- Actions -->
-        <HBox spacing="10"
-              styleClass="add-food-details-actions">
-
-            <Button text="Cancel"
-                    maxWidth="Infinity"
-                    HBox.hgrow="ALWAYS"
-                    onAction="#handleCancelFoodDetails"
-                    styleClass="back-btn, add-food-details-button"/>
-
-            <Button text="Add to meal"
-                    maxWidth="Infinity"
-                    HBox.hgrow="ALWAYS"
-                    onAction="#handleConfirmAddFood"
-                    styleClass="action-btn, add-food-details-button"/>
-
-        </HBox>
 
     </VBox>
 

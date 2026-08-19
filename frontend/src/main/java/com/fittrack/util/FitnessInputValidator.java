@@ -6,11 +6,11 @@ public final class FitnessInputValidator {
     private FitnessInputValidator() {}
 
     private static boolean isDecimalMeasurementValid(String value, double min, double max) {
-        if (value == null || !value.trim().matches("^\\d{1,3}(\\.\\d{1,2})?$")) {
+        if (value == null || !value.trim().matches("^\\d{1,3}([.,]\\d{1,2})?$")) {
             return false;
         }
 
-        double parsedValue = Double.parseDouble(value.trim());
+        double parsedValue = NumberUtils.parseDecimal(value);
         return parsedValue >= min && parsedValue <= max;
     }
 

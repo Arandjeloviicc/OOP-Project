@@ -37,11 +37,12 @@ public class MealCardController {
 
         if (firstFood == null) {
             firstFoodLabel.setText("No foods logged");
+            moreFoodsLabel.setText("");
             caloriesLabel.setText("0 cal");
         } else {
             firstFoodLabel.setText(firstFood);
 
-            if (otherFoodsCount == null) {
+            if (otherFoodsCount == null || otherFoodsCount <= 0) {
                 moreFoodsLabel.setText("");
             } else {
                 moreFoodsLabel.setText("and " + otherFoodsCount + " more");

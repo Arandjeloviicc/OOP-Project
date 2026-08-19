@@ -220,5 +220,8 @@ public final class AppConstants {
                                 Validation.MIN_HIP_CIRCUMFERENCE,
                                 Validation.MAX_HIP_CIRCUMFERENCE
                         );
+
+        // Meals
+        public static final String INVALID_SERVINGS_MESSAGE = "Enter a number of servings greater than 0.";
     }
 }

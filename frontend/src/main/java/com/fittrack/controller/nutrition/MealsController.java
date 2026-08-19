@@ -8,6 +8,7 @@ import com.fittrack.controller.nutrition.components.MealCardController;
 import com.fittrack.controller.nutrition.components.NutritionProgressCardController;
 import com.fittrack.dto.nutrition.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
+import com.fittrack.model.nutrition.MealType;
 import com.fittrack.service.nutrition.MealService;
 import com.fittrack.session.UserSession;
 import com.fittrack.util.*;
@@ -108,7 +109,7 @@ public class MealsController extends BaseController implements Initializable, Re
         initializeMealCards();
 
         // Initialize Responsive
-        initializeResponsiveLayout(rootLayout, NARROW_BREAKPOINT);
+        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
 
         // Initialize Controls
         initializeMealsControls();
@@ -176,7 +177,7 @@ public class MealsController extends BaseController implements Initializable, Re
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
-    public void updateLayout(boolean narrow) {
+    public void updateWidthLayout(boolean narrow) {
         if (Objects.equals(narrowLayout, narrow)) return;
 
         narrowLayout = narrow;
@@ -424,7 +425,7 @@ public class MealsController extends BaseController implements Initializable, Re
         component.controller().setOnLogAction(() -> {
             LoadedComponent<AddFoodController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_FOOD);
 
-            addFood.controller().setContext(title, datePicker.getValue());
+            addFood.controller().setContext(MealType.fromName(title), datePicker.getValue());
 
             addFood.controller().setOnCloseAction(this::refresh);
 
