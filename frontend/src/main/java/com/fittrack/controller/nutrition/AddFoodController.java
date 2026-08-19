@@ -5,7 +5,7 @@ import com.fittrack.api.nutrition.MealApi;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.FoodListItemController;
-import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
+import com.fittrack.controller.nutrition.components.MealItemDetailsController;
 import com.fittrack.dto.nutrition.AddMealItemRequest;
 import com.fittrack.dto.nutrition.FoodResponse;
 import com.fittrack.model.nutrition.MealType;
@@ -15,7 +15,6 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -39,7 +38,7 @@ public class AddFoodController extends FormController implements Initializable, 
     @FXML private StackPane rootLayout;
     @FXML private VBox dialogContainer;
 
-    // Food List Container
+    // Food List
     @FXML private VBox foodListContainer;
     @FXML private Label titleLabel;
     @FXML private TextField searchField;
@@ -51,24 +50,12 @@ public class AddFoodController extends FormController implements Initializable, 
 
     // Details
     @FXML private VBox foodDetailsContainer;
-    @FXML private Label selectedFoodTitleLabel;
-    @FXML private ComboBox<MealType> mealComboBox;
-    @FXML private HBox servingRow;
-    @FXML private VBox servingSizeContainer;
-    @FXML private VBox servingsContainer;
-    @FXML private ComboBox<String> servingSizeComboBox;
-    @FXML private TextField servingsField;
-    @FXML private Label servingsMessage;
-    @FXML private VBox nutrientPreview;
 
     // Attributes
     private MealType mealType;
     private LocalDate mealDate;
     private Runnable onCloseAction;
     private boolean dataChanged;
-
-    private FoodResponse selectedFood;
-    private NutritionMacroPreviewController nutritionMacroPreviewController;
 
     // Responsive Helpers
     private static final int NARROW_BREAKPOINT = 760;
@@ -82,29 +69,25 @@ public class AddFoodController extends FormController implements Initializable, 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // Responsive Initialize
         initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
         initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
 
-        initializeServingLayout();
-
-        mealComboBox.getItems().setAll(MealType.values());
-
-        servingsField.setText("1");
-
-        TextFieldValidators.applyDecimalFilter(servingsField);
-        servingsField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateNutrientsInfo();
-            restoreServingsHelper();
-        });
-
-        servingSizeComboBox.valueProperty().addListener(
-                (observable, oldValue, newValue) -> updateNutrientsInfo()
-        );
-
-        restoreServingsHelper();
+        // Search listener
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> loadAllFoods(newValue));
     }
 
+    // ── Button Actions ─────────────────────────────────────────────────
+    @FXML
+    private void handleClose() {
+        OverlayManager.close();
+
+        if (dataChanged && onCloseAction != null) {
+            onCloseAction.run();
+        }
+    }
+
+    // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
     public void updateWidthLayout(boolean narrow) {
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
@@ -139,78 +122,7 @@ public class AddFoodController extends FormController implements Initializable, 
         rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
     }
 
-    // ── Button Actions ─────────────────────────────────────────────────
-    @FXML
-    private void handleClose() {
-        OverlayManager.close();
-
-        if (dataChanged && onCloseAction != null) {
-            onCloseAction.run();
-        }
-    }
-
-    @FXML
-    private void handleCancelFoodDetails() {
-        selectedFood = null;
-        nutritionMacroPreviewController = null;
-
-        servingsField.clear();
-        servingsField.setText("1");
-        restoreServingsHelper();
-
-        servingSizeComboBox.getItems().clear();
-
-        setVisible(foodDetailsContainer, false);
-        setVisible(foodListContainer, true);
-    }
-
-    @FXML
-    private void handleConfirmAddFood() {
-        String servingsText = servingsField.getText();
-
-        if (servingsText.isEmpty()) {
-            showServingsMessage();
-            shake(servingsField);
-            return;
-        }
-
-        double numberOfServings;
-
-        try {
-            numberOfServings = NumberUtils.parseDecimal(servingsText);
-        } catch (NumberFormatException _) {
-            showServingsMessage();
-            shake(servingsField);
-            return;
-        }
-
-        if (numberOfServings <= 0) {
-            showServingsMessage();
-            shake(servingsField);
-            return;
-        }
-
-        double servingSizeGrams = getSelectedServingSizeGrams();
-
-        double quantityGrams = servingSizeGrams * numberOfServings;
-
-        addFoodToMeal(quantityGrams);
-    }
-
-    private void initializeServingLayout() {
-        servingSizeContainer.prefWidthProperty().bind(
-                servingRow.widthProperty()
-                        .subtract(servingRow.getSpacing())
-                        .multiply(0.4)
-        );
-
-        servingsContainer.prefWidthProperty().bind(
-                servingRow.widthProperty()
-                        .subtract(servingRow.getSpacing())
-                        .multiply(0.6)
-        );
-    }
-
+    // ── Context & Callbacks ────────────────────────────────────────────
     public void setContext(MealType mealType, LocalDate mealDate) {
         this.mealType = mealType;
         this.mealDate = mealDate;
@@ -225,6 +137,7 @@ public class AddFoodController extends FormController implements Initializable, 
         this.onCloseAction = onCloseAction;
     }
 
+    // ── Food Loading ───────────────────────────────────────────────────
     private void loadAllFoods(String search) {
         AsyncTaskRunner.run(
                 () -> foodApi.searchFoods(search),
@@ -259,45 +172,55 @@ public class AddFoodController extends FormController implements Initializable, 
         }
     }
 
+    // ── Food Details ───────────────────────────────────────────────────
     private void openFoodDetails(FoodResponse food) {
-        selectedFood = food;
+        LoadedComponent<MealItemDetailsController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_DETAILS);
 
-        selectedFoodTitleLabel.setText(food.name());
-        mealComboBox.setValue(mealType);
-        servingSizeComboBox.getItems().setAll(
-                Math.round(food.servingSizeGrams()) + " g"
+        details.controller().setData(food, mealType);
+        details.controller().setCaption("Add food");
+        details.controller().setConfirmButtonText("Add to meal");
+
+        details.controller().setOnCancelAction(
+                this::closeFoodDetails
         );
 
-        servingSizeComboBox.getSelectionModel().selectFirst();
-
-        LoadedComponent<NutritionMacroPreviewController> nutrients = FxmlComponentLoader.load(AppConstants.Components.NUTRITION_MACRO_PREVIEW);
-        nutritionMacroPreviewController = nutrients.controller();
-        nutrients.controller().setData(
-                food.caloriesPerServing(),
-                food.carbsPerServing(),
-                food.fatPerServing(),
-                food.proteinPerServing()
+        details.controller().setOnConfirmAction(
+                quantityGrams -> addFoodToMeal(
+                        food,
+                        details.controller().getSelectedMealType(),
+                        quantityGrams
+                )
         );
 
-        nutrientPreview.getChildren().setAll(nutrients.root());
+        foodDetailsContainer.getChildren().setAll(details.root());
 
         setVisible(foodListContainer, false);
         setVisible(foodDetailsContainer, true);
     }
 
-    private void addFoodToMeal(double quantityGrams) {
+    private void closeFoodDetails() {
+        foodDetailsContainer.getChildren().clear();
+
+        setVisible(foodDetailsContainer, false);
+        setVisible(foodListContainer, true);
+    }
+
+    // ── Meal Item Actions ──────────────────────────────────────────────
+    private void addFoodToMeal(FoodResponse food, MealType selectedMeal, double quantityGrams) {
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
-        MealType selectedMeal = mealComboBox.getValue();
-
-        AddMealItemRequest request = new AddMealItemRequest(mealDate, selectedMeal.getName(), selectedFood.id(), quantityGrams);
+        AddMealItemRequest request = new AddMealItemRequest(
+                mealDate,
+                selectedMeal.getName(),
+                food.id(), quantityGrams
+        );
 
         AsyncTaskRunner.run(
                 () -> mealApi.addMealItem(userId, request),
 
                 response -> {
                     dataChanged = true;
-                    handleCancelFoodDetails();
+                    closeFoodDetails();
                 },
 
                 exception -> log.error(
@@ -305,57 +228,5 @@ public class AddFoodController extends FormController implements Initializable, 
                         exception
                 )
         );
-    }
-
-    private void updateNutrientsInfo() {
-        if (selectedFood == null
-                || nutritionMacroPreviewController == null
-                || servingSizeComboBox.getValue() == null) {
-            return;
-        }
-
-        double numberOfServings;
-        try {
-            numberOfServings = NumberUtils.parseDecimal(servingsField.getText());
-        } catch (NumberFormatException _) {
-            return;
-        }
-
-        if (numberOfServings <= 0) {
-            return;
-        }
-
-        double selectedServingSize = getSelectedServingSizeGrams();
-        double baseServingSize = selectedFood.servingSizeGrams();
-
-        if (baseServingSize <= 0) {
-            return;
-        }
-
-        double quantityGrams =
-                selectedServingSize * numberOfServings;
-
-        double ratio = quantityGrams / baseServingSize;
-
-        double calories = selectedFood.caloriesPerServing() * ratio;
-        double carbs = selectedFood.carbsPerServing() * ratio;
-        double fat = selectedFood.fatPerServing() * ratio;
-        double protein = selectedFood.proteinPerServing() * ratio;
-
-        nutritionMacroPreviewController.setData(calories, carbs, fat, protein);
-
-    }
-
-    private double getSelectedServingSizeGrams() {
-        return selectedFood.servingSizeGrams();
-    }
-
-    // ── Quantity Helpers ─────────────────────────────────────────────────
-    private void showServingsMessage() {
-        setFieldMessage(servingsMessage, AppConstants.Messages.INVALID_SERVINGS_MESSAGE, true, servingsField);
-    }
-
-    private void restoreServingsHelper() {
-        setFieldMessage(servingsMessage, "", false, servingsField);
     }
 }

@@ -17,6 +17,7 @@ public class NutritionProgressCardController {
     @FXML private Label remainingStatusLabel;
     @FXML ProgressBar progressBar;
 
+    // ── Set Data ─────────────────────────────────────────────────
     public void setData(String title, double current, double goal, String unit, boolean showRemaining) {
         titleLabel.setText(title);
 
@@ -28,6 +29,7 @@ public class NutritionProgressCardController {
         updateRemaining(current, goal, showRemaining);
     }
 
+    // ── Progress Bar ─────────────────────────────────────────────────
     public void setProgressStyle(String styleClass) {
         progressBar.getStyleClass().add(styleClass);
     }

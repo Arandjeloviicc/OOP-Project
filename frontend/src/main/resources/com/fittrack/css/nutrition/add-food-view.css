@@ -119,7 +119,7 @@
 }
 
 /* ========================================================== */
-/* == FOOD ITEMS ================================================= */
+/* == FOOD ITEMS ============================================ */
 /* ========================================================== */
 
 .add-food-items {
@@ -133,59 +133,11 @@
 }
 
 /* ========================================================== */
-/* == FOOD DETAILS ========================================== */
+/* == DETAILS =============================================== */
 /* ========================================================== */
 
 .add-food-details-container {
     -fx-alignment: center;
-}
-
-.add-food-details {
-    -fx-background-color: -app-background;
-    -fx-background-radius: 1.5em;
-
-    -fx-border-color: -app-input-border;
-    -fx-border-radius: 1.5em;
-    -fx-border-width: 1px;
-
-    -fx-max-width: 43em;
-    -fx-max-height: 46em;
-
-    -fx-padding: 2em;
-    -fx-spacing: 1.15em;
-}
-
-/* ========================================================== */
-/* == FOOD DETAILS HEADER =================================== */
-/* ========================================================== */
-
-.add-food-details-header {
-    -fx-padding: 0 0 0.35em 0;
-}
-
-.add-food-details-caption {
-    -fx-font-size: 1em;
-    -fx-font-weight: 600;
-    -fx-text-fill: -app-primary-light;
-}
-
-.add-food-details-title {
-    -fx-font-size: 1.65em;
-    -fx-font-weight: bold;
-    -fx-text-fill: -app-text-primary;
-}
-
-/* ========================================================== */
-/* == FOOD DETAILS ACTIONS ================================== */
-/* ========================================================== */
-
-.add-food-details-actions {
-    -fx-padding: 0.65em 0 0 0;
-    -fx-alignment: center;
-}
-
-.add-food-details-button {
-    -fx-pref-height: 3.3em;
 }
 
 /* ========================================================== */
@@ -202,7 +154,7 @@
 }
 
 .add-food-root:narrow .add-food-dialog,
-.add-food-root:narrow .add-food-details {
+.add-food-root:narrow .meal-item-details {
     -fx-max-width: Infinity;
     -fx-max-height: Infinity;
 
@@ -217,7 +169,7 @@
     -fx-alignment: center;
 }
 
-.add-food-root:narrow .add-food-details {
+.add-food-root:narrow .meal-item-details {
     -fx-max-width: 43em;
 }
 
@@ -230,7 +182,7 @@
 }
 
 .add-food-root:short .add-food-dialog,
-.add-food-root:short .add-food-details {
+.add-food-root:short .meal-item-details {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-border-width: 0;

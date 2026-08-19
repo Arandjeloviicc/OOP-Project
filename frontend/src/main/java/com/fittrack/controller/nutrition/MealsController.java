@@ -115,6 +115,7 @@ public class MealsController extends BaseController implements Initializable, Re
         initializeMealsControls();
     }
 
+    // ── Refresh Actions ─────────────────────────────────────────────────
     @Override
     public void refresh() {
         loadMealsForDate();

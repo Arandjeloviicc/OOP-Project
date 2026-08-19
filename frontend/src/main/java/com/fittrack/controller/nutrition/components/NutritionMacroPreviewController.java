@@ -35,6 +35,7 @@ public class NutritionMacroPreviewController {
         chartPane.heightProperty().addListener((obs, oldVal, newVal) -> drawChart(lastCarbs, lastFat, lastProtein));
     }
 
+    // ── Set Data ─────────────────────────────────────────────────
     public void setData(double calories, double carbs, double fat, double protein) {
         caloriesValueLabel.setText(NumberUtils.formatWhole(Math.round(calories)));
 
@@ -49,6 +50,7 @@ public class NutritionMacroPreviewController {
         drawChart(carbs, fat, protein);
     }
 
+    // ── Donut Pie Chart ─────────────────────────────────────────────────
     private void drawChart(double carbs, double fat, double protein) {
         double width = chartPane.getWidth();
         double height = chartPane.getHeight();

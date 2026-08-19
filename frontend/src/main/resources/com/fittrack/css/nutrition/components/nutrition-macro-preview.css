@@ -22,6 +22,8 @@
     -fx-min-height: 110px;
     -fx-pref-width: 110px;
     -fx-pref-height: 110px;
+
+    -fx-alignment: center;
 }
 
 .macro-preview-calories-value {
@@ -43,6 +45,8 @@
 .macro-preview-legend {
     -fx-spacing: 10px;
     -fx-fill-width: true;
+
+    -fx-alignment: center-left;
 }
 
 .macro-preview-row {

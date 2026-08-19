@@ -1,0 +1,108 @@
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.Region?>
+
+<VBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.nutrition.components.MealItemDetailsController"
+      stylesheets="@../../../css/nutrition/components/meal-item-details.css"
+      styleClass="meal-item-details">
+
+    <!-- Header -->
+    <HBox alignment="TOP_CENTER"
+          styleClass="meal-item-details-header">
+
+        <VBox spacing="3">
+            <Label fx:id="captionLabel"
+                   styleClass="meal-item-details-caption"/>
+
+            <Label fx:id="selectedFoodTitleLabel"
+                   text="Food name"
+                   styleClass="meal-item-details-title"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+    </HBox>
+
+    <!-- Meal -->
+    <VBox styleClass="field-group">
+        <Label text="Meal"
+               styleClass="field-label"/>
+
+        <ComboBox fx:id="mealComboBox"
+                  maxWidth="Infinity"
+                  styleClass="input-field, combo-box-field"/>
+    </VBox>
+
+    <!-- Servings -->
+    <HBox fx:id="servingRow"
+          spacing="10">
+
+        <!-- Serving size -->
+        <VBox fx:id="servingSizeContainer"
+              styleClass="field-group">
+
+            <Label text="Serving size"
+                   styleClass="field-label"/>
+
+            <ComboBox fx:id="servingSizeComboBox"
+                      maxWidth="Infinity"
+                      styleClass="input-field, combo-box-field"/>
+        </VBox>
+
+        <!-- Number of servings -->
+        <VBox fx:id="servingsContainer"
+              styleClass="field-group">
+
+            <Label text="Number of servings"
+                   styleClass="field-label"/>
+
+            <TextField fx:id="servingsField"
+                       promptText="Enter a number of servings"
+                       maxWidth="Infinity"
+                       styleClass="input-field, text-field"/>
+
+            <Label fx:id="servingsMessage"
+                   styleClass="helper-label"
+                   wrapText="true"
+                   minHeight="-Infinity"
+                   maxHeight="Infinity"
+                   maxWidth="Infinity"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Nutrition preview -->
+    <VBox fx:id="nutrientPreview"
+          alignment="CENTER_LEFT"
+          VBox.vgrow="ALWAYS">
+
+        <!-- Add Nutrition Preview Card -->
+
+    </VBox>
+
+    <!-- Actions -->
+    <HBox spacing="10"
+          styleClass="meal-item-details-actions">
+
+        <Button text="Cancel"
+                maxWidth="Infinity"
+                HBox.hgrow="ALWAYS"
+                onAction="#handleCancel"
+                styleClass="back-btn, meal-item-details-button"/>
+
+        <Button fx:id="confirmButton"
+                maxWidth="Infinity"
+                HBox.hgrow="ALWAYS"
+                onAction="#handleConfirm"
+                styleClass="action-btn, meal-item-details-button"/>
+
+    </HBox>
+
+</VBox>

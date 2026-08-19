@@ -1,0 +1,53 @@
+@import "../../theme.css";
+
+/* ========================================================== */
+/* == FOOD DETAILS ========================================== */
+/* ========================================================== */
+
+.meal-item-details {
+    -fx-background-color: -app-background;
+    -fx-background-radius: 1.5em;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-radius: 1.5em;
+    -fx-border-width: 1px;
+
+    -fx-max-width: 43em;
+    -fx-max-height: 46em;
+
+    -fx-padding: 2em;
+    -fx-spacing: 1.15em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.meal-item-details-header {
+    -fx-padding: 0 0 0.35em 0;
+}
+
+.meal-item-details-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-primary-light;
+}
+
+.meal-item-details-title {
+    -fx-font-size: 1.65em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.meal-item-details-actions {
+    -fx-padding: 0.65em 0 0 0;
+    -fx-alignment: center;
+}
+
+.meal-item-details-button {
+    -fx-pref-height: 3.3em;
+}

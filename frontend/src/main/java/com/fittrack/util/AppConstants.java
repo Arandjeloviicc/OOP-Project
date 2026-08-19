@@ -33,6 +33,7 @@ public final class AppConstants {
         public static final String MEAL_CARD = "nutrition/components/meal-card.fxml";
         public static final String FOOD_LIST_ITEM = "nutrition/components/food-list-item.fxml";
         public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
+        public static final String MEAL_ITEM_DETAILS = "nutrition/components/meal-item-details.fxml";
     }
 
     public static final class Validation {
