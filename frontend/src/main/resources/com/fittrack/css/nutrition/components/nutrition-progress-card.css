@@ -14,7 +14,7 @@
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 1em;
 
-    -fx-border-color: rgba(124, 143, 255, 0.18);
+    -fx-border-color: -app-border;
     -fx-border-radius: 1em;
     -fx-border-width: 1px;
 }
@@ -25,7 +25,7 @@
 }
 
 .nutrition-progress-title {
-    -fx-text-fill: rgba(255, 255, 255, 0.80);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
@@ -37,7 +37,7 @@
 
 .nutrition-progress-current-value,
 .nutrition-progress-goal-value {
-    -fx-text-fill: rgba(255, 255, 255, 0.82);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
 }
 
@@ -50,7 +50,7 @@
 
 .nutrition-progress-unit,
 .nutrition-progress-goal-value {
-    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-text-fill: -app-text-muted;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 0.95em;
 }
@@ -61,14 +61,14 @@
 }
 
 .nutrition-progress-remaining-value {
-    -fx-text-fill: rgba(255, 255, 255, 0.82);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1.15em;
     -fx-font-weight: bold;
 }
 
 .nutrition-progress-secondary-value {
-    -fx-text-fill: rgba(255, 255, 255, 0.52);
+    -fx-text-fill: -app-text-muted;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 0.88em;
 }
@@ -87,28 +87,28 @@
 }
 
 .nutrition-progress-bar > .track {
-    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-color: -app-nutrition-track;
     -fx-background-radius: 1em;
     -fx-background-insets: 0;
 }
 
 .nutrition-progress-bar > .bar {
-    -fx-background-color: #86A8FF;
+    -fx-background-color: -app-nutrition-progress;
     -fx-background-radius: 1em;
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
 
 .nutrition-progress-bar.progress-carbs > .bar {
-    -fx-background-color: #FFC857;
+    -fx-background-color: -app-nutrition-carbs;
 }
 
 .nutrition-progress-bar.progress-fat > .bar {
-    -fx-background-color: #6BCB77;
+    -fx-background-color: -app-nutrition-fat;
 }
 
 .nutrition-progress-bar.progress-protein > .bar {
-    -fx-background-color: #FF6B6B;
+    -fx-background-color: -app-nutrition-protein;
 }
 
 /* ========================================================== */
@@ -127,19 +127,23 @@
 }
 
 .nutrition-progress-card.narrow .nutrition-progress-title {
-    -fx-font-size: 0.9em;
+    -fx-font-size: 1em;
 }
 
 .nutrition-progress-card.narrow .nutrition-progress-current-value {
-    -fx-font-size: 1.15em;
+    -fx-font-size: 1.1em;
 }
 
 .nutrition-progress-card.narrow .nutrition-progress-unit,
 .nutrition-progress-card.narrow .nutrition-progress-goal-value {
-    -fx-font-size: 0.82em;
+    -fx-font-size: 0.78em;
 }
 
-.nutrition-progress-card.narrow .nutrition-progress-remaining {
+.nutrition-progress-card.narrow .nutrition-progress-remaining-value {
+    -fx-font-size: 0.9em;
+}
+
+.nutrition-progress-card.narrow .nutrition-progress-secondary-value {
     -fx-font-size: 0.8em;
 }
 

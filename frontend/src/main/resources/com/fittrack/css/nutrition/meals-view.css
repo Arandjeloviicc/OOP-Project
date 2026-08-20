@@ -147,7 +147,7 @@
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 1em;
 
-    -fx-border-color: rgba(124, 143, 255, 0.18);
+    -fx-border-color: -app-border;
     -fx-border-radius: 1em;
     -fx-border-width: 1px;
 
@@ -166,8 +166,4 @@
     -fx-alignment: TOP_CENTER;
 
     -fx-background-color: transparent;
-}
-
-.diary-container .section-title {
-    -fx-padding: 0.4em 0 0.1em 0;
 }

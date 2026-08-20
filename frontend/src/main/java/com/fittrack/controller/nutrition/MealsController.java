@@ -1,6 +1,9 @@
 package com.fittrack.controller.nutrition;
 
 import com.fittrack.api.nutrition.MealApi;
+import com.fittrack.async.AsyncTaskRunner;
+import com.fittrack.config.AppConstants;
+import com.fittrack.config.AppImages;
 import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
@@ -11,7 +14,9 @@ import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.service.nutrition.MealService;
 import com.fittrack.session.UserSession;
-import com.fittrack.util.*;
+import com.fittrack.ui.FxmlComponentLoader;
+import com.fittrack.ui.LoadedComponent;
+import com.fittrack.ui.OverlayManager;
 import javafx.beans.binding.DoubleBinding;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -31,9 +36,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MealsController extends BaseController implements Initializable, ResponsiveLayout, Refreshable {
 
@@ -93,6 +96,9 @@ public class MealsController extends BaseController implements Initializable, Re
     // Constants
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.uuuu");
 
+    // Cache
+    private final Map<LocalDate, List<MealResponse>> mealsCache = new HashMap<>();
+
     // Api
     private final MealApi mealApi = new MealApi();
 
@@ -145,35 +151,46 @@ public class MealsController extends BaseController implements Initializable, Re
     // ── Load Data ─────────────────────────────────────────────────
     private void loadMealsForDate() {
         LocalDate currentDate = datePicker.getValue();
+
+        if (mealsCache.containsKey(currentDate)) {
+            showMeals(mealsCache.get(currentDate));
+            return;
+        }
+
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
         AsyncTaskRunner.run(
                 () -> mealApi.getMealsFromDate(userId, currentDate),
 
                 meals -> {
+                    mealsCache.put(currentDate, meals);
 
                     if (!currentDate.equals(datePicker.getValue())) {
                         return;
                     }
 
-                    // Update Summary Cards
-                    DailyNutritionTotals totals = MealService.calculateDailyNutritionTotals(meals);
-                    updateSummary(totals);
-
-                    // Update Diary Cards
-                    MealResponse breakfast = findMealByName(meals, "Breakfast");
-                    MealResponse lunch = findMealByName(meals, "Lunch");
-                    MealResponse dinner = findMealByName(meals, "Dinner");
-                    MealResponse snacks = findMealByName(meals, "Snacks");
-
-                    loadMealCard("Breakfast", breakfast, breakfastCard);
-                    loadMealCard("Lunch", lunch, lunchCard);
-                    loadMealCard("Dinner", dinner, dinnerCard);
-                    loadMealCard("Snacks", snacks, snacksCard);
+                    showMeals(meals);
                 },
 
                 exception -> log.error("Failed to load meals for date: {}", currentDate, exception)
         );
+    }
+
+    private void showMeals(List<MealResponse> meals) {
+        // Update Summary Cards
+        DailyNutritionTotals totals = MealService.calculateDailyNutritionTotals(meals);
+        updateSummary(totals);
+
+        // Update Diary Cards
+        MealResponse breakfast = findMealByName(meals, "Breakfast");
+        MealResponse lunch = findMealByName(meals, "Lunch");
+        MealResponse dinner = findMealByName(meals, "Dinner");
+        MealResponse snacks = findMealByName(meals, "Snacks");
+
+        loadMealCard("Breakfast", breakfast, breakfastCard);
+        loadMealCard("Lunch", lunch, lunchCard);
+        loadMealCard("Dinner", dinner, dinnerCard);
+        loadMealCard("Snacks", snacks, snacksCard);
     }
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
@@ -403,11 +420,10 @@ public class MealsController extends BaseController implements Initializable, Re
 
     // ── Diary Helpers ─────────────────────────────────────────────────
     private void initializeMealCards() {
-        breakfastCard = createMealCard("Breakfast", AppImages.USER_PROFILE_ICON);
-        lunchCard = createMealCard("Lunch", AppImages.DASHBOARD_ICON);
-        dinnerCard = createMealCard("Dinner", AppImages.CALCULATORS_ICON);
-
-        snacksCard = createMealCard("Snacks", AppImages.MEASUREMENTS_ICON);
+        breakfastCard = createMealCard("Breakfast", AppImages.BREAKFAST_ICON);
+        lunchCard = createMealCard("Lunch", AppImages.LUNCH_ICON);
+        dinnerCard = createMealCard("Dinner", AppImages.DINNER_ICON);
+        snacksCard = createMealCard("Snacks", AppImages.SNACKS_ICON);
 
         diaryContent.getChildren().addAll(
                 breakfastCard.root(),
@@ -424,11 +440,16 @@ public class MealsController extends BaseController implements Initializable, Re
         component.controller().setIcon(icon);
 
         component.controller().setOnLogAction(() -> {
+            LocalDate selectedDate = datePicker.getValue();
+
             LoadedComponent<AddFoodController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_FOOD);
 
             addFood.controller().setContext(MealType.fromName(title), datePicker.getValue());
 
-            addFood.controller().setOnCloseAction(this::refresh);
+            addFood.controller().setOnCloseAction(() -> {
+                invalidateMealsCache(selectedDate);
+                loadMealsForDate();
+            });
 
             OverlayManager.show(addFood.root());
         });
@@ -468,5 +489,10 @@ public class MealsController extends BaseController implements Initializable, Re
                 otherFoodsCount,
                 calories
         );
+    }
+
+    // ── Cache Helpers ─────────────────────────────────────────────────
+    private void invalidateMealsCache(LocalDate date) {
+        mealsCache.remove(date);
     }
 }

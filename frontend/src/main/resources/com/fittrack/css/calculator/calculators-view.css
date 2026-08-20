@@ -268,27 +268,27 @@
 
 /* ── BMI Status Badge ─────────────────────────────────────── */
 .bmi-status-underweight {
-    -fx-text-fill: #f2c94c;
-    -fx-border-color: rgba(242, 201, 76, 0.65);
-    -fx-background-color:  rgba(242, 201, 76, 0.08);
+    -fx-text-fill: -app-calculator-warning;
+    -fx-border-color: -app-calculator-warning-border;
+    -fx-background-color: -app-calculator-warning-background;
 }
 
 .bmi-status-normal {
-    -fx-text-fill: #59d77d;
-    -fx-border-color: rgba(89, 215, 125, 0.65);
-    -fx-background-color: rgba(89, 215, 125, 0.08);
+    -fx-text-fill: -app-calculator-success;
+    -fx-border-color: -app-calculator-success-border;
+    -fx-background-color: -app-calculator-success-background;
 }
 
 .bmi-status-overweight {
-    -fx-text-fill: #f0ad4e;
-    -fx-border-color: rgba(240, 173, 78, 0.65);
-    -fx-background-color: rgba(240, 173, 78, 0.08);
+    -fx-text-fill: -app-calculator-caution;
+    -fx-border-color: -app-calculator-caution-border;
+    -fx-background-color: -app-calculator-caution-background;
 }
 
 .bmi-status-obese {
-    -fx-text-fill: #ef6464;
-    -fx-border-color: rgba(239, 100, 100, 0.65);
-    -fx-background-color: rgba(239, 100, 100, 0.08);
+    -fx-text-fill: -app-calculator-danger;
+    -fx-border-color: -app-calculator-danger-border;
+    -fx-background-color: -app-calculator-danger-background;
 }
 
 /* ── BMI Detail Rows ──────────────────────────────────────── */
@@ -383,7 +383,7 @@
 .bmi-category-active {
     -fx-background-color: -app-hover;
     -fx-border-color: transparent transparent -app-border-soft -app-primary-light;
-    -fx-border-width: 0 0 1px 0.25em;
+    -fx-border-width: 0 0 1px 4px;
 }
 
 .bmi-category-row-last.bmi-category-active {
@@ -397,39 +397,39 @@
 }
 
 .result-detail-row.bmi-category-underweight {
-    -fx-border-color: rgba(242, 201, 76, 0.65);
-    -fx-background-color: rgba(242, 201, 76, 0.08);
+    -fx-border-color: -app-calculator-warning-border;
+    -fx-background-color: -app-calculator-warning-background;
 }
 
 .result-detail-row.bmi-category-underweight .label {
-    -fx-text-fill: #f2c94c;
+    -fx-text-fill: -app-calculator-warning;
 }
 
 .result-detail-row.bmi-category-normal {
-    -fx-border-color: rgba(89, 215, 125, 0.65);
-    -fx-background-color: rgba(89, 215, 125, 0.08);
+    -fx-border-color: -app-calculator-success-border;
+    -fx-background-color: -app-calculator-success-background;
 }
 
 .result-detail-row.bmi-category-normal .label {
-    -fx-text-fill: #59d77d;
+    -fx-text-fill: -app-calculator-success;
 }
 
 .result-detail-row.bmi-category-overweight {
-    -fx-border-color: rgba(240, 173, 78, 0.65);
-    -fx-background-color: rgba(240, 173, 78, 0.08);
+    -fx-border-color: -app-calculator-caution-border;
+    -fx-background-color: -app-calculator-caution-background;
 }
 
 .result-detail-row.bmi-category-overweight .label {
-    -fx-text-fill: #f0ad4e;
+    -fx-text-fill: -app-calculator-caution;
 }
 
 .result-detail-row.bmi-category-obese {
-    -fx-border-color: rgba(239, 100, 100, 0.65);
-    -fx-background-color: rgba(239, 100, 100, 0.08);
+    -fx-border-color: -app-calculator-danger-border;
+    -fx-background-color: -app-calculator-danger-background;
 }
 
 .result-detail-row.bmi-category-obese .label {
-    -fx-text-fill: #ef6464;
+    -fx-text-fill: -app-calculator-danger;
 }
 
 /* ========================================================== */
@@ -481,15 +481,15 @@
 
 /* ── TDEE Weight goals ──────────────────────────────────────── */
 .result-detail-row.calorie-goal-loss {
-    -fx-border-color: rgba(242, 201, 76, 0.55);
+    -fx-border-color: -app-calculator-warning-border-soft;
 }
 
 .result-detail-row.calorie-goal-maintain {
-    -fx-border-color: rgba(89, 215, 125, 0.55);
+    -fx-border-color: -app-calculator-success-border-soft;
 }
 
 .result-detail-row.calorie-goal-gain {
-    -fx-border-color: rgba(139, 108, 246, 0.55);
+    -fx-border-color: -app-calculator-gain-border;
 }
 
 /* ========================================================== */
@@ -498,51 +498,51 @@
 
 /* ── Body Fat ──────────────────────────────────────── */
 .body-fat-category-essential {
-    -fx-text-fill: #ef6464;
-    -fx-border-color: rgba(239, 100, 100, 0.65);
-    -fx-background-color: rgba(239, 100, 100, 0.08);
+    -fx-text-fill: -app-calculator-danger;
+    -fx-border-color: -app-calculator-danger-border;
+    -fx-background-color: -app-calculator-danger-background;
 }
 
 .result-detail-row.body-fat-category-essential .label {
-    -fx-text-fill: #ef6464;
+    -fx-text-fill: -app-calculator-danger;
 }
 
 .body-fat-category-athletes {
-    -fx-text-fill: #59d77d;
-    -fx-border-color: rgba(89, 215, 125, 0.65);
-    -fx-background-color: rgba(89, 215, 125, 0.08);
+    -fx-text-fill: -app-calculator-success;
+    -fx-border-color: -app-calculator-success-border;
+    -fx-background-color: -app-calculator-success-background;
 }
 
 .result-detail-row.body-fat-category-athletes .label {
-    -fx-text-fill: #59d77d;
+    -fx-text-fill: -app-calculator-success;
 }
 
 .body-fat-category-fitness {
-    -fx-text-fill: #34d399;
-    -fx-border-color: rgba(52, 211, 153, 0.65);
-    -fx-background-color: rgba(52, 211, 153, 0.08);
+    -fx-text-fill: -app-calculator-fitness;
+    -fx-border-color: -app-calculator-fitness-border;
+    -fx-background-color: -app-calculator-fitness-background;
 }
 
 .result-detail-row.body-fat-category-fitness .label {
-    -fx-text-fill: #34d399;
+    -fx-text-fill: -app-calculator-fitness;
 }
 
 .body-fat-category-average {
-    -fx-text-fill: #f2c94c;
-    -fx-border-color: rgba(242, 201, 76, 0.65);
-    -fx-background-color: rgba(242, 201, 76, 0.08);
+    -fx-text-fill: -app-calculator-warning;
+    -fx-border-color: -app-calculator-warning-border;
+    -fx-background-color: -app-calculator-warning-background;
 }
 
 .result-detail-row.body-fat-category-average .label {
-    -fx-text-fill: #f2c94c;
+    -fx-text-fill: -app-calculator-warning;
 }
 
 .body-fat-category-obese {
-    -fx-text-fill: #ef6464;
-    -fx-border-color: rgba(239, 100, 100, 0.65);
-    -fx-background-color: rgba(239, 100, 100, 0.08);
+    -fx-text-fill: -app-calculator-danger;
+    -fx-border-color: -app-calculator-danger-border;
+    -fx-background-color: -app-calculator-danger-background;
 }
 
 .result-detail-row.body-fat-category-obese .label {
-    -fx-text-fill: #ef6464;
+    -fx-text-fill: -app-calculator-danger;
 }

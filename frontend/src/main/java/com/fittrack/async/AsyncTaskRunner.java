@@ -1,4 +1,4 @@
-package com.fittrack.util;
+package com.fittrack.async;
 
 import javafx.concurrent.Task;
 

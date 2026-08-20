@@ -2,6 +2,9 @@ package com.fittrack.controller.nutrition;
 
 import com.fittrack.api.nutrition.FoodApi;
 import com.fittrack.api.nutrition.MealApi;
+import com.fittrack.async.AsyncTaskRunner;
+import com.fittrack.cache.FoodSearchCache;
+import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.FoodListItemController;
@@ -10,7 +13,10 @@ import com.fittrack.dto.nutrition.AddMealItemRequest;
 import com.fittrack.dto.nutrition.FoodResponse;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.session.UserSession;
-import com.fittrack.util.*;
+import com.fittrack.ui.FxmlComponentLoader;
+import com.fittrack.ui.LoadedComponent;
+import com.fittrack.ui.OverlayManager;
+import javafx.animation.PauseTransition;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,13 +24,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AddFoodController extends FormController implements Initializable, ResponsiveLayout {
 
@@ -57,6 +63,9 @@ public class AddFoodController extends FormController implements Initializable, 
     private Runnable onCloseAction;
     private boolean dataChanged;
 
+    // Search Helpers
+    private final PauseTransition searchDebounce = new PauseTransition(Duration.millis(300));
+
     // Responsive Helpers
     private static final int NARROW_BREAKPOINT = 760;
     private static final int SHORT_BREAKPOINT = 650;
@@ -74,7 +83,12 @@ public class AddFoodController extends FormController implements Initializable, 
         initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
 
         // Search listener
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> loadAllFoods(newValue));
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchDebounce.stop();
+
+            searchDebounce.setOnFinished(event -> loadAllFoods(newValue));
+            searchDebounce.playFromStart();
+        });
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -139,10 +153,23 @@ public class AddFoodController extends FormController implements Initializable, 
 
     // ── Food Loading ───────────────────────────────────────────────────
     private void loadAllFoods(String search) {
+        String cacheKey = normalizeSearch(search);
+
+        if (FoodSearchCache.contains(cacheKey)) {
+            showFoods(FoodSearchCache.get(cacheKey));
+            return;
+        }
+
         AsyncTaskRunner.run(
                 () -> foodApi.searchFoods(search),
 
                 foods -> {
+                    FoodSearchCache.put(cacheKey, foods);
+
+                    if (!cacheKey.equals(normalizeSearch(searchField.getText()))) {
+                        return;
+                    }
+
                     showFoods(foods);
                 },
 
@@ -229,4 +256,12 @@ public class AddFoodController extends FormController implements Initializable, 
                 )
         );
     }
+
+    // ── Cache Helpers ──────────────────────────────────────────────
+    private String normalizeSearch(String search) {
+        return search == null
+                ? ""
+                : search.trim().toLowerCase(Locale.ROOT);
+    }
+
 }

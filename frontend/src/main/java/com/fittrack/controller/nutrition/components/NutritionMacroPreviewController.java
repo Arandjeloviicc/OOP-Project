@@ -4,7 +4,6 @@ import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.StrokeLineCap;
@@ -20,10 +19,10 @@ public class NutritionMacroPreviewController {
 
     private static final double STROKE_WIDTH = 10;
 
-    private static final Color CARBS_COLOR = Color.web("#FFC857");
-    private static final Color FAT_COLOR = Color.web("#6BCB77");
-    private static final Color PROTEIN_COLOR = Color.web("#FF6B6B");
-    private static final Color EMPTY_COLOR = Color.web("rgba(255,255,255,0.08)");
+    private static final String CARBS_STYLE = "macro-arc-carbs";
+    private static final String FAT_STYLE = "macro-arc-fat";
+    private static final String PROTEIN_STYLE = "macro-arc-protein";
+    private static final String EMPTY_STYLE = "macro-arc-empty";
 
     private double lastCarbs;
     private double lastFat;
@@ -71,7 +70,7 @@ public class NutritionMacroPreviewController {
         chartPane.getChildren().clear();
 
         if (total <= 0) {
-            chartPane.getChildren().add(createArcSegment(centerX, centerY, radius, 0, 360, EMPTY_COLOR));
+            chartPane.getChildren().add(createArcSegment(centerX, centerY, radius, 0, 360, EMPTY_STYLE));
             return;
         }
 
@@ -81,24 +80,27 @@ public class NutritionMacroPreviewController {
 
         double startAngle = 90;
 
-        Arc carbsArc = createArcSegment(centerX, centerY, radius, startAngle, -carbsAngle, CARBS_COLOR);
+        Arc carbsArc = createArcSegment(centerX, centerY, radius, startAngle, -carbsAngle, CARBS_STYLE);
         startAngle -= carbsAngle;
 
-        Arc fatArc = createArcSegment(centerX, centerY, radius, startAngle, -fatAngle, FAT_COLOR);
+        Arc fatArc = createArcSegment(centerX, centerY, radius, startAngle, -fatAngle, FAT_STYLE);
         startAngle -= fatAngle;
 
-        Arc proteinArc = createArcSegment(centerX, centerY, radius, startAngle, -proteinAngle, PROTEIN_COLOR);
+        Arc proteinArc = createArcSegment(centerX, centerY, radius, startAngle, -proteinAngle, PROTEIN_STYLE);
 
         chartPane.getChildren().addAll(carbsArc, fatArc, proteinArc);
     }
 
-    private Arc createArcSegment(double centerX, double centerY, double radius, double startAngle, double length, Color color) {
+    private Arc createArcSegment(double centerX, double centerY, double radius, double startAngle, double length, String styleClass) {
         Arc arc = new Arc(centerX, centerY, radius, radius, startAngle, length);
+
         arc.setType(ArcType.OPEN);
         arc.setFill(null);
-        arc.setStroke(color);
         arc.setStrokeWidth(STROKE_WIDTH);
         arc.setStrokeLineCap(StrokeLineCap.BUTT);
+
+        arc.getStyleClass().add(styleClass);
+
         return arc;
     }
 }

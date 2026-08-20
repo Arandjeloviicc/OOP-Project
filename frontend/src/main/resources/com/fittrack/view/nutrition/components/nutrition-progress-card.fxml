@@ -11,12 +11,15 @@
       stylesheets="@../../../css/nutrition/components/nutrition-progress-card.css"
       styleClass="nutrition-progress-card">
 
+    <!-- Title -->
     <Label fx:id="titleLabel"
            styleClass="nutrition-progress-title"
            text="Calories"/>
 
+    <!-- Values -->
     <HBox styleClass="nutrition-progress-values">
 
+        <!-- Current -->
         <HBox alignment="BASELINE_LEFT"
               styleClass="nutrition-progress-value-group">
             <Label fx:id="currentValueLabel"
@@ -32,6 +35,7 @@
 
         <Region HBox.hgrow="ALWAYS"/>
 
+        <!-- Remaining -->
         <HBox fx:id="remainingContainer"
               alignment="BASELINE_RIGHT"
               styleClass="nutrition-progress-remaining-group">
@@ -45,6 +49,7 @@
         </HBox>
     </HBox>
 
+    <!-- Progress Bar -->
     <ProgressBar fx:id="progressBar"
                  progress="0"
                  maxWidth="Infinity"

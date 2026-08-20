@@ -14,7 +14,7 @@
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 1em;
 
-    -fx-border-color: rgba(124, 143, 255, 0.24);
+    -fx-border-color: -app-border;
     -fx-border-radius: 1em;
     -fx-border-width: 1px;
 
@@ -22,8 +22,8 @@
 }
 
 .meal-card:hover {
-    -fx-background-color: #101A33;
-    -fx-border-color: rgba(124, 143, 255, 0.18);
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-border-soft;
 }
 
 /* ========================================================== */
@@ -36,7 +36,7 @@
 }
 
 .meal-card-title {
-    -fx-text-fill: #E4E8FF;
+    -fx-text-fill: -app-text-primary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1.1em;
     -fx-font-weight: bold;
@@ -62,21 +62,21 @@
 }
 
 .meal-card-first-food {
-    -fx-text-fill: rgba(255, 255, 255, 0.88);
+    -fx-text-fill: -app-text-primary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 }
 
 .meal-card-more-foods {
-    -fx-text-fill: #86A8FF;
+    -fx-text-fill: -app-nutrition-progress;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 0.9em;
-    -fx-opcity: 0.70;
+    -fx-opacity: 0.70;
 }
 
 .meal-card-calories {
-    -fx-text-fill: rgba(180, 190, 235, 0.72);
+    -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 0.88em;
 }
@@ -121,11 +121,11 @@
 }
 
 .meal-card-log-button:hover {
-    -fx-background-color: #6F86FF;
+    -fx-background-color: linear-gradient(to right, -app-button-gradient-hover-start, -app-button-gradient-hover-end);
 }
 
 .meal-card-log-button:pressed {
-    -fx-background-color: #4058D8;
+    -fx-background-color: linear-gradient(to right, -app-button-gradient-pressed-start, -app-button-gradient-pressed-end);
 }
 
 /* ========================================================== */

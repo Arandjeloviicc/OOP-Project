@@ -9,7 +9,7 @@
 
 .root {
     -fx-background-color: -app-background;
-    -fx-font-size: 14px;
+    -fx-font-size: 0.875em;
 }
 
 /* ========================================================== */

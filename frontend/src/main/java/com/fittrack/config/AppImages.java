@@ -1,4 +1,4 @@
-package com.fittrack.util;
+package com.fittrack.config;
 
 import javafx.scene.image.Image;
 
@@ -25,6 +25,10 @@ public final class AppImages {
     public static final Image USER_PROFILE_ICON = load("/com/fittrack/images/icons/profile.png");
 
     // Meal Types
+    public static final Image BREAKFAST_ICON = load("/com/fittrack/images/icons/meals/breakfast.png");
+    public static final Image LUNCH_ICON = load("/com/fittrack/images/icons/meals/lunch.png");
+    public static final Image DINNER_ICON = load("/com/fittrack/images/icons/meals/dinner.png");
+    public static final Image SNACKS_ICON = load("/com/fittrack/images/icons/meals/snacks.png");
 
     private AppImages() {}
 

@@ -15,7 +15,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <StackPane
         fx:id="rootLayout"
-        styleClass="root"
+        styleClass="auth-root"
         stylesheets="@../../css/auth/login-view.css"
         xmlns="http://javafx.com/javafx/22"
         xmlns:fx="http://javafx.com/fxml/1"

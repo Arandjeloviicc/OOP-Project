@@ -23,6 +23,10 @@
 /* == HEADER ================================================ */
 /* ========================================================== */
 
+.meal-item-details-title-group {
+    -fx-spacing: 0.2em;
+}
+
 .meal-item-details-header {
     -fx-padding: 0 0 0.35em 0;
 }
@@ -39,15 +43,35 @@
     -fx-text-fill: -app-text-primary;
 }
 
+.meal-item-details-serving-row .field-group {
+    -fx-padding: 0;
+}
+
+.meal-item-details-serving-row {
+    -fx-spacing: 0.65em;
+    -fx-padding: 0 0 0.3em 0;
+}
+
 /* ========================================================== */
-/* == ACTIONS =============================================== */
+/* == BUTTONS =============================================== */
 /* ========================================================== */
 
 .meal-item-details-actions {
+    -fx-max-width: Infinity;
+    -fx-hgap: 0.65em;
     -fx-padding: 0.65em 0 0 0;
-    -fx-alignment: center;
 }
 
-.meal-item-details-button {
+.meal-item-details-action-button {
+    -fx-font-size: 1em;
+
+    -fx-min-height: 3.3em;
     -fx-pref-height: 3.3em;
+    -fx-max-height: 3.3em;
+}
+
+.meal-item-details .back-btn.meal-item-details-action-button,
+.meal-item-details .action-btn.meal-item-details-action-button {
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
 }

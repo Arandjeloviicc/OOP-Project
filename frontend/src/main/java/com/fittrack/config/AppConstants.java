@@ -1,4 +1,4 @@
-package com.fittrack.util;
+package com.fittrack.config;
 
 public final class AppConstants {
 

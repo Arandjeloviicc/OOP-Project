@@ -2,8 +2,8 @@ package com.fittrack.controller.auth;
 
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
-import com.fittrack.util.AppConstants;
-import com.fittrack.util.AppImages;
+import com.fittrack.config.AppConstants;
+import com.fittrack.config.AppImages;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;

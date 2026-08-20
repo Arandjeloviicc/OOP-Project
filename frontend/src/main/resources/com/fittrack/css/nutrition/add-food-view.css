@@ -8,7 +8,7 @@
 /* ========================================================== */
 
 .add-food-root {
-    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-color: -app-modal-overlay;
     -fx-alignment: center;
 }
 
@@ -22,7 +22,7 @@
 
 .add-food-dialog {
     -fx-background-color: -app-background;
-    -fx-background-radius: 18px;
+    -fx-background-radius: 1.125em;
 
     -fx-pref-width: 53em;
     -fx-pref-height: 51em;
@@ -70,7 +70,7 @@
 }
 
 .add-food-close-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-color: -app-control-background;
     -fx-text-fill: -app-text-primary;
 }
 
@@ -110,7 +110,7 @@
 
 .add-food-tab:hover {
     -fx-text-fill: -app-text-primary;
-    -fx-background-color: rgba(255, 255, 255, 0.04);
+    -fx-background-color: -app-control-background-soft;
 }
 
 .add-food-tab:selected {

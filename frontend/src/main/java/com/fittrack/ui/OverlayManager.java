@@ -1,4 +1,4 @@
-package com.fittrack.util;
+package com.fittrack.ui;
 
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;

@@ -6,36 +6,56 @@
 
 .macro-preview-card {
     -fx-alignment: center-left;
-    -fx-spacing: 18px;
-    -fx-padding: 16px 18px;
+    -fx-spacing: 1.125em;
+    -fx-padding: 1em 1.125em;
 
     -fx-background-color: -app-surface-light;
-    -fx-background-radius: 14px;
+    -fx-background-radius: 0.875em;
 
     -fx-border-color: -app-input-border;
-    -fx-border-radius: 14px;
-    -fx-border-width: 1px;
+    -fx-border-radius: 0.875em;
+    -fx-border-width: 0.0625em;
 }
 
 .macro-preview-chart-wrap {
-    -fx-min-width: 110px;
-    -fx-min-height: 110px;
-    -fx-pref-width: 110px;
-    -fx-pref-height: 110px;
+    -fx-min-width: 6.875em;
+    -fx-min-height: 6.875em;
+    -fx-pref-width: 6.875em;
+    -fx-pref-height: 6.875em;
 
     -fx-alignment: center;
 }
 
 .macro-preview-calories-value {
     -fx-text-fill: -app-text-primary;
-    -fx-font-size: 26px;
+    -fx-font-size: 1.625em;
     -fx-font-weight: bold;
 }
 
 .macro-preview-calories-unit {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-size: 12px;
+    -fx-font-size: 0.75em;
     -fx-font-weight: 600;
+}
+
+/* ========================================================== */
+/* == DONUT CHART =========================================== */
+/* ========================================================== */
+
+.macro-arc-carbs {
+    -fx-stroke: -app-nutrition-carbs;
+}
+
+.macro-arc-fat {
+    -fx-stroke: -app-nutrition-fat;
+}
+
+.macro-arc-protein {
+    -fx-stroke: -app-nutrition-protein;
+}
+
+.macro-arc-empty {
+    -fx-stroke: -app-nutrition-track;
 }
 
 /* ========================================================== */
@@ -43,7 +63,7 @@
 /* ========================================================== */
 
 .macro-preview-legend {
-    -fx-spacing: 10px;
+    -fx-spacing: 0.625em;
     -fx-fill-width: true;
 
     -fx-alignment: center-left;
@@ -51,28 +71,28 @@
 
 .macro-preview-row {
     -fx-alignment: center-left;
-    -fx-spacing: 8px;
+    -fx-spacing: 0.5em;
 }
 
 .macro-preview-name {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-size: 14px;
+    -fx-font-size: 0.875em;
 }
 
 .macro-preview-value {
     -fx-text-fill: -app-text-primary;
-    -fx-font-size: 14px;
+    -fx-font-size: 0.875em;
     -fx-font-weight: bold;
 }
 
 .macro-dot-carbs {
-    -fx-fill: #F6C453;
+    -fx-fill: -app-nutrition-carbs;
 }
 
 .macro-dot-fat {
-    -fx-fill: #69D37D;
+    -fx-fill: -app-nutrition-fat;
 }
 
 .macro-dot-protein {
-    -fx-fill: #FF6B6B;
+    -fx-fill: -app-nutrition-protein;
 }

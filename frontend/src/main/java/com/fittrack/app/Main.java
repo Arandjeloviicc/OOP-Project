@@ -1,7 +1,7 @@
 package com.fittrack.app;
 
-import com.fittrack.util.AppConstants;
-import com.fittrack.util.SceneManager;
+import com.fittrack.config.AppConstants;
+import com.fittrack.ui.SceneManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

@@ -1,4 +1,7 @@
-package com.fittrack.util;
+package com.fittrack.validation;
+
+import com.fittrack.config.AppConstants;
+import com.fittrack.util.NumberUtils;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public final class FitnessInputValidator {

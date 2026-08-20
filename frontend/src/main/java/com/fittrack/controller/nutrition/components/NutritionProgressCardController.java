@@ -15,7 +15,7 @@ public class NutritionProgressCardController {
     @FXML private HBox remainingContainer;
     @FXML private Label remainingValueLabel;
     @FXML private Label remainingStatusLabel;
-    @FXML ProgressBar progressBar;
+    @FXML private ProgressBar progressBar;
 
     // ── Set Data ─────────────────────────────────────────────────
     public void setData(String title, double current, double goal, String unit, boolean showRemaining) {

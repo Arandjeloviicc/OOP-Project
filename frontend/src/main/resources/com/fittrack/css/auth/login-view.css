@@ -1,6 +1,6 @@
-@import "auth-view.css";
 @import "../common/base-view.css";
 @import "../common/scroll.css";
+@import "auth-view.css";
 
 .glass-card {
     -fx-min-width: 0;

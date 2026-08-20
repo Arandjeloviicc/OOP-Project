@@ -2,7 +2,7 @@ package com.fittrack.service.calculator;
 
 import com.fittrack.model.profile.ActivityLevel;
 import com.fittrack.model.profile.Gender;
-import com.fittrack.util.AppConstants;
+import com.fittrack.config.AppConstants;
 
 public final class CalculationService {
 

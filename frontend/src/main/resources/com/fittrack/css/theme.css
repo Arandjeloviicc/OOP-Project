@@ -127,6 +127,7 @@
 
     /* Background Overlay */
     -app-overlay-background: rgba(6, 9, 20, 0.25);
+    -app-modal-overlay: rgba(0, 0, 0, 0.5);
 
     /* Glass Card */
     -app-glass-background: rgba(14, 20, 42, 0.55);
@@ -179,4 +180,49 @@
     /* Text */
     -app-setup-subtitle: rgba(255, 255, 255, 0.65);
     -app-setup-step-text: rgba(124, 143, 255, 0.85);
+
+    /* ========================================================== */
+    /* == CALCULATORS =========================================== */
+    /* ========================================================== */
+
+    /* Yellow / Warning */
+    -app-calculator-warning: #F2C94C;
+    -app-calculator-warning-border: rgba(242, 201, 76, 0.65);
+    -app-calculator-warning-border-soft: rgba(242, 201, 76, 0.55);
+    -app-calculator-warning-background: rgba(242, 201, 76, 0.08);
+
+    /* Green / Healthy */
+    -app-calculator-success: #59D77D;
+    -app-calculator-success-border: rgba(89, 215, 125, 0.65);
+    -app-calculator-success-border-soft: rgba(89, 215, 125, 0.55);
+    -app-calculator-success-background: rgba(89, 215, 125, 0.08);
+
+    /* Orange / Elevated */
+    -app-calculator-caution: #F0AD4E;
+    -app-calculator-caution-border: rgba(240, 173, 78, 0.65);
+    -app-calculator-caution-background: rgba(240, 173, 78, 0.08);
+
+    /* Red / High Risk */
+    -app-calculator-danger: #EF6464;
+    -app-calculator-danger-border: rgba(239, 100, 100, 0.65);
+    -app-calculator-danger-background: rgba(239, 100, 100, 0.08);
+
+    /* Fitness Green */
+    -app-calculator-fitness: #34D399;
+    -app-calculator-fitness-border: rgba(52, 211, 153, 0.65);
+    -app-calculator-fitness-background: rgba(52, 211, 153, 0.08);
+
+    /* Purple / Gain */
+    -app-calculator-gain-border: rgba(139, 108, 246, 0.55);
+
+    /* ========================================================== */
+    /* == NUTRITION ============================================= */
+    /* ========================================================== */
+
+    /* Nutrition Progress Card */
+    -app-nutrition-carbs: #FFC857;
+    -app-nutrition-fat: #6BCB77;
+    -app-nutrition-protein: #FF6B6B;
+    -app-nutrition-progress: #86A8FF;
+    -app-nutrition-track: rgba(255, 255, 255, 0.08);
 }

@@ -1,6 +1,6 @@
 package com.fittrack.controller.common;
 
-import com.fittrack.util.SceneManager;
+import com.fittrack.ui.SceneManager;
 import javafx.scene.Node;
 import org.slf4j.Logger;
 
