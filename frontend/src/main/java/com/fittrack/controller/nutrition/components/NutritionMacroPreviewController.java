@@ -1,8 +1,10 @@
 package com.fittrack.controller.nutrition.components;
 
 import com.fittrack.util.NumberUtils;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -11,6 +13,7 @@ import javafx.scene.shape.StrokeLineCap;
 public class NutritionMacroPreviewController {
 
     // Fields
+    @FXML private HBox rootLayout;
     @FXML private Pane chartPane;
     @FXML private Label caloriesValueLabel;
     @FXML private Label carbsLabel;
@@ -28,10 +31,17 @@ public class NutritionMacroPreviewController {
     private double lastFat;
     private double lastProtein;
 
+    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
+
     @FXML
     public void initialize() {
         chartPane.widthProperty().addListener((obs, oldVal, newVal) -> drawChart(lastCarbs, lastFat, lastProtein));
         chartPane.heightProperty().addListener((obs, oldVal, newVal) -> drawChart(lastCarbs, lastFat, lastProtein));
+    }
+
+    // ── Responsive PseudoClass ─────────────────────────────────────────────────
+    public void setNarrow(boolean narrow) {
+        rootLayout.pseudoClassStateChanged(NARROW, narrow);
     }
 
     // ── Set Data ─────────────────────────────────────────────────

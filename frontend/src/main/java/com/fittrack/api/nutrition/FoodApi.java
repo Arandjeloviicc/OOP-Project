@@ -62,9 +62,14 @@ public class FoodApi extends BaseApi {
         }
     }
 
-    public List<FoodResponse> getMyFoods(Integer userId) {
+    public List<FoodResponse> getMyFoods(Integer userId, String search) {
         try {
-            String url = API_URL + "/mine/" + userId;
+            String encodedSearch = URLEncoder.encode(
+                    search == null ? "" : search,
+                    StandardCharsets.UTF_8
+            );
+
+            String url = API_URL + "/mine/" + userId + "?search=" + encodedSearch;
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

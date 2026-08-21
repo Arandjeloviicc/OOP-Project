@@ -2,6 +2,7 @@ package com.fittrack.dto.nutrition;
 
 public record MealItemResponse(
         Integer id,
+        Integer foodId,
         String foodName,
         String brand,
         double quantityGrams,

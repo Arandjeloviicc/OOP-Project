@@ -28,8 +28,12 @@ public class Meal {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "meal_date", nullable = false)
+    @Column(name = "meal_date")
     private LocalDate mealDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MealKind kind;
 
     // Created / Updated
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -45,10 +49,11 @@ public class Meal {
     // Constructor
     protected Meal() {}
 
-    public Meal(User user, String name, LocalDate mealDate) {
+    public Meal(User user, String name, LocalDate mealDate, MealKind kind) {
         this.user = user;
         this.name = name;
         this.mealDate = mealDate;
+        this.kind = kind;
     }
 
     // Default
@@ -77,6 +82,10 @@ public class Meal {
 
     public LocalDate getMealDate() {
         return mealDate;
+    }
+
+    public MealKind getKind() {
+        return kind;
     }
 
     public LocalDateTime getCreatedAt() {

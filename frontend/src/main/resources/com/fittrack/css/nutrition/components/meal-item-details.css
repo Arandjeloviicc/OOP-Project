@@ -71,7 +71,30 @@
 }
 
 .meal-item-details .back-btn.meal-item-details-action-button,
-.meal-item-details .action-btn.meal-item-details-action-button {
+.meal-item-details .action-btn.meal-item-details-action-button,
+.meal-item-details .meal-item-details-remove-button {
     -fx-background-radius: 1.65em;
     -fx-border-radius: 1.65em;
+}
+
+.meal-item-details-remove-button {
+    -fx-background-color: -app-control-background;
+    -fx-border-color: -app-control-border;
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
+}
+
+.meal-item-details-remove-button:hover {
+    -fx-background-color: -app-danger-background;
+    -fx-border-color: -app-control-border;
+    -fx-text-fill: -app-danger-text;
+}
+
+.meal-item-details-remove-button:pressed {
+    -fx-background-color: -app-danger-background-pressed;
+    -fx-border-color: -app-danger-border;
 }

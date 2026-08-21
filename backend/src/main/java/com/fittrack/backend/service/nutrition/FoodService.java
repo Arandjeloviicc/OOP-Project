@@ -28,8 +28,12 @@ public class FoodService {
         return foodRepository.findTop20ByNameContainingIgnoreCaseOrderByNameAsc(search.trim());
     }
 
-    public List<Food> getFoodsCreatedByUser(Integer userId) {
-        return foodRepository.findByCreatedByUser_IdOrderByNameAsc(userId);
+    public List<Food> getFoodsCreatedByUser(Integer userId, String search) {
+        if (search == null || search.isBlank()) {
+            return foodRepository.findByCreatedByUserIdOrderByNameAsc(userId);
+        }
+
+        return foodRepository.findByCreatedByUserIdAndNameContainingIgnoreCaseOrderByNameAsc(userId, search.trim());
     }
 
     public Food createFood(CreateFoodRequest request, User createdByUser) {

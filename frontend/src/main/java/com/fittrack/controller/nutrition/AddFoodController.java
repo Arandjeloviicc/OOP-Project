@@ -7,11 +7,15 @@ import com.fittrack.cache.FoodSearchCache;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
+import com.fittrack.controller.nutrition.components.CreateFoodController;
 import com.fittrack.controller.nutrition.components.FoodListItemController;
 import com.fittrack.controller.nutrition.components.MealItemDetailsController;
 import com.fittrack.dto.nutrition.AddMealItemRequest;
 import com.fittrack.dto.nutrition.FoodResponse;
+import com.fittrack.dto.nutrition.MealResponse;
 import com.fittrack.model.nutrition.MealType;
+import com.fittrack.model.nutrition.SearchSource;
+import com.fittrack.service.nutrition.MealService;
 import com.fittrack.session.UserSession;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
@@ -21,9 +25,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class AddFoodController extends FormController implements Initializable, ResponsiveLayout {
 
@@ -52,15 +55,25 @@ public class AddFoodController extends FormController implements Initializable, 
     @FXML private ToggleButton allFoodsButton;
     @FXML private ToggleButton myFoodsButton;
     @FXML private ToggleButton myMealsButton;
+    @FXML private VBox createItemPanel;
+    @FXML private Label createItemIcon;
+    @FXML private Label createItemLabel;
     @FXML private VBox itemsContainer;
 
     // Details
     @FXML private VBox foodDetailsContainer;
 
+    // Create Item
+    @FXML private VBox createItemContainer;
+
+    // Search Source Tabs
+    private List<ToggleButton> searchTabs;
+
     // Attributes
     private MealType mealType;
     private LocalDate mealDate;
     private Runnable onCloseAction;
+    private Consumer<Boolean> onBackAction;
     private boolean dataChanged;
 
     // Search Helpers
@@ -82,13 +95,20 @@ public class AddFoodController extends FormController implements Initializable, 
         initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
         initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
 
-        // Search listener
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchDebounce.stop();
+        initializeSearchTabs();
 
-            searchDebounce.setOnFinished(event -> loadAllFoods(newValue));
-            searchDebounce.playFromStart();
-        });
+        addListeners();
+    }
+
+    // ── Set Data ────────────────────────────────────────────
+    public void setData(MealType mealType, LocalDate mealDate) {
+        this.mealType = mealType;
+        this.mealDate = mealDate;
+        this.dataChanged = false;
+
+        titleLabel.setText("Add to " + mealType.getName());
+
+        loadAllFoods("");
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -98,6 +118,93 @@ public class AddFoodController extends FormController implements Initializable, 
 
         if (dataChanged && onCloseAction != null) {
             onCloseAction.run();
+        }
+    }
+
+    @FXML
+    private void handleBack() {
+        if (onBackAction != null) {
+            onBackAction.accept(dataChanged);
+        } else {
+            OverlayManager.close();
+        }
+    }
+
+    @FXML
+    private void handleCreateItem() {
+        SearchSource source = (SearchSource) foodCategoryGroup.getSelectedToggle().getUserData();
+
+        switch (source) {
+            case MY_FOODS -> openCreateFood();
+            case MY_MEALS -> openCreateMeal();
+        }
+    }
+
+    public void setOnCloseAction(Runnable onCloseAction) {
+        this.onCloseAction = onCloseAction;
+    }
+
+    public void setOnBackAction(Consumer<Boolean> onBackAction) {
+        this.onBackAction = onBackAction;
+    }
+
+    // ── Initialize Helpers ─────────────────────────────────────────────────
+    private void addListeners() {
+        // Search Toggle Button
+        foodCategoryGroup.selectedToggleProperty().addListener(
+                (obs, oldToggle, newToggle) -> {
+                    if (newToggle == null) {
+                        if (oldToggle != null) {
+                            foodCategoryGroup.selectToggle(oldToggle);
+                        }
+                        return;
+                    }
+
+                    SearchSource source = (SearchSource) newToggle.getUserData();
+
+                    loadSearchSource(source);
+                }
+        );
+
+        // Seacrh Field
+        searchField.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    searchDebounce.stop();
+
+                    searchDebounce.setOnFinished(event -> {
+                        SearchSource source =
+                                (SearchSource) foodCategoryGroup
+                                        .getSelectedToggle()
+                                        .getUserData();
+
+                        loadSearchSource(source);
+                    });
+
+                    searchDebounce.playFromStart();
+                }
+        );
+    }
+
+    private void initializeSearchTabs() {
+        searchTabs = List.of(
+                allFoodsButton,
+                myFoodsButton,
+                myMealsButton
+        );
+
+        allFoodsButton.setUserData(SearchSource.ALL);
+        myFoodsButton.setUserData(SearchSource.MY_FOODS);
+        myMealsButton.setUserData(SearchSource.MY_MEALS);
+
+        foodCategoryGroup.selectToggle(allFoodsButton);
+
+        updateTabsLayout();
+    }
+
+    private void updateTabsLayout() {
+        for (ToggleButton tab : searchTabs) {
+            HBox.setHgrow(tab, Priority.ALWAYS);
+            tab.setMaxWidth(Double.MAX_VALUE);
         }
     }
 
@@ -136,22 +243,45 @@ public class AddFoodController extends FormController implements Initializable, 
         rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
     }
 
-    // ── Context & Callbacks ────────────────────────────────────────────
-    public void setContext(MealType mealType, LocalDate mealDate) {
-        this.mealType = mealType;
-        this.mealDate = mealDate;
-        this.dataChanged = false;
+    // ── Food/Meal Loading Helpers ───────────────────────────────────────────────────
+    private void loadSearchSource(SearchSource source) {
+        switch (source) {
+            case ALL -> {
+                setVisible(createItemPanel, false);
+                loadAllFoods(searchField.getText());
+            }
 
-        titleLabel.setText("Add to " + mealType.getName());
+            case MY_FOODS -> {
+                showCreateFoodPanel();
+                loadMyFoods(searchField.getText());
+            }
 
-        loadAllFoods("");
+            case MY_MEALS -> {
+                showCreateMealPanel();
+                loadMyMeals(searchField.getText());
+            }
+        }
     }
 
-    public void setOnCloseAction(Runnable onCloseAction) {
-        this.onCloseAction = onCloseAction;
+    private void showCreateFoodPanel() {
+        setVisible(createItemPanel, true);
+
+        createItemLabel.setText("Create a food");
+
+        createItemPanel.getStyleClass().remove("create-meal");
+        createItemPanel.getStyleClass().add("create-food");
     }
 
-    // ── Food Loading ───────────────────────────────────────────────────
+    private void showCreateMealPanel() {
+        setVisible(createItemPanel, true);
+
+        createItemLabel.setText("Create a meal");
+
+        createItemPanel.getStyleClass().remove("create-food");
+        createItemPanel.getStyleClass().add("create-meal");
+    }
+
+    // ── All Foods ───────────────────────────────────────────────────
     private void loadAllFoods(String search) {
         String cacheKey = normalizeSearch(search);
 
@@ -180,6 +310,64 @@ public class AddFoodController extends FormController implements Initializable, 
         );
     }
 
+    // ── My Foods ───────────────────────────────────────────────────
+    private void loadMyFoods(String search) {
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+        String normalizedSearch = normalizeSearch(search);
+
+        AsyncTaskRunner.run(
+                () -> foodApi.getMyFoods(userId, search),
+
+                foods -> {
+                    if (!normalizedSearch.equals(normalizeSearch(searchField.getText()))) {
+                        return;
+                    }
+
+                    SearchSource currentSource = (SearchSource) foodCategoryGroup.getSelectedToggle().getUserData();
+
+                    if (currentSource != SearchSource.MY_FOODS) {
+                        return;
+                    }
+
+                    showFoods(foods);
+                },
+
+                exception -> log.error(
+                        "Failed to load user's foods.",
+                        exception
+                )
+        );
+    }
+
+    // ── My Meals ───────────────────────────────────────────────────
+    private void loadMyMeals(String search) {
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+        String normalizedSearch = normalizeSearch(search);
+
+        AsyncTaskRunner.run(
+                () -> mealApi.getMyMeals(userId, search),
+
+                meals -> {
+                    if (!normalizedSearch.equals(normalizeSearch(searchField.getText()))) {
+                        return;
+                    }
+
+                    SearchSource currentSource = (SearchSource) foodCategoryGroup.getSelectedToggle().getUserData();
+
+                    if (currentSource != SearchSource.MY_MEALS) {
+                        return;
+                    }
+
+                    showMeals(meals);
+                },
+
+                exception -> log.error(
+                        "Failed to load user's meals.",
+                        exception
+                )
+        );
+    }
+
     private void showFoods(List<FoodResponse> foods) {
         itemsContainer.getChildren().clear();
 
@@ -196,6 +384,31 @@ public class AddFoodController extends FormController implements Initializable, 
             item.controller().setOnAddAction(() -> openFoodDetails(food));
 
             itemsContainer.getChildren().add(item.root());
+        }
+    }
+
+    private void showMeals(List<MealResponse> meals) {
+        itemsContainer.getChildren().clear();
+
+        for (MealResponse meal : meals) {
+            int calories = MealService.calculateMealCalories(meal);
+
+            String itemText = meal.items().size() == 1
+                    ? "1 item"
+                    : meal.items().size() + " items";
+
+            Label label = new Label(
+                    meal.name()
+                            + " · "
+                            + itemText
+                            + " · "
+                            + calories
+                            + " cal"
+            );
+
+            label.getStyleClass().add("add-food-placeholder");
+
+            itemsContainer.getChildren().add(label);
         }
     }
 
@@ -257,11 +470,26 @@ public class AddFoodController extends FormController implements Initializable, 
         );
     }
 
+    // ── Create Food Action ──────────────────────────────────────────────
+    private void openCreateFood() {
+        LoadedComponent<CreateFoodController> createFood = FxmlComponentLoader.load(AppConstants.Components.CREATE_FOOD_CARD);
+
+
+        createItemContainer.getChildren().setAll(createFood.root());
+
+        setVisible(foodListContainer, false);
+        setVisible(createItemContainer, true);
+    }
+
+    // ── Create Meal Action ──────────────────────────────────────────────
+    private void openCreateMeal() {
+
+    }
+
     // ── Cache Helpers ──────────────────────────────────────────────
     private String normalizeSearch(String search) {
         return search == null
                 ? ""
                 : search.trim().toLowerCase(Locale.ROOT);
     }
-
 }

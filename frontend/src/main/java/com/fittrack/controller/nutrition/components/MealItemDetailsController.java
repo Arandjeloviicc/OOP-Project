@@ -3,6 +3,7 @@ package com.fittrack.controller.nutrition.components;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.dto.nutrition.FoodResponse;
+import com.fittrack.dto.nutrition.MealItemResponse;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
@@ -42,13 +43,16 @@ public class MealItemDetailsController extends FormController implements Initial
     @FXML private Label servingsMessage;
     @FXML private VBox nutrientPreview;
     @FXML private Button confirmButton;
+    @FXML private Button removeButton;
 
     // Helpers
     private FoodResponse selectedFood;
+    private MealItemResponse selectedMealItem;
     private NutritionMacroPreviewController nutritionMacroPreviewController;
 
     private Runnable onCancelAction;
     private Consumer<Double> onConfirmAction;
+    private Runnable onRemoveAction;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,6 +66,7 @@ public class MealItemDetailsController extends FormController implements Initial
     // ── Set Data ─────────────────────────────────────────────────
     public void setData(FoodResponse food, MealType mealType) {
         selectedFood = food;
+        selectedMealItem = null;
 
         selectedFoodTitleLabel.setText(food.name());
 
@@ -76,13 +81,35 @@ public class MealItemDetailsController extends FormController implements Initial
 
         servingsField.setText("1");
 
-        LoadedComponent<NutritionMacroPreviewController> nutrients = FxmlComponentLoader.load(AppConstants.Components.NUTRITION_MACRO_PREVIEW);
+        setVisible(removeButton, false);
 
-        nutritionMacroPreviewController = nutrients.controller();
+        // Macro Preview
+        loadNutritionMacroPreview();
+    }
 
-        nutrientPreview.getChildren().setAll(nutrients.root());
+    public void setData(MealItemResponse mealItem, MealType mealType) {
+        selectedMealItem = mealItem;
+        selectedFood = null;
 
-        updateNutrientsInfo();
+        selectedFoodTitleLabel.setText(mealItem.foodName());
+
+        mealComboBox.getItems().setAll(MealType.values());
+        mealComboBox.setValue(mealType);
+
+        servingSizeComboBox.getItems().setAll(
+                Math.round(mealItem.servingSizeGrams()) + " g"
+        );
+
+        servingSizeComboBox.getSelectionModel().selectFirst();
+
+        double numberOfServings = mealItem.quantityGrams() / mealItem.servingSizeGrams();
+
+        servingsField.setText(NumberUtils.formatDecimal(numberOfServings));
+
+        setVisible(removeButton, true);
+
+        // Macro Preview
+        loadNutritionMacroPreview();
     }
 
     // ── Callback Setters ─────────────────────────────────────────────────
@@ -92,6 +119,10 @@ public class MealItemDetailsController extends FormController implements Initial
 
     public void setOnConfirmAction(Consumer<Double> onConfirmAction) {
         this.onConfirmAction = onConfirmAction;
+    }
+
+    public void setOnRemoveAction(Runnable onRemoveAction) {
+        this.onRemoveAction = onRemoveAction;
     }
 
     // ── Action Setters ─────────────────────────────────────────────────
@@ -145,6 +176,13 @@ public class MealItemDetailsController extends FormController implements Initial
         }
     }
 
+    @FXML
+    private void handleRemove() {
+        if (onRemoveAction != null) {
+            onRemoveAction.run();
+        }
+    }
+
     // ── Initialize Helpers ─────────────────────────────────────────────────
     private void initializeServingLayout() {
         servingSizeContainer.prefWidthProperty().bind(
@@ -178,8 +216,19 @@ public class MealItemDetailsController extends FormController implements Initial
         restoreServingsHelper();
     }
 
+    // ── Nutrient Macro Preview Helpers ─────────────────────────────────────────────────
+    private void loadNutritionMacroPreview() {
+        LoadedComponent<NutritionMacroPreviewController> nutrients = FxmlComponentLoader.load(AppConstants.Components.NUTRITION_MACRO_PREVIEW);
+
+        nutritionMacroPreviewController = nutrients.controller();
+
+        nutrientPreview.getChildren().setAll(nutrients.root());
+
+        updateNutrientsInfo();
+    }
+
     private void updateNutrientsInfo() {
-        if (selectedFood == null
+        if ((selectedFood == null && selectedMealItem == null)
                 || nutritionMacroPreviewController == null
                 || servingSizeComboBox.getValue() == null) {
             return;
@@ -197,21 +246,39 @@ public class MealItemDetailsController extends FormController implements Initial
         }
 
         double selectedServingSize = getSelectedServingSizeGrams();
-        double baseServingSize = selectedFood.servingSizeGrams();
+
+        double baseServingSize;
+        double caloriesPerServing;
+        double carbsPerServing;
+        double fatPerServing;
+        double proteinPerServing;
+
+        if (selectedFood != null) {
+            baseServingSize = selectedFood.servingSizeGrams();
+            caloriesPerServing = selectedFood.caloriesPerServing();
+            carbsPerServing = selectedFood.carbsPerServing();
+            fatPerServing = selectedFood.fatPerServing();
+            proteinPerServing = selectedFood.proteinPerServing();
+        } else {
+            baseServingSize = selectedMealItem.servingSizeGrams();
+            caloriesPerServing = selectedMealItem.caloriesPerServing();
+            carbsPerServing = selectedMealItem.carbsPerServing();
+            fatPerServing = selectedMealItem.fatPerServing();
+            proteinPerServing = selectedMealItem.proteinPerServing();
+        }
 
         if (baseServingSize <= 0) {
             return;
         }
 
-        double quantityGrams =
-                selectedServingSize * numberOfServings;
+        double quantityGrams = selectedServingSize * numberOfServings;
 
         double ratio = quantityGrams / baseServingSize;
 
-        double calories = selectedFood.caloriesPerServing() * ratio;
-        double carbs = selectedFood.carbsPerServing() * ratio;
-        double fat = selectedFood.fatPerServing() * ratio;
-        double protein = selectedFood.proteinPerServing() * ratio;
+        double calories = caloriesPerServing * ratio;
+        double carbs = carbsPerServing * ratio;
+        double fat = fatPerServing * ratio;
+        double protein = proteinPerServing * ratio;
 
         nutritionMacroPreviewController.setData(calories, carbs, fat, protein);
     }
@@ -223,7 +290,11 @@ public class MealItemDetailsController extends FormController implements Initial
 
     // ── Servings Helpers ─────────────────────────────────────────────────
     private double getSelectedServingSizeGrams() {
-        return selectedFood.servingSizeGrams();
+        if (selectedFood != null) {
+            return selectedFood.servingSizeGrams();
+        }
+
+        return selectedMealItem.servingSizeGrams();
     }
 
     private void showServingsMessage() {

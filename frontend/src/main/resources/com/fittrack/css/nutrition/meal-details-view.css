@@ -1,0 +1,147 @@
+@import "../theme.css";
+@import "../common/base-view.css";
+@import "../common/form-controls.css";
+@import "../common/scroll.css";
+@import "../common/overlay.css";
+
+/* ========================================================== */
+/* == DIALOG ================================================ */
+/* ========================================================== */
+
+.meal-details-dialog {
+    -fx-pref-width: 42em;
+    -fx-pref-height: 44em;
+
+    -fx-max-width: 48em;
+    -fx-max-height: 50em;
+
+    -fx-padding: 2em;
+    -fx-spacing: 1.35em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.meal-details-header {
+    -fx-alignment: center-left;
+    -fx-spacing: 1em;
+}
+
+.meal-details-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
+}
+
+.meal-details-title {
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-details-close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -app-text-secondary;
+
+    -fx-font-size: 1.5em;
+    -fx-padding: 0.5em 0.75em;
+
+    -fx-background-radius: 0.7em;
+    -fx-cursor: hand;
+}
+
+.meal-details-close-button:hover {
+    -fx-background-color: -app-control-background;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == MACRO PREVIEW ========================================= */
+/* ========================================================== */
+
+.meal-details-macro-container {
+    -fx-max-width: Infinity;
+}
+
+/* ========================================================== */
+/* == SECTION HEADER ======================================== */
+/* ========================================================== */
+
+.meal-details-section-header {
+    -fx-alignment: center-left;
+    -fx-spacing: 1em;
+}
+
+.meal-details-section-title {
+    -fx-font-size: 1.15em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-details-item-count {
+    -fx-font-size: 0.95em;
+    -fx-text-fill: -app-text-muted;
+}
+
+/* ========================================================== */
+/* == ITEMS ================================================= */
+/* ========================================================== */
+
+.meal-details-scroll {
+    -fx-background-color: transparent;
+}
+
+.meal-details-items {
+    -fx-spacing: 0.7em;
+    -fx-padding: 0.15em 0.65em 0;
+}
+
+/* ========================================================== */
+/* == FOOTER ================================================ */
+/* ========================================================== */
+
+.meal-details-log-button {
+    -fx-pref-height: 3.4em;
+}
+
+/* ========================================================== */
+/* == ITEM DETAILS ========================================== */
+/* ========================================================== */
+
+.item-details-container {
+    -fx-alignment: center;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.meal-details-root:narrow .meal-details-dialog {
+    -fx-padding: 1.65em;
+}
+
+.meal-details-root:narrow .item-details-container {
+    -fx-alignment: center;
+}
+
+.meal-details-root:narrow .meal-item-details {
+    -fx-max-width: 43em;
+    -fx-max-height: Infinity;
+
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+
+    -fx-padding: 1.65em;
+}
+
+/* ========================================================== */
+/* == Short ================================================ */
+/* ========================================================== */
+
+.meal-details-root:short .meal-item-details {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+}

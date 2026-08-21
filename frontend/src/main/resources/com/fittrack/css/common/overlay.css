@@ -1,0 +1,55 @@
+@import "../theme.css";
+
+/* ========================================================== */
+/* == POPUP ROOT ============================================ */
+/* ========================================================== */
+
+.popup-root {
+    -fx-background-color: -app-modal-overlay;
+    -fx-alignment: center;
+}
+
+/* ========================================================== */
+/* == POPUP DIALOG ========================================== */
+/* ========================================================== */
+
+.popup-dialog {
+    -fx-background-color: -app-background;
+    -fx-background-radius: 1.125em;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1.125em;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.popup-root:narrow {
+    -fx-background-color: -app-background;
+    -fx-padding: 0;
+}
+
+.popup-root:narrow .popup-dialog {
+    -fx-max-width: Infinity;
+    -fx-max-height: Infinity;
+
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+}
+
+/* ========================================================== */
+/* == SHORT ================================================= */
+/* ========================================================== */
+
+.popup-root:short {
+    -fx-background-color: -app-background;
+}
+
+.popup-root:short .popup-dialog {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+}

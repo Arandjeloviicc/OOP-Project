@@ -12,5 +12,7 @@ public interface FoodRepository extends JpaRepository<@NonNull Food, @NonNull In
 
     List<Food> findTop20ByNameContainingIgnoreCaseOrderByNameAsc(String name);
 
-    List<Food> findByCreatedByUser_IdOrderByNameAsc(Integer userId);
+    List<Food> findByCreatedByUserIdOrderByNameAsc(Integer userId);
+
+    List<Food> findByCreatedByUserIdAndNameContainingIgnoreCaseOrderByNameAsc(Integer userId, String name);
 }

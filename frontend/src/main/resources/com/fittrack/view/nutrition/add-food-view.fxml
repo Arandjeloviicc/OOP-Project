@@ -16,7 +16,7 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fittrack.controller.nutrition.AddFoodController"
            stylesheets="@../../css/nutrition/add-food-view.css"
-           styleClass="add-food-root">
+           styleClass="popup-root, add-food-root">
 
     <!-- Food list -->
     <VBox fx:id="foodListContainer"
@@ -24,11 +24,15 @@
           styleClass="add-food-list-container">
 
         <VBox fx:id="dialogContainer"
-              styleClass="add-food-dialog">
+              styleClass="popup-dialog, add-food-dialog">
 
             <!-- Header -->
             <HBox alignment="CENTER_LEFT"
                   styleClass="add-food-header">
+
+                <Button text="←"
+                        onAction="#handleBack"
+                        styleClass="add-food-close-button"/>
 
                 <VBox spacing="2">
                     <Label text="Nutrition"
@@ -62,19 +66,43 @@
                               text="All"
                               toggleGroup="$foodCategoryGroup"
                               selected="true"
+                              maxWidth="Infinity"
+                              HBox.hgrow="ALWAYS"
                               styleClass="add-food-tab"/>
 
                 <ToggleButton fx:id="myFoodsButton"
                               text="My Foods"
                               toggleGroup="$foodCategoryGroup"
+                              maxWidth="Infinity"
+                              HBox.hgrow="ALWAYS"
                               styleClass="add-food-tab"/>
 
                 <ToggleButton fx:id="myMealsButton"
                               text="My Meals"
                               toggleGroup="$foodCategoryGroup"
+                              maxWidth="Infinity"
+                              HBox.hgrow="ALWAYS"
                               styleClass="add-food-tab"/>
 
             </HBox>
+
+            <!-- Create Button -->
+            <VBox fx:id="createItemPanel"
+                  alignment="CENTER"
+                  visible="false"
+                  managed="false"
+                  onMouseClicked="#handleCreateItem"
+                  styleClass="add-food-create-panel">
+
+                <Label fx:id="createItemIcon"
+                       text="+"
+                       styleClass="add-food-create-icon"/>
+
+                <Label fx:id="createItemLabel"
+                       text="Create a food"
+                       styleClass="add-food-create-text"/>
+
+            </VBox>
 
             <!-- List -->
             <ScrollPane fitToWidth="true"
@@ -100,6 +128,16 @@
           visible="false"
           managed="false"
           styleClass="add-food-details-container">
+
+        <!-- Add Food Card -->
+
+    </VBox>
+
+    <!-- Create item -->
+    <VBox fx:id="createItemContainer"
+          visible="false"
+          managed="false"
+          styleClass="create-item-container">
 
         <!-- Add Food Card -->
 

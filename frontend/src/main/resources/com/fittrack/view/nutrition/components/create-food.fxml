@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.ScrollPane?>
+
+<VBox fx:id="rootLayout"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.nutrition.components.CreateFoodController"
+      stylesheets="@../../../css/nutrition/components/create-food.css"
+      styleClass="create-food-root">
+
+    <ScrollPane fx:id="setupScroll"
+                fitToWidth="true"
+                hbarPolicy="NEVER"
+                VBox.vgrow="ALWAYS"
+                styleClass="app-scroll">
+
+        <VBox fx:id="createFoodContent"
+              styleClass="create-food-content">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT"
+                  styleClass="create-food-header">
+
+                <VBox>
+                    <Label text="Create Food"
+                           styleClass="create-food-title"/>
+
+                    <Label fx:id="titleMessage"
+                           visible="false"
+                           managed="false"
+                           styleClass="helper-label, error"/>
+
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+            </HBox>
+
+            <!-- Basic Info -->
+            <VBox styleClass="field-group">
+                <Label text="Name"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="nameField"
+                           promptText="e.g. Greek yogurt"
+                           styleClass="input-field, text-field"/>
+
+                <Label fx:id="nameMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+            <VBox styleClass="field-group">
+                <Label text="Brand"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="brandField"
+                           promptText="Optional"
+                           styleClass="input-field, text-field"/>
+
+            </VBox>
+
+            <!-- Serving -->
+            <VBox styleClass="field-group">
+                <Label text="Serving size (g)"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="servingSizeField"
+                           promptText="e.g. 100"
+                           styleClass="input-field, text-field"/>
+
+                <Label fx:id="servingSizeMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Nutrition -->
+            <Label text="Nutrition per serving"
+                   styleClass="create-food-section-title"/>
+
+            <HBox styleClass="create-food-field-row">
+
+                <VBox styleClass="field-group"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Calories"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="caloriesField"
+                               promptText="kcal"
+                               maxWidth="Infinity"
+                               styleClass="input-field, text-field"/>
+
+                    <Label fx:id="caloriesMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox styleClass="field-group"
+                      HBox.hgrow="ALWAYS">
+                    <Label text="Carbs (g)"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="carbsField"
+                               promptText="g"
+                               maxWidth="Infinity"
+                               styleClass="input-field, text-field"/>
+
+                    <Label fx:id="carbsMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+            </HBox>
+
+            <HBox styleClass="create-food-field-row">
+
+                <VBox styleClass="field-group"
+                      HBox.hgrow="ALWAYS">
+                    <Label text="Fat (g)"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="fatField"
+                               promptText="g"
+                               maxWidth="Infinity"
+                               styleClass="input-field, text-field"/>
+
+                    <Label fx:id="fatMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox styleClass="field-group"
+                      HBox.hgrow="ALWAYS">
+                    <Label text="Protein (g)"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="proteinField"
+                               promptText="g"
+                               maxWidth="Infinity"
+                               styleClass="input-field, text-field"/>
+
+                    <Label fx:id="proteinMessage"
+                           styleClass="helper-label"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+            </HBox>
+
+
+            <!-- Add/Update Button -->
+            <GridPane styleClass="create-food-actions">
+
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+                </columnConstraints>
+
+                <Button text="Cancel"
+                        maxWidth="Infinity"
+                        onAction="#handleCancel"
+                        styleClass="back-btn, create-food-action-button"
+                        GridPane.columnIndex="0"/>
+
+                <Button text="Create food"
+                        maxWidth="Infinity"
+                        onAction="#handleCreate"
+                        styleClass="action-btn, create-food-action-button"
+                        GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+        </VBox>
+
+    </ScrollPane>
+
+</VBox>

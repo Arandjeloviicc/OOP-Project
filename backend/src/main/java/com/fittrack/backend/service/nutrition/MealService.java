@@ -3,15 +3,18 @@ package com.fittrack.backend.service.nutrition;
 import com.fittrack.backend.dto.nutrition.AddMealItemRequest;
 import com.fittrack.backend.dto.nutrition.MealItemResponse;
 import com.fittrack.backend.dto.nutrition.MealResponse;
+import com.fittrack.backend.dto.nutrition.UpdateMealItemRequest;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.entity.nutrition.Meal;
 import com.fittrack.backend.entity.nutrition.MealItem;
+import com.fittrack.backend.entity.nutrition.MealKind;
 import com.fittrack.backend.entity.user.User;
 import com.fittrack.backend.repository.nutrition.FoodRepository;
 import com.fittrack.backend.repository.nutrition.MealItemRepository;
 import com.fittrack.backend.repository.nutrition.MealRepository;
 import com.fittrack.backend.repository.user.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,11 +37,7 @@ public class MealService {
 
     public List<MealResponse> getMealsForDate(Integer userId, LocalDate mealDate) {
 
-        long start = System.currentTimeMillis();
-
-        List<Meal> meals = mealRepository.findByUserIdAndMealDateWithItems(userId, mealDate);
-
-        long afterQuery = System.currentTimeMillis();
+        List<Meal> meals = mealRepository.findByUserIdAndMealDateWithItems(userId, mealDate, MealKind.DAILY);
 
         List<MealResponse> mealResponses = new ArrayList<>();
 
@@ -46,24 +45,15 @@ public class MealService {
             mealResponses.add(toResponse(meal));
         }
 
-        long end = System.currentTimeMillis();
-
-        System.out.println(
-                "DB query: " + (afterQuery - start) + " ms"
-        );
-
-        System.out.println(
-                "Mapping: " + (end - afterQuery) + " ms"
-        );
-
         return mealResponses;
     }
 
     public MealItemResponse addMealItem(Integer userId, AddMealItemRequest request) {
-        Meal meal = mealRepository.findByUserIdAndMealDateAndName(
+        Meal meal = mealRepository.findByUserIdAndMealDateAndNameAndKind(
                 userId,
                 request.mealDate(),
-                request.mealName()
+                request.mealName(),
+                MealKind.DAILY
         ).orElse(null);
 
         if (meal == null) {
@@ -72,7 +62,7 @@ public class MealService {
                             new IllegalArgumentException("User not found")
                     );
 
-            meal = new Meal(user, request.mealName(), request.mealDate());
+            meal = new Meal(user, request.mealName(), request.mealDate(), MealKind.DAILY);
             meal = mealRepository.save(meal);
         }
 
@@ -85,6 +75,92 @@ public class MealService {
         mealItem = mealItemRepository.save(mealItem);
 
         return toItemResponse(mealItem);
+    }
+
+    @Transactional
+    public MealItemResponse updateMealItem(Integer userId, Integer mealItemId, UpdateMealItemRequest request) {
+        MealItem mealItem = mealItemRepository.findById(mealItemId)
+                .orElseThrow(() -> new IllegalArgumentException("Meal Item not found"));
+
+        Meal currentMeal = mealItem.getMeal();
+
+        if (currentMeal.getKind() != MealKind.DAILY) {
+            throw new IllegalArgumentException(
+                    "Meal item does not belong to a daily meal."
+            );
+        }
+
+        if (!currentMeal.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("Meal item does not belong to user.");
+        }
+
+        if (request.quantityGrams() <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than zero.");
+        }
+
+        mealItem.setQuantityGrams(request.quantityGrams());
+
+        String requestedMealName = request.mealType();
+
+        // If we change Meal
+        if (!currentMeal.getName().equals(requestedMealName)) {
+            Meal targetMeal = findOrCreateMeal(
+                    currentMeal.getUser(),
+                    currentMeal.getMealDate(),
+                    requestedMealName
+            );
+
+            mealItem.setMeal(targetMeal);
+        }
+
+        MealItem savedItem = mealItemRepository.save(mealItem);
+
+        return toItemResponse(savedItem);
+    }
+
+    @Transactional
+    public void deleteMealItem(Integer userId, Integer mealItemId) {
+        MealItem mealItem = mealItemRepository.findById(mealItemId)
+                .orElseThrow(() ->  new IllegalArgumentException("Meal Item not found"));
+
+        Meal currentMeal = mealItem.getMeal();
+
+        if (currentMeal.getKind() != MealKind.DAILY) {
+            throw new IllegalArgumentException(
+                    "Meal item does not belong to a daily meal."
+            );
+        }
+
+        if (!mealItem.getMeal().getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException(
+                    "Meal item does not belong to user."
+            );
+        }
+
+        mealItemRepository.delete(mealItem);
+    }
+
+    public List<MealResponse> getMyMeals(Integer userId, String search) {
+        List<Meal> meals;
+
+        if (search == null || search.isBlank()) {
+            meals = mealRepository.findByUserIdAndKindWithItems(userId, MealKind.SAVED);
+        } else {
+            meals = mealRepository.findByUserIdAndKindAndNameContainingWithItems(userId, MealKind.SAVED, search.trim());
+        }
+
+        List<MealResponse> responses = new ArrayList<>();
+
+        for (Meal meal : meals) {
+            responses.add(toResponse(meal));
+        }
+
+        return responses;
+    }
+
+    private Meal findOrCreateMeal(User user, LocalDate mealDate, String mealName) {
+        return mealRepository.findByUserIdAndMealDateAndNameAndKind(user.getId(), mealDate, mealName, MealKind.DAILY)
+                .orElseGet(() -> mealRepository.save(new Meal(user, mealName, mealDate, MealKind.DAILY)));
     }
 
     public MealResponse toResponse(Meal meal) {
@@ -107,6 +183,7 @@ public class MealService {
     public MealItemResponse toItemResponse(MealItem mealItem) {
         return new MealItemResponse(
                 mealItem.getId(),
+                mealItem.getFood() != null ? mealItem.getFood().getId() : null,
                 mealItem.getFoodName(),
                 mealItem.getBrand(),
                 mealItem.getQuantityGrams(),

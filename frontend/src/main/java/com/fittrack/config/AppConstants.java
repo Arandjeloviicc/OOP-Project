@@ -20,9 +20,9 @@ public final class AppConstants {
         public static final String MEASUREMENTS = "";
         public static final String USER_PROFILE = "profile/user-profile-view.fxml";
 
-
         // PopUp Views
         public static final String ADD_FOOD = "nutrition/add-food-view.fxml";
+        public static final String MEAL_DETAILS = "nutrition/meal-details-view.fxml";
     }
 
     public static final class Components {
@@ -34,6 +34,8 @@ public final class AppConstants {
         public static final String FOOD_LIST_ITEM = "nutrition/components/food-list-item.fxml";
         public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
         public static final String MEAL_ITEM_DETAILS = "nutrition/components/meal-item-details.fxml";
+        public static final String MEAL_ITEM_CARD = "nutrition/components/meal-item-card.fxml";
+        public static final String CREATE_FOOD_CARD = "nutrition/components/create-food.fxml";
     }
 
     public static final class Validation {

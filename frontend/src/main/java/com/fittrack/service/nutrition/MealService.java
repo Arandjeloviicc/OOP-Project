@@ -31,6 +31,14 @@ public final class MealService {
         return new DailyNutritionTotals(calories, carbs, fat, protein);
     }
 
+    public static DailyNutritionTotals calculateMealNutritionTotals(MealResponse meal) {
+        if (meal == null || meal.items().isEmpty()) {
+            return new DailyNutritionTotals(0, 0, 0, 0);
+        }
+
+        return calculateDailyNutritionTotals(List.of(meal));
+    }
+
     public static int calculateMealCalories(MealResponse meal) {
         double totalCalories = 0;
 
@@ -40,5 +48,13 @@ public final class MealService {
         }
 
         return (int) Math.round(totalCalories);
+    }
+
+    public static double calculateFoodCalories(MealItemResponse mealItem) {
+        if (mealItem.servingSizeGrams() <= 0) {
+            return 0.0;
+        }
+
+        return mealItem.quantityGrams() / mealItem.servingSizeGrams() * mealItem.caloriesPerServing();
     }
 }

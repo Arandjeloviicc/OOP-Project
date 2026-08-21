@@ -139,4 +139,13 @@ public class MealItem {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    // Setters
+    public void setQuantityGrams(double quantityGrams) {
+        this.quantityGrams = quantityGrams;
+    }
+
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
 }

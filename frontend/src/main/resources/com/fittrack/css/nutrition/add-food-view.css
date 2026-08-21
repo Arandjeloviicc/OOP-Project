@@ -1,16 +1,12 @@
 @import "../theme.css";
 @import "../common/base-view.css";
 @import "../common/form-controls.css";
+@import "../common/overlay.css";
 @import "../common/scroll.css";
 
 /* ========================================================== */
 /* == ROOT ================================================== */
 /* ========================================================== */
-
-.add-food-root {
-    -fx-background-color: -app-modal-overlay;
-    -fx-alignment: center;
-}
 
 .add-food-list-container {
     -fx-alignment: center;
@@ -21,9 +17,6 @@
 /* ========================================================== */
 
 .add-food-dialog {
-    -fx-background-color: -app-background;
-    -fx-background-radius: 1.125em;
-
     -fx-pref-width: 53em;
     -fx-pref-height: 51em;
     -fx-max-width: 63em;
@@ -31,10 +24,6 @@
 
     -fx-padding: 2em;
     -fx-spacing: 1.3em;
-
-    -fx-border-color: -app-input-border;
-    -fx-border-width: 1px;
-    -fx-border-radius: 1.5em;
 }
 
 /* ========================================================== */
@@ -106,6 +95,8 @@
 
     -fx-padding: 0.65em 1.3em;
     -fx-cursor: hand;
+
+    -fx-alignment: center;
 }
 
 .add-food-tab:hover {
@@ -115,7 +106,56 @@
 
 .add-food-tab:selected {
     -fx-background-color: -app-primary;
-    -fx-text-fill: white;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == CREATE ITEM PANEL ===================================== */
+/* ========================================================== */
+
+.add-food-create-panel {
+    -fx-spacing: 0.15em;
+    -fx-padding: 0.7em;
+
+    -fx-background-color: -app-control-background;
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: -app-border;
+    -fx-border-radius: 0.7em;
+
+    -fx-cursor: hand;
+}
+
+.add-food-create-icon {
+    -fx-font-size: 1.4em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-primary-light;
+}
+
+.add-food-create-text {
+    -fx-font-size: 1em;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* Create Food */
+.add-food-create-panel.create-food {
+    -fx-border-color: -app-primary;
+}
+
+.add-food-create-panel.create-food .add-food-create-icon,
+.add-food-create-panel.create-food .add-food-create-text {
+    -fx-text-fill: -app-primary-light;
+}
+
+
+/* Create Meal */
+.add-food-create-panel.create-meal {
+    -fx-border-color: -app-nutrition-fat;
+}
+
+.add-food-create-panel.create-meal .add-food-create-icon,
+.add-food-create-panel.create-meal .add-food-create-text {
+    -fx-text-fill: -app-nutrition-fat;
 }
 
 /* ========================================================== */
@@ -141,21 +181,27 @@
 }
 
 /* ========================================================== */
-/* == NARROW ================================================ */
+/* == CREATE ITEM =========================================== */
 /* ========================================================== */
 
-.add-food-root:narrow {
-    -fx-background-color: -app-background;
-    -fx-padding: 0;
+.create-item-container {
+    -fx-alignment: center;
 }
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
 
 .add-food-root:narrow .add-food-list-container {
     -fx-alignment: center;
 }
 
-.add-food-root:narrow .add-food-dialog,
+.add-food-root:narrow .add-food-dialog {
+    -fx-padding: 1.65em;
+}
+
 .add-food-root:narrow .meal-item-details {
-    -fx-max-width: Infinity;
+    -fx-max-width: 43em;
     -fx-max-height: Infinity;
 
     -fx-background-radius: 0;
@@ -169,29 +215,12 @@
     -fx-alignment: center;
 }
 
-.add-food-root:narrow .meal-item-details {
-    -fx-max-width: 43em;
-}
-
 /* ========================================================== */
 /* == SHORT ================================================= */
 /* ========================================================== */
 
-.add-food-root:short {
-    -fx-background-color: -app-background;
-}
-
-.add-food-root:short .add-food-dialog,
 .add-food-root:short .meal-item-details {
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-border-width: 0;
-}
-
-/* ========================================================== */
-/* == NARROW + SHORT ======================================== */
-/* ========================================================== */
-
-.add-food-root:narrow:short {
-    -fx-background-color: -app-background;
 }

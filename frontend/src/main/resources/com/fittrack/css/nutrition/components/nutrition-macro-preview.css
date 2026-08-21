@@ -34,7 +34,7 @@
 
 .macro-preview-calories-unit {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-size: 0.75em;
+    -fx-font-size: 1em;
     -fx-font-weight: 600;
 }
 
@@ -63,25 +63,37 @@
 /* ========================================================== */
 
 .macro-preview-legend {
-    -fx-spacing: 0.625em;
-    -fx-fill-width: true;
+    -fx-alignment: center;
+    -fx-spacing: 1em;
 
-    -fx-alignment: center-left;
+    -fx-min-height: 6.875em;
+    -fx-pref-height: 6.875em;
+
+    -fx-padding: 0.25em 0 0 0;
 }
 
-.macro-preview-row {
-    -fx-alignment: center-left;
-    -fx-spacing: 0.5em;
+.macro-preview-column {
+    -fx-alignment: center;
+    -fx-spacing: 0.2em;
+
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.macro-preview-value-row {
+    -fx-alignment: center;
+    -fx-spacing: 0.4em;
 }
 
 .macro-preview-name {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-size: 0.875em;
+    -fx-font-size: 1.05em;
+    -fx-font-weight: 600;
 }
 
 .macro-preview-value {
     -fx-text-fill: -app-text-primary;
-    -fx-font-size: 0.875em;
+    -fx-font-size: 1.35em;
     -fx-font-weight: bold;
 }
 
@@ -95,4 +107,24 @@
 
 .macro-dot-protein {
     -fx-fill: -app-nutrition-protein;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.macro-preview-card:narrow .macro-preview-calories-value {
+    -fx-font-size: 1.4em;
+}
+
+.macro-preview-card:narrow .macro-preview-calories-unit {
+    -fx-font-size: 0.9em;
+}
+
+.macro-preview-card:narrow .macro-preview-value {
+    -fx-font-size: 1.1em;
+}
+
+.macro-preview-card.narrow .macro-preview-name {
+    -fx-font-size: 0.9em;
 }

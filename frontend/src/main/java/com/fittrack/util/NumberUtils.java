@@ -26,4 +26,12 @@ public final class NumberUtils {
         formatter.setMaximumFractionDigits(0);
         return formatter.format(value);
     }
+
+    public static String formatDecimal(double value) {
+        if (value == Math.rint(value)) {
+            return String.valueOf((long) value);
+        }
+
+        return String.valueOf(value);
+    }
 }

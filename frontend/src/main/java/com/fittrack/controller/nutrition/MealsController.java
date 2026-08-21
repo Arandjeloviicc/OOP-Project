@@ -444,11 +444,20 @@ public class MealsController extends BaseController implements Initializable, Re
 
             LoadedComponent<AddFoodController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_FOOD);
 
-            addFood.controller().setContext(MealType.fromName(title), datePicker.getValue());
+            addFood.controller().setData(MealType.fromName(title), selectedDate);
 
             addFood.controller().setOnCloseAction(() -> {
                 invalidateMealsCache(selectedDate);
                 loadMealsForDate();
+            });
+
+            addFood.controller().setOnBackAction(changed -> {
+                OverlayManager.close();
+
+                if (changed) {
+                    invalidateMealsCache(selectedDate);
+                    loadMealsForDate();
+                }
             });
 
             OverlayManager.show(addFood.root());
@@ -468,6 +477,13 @@ public class MealsController extends BaseController implements Initializable, Re
     }
 
     private void loadMealCard(String mealName, MealResponse meal, LoadedComponent<MealCardController> card) {
+        LocalDate selectedDate = datePicker.getValue();
+        MealType mealType = MealType.fromName(mealName);
+
+        card.controller().setOnOpenAction(() -> {
+            openMealDetails(mealType, selectedDate, meal);
+        });
+
         if (meal == null || meal.items().isEmpty()) {
             card.controller().setData(
                     mealName,
@@ -489,6 +505,20 @@ public class MealsController extends BaseController implements Initializable, Re
                 otherFoodsCount,
                 calories
         );
+    }
+
+    // ── Meal Details Helpers ─────────────────────────────────────────────────
+    private void openMealDetails(MealType mealType, LocalDate mealDate, MealResponse meal) {
+        LoadedComponent<MealDetailsController> details = FxmlComponentLoader.load(AppConstants.Views.MEAL_DETAILS);
+
+        details.controller().setData(mealType, mealDate, meal);
+
+        details.controller().setOnCloseAction(() -> {
+            invalidateMealsCache(mealDate);
+            loadMealsForDate();
+        });
+
+        OverlayManager.show(details.root());
     }
 
     // ── Cache Helpers ─────────────────────────────────────────────────

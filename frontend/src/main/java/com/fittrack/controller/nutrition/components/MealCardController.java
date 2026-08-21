@@ -1,11 +1,14 @@
 package com.fittrack.controller.nutrition.components;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import javafx.scene.input.MouseEvent;
 
 public class MealCardController {
 
@@ -22,16 +25,41 @@ public class MealCardController {
 
     // Button Action
     private Runnable onLogAction;
+    private Runnable onOpenAction;
+
+    // ── Setters ─────────────────────────────────────────────────
+    public void setIcon(Image icon) {
+        mealIcon.setImage(icon);
+    }
+
+    public void setOnLogAction(Runnable action) {
+        this.onLogAction = action;
+    }
+
+    public void setOnOpenAction(Runnable onOpenAction) {
+        this.onOpenAction = onOpenAction;
+    }
 
     // ── Button Actions ─────────────────────────────────────────────────
     @FXML
-    public void handleLog() {
+    private void handleLog() {
         if (onLogAction != null) {
             onLogAction.run();
         }
     }
 
-    // ── Helpers ─────────────────────────────────────────────────
+    @FXML
+    private void handleOpen(MouseEvent event) {
+        if (isClickOnButton(event)) {
+            return;
+        }
+
+        if (onOpenAction != null) {
+            onOpenAction.run();
+        }
+    }
+
+    // ── Set Data ─────────────────────────────────────────────────
     public void setData(String title, String firstFood, Integer otherFoodsCount, double calories) {
         titleLabel.setText(title);
 
@@ -52,11 +80,18 @@ public class MealCardController {
         }
     }
 
-    public void setIcon(Image icon) {
-        mealIcon.setImage(icon);
-    }
+    // ── Button Helpers ─────────────────────────────────────────────────
+    private boolean isClickOnButton(MouseEvent event) {
+        Node node = (Node) event.getTarget();
 
-    public void setOnLogAction(Runnable action) {
-        this.onLogAction = action;
+        while (node != null) {
+            if (node instanceof Button) {
+                return true;
+            }
+
+            node = node.getParent();
+        }
+
+        return false;
     }
 }

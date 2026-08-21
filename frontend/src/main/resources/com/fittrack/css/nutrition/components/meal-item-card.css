@@ -1,0 +1,84 @@
+@import "../../theme.css";
+
+/* ========================================================== */
+/* == MEAL ITEM CARD ======================================== */
+/* ========================================================== */
+
+.meal-item-card {
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.75em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.75em;
+
+    -fx-padding: 0.75em 0.875em;
+    -fx-spacing: 0.75em;
+
+    -fx-min-height: 4.8em;
+
+    -fx-cursor: default;
+}
+
+.meal-item-card:hover {
+    -fx-background-color: -app-control-background-soft;
+    -fx-border-color: -app-border;
+}
+
+.meal-item-card-content {
+    -fx-spacing: 0.18em;
+}
+
+/* ========================================================== */
+/* == TEXT ================================================== */
+/* ========================================================== */
+
+.meal-item-card-title {
+    -fx-font-size: 1.2em;
+    -fx-font-weight: 700;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-item-card-quantity {
+    -fx-font-size: 1em;
+    -fx-text-fill: -app-text-secondary;
+}
+
+.meal-item-card-calories {
+    -fx-font-size: 1em;
+    -fx-text-fill: -app-text-muted;
+}
+
+/* ========================================================== */
+/* == OPEN BUTTON =========================================== */
+/* ========================================================== */
+
+.meal-item-card-open {
+    -fx-background-color: -app-hover;
+    -fx-background-radius: 0.5625em;
+
+    -fx-text-fill: -app-primary-light;
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
+
+    -fx-min-width: 2.25em;
+    -fx-pref-width: 2.25em;
+    -fx-max-width: 2.25em;
+
+    -fx-min-height: 2.25em;
+    -fx-pref-height: 2.25em;
+    -fx-max-height: 2.25em;
+
+    -fx-padding: 0;
+
+    -fx-cursor: hand;
+}
+
+.meal-item-card-open:hover {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-item-card-open:pressed {
+    -fx-opacity: 0.85;
+}

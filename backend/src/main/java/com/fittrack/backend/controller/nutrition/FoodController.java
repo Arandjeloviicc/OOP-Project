@@ -40,8 +40,8 @@ public class FoodController {
     }
 
     @GetMapping("/mine/{userId}")
-    public List<FoodResponse> getMyFoods(@PathVariable Integer userId) {
-        List<Food> foods = foodService.getFoodsCreatedByUser(userId);
+    public List<FoodResponse> getMyFoods(@PathVariable Integer userId, @RequestParam(defaultValue = "") String search) {
+        List<Food> foods = foodService.getFoodsCreatedByUser(userId, search);
 
         List<FoodResponse> responses = new ArrayList<>();
 

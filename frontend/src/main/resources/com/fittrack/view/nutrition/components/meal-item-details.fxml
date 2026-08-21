@@ -6,9 +6,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.Region?>
-
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+
 <VBox xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fittrack.controller.nutrition.components.MealItemDetailsController"
@@ -88,7 +88,7 @@
 
     </VBox>
 
-    <!-- Actions -->
+    <!-- Add/Update Button -->
     <GridPane styleClass="meal-item-details-actions">
 
         <columnConstraints>
@@ -111,5 +111,14 @@
                 GridPane.columnIndex="1"/>
 
     </GridPane>
+
+    <!-- Remove Button -->
+    <Button fx:id="removeButton"
+            text="Remove Food"
+            maxWidth="Infinity"
+            visible="false"
+            managed="false"
+            onAction="#handleRemove"
+            styleClass="meal-item-details-action-button, meal-item-details-remove-button"/>
 
 </VBox>
