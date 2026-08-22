@@ -36,6 +36,7 @@ public final class AppConstants {
         public static final String MEAL_ITEM_DETAILS = "nutrition/components/meal-item-details.fxml";
         public static final String MEAL_ITEM_CARD = "nutrition/components/meal-item-card.fxml";
         public static final String CREATE_FOOD_CARD = "nutrition/components/create-food.fxml";
+        public static final String MEAL_EDITOR = "nutrition/components/meal-editor.fxml";
     }
 
     public static final class Validation {
@@ -226,5 +227,31 @@ public final class AppConstants {
 
         // Meals
         public static final String INVALID_SERVINGS_MESSAGE = "Enter a number of servings greater than 0.";
+
+        // Create Food
+        public static final String INVALID_FOOD_NAME_MESSAGE = "Enter a food name.";
+        public static final String INVALID_FOOD_SERVING_SIZE_MESSAGE = "Enter a serving size greater than 0.";
+        public static final String INVALID_FOOD_CALORIES_MESSAGE = "Enter a valid number of calories.";
+        public static final String INVALID_FOOD_CARBS_MESSAGE = "Enter a valid amount of carbs.";
+        public static final String INVALID_FOOD_FAT_MESSAGE = "Enter a valid amount of fat.";
+        public static final String INVALID_FOOD_PROTEIN_MESSAGE = "Enter a valid amount of protein.";
+        public static final String INVALID_MACROS_EXCEED_SERVING_MESSAGE = "Carbs, fat, and protein combined cannot exceed the serving size.";
+        public static final String INVALID_CALORIES_MISMATCH_MESSAGE = "Entered calories don't match the entered macronutrients.";
+
+        // Helpers
+        public static final String HELPER_FOOD_NAME_MESSAGE = "The name of the food or product.";
+        public static final String HELPER_BRAND_MESSAGE = "The brand of the food or product.";
+        public static final String HELPER_FOOD_SERVING_SIZE_MESSAGE = "Serving size in grams.";
+        public static final String HELPER_FOOD_CALORIES_MESSAGE = "Calories per serving.";
+        public static final String HELPER_FOOD_CARBS_MESSAGE = "Carbohydrates per serving, in grams.";
+        public static final String HELPER_FOOD_FAT_MESSAGE = "Fat per serving, in grams.";
+        public static final String HELPER_FOOD_PROTEIN_MESSAGE = "Protein per serving, in grams.";
+
+        // Create Food
+        public static final String INVALID_MEAL_NAME_MESSAGE = "Enter a meal name.";
+
+        // Helpers
+        public static final String HELPER_MEAL_NAME_MESSAGE = "The name of the meal.";
+
     }
 }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.components.MealEditorController"
+           stylesheets="@../../../css/nutrition/components/meal-editor.css"
+           styleClass="popup-host, meal-editor-root">
+
+    <!-- Editor -->
+    <VBox fx:id="editorContainer"
+          styleClass="popup-dialog, meal-editor-dialog">
+
+        <!-- Header -->
+        <HBox styleClass="meal-editor-header">
+
+            <VBox spacing="0.2">
+                <Label text="My Meal"
+                       styleClass="meal-editor-caption"/>
+
+                <Label fx:id="titleLabel"
+                       text="Create Meal"
+                       styleClass="meal-editor-title"/>
+            </VBox>
+
+        </HBox>
+
+        <!-- Name -->
+        <VBox styleClass="field-group">
+
+            <Label text="Name"
+                   styleClass="field-label"/>
+
+            <TextField fx:id="nameField"
+                       promptText="e.g. Post Workout"
+                       styleClass="input-field, text-field"/>
+
+            <Label fx:id="nameMessage"
+                   styleClass="helper-label"
+                   wrapText="true"
+                   minHeight="-Infinity"
+                   maxHeight="Infinity"
+                   maxWidth="Infinity"/>
+
+        </VBox>
+
+        <!-- Macro Preview -->
+        <VBox fx:id="macroPreviewContainer"
+              styleClass="meal-editor-macro-container"/>
+
+        <!-- Foods Header -->
+        <HBox styleClass="meal-editor-section-header">
+
+            <Label text="Foods"
+                   styleClass="meal-editor-section-title"/>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="itemCountLabel"
+                   text="0 items"
+                   styleClass="meal-editor-item-count"/>
+
+        </HBox>
+
+        <!-- Foods -->
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    VBox.vgrow="ALWAYS"
+                    styleClass="app-scroll, meal-editor-scroll">
+
+            <VBox fx:id="itemsContainer"
+                  styleClass="meal-editor-items"/>
+
+        </ScrollPane>
+
+        <!-- Add Food -->
+        <Button text="+  Add food"
+                maxWidth="Infinity"
+                onAction="#handleAddFood"
+                styleClass="action-btn, meal-editor-add-button"/>
+
+        <!-- Cancel / Create or Save -->
+        <GridPane styleClass="meal-editor-actions">
+
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS"
+                                   minWidth="0"/>
+
+                <ColumnConstraints hgrow="ALWAYS"
+                                   minWidth="0"/>
+            </columnConstraints>
+
+            <Button text="Cancel"
+                    maxWidth="Infinity"
+                    onAction="#handleCancel"
+                    styleClass="back-btn, meal-editor-action-button"
+                    GridPane.columnIndex="0"/>
+
+            <Button fx:id="saveButton"
+                    text="Create meal"
+                    maxWidth="Infinity"
+                    visible="false"
+                    onAction="#handleSave"
+                    styleClass="action-btn, meal-editor-action-button"
+                    GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+        <!-- Delete whole saved meal - edit mode only -->
+        <Button fx:id="deleteMealButton"
+                text="Delete meal"
+                maxWidth="Infinity"
+                visible="false"
+                managed="false"
+                onAction="#handleDeleteMeal"
+                styleClass="meal-editor-action-button, meal-editor-delete-button"/>
+
+    </VBox>
+
+    <!-- Edit one draft MealItem -->
+    <StackPane fx:id="itemDetailsContainer"
+               visible="false"
+               managed="false"
+               styleClass="popup-host, meal-editor-item-details-container"/>
+
+</StackPane>

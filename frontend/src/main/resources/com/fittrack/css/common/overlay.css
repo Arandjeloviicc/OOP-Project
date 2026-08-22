@@ -10,6 +10,14 @@
 }
 
 /* ========================================================== */
+/* == POPUP HOST ============================================ */
+/* ========================================================== */
+
+.popup-host {
+    -fx-alignment: center;
+}
+
+/* ========================================================== */
 /* == POPUP DIALOG ========================================== */
 /* ========================================================== */
 
@@ -20,6 +28,8 @@
     -fx-border-color: -app-input-border;
     -fx-border-width: 1px;
     -fx-border-radius: 1.125em;
+
+    -fx-padding: 2em;
 }
 
 /* ========================================================== */
@@ -31,6 +41,10 @@
     -fx-padding: 0;
 }
 
+.popup-root:narrow .popup-host {
+    -fx-alignment: top-center;
+}
+
 .popup-root:narrow .popup-dialog {
     -fx-max-width: Infinity;
     -fx-max-height: Infinity;
@@ -38,6 +52,8 @@
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-border-width: 0;
+
+    -fx-padding: 1.65em;
 }
 
 /* ========================================================== */
@@ -46,9 +62,28 @@
 
 .popup-root:short {
     -fx-background-color: -app-background;
+    -fx-padding: 0;
+}
+
+.popup-root:short .popup-host {
+    -fx-alignment: top-center;
 }
 
 .popup-root:short .popup-dialog {
+    -fx-max-height: Infinity;
+
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+}
+
+.popup-root:short .popup-host {
+    -fx-alignment: top-center;
+}
+
+.popup-root:short .popup-dialog {
+    -fx-max-height: Infinity;
+
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-border-width: 0;

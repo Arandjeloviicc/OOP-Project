@@ -76,6 +76,20 @@ public class MealItem {
         this.fatPerServing = food.getFatPerServing();
     }
 
+    public MealItem(Meal meal, MealItem sourceItem) {
+        this.meal = meal;
+        this.food = sourceItem.getFood();
+        this.quantityGrams = sourceItem.getQuantityGrams();
+
+        this.foodName = sourceItem.getFoodName();
+        this.brand = sourceItem.getBrand();
+        this.servingSizeGrams = sourceItem.getServingSizeGrams();
+        this.caloriesPerServing = sourceItem.getCaloriesPerServing();
+        this.proteinPerServing = sourceItem.getProteinPerServing();
+        this.carbsPerServing = sourceItem.getCarbsPerServing();
+        this.fatPerServing = sourceItem.getFatPerServing();
+    }
+
     // Default
     @PrePersist
     private void prePersist() {

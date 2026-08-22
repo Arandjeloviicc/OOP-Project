@@ -5,14 +5,6 @@
 @import "../common/scroll.css";
 
 /* ========================================================== */
-/* == ROOT ================================================== */
-/* ========================================================== */
-
-.add-food-list-container {
-    -fx-alignment: center;
-}
-
-/* ========================================================== */
 /* == FOOD LIST DIALOG ====================================== */
 /* ========================================================== */
 
@@ -147,7 +139,6 @@
     -fx-text-fill: -app-primary-light;
 }
 
-
 /* Create Meal */
 .add-food-create-panel.create-meal {
     -fx-border-color: -app-nutrition-fat;
@@ -170,57 +161,4 @@
 .add-food-placeholder {
     -fx-text-fill: -app-text-secondary;
     -fx-padding: 1.5em 0.35em;
-}
-
-/* ========================================================== */
-/* == DETAILS =============================================== */
-/* ========================================================== */
-
-.add-food-details-container {
-    -fx-alignment: center;
-}
-
-/* ========================================================== */
-/* == CREATE ITEM =========================================== */
-/* ========================================================== */
-
-.create-item-container {
-    -fx-alignment: center;
-}
-
-/* ========================================================== */
-/* == NARROW ================================================ */
-/* ========================================================== */
-
-.add-food-root:narrow .add-food-list-container {
-    -fx-alignment: center;
-}
-
-.add-food-root:narrow .add-food-dialog {
-    -fx-padding: 1.65em;
-}
-
-.add-food-root:narrow .meal-item-details {
-    -fx-max-width: 43em;
-    -fx-max-height: Infinity;
-
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-border-width: 0;
-
-    -fx-padding: 1.65em;
-}
-
-.add-food-root:narrow .add-food-details-container {
-    -fx-alignment: center;
-}
-
-/* ========================================================== */
-/* == SHORT ================================================= */
-/* ========================================================== */
-
-.add-food-root:short .meal-item-details {
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-border-width: 0;
 }

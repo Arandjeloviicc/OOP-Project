@@ -1,4 +1,4 @@
-package com.fittrack.dto.nutrition;
+package com.fittrack.backend.dto.nutrition.meal.item;
 
 public record MealItemResponse(
         Integer id,

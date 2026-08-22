@@ -8,6 +8,7 @@ public final class FitnessInputValidator {
 
     private FitnessInputValidator() {}
 
+    // ── Calculator Helpers ─────────────────────────────────────────────────
     private static boolean isDecimalMeasurementValid(String value, double min, double max) {
         if (value == null || !value.trim().matches("^\\d{1,3}([.,]\\d{1,2})?$")) {
             return false;
@@ -58,5 +59,38 @@ public final class FitnessInputValidator {
 
     public static boolean isNeckWaistRelationValid(double neck, double waist) {
         return neck < waist;
+    }
+
+    // ── Meal Helpers ─────────────────────────────────────────────────
+    private static boolean isFoodDecimalValid(String value) {
+        return value != null
+                && value.trim().matches("^\\d{1,4}([.,]\\d{1,2})?$");
+    }
+
+    public static boolean isPositiveFoodDecimal(String value) {
+        return isFoodDecimalValid(value)
+                && NumberUtils.parseDecimal(value) > 0;
+    }
+
+    public static boolean isNonNegativeFoodDecimal(String value) {
+        return isFoodDecimalValid(value)
+                && NumberUtils.parseDecimal(value) >= 0;
+    }
+
+    public static boolean areMacrosWithinServingSize(double servingSize, double carbs, double fat, double protein) {
+        return carbs + fat + protein <= servingSize;
+    }
+
+    public static boolean areCaloriesReasonable(double calories, double carbs, double fat, double protein) {
+        double calculatedCalories =
+                carbs * 4
+                        + protein * 4
+                        + fat * 9;
+
+        double difference = Math.abs(calories - calculatedCalories);
+
+        double tolerance = Math.max(10, calculatedCalories * 0.15);
+
+        return difference <= tolerance;
     }
 }

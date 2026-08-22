@@ -1,7 +1,7 @@
 package com.fittrack.backend.service.nutrition;
 
-import com.fittrack.backend.dto.nutrition.CreateFoodRequest;
-import com.fittrack.backend.dto.nutrition.FoodResponse;
+import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.entity.user.User;
 import com.fittrack.backend.repository.nutrition.FoodRepository;
@@ -37,20 +37,20 @@ public class FoodService {
     }
 
     public Food createFood(CreateFoodRequest request, User createdByUser) {
-        String brand = request.getBrand();
+        String brand = request.brand();
 
         if (brand != null && brand.isBlank()) {
             brand = null;
         }
 
         Food food = new Food(
-                request.getName().trim(),
+                request.name().trim(),
                 brand != null ? brand.trim() : null,
-                request.getServingSizeGrams(),
-                request.getCaloriesPerServing(),
-                request.getProteinPerServing(),
-                request.getCarbsPerServing(),
-                request.getFatPerServing(),
+                request.servingSizeGrams(),
+                request.caloriesPerServing(),
+                request.proteinPerServing(),
+                request.carbsPerServing(),
+                request.fatPerServing(),
                 createdByUser
         );
 

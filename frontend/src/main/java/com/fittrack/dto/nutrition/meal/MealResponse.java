@@ -1,4 +1,6 @@
-package com.fittrack.dto.nutrition;
+package com.fittrack.dto.nutrition.meal;
+
+import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 
 import java.time.LocalDate;
 import java.util.List;

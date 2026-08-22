@@ -1,10 +1,11 @@
 package com.fittrack.api.nutrition;
 
 import com.fittrack.api.common.BaseApi;
-import com.fittrack.dto.nutrition.AddMealItemRequest;
-import com.fittrack.dto.nutrition.MealItemResponse;
-import com.fittrack.dto.nutrition.MealResponse;
-import com.fittrack.dto.nutrition.UpdateMealItemRequest;
+import com.fittrack.dto.nutrition.meal.CreateMealRequest;
+import com.fittrack.dto.nutrition.meal.item.AddMealItemRequest;
+import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
+import com.fittrack.dto.nutrition.meal.MealResponse;
+import com.fittrack.dto.nutrition.meal.item.UpdateMealItemRequest;
 import tools.jackson.core.type.TypeReference;
 
 import java.io.IOException;
@@ -228,6 +229,50 @@ public class MealApi extends BaseApi {
 
             throw new IllegalStateException(
                     "Meal request was interrupted.",
+                    exception
+            );
+        }
+    }
+
+    public MealResponse createMyMeal(Integer userId, CreateMealRequest requestData) {
+        try {
+            String url = API_URL + "/mine/" + userId;
+
+            String requestBody = objectMapper.writeValueAsString(requestData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() != 201) {
+                throw new IOException(
+                        "Failed to create meal. Status: "
+                                + response.statusCode()
+                );
+            }
+
+            return objectMapper.readValue(
+                    response.body(),
+                    MealResponse.class
+            );
+
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Could not communicate with the FitTrack server.",
+                    exception
+            );
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+
+            throw new IllegalStateException(
+                    "Meal creation request was interrupted.",
                     exception
             );
         }

@@ -16,12 +16,11 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fittrack.controller.nutrition.AddFoodController"
            stylesheets="@../../css/nutrition/add-food-view.css"
-           styleClass="popup-root, add-food-root">
+           styleClass="popup-root">
 
     <!-- Food list -->
     <VBox fx:id="foodListContainer"
-          alignment="CENTER"
-          styleClass="add-food-list-container">
+          styleClass="popup-host">
 
         <VBox fx:id="dialogContainer"
               styleClass="popup-dialog, add-food-dialog">
@@ -124,23 +123,15 @@
     </VBox>
 
     <!-- Add food to a meal -->
-    <VBox fx:id="foodDetailsContainer"
+    <StackPane fx:id="foodDetailsContainer"
           visible="false"
           managed="false"
-          styleClass="add-food-details-container">
-
-        <!-- Add Food Card -->
-
-    </VBox>
+          styleClass="popup-host"/>
 
     <!-- Create item -->
-    <VBox fx:id="createItemContainer"
-          visible="false"
-          managed="false"
-          styleClass="create-item-container">
-
-        <!-- Add Food Card -->
-
-    </VBox>
+    <StackPane fx:id="createItemContainer"
+               visible="false"
+               managed="false"
+               styleClass="popup-host"/>
 
 </StackPane>

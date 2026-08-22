@@ -1,7 +1,7 @@
 package com.fittrack.service.nutrition;
 
-import com.fittrack.dto.nutrition.MealItemResponse;
-import com.fittrack.dto.nutrition.MealResponse;
+import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
+import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 
 import java.util.List;

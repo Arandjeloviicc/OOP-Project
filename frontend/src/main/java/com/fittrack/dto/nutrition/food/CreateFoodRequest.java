@@ -1,14 +1,11 @@
-package com.fittrack.backend.dto.nutrition;
+package com.fittrack.dto.nutrition.food;
 
-public record FoodResponse(
-        Integer id,
+public record CreateFoodRequest(
         String name,
         String brand,
         double servingSizeGrams,
         double caloriesPerServing,
         double proteinPerServing,
         double carbsPerServing,
-        double fatPerServing,
-        Integer createdByUserId
-) {
-}
+        double fatPerServing
+) {}

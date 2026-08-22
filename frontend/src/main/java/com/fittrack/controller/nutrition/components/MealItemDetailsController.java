@@ -2,8 +2,9 @@ package com.fittrack.controller.nutrition.components;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
-import com.fittrack.dto.nutrition.FoodResponse;
-import com.fittrack.dto.nutrition.MealItemResponse;
+import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
+import com.fittrack.dto.nutrition.food.FoodResponse;
+import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
@@ -32,8 +33,11 @@ public class MealItemDetailsController extends FormController implements Initial
     @Override
     protected Logger getLogger() { return log; }
 
+    @FXML private VBox rootLayout;
+
     @FXML private Label captionLabel;
     @FXML private Label selectedFoodTitleLabel;
+    @FXML private VBox mealContainer;
     @FXML private ComboBox<MealType> mealComboBox;
     @FXML private HBox servingRow;
     @FXML private VBox servingSizeContainer;
@@ -48,6 +52,7 @@ public class MealItemDetailsController extends FormController implements Initial
     // Helpers
     private FoodResponse selectedFood;
     private MealItemResponse selectedMealItem;
+    private MealItemDraft selectedDraftItem;
     private NutritionMacroPreviewController nutritionMacroPreviewController;
 
     private Runnable onCancelAction;
@@ -67,9 +72,11 @@ public class MealItemDetailsController extends FormController implements Initial
     public void setData(FoodResponse food, MealType mealType) {
         selectedFood = food;
         selectedMealItem = null;
+        selectedDraftItem = null;
 
         selectedFoodTitleLabel.setText(food.name());
 
+        setVisible(mealContainer, true);
         mealComboBox.getItems().setAll(MealType.values());
         mealComboBox.setValue(mealType);
 
@@ -90,9 +97,11 @@ public class MealItemDetailsController extends FormController implements Initial
     public void setData(MealItemResponse mealItem, MealType mealType) {
         selectedMealItem = mealItem;
         selectedFood = null;
+        selectedDraftItem = null;
 
         selectedFoodTitleLabel.setText(mealItem.foodName());
 
+        setVisible(mealContainer, true);
         mealComboBox.getItems().setAll(MealType.values());
         mealComboBox.setValue(mealType);
 
@@ -109,6 +118,51 @@ public class MealItemDetailsController extends FormController implements Initial
         setVisible(removeButton, true);
 
         // Macro Preview
+        loadNutritionMacroPreview();
+    }
+
+    public void setData(MealItemDraft item) {
+        selectedDraftItem = item;
+        selectedFood = null;
+        selectedMealItem = null;
+
+        selectedFoodTitleLabel.setText(item.foodName());
+
+        setVisible(mealContainer, false);
+
+        servingSizeComboBox.getItems().setAll(
+                Math.round(item.servingSizeGrams()) + " g"
+        );
+
+        servingSizeComboBox.getSelectionModel().selectFirst();
+
+        double numberOfServings = item.quantityGrams() / item.servingSizeGrams();
+
+        servingsField.setText(NumberUtils.formatDecimal(numberOfServings));
+
+        setVisible(removeButton, true);
+
+        loadNutritionMacroPreview();
+    }
+
+    public void setDraftData(FoodResponse food) {
+        selectedFood = food;
+        selectedMealItem = null;
+        selectedDraftItem = null;
+
+        selectedFoodTitleLabel.setText(food.name());
+
+        servingSizeComboBox.getItems().setAll(
+                Math.round(food.servingSizeGrams()) + " g"
+        );
+
+        servingSizeComboBox.getSelectionModel().selectFirst();
+
+        servingsField.setText("1");
+
+        setVisible(mealContainer, false);
+        setVisible(removeButton, false);
+
         loadNutritionMacroPreview();
     }
 
@@ -228,7 +282,9 @@ public class MealItemDetailsController extends FormController implements Initial
     }
 
     private void updateNutrientsInfo() {
-        if ((selectedFood == null && selectedMealItem == null)
+        if ((selectedFood == null
+                && selectedMealItem == null
+                && selectedDraftItem == null)
                 || nutritionMacroPreviewController == null
                 || servingSizeComboBox.getValue() == null) {
             return;
@@ -259,12 +315,20 @@ public class MealItemDetailsController extends FormController implements Initial
             carbsPerServing = selectedFood.carbsPerServing();
             fatPerServing = selectedFood.fatPerServing();
             proteinPerServing = selectedFood.proteinPerServing();
-        } else {
+
+        } else if (selectedMealItem != null) {
             baseServingSize = selectedMealItem.servingSizeGrams();
             caloriesPerServing = selectedMealItem.caloriesPerServing();
             carbsPerServing = selectedMealItem.carbsPerServing();
             fatPerServing = selectedMealItem.fatPerServing();
             proteinPerServing = selectedMealItem.proteinPerServing();
+
+        } else {
+            baseServingSize = selectedDraftItem.servingSizeGrams();
+            caloriesPerServing = selectedDraftItem.caloriesPerServing();
+            carbsPerServing = selectedDraftItem.carbsPerServing();
+            fatPerServing = selectedDraftItem.fatPerServing();
+            proteinPerServing = selectedDraftItem.proteinPerServing();
         }
 
         if (baseServingSize <= 0) {
@@ -294,7 +358,11 @@ public class MealItemDetailsController extends FormController implements Initial
             return selectedFood.servingSizeGrams();
         }
 
-        return selectedMealItem.servingSizeGrams();
+        if (selectedMealItem != null) {
+            return selectedMealItem.servingSizeGrams();
+        }
+
+        return selectedDraftItem.servingSizeGrams();
     }
 
     private void showServingsMessage() {

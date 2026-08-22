@@ -1,6 +1,7 @@
 @import "../../theme.css";
 @import "../../common/base-view.css";
 @import "../../common/form-controls.css";
+@import "../../common/overlay.css";
 @import "../../common/scroll.css";
 
 /* ========================================================== */
@@ -8,23 +9,21 @@
 /* ========================================================== */
 
 .create-food-root {
-    -fx-spacing: 1em;
-    -fx-padding: 1.4em;
-
-    -fx-pref-width: 40em;
-    -fx-min-width: 0em;
     -fx-max-width: 40em;
+    -fx-max-height: Infinity;
 
-    -fx-pref-height: 60em;
-    -fx-min-height: 0em;
-    -fx-max-height: 60em;
-
-    -fx-background-color: -app-background;
-    -fx-background-radius: 1em;
+    -fx-spacing: 1.15em;
 }
 
 .create-food-content {
     -fx-spacing: 1em;
+    -fx-padding: 0 0.5em 0 0;
+}
+
+.create-food-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
 }
 
 .create-food-header {
@@ -32,7 +31,7 @@
 }
 
 .create-food-title {
-    -fx-font-size: 1.5em;
+    -fx-font-size: 1.8em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
 }
@@ -49,6 +48,13 @@
 }
 
 .create-food-field-row .field-group {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.create-food-field-row .helper-label {
+    -fx-min-width: 0;
     -fx-max-width: Infinity;
 }
 

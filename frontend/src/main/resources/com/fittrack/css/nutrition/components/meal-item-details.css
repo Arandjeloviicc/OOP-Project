@@ -1,21 +1,12 @@
 @import "../../theme.css";
+@import "../../common/overlay.css";
 
 /* ========================================================== */
 /* == FOOD DETAILS ========================================== */
 /* ========================================================== */
 
 .meal-item-details {
-    -fx-background-color: -app-background;
-    -fx-background-radius: 1.5em;
-
-    -fx-border-color: -app-input-border;
-    -fx-border-radius: 1.5em;
-    -fx-border-width: 1px;
-
     -fx-max-width: 43em;
-    -fx-max-height: 46em;
-
-    -fx-padding: 2em;
     -fx-spacing: 1.15em;
 }
 

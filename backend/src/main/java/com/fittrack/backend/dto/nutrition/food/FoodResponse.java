@@ -1,4 +1,4 @@
-package com.fittrack.dto.nutrition;
+package com.fittrack.backend.dto.nutrition.food;
 
 public record FoodResponse(
         Integer id,
@@ -10,4 +10,5 @@ public record FoodResponse(
         double carbsPerServing,
         double fatPerServing,
         Integer createdByUserId
-) {}
+) {
+}

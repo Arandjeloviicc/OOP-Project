@@ -1,4 +1,4 @@
-package com.fittrack.backend.dto.nutrition;
+package com.fittrack.dto.nutrition.meal.item;
 
 public record UpdateMealItemRequest(
         double quantityGrams,

@@ -1,8 +1,10 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.util.NumberUtils;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -10,7 +12,10 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.StrokeLineCap;
 
-public class NutritionMacroPreviewController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class NutritionMacroPreviewController implements Initializable, ResponsiveLayout {
 
     // Fields
     @FXML private HBox rootLayout;
@@ -31,16 +36,19 @@ public class NutritionMacroPreviewController {
     private double lastFat;
     private double lastProtein;
 
+    private static final int NARROW_BREAKPOINT = 400;
     private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         chartPane.widthProperty().addListener((obs, oldVal, newVal) -> drawChart(lastCarbs, lastFat, lastProtein));
         chartPane.heightProperty().addListener((obs, oldVal, newVal) -> drawChart(lastCarbs, lastFat, lastProtein));
+
+        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
     }
 
-    // ── Responsive PseudoClass ─────────────────────────────────────────────────
-    public void setNarrow(boolean narrow) {
+    @Override
+    public void updateWidthLayout(boolean narrow) {
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
     }
 
@@ -48,9 +56,9 @@ public class NutritionMacroPreviewController {
     public void setData(double calories, double carbs, double fat, double protein) {
         caloriesValueLabel.setText(NumberUtils.formatWhole(Math.round(calories)));
 
-        carbsLabel.setText(NumberUtils.formatWhole(Math.round(carbs)) + " g");
-        fatLabel.setText(NumberUtils.formatWhole(Math.round(fat)) + " g");
-        proteinLabel.setText(NumberUtils.formatWhole(Math.round(protein)) + " g");
+        carbsLabel.setText(NumberUtils.formatDecimal(carbs) + " g");
+        fatLabel.setText(NumberUtils.formatDecimal((fat)) + " g");
+        proteinLabel.setText(NumberUtils.formatDecimal((protein)) + " g");
 
         this.lastCarbs = carbs;
         this.lastFat = fat;

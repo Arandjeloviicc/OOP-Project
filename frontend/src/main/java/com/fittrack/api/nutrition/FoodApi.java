@@ -1,7 +1,8 @@
 package com.fittrack.api.nutrition;
 
 import com.fittrack.api.common.BaseApi;
-import com.fittrack.dto.nutrition.FoodResponse;
+import com.fittrack.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.dto.nutrition.food.FoodResponse;
 import tools.jackson.core.type.TypeReference;
 
 import java.io.IOException;
@@ -102,6 +103,49 @@ public class FoodApi extends BaseApi {
 
             throw new IllegalStateException(
                     "Food request was interrupted.",
+                    exception
+            );
+        }
+    }
+
+    public FoodResponse createFood(Integer userId, CreateFoodRequest requestData) {
+        try {
+            String url = API_URL + "/user/" + userId;
+
+            String requestBody = objectMapper.writeValueAsString(requestData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() != 201) {
+                throw new IllegalStateException(
+                        "Failed to create food."
+                );
+            }
+
+            return objectMapper.readValue(
+                    response.body(),
+                    FoodResponse.class
+            );
+
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Could not communicate with the FitTrack server.",
+                    exception
+            );
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+
+            throw new IllegalStateException(
+                    "Food creation request was interrupted.",
                     exception
             );
         }

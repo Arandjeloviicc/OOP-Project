@@ -9,10 +9,14 @@ import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.CreateFoodController;
 import com.fittrack.controller.nutrition.components.FoodListItemController;
+import com.fittrack.controller.nutrition.components.MealEditorController;
 import com.fittrack.controller.nutrition.components.MealItemDetailsController;
-import com.fittrack.dto.nutrition.AddMealItemRequest;
-import com.fittrack.dto.nutrition.FoodResponse;
-import com.fittrack.dto.nutrition.MealResponse;
+import com.fittrack.dto.nutrition.meal.CreateMealRequest;
+import com.fittrack.dto.nutrition.meal.item.AddMealItemRequest;
+import com.fittrack.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.dto.nutrition.food.FoodResponse;
+import com.fittrack.dto.nutrition.meal.MealResponse;
+import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.model.nutrition.SearchSource;
 import com.fittrack.service.nutrition.MealService;
@@ -61,20 +65,23 @@ public class AddFoodController extends FormController implements Initializable, 
     @FXML private VBox itemsContainer;
 
     // Details
-    @FXML private VBox foodDetailsContainer;
+    @FXML private StackPane foodDetailsContainer;
 
     // Create Item
-    @FXML private VBox createItemContainer;
+    @FXML private StackPane createItemContainer;
 
     // Search Source Tabs
     private List<ToggleButton> searchTabs;
 
-    // Attributes
+    // Actions
     private MealType mealType;
     private LocalDate mealDate;
     private Runnable onCloseAction;
     private Consumer<Boolean> onBackAction;
     private boolean dataChanged;
+
+    // Active Card
+    private MealEditorController activeMealEditor;
 
     // Search Helpers
     private final PauseTransition searchDebounce = new PauseTransition(Duration.millis(300));
@@ -123,6 +130,11 @@ public class AddFoodController extends FormController implements Initializable, 
 
     @FXML
     private void handleBack() {
+        if (activeMealEditor != null) {
+            returnToMealEditor();
+            return;
+        }
+
         if (onBackAction != null) {
             onBackAction.accept(dataChanged);
         } else {
@@ -416,20 +428,34 @@ public class AddFoodController extends FormController implements Initializable, 
     private void openFoodDetails(FoodResponse food) {
         LoadedComponent<MealItemDetailsController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_DETAILS);
 
-        details.controller().setData(food, mealType);
-        details.controller().setCaption("Add food");
-        details.controller().setConfirmButtonText("Add to meal");
+        if (activeMealEditor != null) {
+            details.controller().setDraftData(food);
+            details.controller().setCaption("Add food");
+            details.controller().setConfirmButtonText("Add food");
+
+            details.controller().setOnConfirmAction(
+                    quantityGrams -> addFoodToMealDraft(
+                            food,
+                            quantityGrams
+                    )
+            );
+
+        } else {
+            details.controller().setData(food, mealType);
+            details.controller().setCaption("Add food");
+            details.controller().setConfirmButtonText("Add to meal");
+
+            details.controller().setOnConfirmAction(
+                    quantityGrams -> addFoodToMeal(
+                            food,
+                            details.controller().getSelectedMealType(),
+                            quantityGrams
+                    )
+            );
+        }
 
         details.controller().setOnCancelAction(
                 this::closeFoodDetails
-        );
-
-        details.controller().setOnConfirmAction(
-                quantityGrams -> addFoodToMeal(
-                        food,
-                        details.controller().getSelectedMealType(),
-                        quantityGrams
-                )
         );
 
         foodDetailsContainer.getChildren().setAll(details.root());
@@ -443,6 +469,14 @@ public class AddFoodController extends FormController implements Initializable, 
 
         setVisible(foodDetailsContainer, false);
         setVisible(foodListContainer, true);
+    }
+
+    private void returnToMealEditor() {
+        foodDetailsContainer.getChildren().clear();
+
+        setVisible(foodDetailsContainer, false);
+        setVisible(foodListContainer, false);
+        setVisible(createItemContainer, true);
     }
 
     // ── Meal Item Actions ──────────────────────────────────────────────
@@ -470,10 +504,36 @@ public class AddFoodController extends FormController implements Initializable, 
         );
     }
 
-    // ── Create Food Action ──────────────────────────────────────────────
+    private void addFoodToMealDraft(FoodResponse food, double quantityGrams) {
+        MealItemDraft draftItem = new MealItemDraft(
+                null,
+                food.id(),
+                food.name(),
+                food.brand(),
+                quantityGrams,
+                food.servingSizeGrams(),
+                food.caloriesPerServing(),
+                food.proteinPerServing(),
+                food.carbsPerServing(),
+                food.fatPerServing()
+        );
+
+        activeMealEditor.addDraftItem(draftItem);
+
+        returnToMealEditor();
+    }
+
+    // ── Create/Edit Food Action ──────────────────────────────────────────────
     private void openCreateFood() {
         LoadedComponent<CreateFoodController> createFood = FxmlComponentLoader.load(AppConstants.Components.CREATE_FOOD_CARD);
 
+        createFood.controller().setOnCancelAction(
+                this::closeCreateItem
+        );
+
+        createFood.controller().setOnCreateAction(request -> {
+                    createFood(request);
+        });
 
         createItemContainer.getChildren().setAll(createFood.root());
 
@@ -481,9 +541,101 @@ public class AddFoodController extends FormController implements Initializable, 
         setVisible(createItemContainer, true);
     }
 
-    // ── Create Meal Action ──────────────────────────────────────────────
-    private void openCreateMeal() {
+    private void closeCreateItem() {
+        createItemContainer.getChildren().clear();
 
+        setVisible(createItemContainer, false);
+        setVisible(foodListContainer, true);
+    }
+
+    private void createFood(CreateFoodRequest createFoodRequest) {
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+
+        AsyncTaskRunner.run(
+                () -> foodApi.createFood(userId, createFoodRequest),
+
+                food -> {
+                    dataChanged = true;
+
+                    FoodSearchCache.clear();
+                    searchField.clear();
+
+                    closeCreateItem();
+                    loadMyFoods("");
+                },
+
+                exception -> log.error(
+                        "Failed to create a food.",
+                        exception
+                )
+        );
+    }
+
+    // ── Create/Edit Meal Action ──────────────────────────────────────────────
+    private void openCreateMeal() {
+        LoadedComponent<MealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.MEAL_EDITOR);
+
+        activeMealEditor = editor.controller();
+        activeMealEditor.setCreateMode();
+
+        activeMealEditor.setOnCancelAction(() -> {
+            activeMealEditor = null;
+
+            closeCreateItem();
+
+            searchField.clear();
+            foodCategoryGroup.selectToggle(myMealsButton);
+        });
+
+        activeMealEditor.setOnAddFoodAction(
+                this::openFoodSelectionForMealDraft
+        );
+
+        activeMealEditor.setOnSaveAction(
+                this::createMeal
+        );
+
+        createItemContainer.getChildren().setAll(editor.root());
+
+        setVisible(foodListContainer, false);
+        setVisible(createItemContainer, true);
+    }
+
+    private void createMeal(CreateMealRequest request) {
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+
+        AsyncTaskRunner.run(
+                () -> mealApi.createMyMeal(userId, request),
+
+                meal -> {
+                    activeMealEditor = null;
+
+                    closeCreateItem();
+
+                    searchField.clear();
+                    foodCategoryGroup.selectToggle(myMealsButton);
+
+                    loadMyMeals("");
+                },
+
+                exception -> log.error(
+                        "Failed to create meal.",
+                        exception
+                )
+        );
+    }
+
+    private void openFoodSelectionForMealDraft() {
+        setVisible(createItemContainer, false);
+        setVisible(foodDetailsContainer, false);
+        setVisible(foodListContainer, true);
+
+        titleLabel.setText("Add food to meal");
+
+        searchField.clear();
+        foodCategoryGroup.selectToggle(allFoodsButton);
+
+        loadAllFoods("");
     }
 
     // ── Cache Helpers ──────────────────────────────────────────────

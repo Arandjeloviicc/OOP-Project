@@ -9,7 +9,7 @@ import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.MealCardController;
 import com.fittrack.controller.nutrition.components.NutritionProgressCardController;
-import com.fittrack.dto.nutrition.MealResponse;
+import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.service.nutrition.MealService;

@@ -1,4 +1,4 @@
-package com.fittrack.backend.dto.nutrition;
+package com.fittrack.backend.dto.nutrition.meal.item;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

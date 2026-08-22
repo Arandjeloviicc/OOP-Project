@@ -8,9 +8,9 @@ import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.MealItemCardController;
 import com.fittrack.controller.nutrition.components.MealItemDetailsController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
-import com.fittrack.dto.nutrition.MealItemResponse;
-import com.fittrack.dto.nutrition.MealResponse;
-import com.fittrack.dto.nutrition.UpdateMealItemRequest;
+import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
+import com.fittrack.dto.nutrition.meal.MealResponse;
+import com.fittrack.dto.nutrition.meal.item.UpdateMealItemRequest;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.service.nutrition.MealService;
@@ -191,8 +191,6 @@ public class MealDetailsController extends FormController implements Initializab
     @Override
     public void updateWidthLayout(boolean narrow) {
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
-
-        macroPreview.setNarrow(narrow);
 
         if (narrow) {
             dialogContainer.prefWidthProperty().bind(rootLayout.widthProperty());

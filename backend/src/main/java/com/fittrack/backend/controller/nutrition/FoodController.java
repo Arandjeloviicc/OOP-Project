@@ -1,7 +1,7 @@
 package com.fittrack.backend.controller.nutrition;
 
-import com.fittrack.backend.dto.nutrition.CreateFoodRequest;
-import com.fittrack.backend.dto.nutrition.FoodResponse;
+import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.entity.user.User;
 import com.fittrack.backend.repository.user.UserRepository;

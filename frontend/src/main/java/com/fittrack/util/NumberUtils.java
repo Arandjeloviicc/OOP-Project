@@ -1,5 +1,7 @@
 package com.fittrack.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -28,10 +30,12 @@ public final class NumberUtils {
     }
 
     public static String formatDecimal(double value) {
-        if (value == Math.rint(value)) {
-            return String.valueOf((long) value);
+        BigDecimal rounded = BigDecimal.valueOf(value).setScale(1, RoundingMode.HALF_UP);
+
+        if (rounded.stripTrailingZeros().scale() <= 0) {
+            return rounded.stripTrailingZeros().toPlainString();
         }
 
-        return String.valueOf(value);
+        return rounded.toPlainString();
     }
 }

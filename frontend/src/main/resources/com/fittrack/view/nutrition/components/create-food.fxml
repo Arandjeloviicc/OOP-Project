@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.layout.GridPane?>
@@ -16,7 +15,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fittrack.controller.nutrition.components.CreateFoodController"
       stylesheets="@../../../css/nutrition/components/create-food.css"
-      styleClass="create-food-root">
+      styleClass="popup-dialog, create-food-root">
 
     <ScrollPane fx:id="setupScroll"
                 fitToWidth="true"
@@ -31,18 +30,13 @@
             <HBox alignment="CENTER_LEFT"
                   styleClass="create-food-header">
 
-                <VBox>
+                <VBox spacing="0.2">
+                    <Label text="My Food"
+                           styleClass="create-food-caption"/>
+
                     <Label text="Create Food"
                            styleClass="create-food-title"/>
-
-                    <Label fx:id="titleMessage"
-                           visible="false"
-                           managed="false"
-                           styleClass="helper-label, error"/>
-
                 </VBox>
-
-                <Region HBox.hgrow="ALWAYS"/>
 
             </HBox>
 
@@ -70,6 +64,13 @@
                 <TextField fx:id="brandField"
                            promptText="Optional"
                            styleClass="input-field, text-field"/>
+
+                <Label fx:id="brandMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
 
             </VBox>
 
@@ -103,7 +104,7 @@
                            styleClass="field-label"/>
 
                     <TextField fx:id="caloriesField"
-                               promptText="kcal"
+                               promptText="e.g. 150"
                                maxWidth="Infinity"
                                styleClass="input-field, text-field"/>
 
@@ -121,7 +122,7 @@
                            styleClass="field-label"/>
 
                     <TextField fx:id="carbsField"
-                               promptText="g"
+                               promptText="e.g. 20"
                                maxWidth="Infinity"
                                styleClass="input-field, text-field"/>
 
@@ -143,7 +144,7 @@
                            styleClass="field-label"/>
 
                     <TextField fx:id="fatField"
-                               promptText="g"
+                               promptText="e.g. 5"
                                maxWidth="Infinity"
                                styleClass="input-field, text-field"/>
 
@@ -161,7 +162,7 @@
                            styleClass="field-label"/>
 
                     <TextField fx:id="proteinField"
-                               promptText="g"
+                               promptText="e.g. 8"
                                maxWidth="Infinity"
                                styleClass="input-field, text-field"/>
 

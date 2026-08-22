@@ -9,11 +9,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 
-<VBox xmlns="http://javafx.com/javafx/22"
+<VBox fx:id="rootLayout"
+      xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fittrack.controller.nutrition.components.MealItemDetailsController"
       stylesheets="@../../../css/nutrition/components/meal-item-details.css"
-      styleClass="meal-item-details">
+      maxHeight="-Infinity"
+      styleClass="popup-dialog, meal-item-details">
 
     <!-- Header -->
     <HBox alignment="TOP_CENTER"
@@ -33,7 +35,8 @@
     </HBox>
 
     <!-- Meal -->
-    <VBox styleClass="field-group">
+    <VBox fx:id="mealContainer"
+          styleClass="field-group">
         <Label text="Meal"
                styleClass="field-label"/>
 

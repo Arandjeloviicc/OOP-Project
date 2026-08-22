@@ -1,10 +1,12 @@
 package com.fittrack.backend.controller.nutrition;
 
 
-import com.fittrack.backend.dto.nutrition.AddMealItemRequest;
-import com.fittrack.backend.dto.nutrition.MealItemResponse;
-import com.fittrack.backend.dto.nutrition.MealResponse;
-import com.fittrack.backend.dto.nutrition.UpdateMealItemRequest;
+import com.fittrack.backend.dto.nutrition.meal.CreateMealRequest;
+import com.fittrack.backend.dto.nutrition.meal.LogMealRequest;
+import com.fittrack.backend.dto.nutrition.meal.item.AddMealItemRequest;
+import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
+import com.fittrack.backend.dto.nutrition.meal.MealResponse;
+import com.fittrack.backend.dto.nutrition.meal.item.UpdateMealItemRequest;
 import com.fittrack.backend.service.nutrition.MealService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
@@ -50,5 +52,17 @@ public class MealController {
     @GetMapping("/mine/{userId}")
     public List<MealResponse> getMyMeals(@PathVariable Integer userId, @RequestParam(defaultValue = "") String search) {
         return mealService.getMyMeals(userId, search);
+    }
+
+    @PostMapping("/mine/{userId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MealResponse createMyMeal(@PathVariable Integer userId, @Valid @RequestBody CreateMealRequest request) {
+        return mealService.createMyMeal(userId, request);
+    }
+
+    @PostMapping("/mine/{userId}/{mealId}log")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void logMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody LogMealRequest request) {
+        mealService.logMyMeal(userId, mealId, request);
     }
 }

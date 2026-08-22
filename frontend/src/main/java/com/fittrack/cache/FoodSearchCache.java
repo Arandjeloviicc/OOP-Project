@@ -1,6 +1,6 @@
 package com.fittrack.cache;
 
-import com.fittrack.dto.nutrition.FoodResponse;
+import com.fittrack.dto.nutrition.food.FoodResponse;
 
 import java.util.HashMap;
 import java.util.List;

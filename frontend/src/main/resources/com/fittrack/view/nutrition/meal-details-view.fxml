@@ -75,6 +75,6 @@
     <VBox fx:id="foodDetailsContainer"
           visible="false"
           managed="false"
-          styleClass="item-details-container"/>
+          styleClass="popup-host, item-details-container"/>
 
 </StackPane>
