@@ -3,16 +3,16 @@ package com.fittrack.controller.nutrition.components;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.ui.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import com.fittrack.validation.FitnessInputValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,36 +21,49 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class CreateFoodController extends FormController implements Initializable {
+public class FoodEditorController extends FormController implements Initializable {
 
     // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(CreateFoodController.class);
+    private static final Logger log = LoggerFactory.getLogger(FoodEditorController.class);
 
     @Override
     protected Logger getLogger() { return log; }
 
     @FXML private VBox rootLayout;
     @FXML private ScrollPane setupScroll;
-    @FXML private VBox createFoodContent;
+    @FXML private VBox editorContent;
+
+    @FXML private Label titleLabel;
 
     @FXML private TextField nameField;
     @FXML private Label nameMessage;
+
     @FXML private TextField brandField;
     @FXML private Label brandMessage;
+
     @FXML private TextField servingSizeField;
     @FXML private Label servingSizeMessage;
+
     @FXML private TextField caloriesField;
     @FXML private Label caloriesMessage;
+
     @FXML private TextField carbsField;
     @FXML private Label carbsMessage;
+
     @FXML private TextField fatField;
     @FXML private Label fatMessage;
+
     @FXML private TextField proteinField;
     @FXML private Label proteinMessage;
 
+    @FXML private Button saveButton;
+    @FXML private Button deleteFoodButton;
+
+    // Actions
     private Runnable onCancelAction;
     private Consumer<CreateFoodRequest> onCreateAction;
 
+    // ── Configuration ──────────────────────────────────────────
     public void setOnCancelAction(Runnable onCancelAction) {
         this.onCancelAction = onCancelAction;
     }
@@ -59,17 +72,45 @@ public class CreateFoodController extends FormController implements Initializabl
         this.onCreateAction = onCreateAction;
     }
 
+    public void setCreateMode() {
+        titleLabel.setText("Create Food");
+        saveButton.setText("Create food");
+
+        setVisible(deleteFoodButton, false);
+
+        clearFields();
+        restoreHelpers();
+    }
+
+    // ── Initialization ─────────────────────────────────────────
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Setup ScrollPane
-        createFoodContent.minHeightProperty().bind(
+        editorContent.minHeightProperty().bind(
                 setupScroll.viewportBoundsProperty().map(Bounds::getHeight)
         );
+
+        // Keyboard shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEscape(this::handleCancel)
+                .onEnter(this::handleSave);
 
         // Add Listeners
         addListeners();
         restoreHelpers();
+
+        // Default Mode is CREATE
+        setCreateMode();
+    }
+
+    private void addListeners() {
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> restoreNameHelper());
+        servingSizeField.textProperty().addListener((observable, oldValue, newValue) -> restoreServingSizeHelper());
+        caloriesField.textProperty().addListener((observable, oldValue, newValue) -> restoreCaloriesHelper());
+        carbsField.textProperty().addListener((observable, oldValue, newValue) -> restoreCarbsHelper());
+        fatField.textProperty().addListener((observable, oldValue, newValue) -> restoreFatHelper());
+        proteinField.textProperty().addListener((observable, oldValue, newValue) -> restoreProteinHelper());
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -81,7 +122,7 @@ public class CreateFoodController extends FormController implements Initializabl
     }
 
     @FXML
-    private void handleCreate() {
+    private void handleSave() {
         if (!validateInputs()) {
             return;
         }
@@ -98,6 +139,12 @@ public class CreateFoodController extends FormController implements Initializabl
         }
     }
 
+    @FXML
+    private void handleDeleteFood() {
+        // TODO: Edit mode comes later.
+    }
+
+    // ── Request ────────────────────────────────────────────────
     private CreateFoodRequest createFoodRequest() {
         String name = nameField.getText().trim();
         String brand = brandField.getText().trim().isEmpty() ? null : brandField.getText().trim();
@@ -118,7 +165,18 @@ public class CreateFoodController extends FormController implements Initializabl
         );
     }
 
-    // ── Validate Helpers ─────────────────────────────────────────────────
+    // ── Field State ────────────────────────────────────────────
+    private void clearFields() {
+        nameField.clear();
+        brandField.clear();
+        servingSizeField.clear();
+        caloriesField.clear();
+        carbsField.clear();
+        fatField.clear();
+        proteinField.clear();
+    }
+
+    // ── Validation ─────────────────────────────────────────────────
     private boolean validateInputs() {
         String name = nameField.getText().trim();
         String servingSize = servingSizeField.getText().trim();
@@ -196,46 +254,20 @@ public class CreateFoodController extends FormController implements Initializabl
         return true;
     }
 
-    // ── Initialize Helpers ─────────────────────────────────────────────────
-    private void addListeners() {
-        // KeyEvent for ESC and ENTER
-        rootLayout.sceneProperty().addListener((observable, oldScene, newScene) -> {
-            if (newScene != null) {
-                newScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                    if (event.getCode() == KeyCode.ESCAPE) {
-                        handleCancel();
-                        event.consume();
-                    }
-
-                    if (event.getCode() == KeyCode.ENTER) {
-                        handleCreate();
-                        event.consume();
-                    }
-                });
-            }
-        });
-
-        rootLayout.setFocusTraversable(true);
-        rootLayout.requestFocus();
-
-        // Set Brand Message (Doesn't have Validation)
-        setBrandMessage();
-
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> restoreNameHelper());
-        servingSizeField.textProperty().addListener((observable, oldValue, newValue) -> restoreServingSizeHelper());
-        caloriesField.textProperty().addListener((observable, oldValue, newValue) -> restoreCaloriesHelper());
-        carbsField.textProperty().addListener((observable, oldValue, newValue) -> restoreCarbsHelper());
-        fatField.textProperty().addListener((observable, oldValue, newValue) -> restoreFatHelper());
-        proteinField.textProperty().addListener((observable, oldValue, newValue) -> restoreProteinHelper());
-    }
-
+    // ── Helper State ───────────────────────────────────────────
     private void restoreHelpers() {
         restoreNameHelper();
+        setBrandMessage();
         restoreServingSizeHelper();
         restoreCaloriesHelper();
         restoreCarbsHelper();
         restoreFatHelper();
         restoreProteinHelper();
+    }
+
+    // ── Submit State ─────────────────────────────────────────────
+    public void setSubmitting(boolean submitting) {
+        saveButton.setDisable(submitting);
     }
 
     // ── Name Helpers ─────────────────────────────────────────────────
@@ -279,7 +311,7 @@ public class CreateFoodController extends FormController implements Initializabl
         setFieldMessage(carbsMessage, AppConstants.Messages.HELPER_FOOD_CARBS_MESSAGE, false, carbsField);
     }
 
-    // ── Calories Helpers ─────────────────────────────────────────────────
+    // ── Fat Helpers ─────────────────────────────────────────────────
     private void showFatMessage() {
         setFieldMessage(fatMessage, AppConstants.Messages.INVALID_FOOD_FAT_MESSAGE, true, fatField);
     }
@@ -288,7 +320,7 @@ public class CreateFoodController extends FormController implements Initializabl
         setFieldMessage(fatMessage, AppConstants.Messages.HELPER_FOOD_FAT_MESSAGE, false, fatField);
     }
 
-    // ── Calories Helpers ─────────────────────────────────────────────────
+    // ── Protein Helpers ─────────────────────────────────────────────────
     private void showProteinMessage() {
         setFieldMessage(proteinMessage, AppConstants.Messages.INVALID_FOOD_PROTEIN_MESSAGE, true, proteinField);
     }

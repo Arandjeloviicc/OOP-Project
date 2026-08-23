@@ -1,12 +1,12 @@
 package com.fittrack.controller.main;
 
 import com.fittrack.controller.common.BaseController;
-import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.view.ViewInstance;
 import com.fittrack.session.UserSession;
 import com.fittrack.config.AppConstants;
 import com.fittrack.ui.OverlayManager;
+import com.fittrack.ui.SceneManager;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -50,7 +50,6 @@ public class MainLayoutController extends BaseController implements Initializabl
     @FXML private HBox topBar;
     @FXML private HBox logoTopBar;
     @FXML private HBox logoSidebar;
-    @FXML private Button logoutButtonSideBar;
     @FXML private Button logoutButtonHeader;
 
     // Sidebar
@@ -133,7 +132,10 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     @FXML
     private void handleLogout() {
+        OverlayManager.close();
         UserSession.getInstance().end();
+        SceneManager.clearCache();
+
         navigateTo(AppConstants.Views.LOGIN);
     }
 
@@ -185,20 +187,6 @@ public class MainLayoutController extends BaseController implements Initializabl
                     "Failed to load content: " + fxml,
                     exception
             );
-        }
-    }
-
-    public void refreshContent(String fxml) {
-        ViewInstance viewInstance = contentCache.get(fxml);
-
-        if (viewInstance == null) {
-            return;
-        }
-
-        Object controller = viewInstance.controller();
-
-        if (controller instanceof Refreshable refreshable) {
-            refreshable.refresh();
         }
     }
 

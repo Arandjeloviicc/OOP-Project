@@ -2,7 +2,6 @@ package com.fittrack.controller.nutrition.components;
 
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class MealItemCardController {
@@ -10,7 +9,6 @@ public class MealItemCardController {
     @FXML private Label titleLabel;
     @FXML private Label quantityLabel;
     @FXML private Label caloriesLabel;
-    @FXML private Button openButton;
 
     // Action
     private Runnable onOpenAction;

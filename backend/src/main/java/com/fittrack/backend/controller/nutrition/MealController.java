@@ -7,6 +7,7 @@ import com.fittrack.backend.dto.nutrition.meal.item.AddMealItemRequest;
 import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.backend.dto.nutrition.meal.MealResponse;
 import com.fittrack.backend.dto.nutrition.meal.item.UpdateMealItemRequest;
+import com.fittrack.backend.dto.nutrition.meal.item.UpdateSavedMealRequest;
 import com.fittrack.backend.service.nutrition.MealService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
@@ -60,7 +61,18 @@ public class MealController {
         return mealService.createMyMeal(userId, request);
     }
 
-    @PostMapping("/mine/{userId}/{mealId}log")
+    @PutMapping("/mine/{userId}/{mealId}")
+    public MealResponse updateMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody UpdateSavedMealRequest request) {
+        return mealService.updateMyMeal(userId, mealId, request);
+    }
+
+    @DeleteMapping("/mine/{userId}/{mealId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId) {
+        mealService.deleteMyMeal(userId, mealId);
+    }
+
+    @PostMapping("/mine/{userId}/{mealId}/log")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody LogMealRequest request) {
         mealService.logMyMeal(userId, mealId, request);

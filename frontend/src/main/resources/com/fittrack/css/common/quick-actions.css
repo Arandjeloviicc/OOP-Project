@@ -1,0 +1,15 @@
+@import "../theme.css";
+
+/* ========================================================== */
+/* == QUICK ACTIONS ========================================= */
+/* ========================================================== */
+
+.quick-add-button:pending {
+    -fx-background-color: -app-hover-strong;
+    -fx-text-fill: -app-text-primary;
+}
+
+.quick-add-button:success {
+    -fx-background-color: -app-success;
+    -fx-text-fill: -app-text-primary;
+}

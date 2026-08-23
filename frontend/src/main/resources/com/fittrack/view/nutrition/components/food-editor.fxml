@@ -13,9 +13,9 @@
 <VBox fx:id="rootLayout"
       xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fittrack.controller.nutrition.components.CreateFoodController"
-      stylesheets="@../../../css/nutrition/components/create-food.css"
-      styleClass="popup-dialog, create-food-root">
+      fx:controller="com.fittrack.controller.nutrition.components.FoodEditorController"
+      stylesheets="@../../../css/nutrition/components/food-editor.css"
+      styleClass="popup-dialog, food-editor-root">
 
     <ScrollPane fx:id="setupScroll"
                 fitToWidth="true"
@@ -23,19 +23,20 @@
                 VBox.vgrow="ALWAYS"
                 styleClass="app-scroll">
 
-        <VBox fx:id="createFoodContent"
-              styleClass="create-food-content">
+        <VBox fx:id="editorContent"
+              styleClass="food-editor-content">
 
             <!-- Header -->
             <HBox alignment="CENTER_LEFT"
-                  styleClass="create-food-header">
+                  styleClass="food-editor-header">
 
                 <VBox spacing="0.2">
                     <Label text="My Food"
-                           styleClass="create-food-caption"/>
+                           styleClass="food-editor-caption"/>
 
-                    <Label text="Create Food"
-                           styleClass="create-food-title"/>
+                    <Label fx:id="titleLabel"
+                           text="Create Food"
+                           styleClass="food-editor-title"/>
                 </VBox>
 
             </HBox>
@@ -93,9 +94,9 @@
 
             <!-- Nutrition -->
             <Label text="Nutrition per serving"
-                   styleClass="create-food-section-title"/>
+                   styleClass="food-editor-section-title"/>
 
-            <HBox styleClass="create-food-field-row">
+            <HBox styleClass="food-editor-field-row">
 
                 <VBox styleClass="field-group"
                       HBox.hgrow="ALWAYS">
@@ -136,7 +137,7 @@
 
             </HBox>
 
-            <HBox styleClass="create-food-field-row">
+            <HBox styleClass="food-editor-field-row">
 
                 <VBox styleClass="field-group"
                       HBox.hgrow="ALWAYS">
@@ -176,13 +177,13 @@
 
             </HBox>
 
-
-            <!-- Add/Update Button -->
-            <GridPane styleClass="create-food-actions">
+            <!-- Cancel / Create or Save -->
+            <GridPane styleClass="food-editor-actions">
 
                 <columnConstraints>
                     <ColumnConstraints hgrow="ALWAYS"
                                        minWidth="0"/>
+
                     <ColumnConstraints hgrow="ALWAYS"
                                        minWidth="0"/>
                 </columnConstraints>
@@ -190,16 +191,26 @@
                 <Button text="Cancel"
                         maxWidth="Infinity"
                         onAction="#handleCancel"
-                        styleClass="back-btn, create-food-action-button"
+                        styleClass="back-btn, food-editor-action-button"
                         GridPane.columnIndex="0"/>
 
-                <Button text="Create food"
+                <Button fx:id="saveButton"
+                        text="Create food"
                         maxWidth="Infinity"
-                        onAction="#handleCreate"
-                        styleClass="action-btn, create-food-action-button"
+                        onAction="#handleSave"
+                        styleClass="action-btn, food-editor-action-button"
                         GridPane.columnIndex="1"/>
 
             </GridPane>
+
+            <!-- Edit mode only -->
+            <Button fx:id="deleteFoodButton"
+                    text="Delete food"
+                    maxWidth="Infinity"
+                    visible="false"
+                    managed="false"
+                    onAction="#handleDeleteFood"
+                    styleClass="food-editor-action-button, food-editor-delete-button"/>
 
         </VBox>
 

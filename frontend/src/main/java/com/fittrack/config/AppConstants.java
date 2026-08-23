@@ -21,22 +21,27 @@ public final class AppConstants {
         public static final String USER_PROFILE = "profile/user-profile-view.fxml";
 
         // PopUp Views
-        public static final String ADD_FOOD = "nutrition/add-food-view.fxml";
-        public static final String MEAL_DETAILS = "nutrition/meal-details-view.fxml";
+        public static final String ADD_TO_MEAL = "nutrition/add-to-meal.fxml";
+        public static final String DAILY_MEAL_DETAILS = "nutrition/daily-meal-details.fxml";
     }
 
     public static final class Components {
 
         private Components() {}
 
-        public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
-        public static final String MEAL_CARD = "nutrition/components/meal-card.fxml";
+        // Common
+        public static final String DELETE_CONFIRMATION = "common/components/delete-confirmation.fxml";
+
+        // Nutrition
+        public static final String DAILY_MEAL_CARD = "nutrition/components/daily-meal-card.fxml";
+        public static final String FOOD_EDITOR = "nutrition/components/food-editor.fxml";
         public static final String FOOD_LIST_ITEM = "nutrition/components/food-list-item.fxml";
-        public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
-        public static final String MEAL_ITEM_DETAILS = "nutrition/components/meal-item-details.fxml";
         public static final String MEAL_ITEM_CARD = "nutrition/components/meal-item-card.fxml";
-        public static final String CREATE_FOOD_CARD = "nutrition/components/create-food.fxml";
-        public static final String MEAL_EDITOR = "nutrition/components/meal-editor.fxml";
+        public static final String MEAL_ITEM_EDITOR = "nutrition/components/meal-item-editor.fxml";
+        public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
+        public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
+        public static final String SAVED_MEAL_EDITOR = "nutrition/components/saved-meal-editor.fxml";
+        public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
     }
 
     public static final class Validation {
@@ -80,70 +85,25 @@ public final class AppConstants {
         private Messages() {}
 
         // Login/Register view
-        public static final String INVALID_USERNAME_MESSAGE =
-                "Username must contain %d–%d characters and start with a letter."
-                        .formatted(
-                                AppConstants.Validation.MIN_USERNAME_LENGTH,
-                                AppConstants.Validation.MAX_USERNAME_LENGTH
-                        );
+        public static final String INVALID_USERNAME_MESSAGE = "Username must contain %d–%d characters and start with a letter.".formatted(AppConstants.Validation.MIN_USERNAME_LENGTH, AppConstants.Validation.MAX_USERNAME_LENGTH);
         public static final String INVALID_EMAIL_MESSAGE = "Enter a valid email address, e.g. name@example.com.";
-        public static final String INVALID_PASSWORD_MESSAGE =
-                "Password must contain at least %d characters."
-                        .formatted(
-                                AppConstants.Validation.MIN_PASSWORD_LENGTH
-                        );
+        public static final String INVALID_PASSWORD_MESSAGE = "Password must contain at least %d characters.".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH);
         public static final String HELPER_USERNAME_MESSAGE = "%d–%d characters; start with a letter.".formatted(AppConstants.Validation.MIN_USERNAME_LENGTH, AppConstants.Validation.MAX_USERNAME_LENGTH);
         public static final String HELPER_EMAIL_MESSAGE = "Use a valid address, e.g. name@example.com.";
         public static final String HELPER_PASSWORD_MESSAGE = "At least %d characters".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH);
 
         // Profile setup view
         // Invalid
-        public static final String INVALID_FIRST_NAME_MESSAGE =
-                "First name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes."
-                        .formatted(
-                                AppConstants.Validation.MIN_NAME_LENGTH,
-                                AppConstants.Validation.MAX_NAME_LENGTH
-                        );
-
-        public static final String INVALID_LAST_NAME_MESSAGE =
-                "Last name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes."
-                        .formatted(
-                                AppConstants.Validation.MIN_NAME_LENGTH,
-                                AppConstants.Validation.MAX_NAME_LENGTH
-                        );
-
-        public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE =
-                "Date must be in dd.MM.yyyy format.";
-
-        public static final String INVALID_DATE_OF_BIRTH_AGE_MESSAGE =
-                "Date of birth must indicate an age between %d and %d years."
-                        .formatted(
-                                AppConstants.Validation.MIN_AGE,
-                                AppConstants.Validation.MAX_AGE
-                        );
+        public static final String INVALID_FIRST_NAME_MESSAGE = "First name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
+        public static final String INVALID_LAST_NAME_MESSAGE = "Last name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
+        public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE = "Date must be in dd.MM.yyyy format.";
+        public static final String INVALID_DATE_OF_BIRTH_AGE_MESSAGE = "Date of birth must indicate an age between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
         public static final String INVALID_GENDER_MESSAGE = "Please select your gender.";
 
         // Helper
-        public static final String HELPER_FIRST_NAME_MESSAGE =
-                "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed."
-                        .formatted(
-                                AppConstants.Validation.MIN_NAME_LENGTH,
-                                AppConstants.Validation.MAX_NAME_LENGTH
-                        );
-
-        public static final String HELPER_LAST_NAME_MESSAGE =
-                "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed."
-                        .formatted(
-                                AppConstants.Validation.MIN_NAME_LENGTH,
-                                AppConstants.Validation.MAX_NAME_LENGTH
-                        );
-
-        public static final String HELPER_DATE_OF_BIRTH_MESSAGE =
-                "Use dd.MM.yyyy format. Age must be between %d and %d years."
-                        .formatted(
-                                AppConstants.Validation.MIN_AGE,
-                                AppConstants.Validation.MAX_AGE
-                        );
+        public static final String HELPER_FIRST_NAME_MESSAGE = "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
+        public static final String HELPER_LAST_NAME_MESSAGE = "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
+        public static final String HELPER_DATE_OF_BIRTH_MESSAGE = "Use dd.MM.yyyy format. Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
 
         // Fitness goals
         // Invalid
@@ -165,65 +125,19 @@ public final class AppConstants {
 
         // Calculators
         // Invalid
-        public static final String INVALID_AGE_MESSAGE =
-                "Age must be between %d and %d years."
-                        .formatted(
-                                AppConstants.Validation.MIN_AGE,
-                                AppConstants.Validation.MAX_AGE
-                        );
-        public static final String INVALID_BODY_FAT_MESSAGE =
-                "Body fat must be between %d%% and %d%%."
-                        .formatted(
-                                AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE,
-                                AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE
-                        );
-        public static final String INVALID_NECK_MESSAGE =
-                "Neck circumference must be between %d and %d cm."
-                        .formatted(
-                                Validation.MIN_NECK_CIRCUMFERENCE,
-                                Validation.MAX_NECK_CIRCUMFERENCE
-                        );
-        public static final String INVALID_NECK_WAIST_RELATION_MESSAGE =
-                "Neck circumference must be smaller than waist circumference.";
-        public static final String INVALID_WAIST_MESSAGE =
-                "Waist circumference must be between %d and %d cm."
-                        .formatted(
-                                Validation.MIN_WAIST_CIRCUMFERENCE,
-                                Validation.MAX_WAIST_CIRCUMFERENCE
-                        );
-        public static final String INVALID_HIP_MESSAGE =
-                "Hip circumference must be between %d and %d cm."
-                        .formatted(
-                                Validation.MIN_HIP_CIRCUMFERENCE,
-                                Validation.MAX_HIP_CIRCUMFERENCE
-                        );
+        public static final String INVALID_AGE_MESSAGE = "Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
+        public static final String INVALID_BODY_FAT_MESSAGE = "Body fat must be between %d%% and %d%%.".formatted(AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE, AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE);
+        public static final String INVALID_NECK_MESSAGE = "Neck circumference must be between %d and %d cm.".formatted(Validation.MIN_NECK_CIRCUMFERENCE, Validation.MAX_NECK_CIRCUMFERENCE);
+        public static final String INVALID_NECK_WAIST_RELATION_MESSAGE = "Neck circumference must be smaller than waist circumference.";
+        public static final String INVALID_WAIST_MESSAGE = "Waist circumference must be between %d and %d cm.".formatted(Validation.MIN_WAIST_CIRCUMFERENCE, Validation.MAX_WAIST_CIRCUMFERENCE);
+        public static final String INVALID_HIP_MESSAGE = "Hip circumference must be between %d and %d cm.".formatted(Validation.MIN_HIP_CIRCUMFERENCE, Validation.MAX_HIP_CIRCUMFERENCE);
 
         // Helpers
         public static final String HELPER_AGE_MESSAGE = "Between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
-        public static final String HELPER_BODY_FAT_MESSAGE =
-                "Optional. Between %d%% and %d%%."
-                        .formatted(
-                                AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE,
-                                AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE
-                        );
-        public static final String HELPER_NECK_MESSAGE =
-                "Enter a neck circumference between %d and %d cm."
-                        .formatted(
-                                Validation.MIN_NECK_CIRCUMFERENCE,
-                                Validation.MAX_NECK_CIRCUMFERENCE
-                        );
-        public static final String HELPER_WAIST_MESSAGE =
-                "Enter a waist circumference between %d and %d cm."
-                        .formatted(
-                                Validation.MIN_WAIST_CIRCUMFERENCE,
-                                Validation.MAX_WAIST_CIRCUMFERENCE
-                        );
-        public static final String HELPER_HIP_MESSAGE =
-                "Enter a hip circumference between %d and %d cm."
-                        .formatted(
-                                Validation.MIN_HIP_CIRCUMFERENCE,
-                                Validation.MAX_HIP_CIRCUMFERENCE
-                        );
+        public static final String HELPER_BODY_FAT_MESSAGE = "Optional. Between %d%% and %d%%.".formatted(AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE, AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE);
+        public static final String HELPER_NECK_MESSAGE = "Enter a neck circumference between %d and %d cm.".formatted(Validation.MIN_NECK_CIRCUMFERENCE, Validation.MAX_NECK_CIRCUMFERENCE);
+        public static final String HELPER_WAIST_MESSAGE = "Enter a waist circumference between %d and %d cm.".formatted(Validation.MIN_WAIST_CIRCUMFERENCE, Validation.MAX_WAIST_CIRCUMFERENCE);
+        public static final String HELPER_HIP_MESSAGE = "Enter a hip circumference between %d and %d cm.".formatted(Validation.MIN_HIP_CIRCUMFERENCE, Validation.MAX_HIP_CIRCUMFERENCE);
 
         // Meals
         public static final String INVALID_SERVINGS_MESSAGE = "Enter a number of servings greater than 0.";
@@ -252,6 +166,5 @@ public final class AppConstants {
 
         // Helpers
         public static final String HELPER_MEAL_NAME_MESSAGE = "The name of the meal.";
-
     }
 }

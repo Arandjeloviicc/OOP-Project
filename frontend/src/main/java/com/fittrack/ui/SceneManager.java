@@ -58,4 +58,8 @@ public class SceneManager {
             );
         }
     }
+
+    public static void clearCache() {
+        viewCache.clear();
+    }
 }

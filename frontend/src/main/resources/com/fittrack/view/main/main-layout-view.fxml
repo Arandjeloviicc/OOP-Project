@@ -132,6 +132,8 @@
 
                     <ToggleButton fx:id="workoutsButton"
                                   text="Workouts"
+                                  visible="false"
+                                  managed="false"
                                   maxWidth="Infinity"
                                   toggleGroup="$navigationGroup"
                                   onAction="#handleWorkouts"
@@ -148,6 +150,8 @@
                     <ToggleButton fx:id="measurementsButton"
                                   text="Measurements"
                                   maxWidth="Infinity"
+                                  visible="false"
+                                  managed="false"
                                   toggleGroup="$navigationGroup"
                                   onAction="#handleMeasurements"
                                   styleClass="navigation-button">
@@ -163,6 +167,8 @@
                     <ToggleButton fx:id="profileButton"
                                   text="Profile"
                                   maxWidth="Infinity"
+                                  visible="false"
+                                  managed="false"
                                   toggleGroup="$navigationGroup"
                                   onAction="#handleProfile"
                                   styleClass="navigation-button">
@@ -190,7 +196,7 @@
                            text="username"
                            styleClass="sidebar-username"/>
 
-                    <Button fx:id="logoutButtonSideBar" text="Log out"
+                    <Button text="Log out"
                             maxWidth="Infinity"
                             onAction="#handleLogout"
                             styleClass="logout-button-base, logout-button-sidebar"/>

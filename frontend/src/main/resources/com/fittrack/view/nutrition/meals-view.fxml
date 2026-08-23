@@ -70,13 +70,11 @@
 
             <!-- Date navigation -->
             <top>
-                <HBox fx:id="dateNavigation"
-                      maxWidth="Infinity"
+                <HBox maxWidth="Infinity"
                       alignment="CENTER"
                       styleClass="meals-date-navigation">
 
-                    <Button fx:id="previousDayButton"
-                            text="‹"
+                    <Button text="‹"
                             onAction="#handlePreviousDay"
                             styleClass="meals-date-button"/>
 
@@ -84,8 +82,7 @@
                                 editable="false"
                                 styleClass="input-field, date-picker-field, meals-date-picker"/>
 
-                    <Button fx:id="nextDayButton"
-                            text="›"
+                    <Button text="›"
                             onAction="#handleNextDay"
                             styleClass="meals-date-button"/>
 
@@ -94,8 +91,7 @@
 
             <!-- Summary + Diary -->
             <center>
-                <StackPane fx:id="bodyStack"
-                           styleClass="meals-body-stack">
+                <StackPane styleClass="meals-body-stack">
 
                     <!-- WIDE -->
                     <HBox fx:id="wideContainer"

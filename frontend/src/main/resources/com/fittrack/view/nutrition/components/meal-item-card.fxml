@@ -31,8 +31,7 @@
     <Region HBox.hgrow="ALWAYS"/>
 
     <!-- Open / Edit Button -->
-    <Button fx:id="openButton"
-            text="›"
+    <Button text="›"
             onAction="#handleOpen"
             styleClass="meal-item-card-open"/>
 

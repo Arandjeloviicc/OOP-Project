@@ -9,37 +9,37 @@
 <?import javafx.scene.image.ImageView?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.fittrack.controller.nutrition.components.MealCardController"
-      stylesheets="@../../../css/nutrition/components/meal-card.css"
+      fx:controller="com.fittrack.controller.nutrition.components.DailyMealCardController"
+      stylesheets="@../../../css/nutrition/components/daily-meal-card.css"
       onMouseClicked="#handleOpen"
-      styleClass="meal-card">
+      styleClass="daily-meal-card">
 
     <!-- Header -->
     <HBox alignment="CENTER_LEFT"
-          styleClass="meal-card-header">
+          styleClass="daily-meal-card-header">
 
         <Label fx:id="titleLabel"
-               styleClass="meal-card-title"/>
+               styleClass="daily-meal-card-title"/>
 
         <Region HBox.hgrow="ALWAYS"/>
 
         <Button fx:id="menuButton"
                 text="..."
-                styleClass="meal-card-menu-button"/>
+                onAction="#handleMenu"
+                styleClass="daily-meal-card-menu-button"/>
 
-        <Button fx:id="logButton"
-                text="Log"
+        <Button text="Log"
                 onAction="#handleLog"
-                styleClass="meal-card-log-button"/>
+                styleClass="daily-meal-card-log-button"/>
 
     </HBox>
 
     <!-- Meal preview -->
     <HBox alignment="CENTER_LEFT"
-          styleClass="meal-card-content">
+          styleClass="daily-meal-card-content">
 
         <!-- Icon -->
-        <StackPane styleClass="meal-card-icon-container">
+        <StackPane styleClass="daily-meal-card-icon-container">
 
             <ImageView fx:id="mealIcon"
                        fitWidth="34"
@@ -50,22 +50,22 @@
 
         <!-- Food + calories -->
         <VBox alignment="CENTER_LEFT"
-              styleClass="meal-card-info">
+              styleClass="daily-meal-card-info">
 
             <HBox alignment="BASELINE_LEFT"
-                  styleClass="meal-card-food-preview">
+                  styleClass="daily-meal-card-food-preview">
 
                 <Label fx:id="firstFoodLabel"
-                       styleClass="meal-card-first-food"/>
+                       styleClass="daily-meal-card-first-food"/>
 
                 <Label fx:id="moreFoodsLabel"
                        text="and 2 more"
-                       styleClass="meal-card-more-foods"/>
+                       styleClass="daily-meal-card-more-foods"/>
 
             </HBox>
 
             <Label fx:id="caloriesLabel"
-                   styleClass="meal-card-calories"/>
+                   styleClass="daily-meal-card-calories"/>
 
         </VBox>
 

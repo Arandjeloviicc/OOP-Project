@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.nutrition.components.SavedMealListItemController"
+      stylesheets="@../../../css/nutrition/components/saved-meal-list-item.css"
+      alignment="CENTER_LEFT"
+      styleClass="saved-meal-list-item">
+
+    <!-- Click to edit -->
+    <VBox HBox.hgrow="ALWAYS"
+          onMouseClicked="#handleEdit"
+          styleClass="saved-meal-list-item-content">
+
+        <Label fx:id="nameLabel"
+               text="Post Workout"
+               styleClass="saved-meal-list-item-title"/>
+
+        <FlowPane styleClass="saved-meal-list-item-nutrition">
+
+            <Label fx:id="caloriesLabel"
+                   text="540 cal"
+                   styleClass="saved-meal-list-item-detail"/>
+
+            <HBox styleClass="saved-meal-list-item-macros">
+
+                <Label fx:id="carbsLabel"
+                       text="C 62 g"
+                       styleClass="saved-meal-list-item-detail"/>
+
+                <Label fx:id="fatLabel"
+                       text="F 14 g"
+                       styleClass="saved-meal-list-item-detail"/>
+
+                <Label fx:id="proteinLabel"
+                       text="P 48 g"
+                       styleClass="saved-meal-list-item-detail"/>
+
+            </HBox>
+
+        </FlowPane>
+
+    </VBox>
+
+    <!-- Log saved meal -->
+    <Button fx:id="addButton"
+            text="+"
+            onAction="#handleAdd"
+            styleClass="quick-add-button, saved-meal-list-item-add"/>
+
+</HBox>

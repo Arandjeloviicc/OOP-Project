@@ -36,8 +36,7 @@
               maxWidth="Infinity"
               styleClass="form-panel">
 
-            <VBox fx:id="formContent"
-                  styleClass="calculator-form-content">
+            <VBox styleClass="calculator-form-content">
 
                 <!-- Age -->
                 <VBox fx:id="ageGroup"
@@ -239,8 +238,7 @@
                 </VBox>
 
                 <!-- Calculate -->
-                <Button fx:id="nextButton"
-                        maxWidth="Infinity"
+                <Button maxWidth="Infinity"
                         onAction="#handleCalculate"
                         styleClass="action-btn"
                         text="Calculate"/>

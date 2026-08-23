@@ -30,6 +30,8 @@ public final class AppImages {
     public static final Image DINNER_ICON = load("/com/fittrack/images/icons/meals/dinner.png");
     public static final Image SNACKS_ICON = load("/com/fittrack/images/icons/meals/snacks.png");
 
+    public static final Image BOOKMARK_ICON = load("/com/fittrack/images/icons/bookmark.png");
+
     private AppImages() {}
 
     private static Image load(String path) {

@@ -7,7 +7,7 @@ import com.fittrack.config.AppImages;
 import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
-import com.fittrack.controller.nutrition.components.MealCardController;
+import com.fittrack.controller.nutrition.components.DailyMealCardController;
 import com.fittrack.controller.nutrition.components.NutritionProgressCardController;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
@@ -22,7 +22,6 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -52,15 +51,11 @@ public class MealsController extends BaseController implements Initializable, Re
     @FXML private BorderPane mealsContent;
 
     // Wide and Narrow
-    @FXML private StackPane bodyStack;
     @FXML private HBox wideContainer;
     @FXML private VBox narrowContainer;
 
     // Top - DatePicker
-    @FXML private HBox dateNavigation;
-    @FXML private Button previousDayButton;
     @FXML private DatePicker datePicker;
-    @FXML private Button nextDayButton;
 
     // Center - Summary + Diary
     // Summary
@@ -83,10 +78,13 @@ public class MealsController extends BaseController implements Initializable, Re
 
     // Diary
     @FXML private VBox diaryContent;
-    private LoadedComponent<MealCardController> breakfastCard;
-    private LoadedComponent<MealCardController> lunchCard;
-    private LoadedComponent<MealCardController> dinnerCard;
-    private LoadedComponent<MealCardController> snacksCard;
+    private LoadedComponent<DailyMealCardController> breakfastCard;
+    private LoadedComponent<DailyMealCardController> lunchCard;
+    private LoadedComponent<DailyMealCardController> dinnerCard;
+    private LoadedComponent<DailyMealCardController> snacksCard;
+
+    // Load Helpers
+    private long mealsLoadVersion;
 
     // Narrow Helpers
     private static final int NARROW_BREAKPOINT = 690;
@@ -124,6 +122,13 @@ public class MealsController extends BaseController implements Initializable, Re
     // ── Refresh Actions ─────────────────────────────────────────────────
     @Override
     public void refresh() {
+        LocalDate currentDate = datePicker.getValue();
+
+        if (currentDate == null) {
+            return;
+        }
+
+        invalidateMealsCache(currentDate);
         loadMealsForDate();
     }
 
@@ -151,6 +156,7 @@ public class MealsController extends BaseController implements Initializable, Re
     // ── Load Data ─────────────────────────────────────────────────
     private void loadMealsForDate() {
         LocalDate currentDate = datePicker.getValue();
+        long loadVersion = ++mealsLoadVersion;
 
         if (mealsCache.containsKey(currentDate)) {
             showMeals(mealsCache.get(currentDate));
@@ -163,12 +169,15 @@ public class MealsController extends BaseController implements Initializable, Re
                 () -> mealApi.getMealsFromDate(userId, currentDate),
 
                 meals -> {
-                    mealsCache.put(currentDate, meals);
+                    if (loadVersion != mealsLoadVersion) {
+                        return;
+                    }
 
                     if (!currentDate.equals(datePicker.getValue())) {
                         return;
                     }
 
+                    mealsCache.put(currentDate, meals);
                     showMeals(meals);
                 },
 
@@ -433,8 +442,8 @@ public class MealsController extends BaseController implements Initializable, Re
         );
     }
 
-    private LoadedComponent<MealCardController> createMealCard(String title, Image icon) {
-        LoadedComponent<MealCardController> component = FxmlComponentLoader.load(AppConstants.Components.MEAL_CARD);
+    private LoadedComponent<DailyMealCardController> createMealCard(String title, Image icon) {
+        LoadedComponent<DailyMealCardController> component = FxmlComponentLoader.load(AppConstants.Components.DAILY_MEAL_CARD);
 
         component.controller().setData(title, null, 0, 0);
         component.controller().setIcon(icon);
@@ -442,16 +451,16 @@ public class MealsController extends BaseController implements Initializable, Re
         component.controller().setOnLogAction(() -> {
             LocalDate selectedDate = datePicker.getValue();
 
-            LoadedComponent<AddFoodController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_FOOD);
+            LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
 
-            addFood.controller().setData(MealType.fromName(title), selectedDate);
+            addToMeal.controller().setData(MealType.fromName(title), selectedDate);
 
-            addFood.controller().setOnCloseAction(() -> {
+            addToMeal.controller().setOnCloseAction(() -> {
                 invalidateMealsCache(selectedDate);
                 loadMealsForDate();
             });
 
-            addFood.controller().setOnBackAction(changed -> {
+            addToMeal.controller().setOnBackAction(changed -> {
                 OverlayManager.close();
 
                 if (changed) {
@@ -460,7 +469,7 @@ public class MealsController extends BaseController implements Initializable, Re
                 }
             });
 
-            OverlayManager.show(addFood.root());
+            OverlayManager.show(addToMeal.root());
         });
 
         return component;
@@ -476,7 +485,7 @@ public class MealsController extends BaseController implements Initializable, Re
         return null;
     }
 
-    private void loadMealCard(String mealName, MealResponse meal, LoadedComponent<MealCardController> card) {
+    private void loadMealCard(String mealName, MealResponse meal, LoadedComponent<DailyMealCardController> card) {
         LocalDate selectedDate = datePicker.getValue();
         MealType mealType = MealType.fromName(mealName);
 
@@ -485,6 +494,8 @@ public class MealsController extends BaseController implements Initializable, Re
         });
 
         if (meal == null || meal.items().isEmpty()) {
+            card.controller().setOnSaveMealAction(null);
+
             card.controller().setData(
                     mealName,
                     null,
@@ -494,6 +505,10 @@ public class MealsController extends BaseController implements Initializable, Re
 
             return;
         }
+
+        card.controller().setOnSaveMealAction(
+                () -> openSaveAsMeal(meal)
+        );
 
         String firstFoodName = meal.items().getFirst().foodName();
         int otherFoodsCount = meal.items().size() - 1;
@@ -509,7 +524,7 @@ public class MealsController extends BaseController implements Initializable, Re
 
     // ── Meal Details Helpers ─────────────────────────────────────────────────
     private void openMealDetails(MealType mealType, LocalDate mealDate, MealResponse meal) {
-        LoadedComponent<MealDetailsController> details = FxmlComponentLoader.load(AppConstants.Views.MEAL_DETAILS);
+        LoadedComponent<DailyMealDetailsController> details = FxmlComponentLoader.load(AppConstants.Views.DAILY_MEAL_DETAILS);
 
         details.controller().setData(mealType, mealDate, meal);
 
@@ -519,6 +534,15 @@ public class MealsController extends BaseController implements Initializable, Re
         });
 
         OverlayManager.show(details.root());
+    }
+
+    // ── Save As Meal ─────────────────────────────────────────────────
+    private void openSaveAsMeal(MealResponse meal) {
+        LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
+
+        addToMeal.controller().setSaveAsMealData(meal);
+
+        OverlayManager.show(addToMeal.root());
     }
 
     // ── Cache Helpers ─────────────────────────────────────────────────

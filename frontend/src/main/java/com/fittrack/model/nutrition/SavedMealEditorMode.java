@@ -1,6 +1,6 @@
 package com.fittrack.model.nutrition;
 
-public enum MealEditorMode {
+public enum SavedMealEditorMode {
     CREATE,
     EDIT
 }

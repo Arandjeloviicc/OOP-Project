@@ -8,7 +8,7 @@
 /* == MEAL EDITOR =========================================== */
 /* ========================================================== */
 
-.meal-editor-dialog {
+.saved-meal-editor-dialog {
     -fx-pref-width: 42em;
     -fx-pref-height: 48em;
 
@@ -22,17 +22,17 @@
 /* == HEADER ================================================ */
 /* ========================================================== */
 
-.meal-editor-header {
+.saved-meal-editor-header {
     -fx-alignment: center-left;
 }
 
-.meal-editor-caption {
+.saved-meal-editor-caption {
     -fx-font-size: 1em;
     -fx-font-weight: 600;
     -fx-text-fill: -app-text-muted;
 }
 
-.meal-editor-title {
+.saved-meal-editor-title {
     -fx-font-size: 1.8em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
@@ -42,7 +42,7 @@
 /* == MACRO PREVIEW ========================================= */
 /* ========================================================== */
 
-.meal-editor-macro-container {
+.saved-meal-editor-macro-container {
     -fx-max-width: Infinity;
 }
 
@@ -50,27 +50,27 @@
 /* == FOODS ================================================= */
 /* ========================================================== */
 
-.meal-editor-section-header {
+.saved-meal-editor-section-header {
     -fx-alignment: center-left;
     -fx-spacing: 1em;
 }
 
-.meal-editor-section-title {
+.saved-meal-editor-section-title {
     -fx-font-size: 1.15em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
 }
 
-.meal-editor-item-count {
+.saved-meal-editor-item-count {
     -fx-font-size: 0.95em;
     -fx-text-fill: -app-text-muted;
 }
 
-.meal-editor-scroll {
+.saved-meal-editor-scroll {
     -fx-background-color: transparent;
 }
 
-.meal-editor-items {
+.saved-meal-editor-items {
     -fx-spacing: 0.7em;
     -fx-padding: 0.15em 0.65em 0 0;
 }
@@ -79,7 +79,7 @@
 /* == ADD FOOD ============================================== */
 /* ========================================================== */
 
-.meal-editor-add-button {
+.saved-meal-editor-add-button {
     -fx-pref-height: 3.4em;
 }
 
@@ -87,11 +87,11 @@
 /* == ACTIONS =============================================== */
 /* ========================================================== */
 
-.meal-editor-actions {
+.saved-meal-editor-actions {
     -fx-hgap: 0.65em;
 }
 
-.meal-editor-action-button {
+.saved-meal-editor-action-button {
     -fx-font-size: 1em;
 
     -fx-min-height: 3.3em;
@@ -99,8 +99,8 @@
     -fx-max-height: 3.3em;
 }
 
-.meal-editor-root .back-btn.meal-editor-action-button,
-.meal-editor-root .action-btn.meal-editor-action-button {
+.saved-meal-editor-root .back-btn.saved-meal-editor-action-button,
+.saved-meal-editor-root .action-btn.saved-meal-editor-action-button {
     -fx-background-radius: 1.65em;
     -fx-border-radius: 1.65em;
 }
@@ -109,7 +109,7 @@
 /* == DELETE MEAL =========================================== */
 /* ========================================================== */
 
-.meal-editor-delete-button {
+.saved-meal-editor-delete-button {
     -fx-background-color: -app-control-background;
     -fx-border-color: -app-control-border;
 
@@ -122,7 +122,7 @@
     -fx-cursor: hand;
 }
 
-.meal-editor-delete-button:hover {
+.saved-meal-editor-delete-button:hover {
     -fx-background-color: -app-danger-background;
     -fx-text-fill: -app-danger-text;
 }
@@ -131,6 +131,16 @@
 /* == ITEM DETAILS ========================================== */
 /* ========================================================== */
 
-.meal-editor-item-details-container {
+.saved-meal-editor-item-details-container {
     -fx-alignment: center;
+}
+
+/* ========================================================== */
+/* == DELETE CONFIRMATION =================================== */
+/* ========================================================== */
+
+.saved-meal-editor-confirmation-container {
+    -fx-background-color: -app-modal-overlay;
+    -fx-alignment: center;
+    -fx-padding: 1.5em;
 }

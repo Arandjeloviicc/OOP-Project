@@ -8,58 +8,58 @@
 <?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.fittrack.controller.nutrition.MealDetailsController"
-           stylesheets="@../../css/nutrition/meal-details-view.css"
+           fx:controller="com.fittrack.controller.nutrition.DailyMealDetailsController"
+           stylesheets="@../../css/nutrition/daily-meal-details.css"
            fx:id="rootLayout"
-           styleClass="popup-root, meal-details-root">
+           styleClass="popup-root">
 
     <VBox fx:id="dialogContainer"
-          styleClass="popup-dialog, meal-details-dialog">
+          styleClass="popup-dialog, daily-meal-details-dialog">
 
         <!-- Header -->
-        <HBox styleClass="meal-details-header">
+        <HBox styleClass="daily-meal-details-header">
 
             <VBox spacing="0.2">
                 <Label text="Meal"
-                       styleClass="meal-details-caption"/>
+                       styleClass="daily-meal-details-caption"/>
 
                 <Label fx:id="titleLabel"
                        text="Breakfast"
-                       styleClass="meal-details-title"/>
+                       styleClass="daily-meal-details-title"/>
             </VBox>
 
             <HBox HBox.hgrow="ALWAYS"/>
 
             <Button text="✕"
                     onAction="#handleClose"
-                    styleClass="meal-details-close-button"/>
+                    styleClass="daily-meal-details-close-button"/>
 
         </HBox>
 
         <!-- Macro Preview -->
         <VBox fx:id="macroPreviewContainer"
-              styleClass="meal-details-macro-container"/>
+              styleClass="daily-meal-details-macro-container"/>
 
         <!-- Items Header -->
-        <HBox styleClass="meal-details-section-header">
+        <HBox styleClass="daily-meal-details-section-header">
             <Label text="Foods"
-                   styleClass="meal-details-section-title"/>
+                   styleClass="daily-meal-details-section-title"/>
 
             <HBox HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="itemCountLabel"
                    text="0 items"
-                   styleClass="meal-details-item-count"/>
+                   styleClass="daily-meal-details-item-count"/>
         </HBox>
 
         <!-- Items -->
         <ScrollPane fitToWidth="true"
                     hbarPolicy="NEVER"
                     VBox.vgrow="ALWAYS"
-                    styleClass="app-scroll, meal-details-scroll">
+                    styleClass="app-scroll, daily-meal-details-scroll">
 
             <VBox fx:id="itemsContainer"
-                  styleClass="meal-details-items"/>
+                  styleClass="daily-meal-details-items"/>
 
         </ScrollPane>
 
@@ -67,7 +67,7 @@
         <Button text="+  Log more"
                 maxWidth="Infinity"
                 onAction="#handleLogMore"
-                styleClass="action-btn, meal-details-log-button"/>
+                styleClass="action-btn, daily-meal-details-log-button"/>
 
     </VBox>
 
@@ -75,6 +75,6 @@
     <VBox fx:id="foodDetailsContainer"
           visible="false"
           managed="false"
-          styleClass="popup-host, item-details-container"/>
+          styleClass="popup-host"/>
 
 </StackPane>

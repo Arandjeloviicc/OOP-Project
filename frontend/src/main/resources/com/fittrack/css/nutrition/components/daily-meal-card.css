@@ -4,7 +4,7 @@
 /* == MEAL CARD ============================================= */
 /* ========================================================== */
 
-.meal-card {
+.daily-meal-card {
     -fx-min-width: 0;
     -fx-max-width: Infinity;
 
@@ -21,7 +21,7 @@
     -fx-cursor: hand;
 }
 
-.meal-card:hover {
+.daily-meal-card:hover {
     -fx-background-color: -app-hover;
     -fx-border-color: -app-border-soft;
 }
@@ -30,12 +30,12 @@
 /* == HEADER ================================================ */
 /* ========================================================== */
 
-.meal-card-header {
+.daily-meal-card-header {
     -fx-spacing: 0.7em;
     -fx-alignment: CENTER_LEFT;
 }
 
-.meal-card-title {
+.daily-meal-card-title {
     -fx-text-fill: -app-text-primary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1.1em;
@@ -46,36 +46,36 @@
 /* == CONTENT =============================================== */
 /* ========================================================== */
 
-.meal-card-content {
+.daily-meal-card-content {
     -fx-spacing: 1em;
     -fx-alignment: CENTER_LEFT;
 }
 
-.meal-card-info {
+.daily-meal-card-info {
     -fx-spacing: 0.3em;
     -fx-alignment: CENTER_LEFT;
 }
 
-.meal-card-food-preview {
+.daily-meal-card-food-preview {
     -fx-spacing: 0.3em;
     -fx-alignment: BASELINE_LEFT;
 }
 
-.meal-card-first-food {
+.daily-meal-card-first-food {
     -fx-text-fill: -app-text-primary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 }
 
-.meal-card-more-foods {
+.daily-meal-card-more-foods {
     -fx-text-fill: -app-nutrition-progress;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 0.9em;
     -fx-opacity: 0.70;
 }
 
-.meal-card-calories {
+.daily-meal-card-calories {
     -fx-text-fill: -app-text-secondary;
     -fx-font-family: "Segoe UI";
     -fx-font-size: 0.88em;
@@ -85,7 +85,7 @@
 /* == ICON ================================================== */
 /* ========================================================== */
 
-.meal-card-icon-container {
+.daily-meal-card-icon-container {
     -fx-min-width: 3.1em;
     -fx-pref-width: 3.1em;
     -fx-max-width: 3.1em;
@@ -104,7 +104,7 @@
 /* == LOG BUTTON ============================================ */
 /* ========================================================== */
 
-.meal-card-log-button {
+.daily-meal-card-log-button {
     -fx-background-color: linear-gradient(to right, -app-button-gradient-start, -app-button-gradient-end);
     -fx-background-radius: 0.7em;
 
@@ -120,11 +120,11 @@
     -fx-cursor: hand;
 }
 
-.meal-card-log-button:hover {
+.daily-meal-card-log-button:hover {
     -fx-background-color: linear-gradient(to right, -app-button-gradient-hover-start, -app-button-gradient-hover-end);
 }
 
-.meal-card-log-button:pressed {
+.daily-meal-card-log-button:pressed {
     -fx-background-color: linear-gradient(to right, -app-button-gradient-pressed-start, -app-button-gradient-pressed-end);
 }
 
@@ -132,7 +132,7 @@
 /* == MENU BUTTON =========================================== */
 /* ========================================================== */
 
-.meal-card-menu-button {
+.daily-meal-card-menu-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0.7em;
 
@@ -157,11 +157,47 @@
     -fx-cursor: hand;
 }
 
-.meal-card-menu-button:hover {
+.daily-meal-card-menu-button:hover {
     -fx-background-color: -app-hover;
     -fx-text-fill: -app-text-primary;
 }
 
-.meal-card-menu-button:pressed {
+.daily-meal-card-menu-button:pressed {
     -fx-background-color: -app-hover-strong;
+}
+
+/* ========================================================== */
+/* == CONTEXT MENU ========================================== */
+/* ========================================================== */
+
+.meal-card-context-menu {
+    -fx-background-color: -app-popup-background;
+    -fx-background-radius: 0.7em;
+
+    -fx-border-color: -app-popup-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.7em;
+
+    -fx-padding: 0.3em;
+    -fx-background-insets: 0;
+}
+
+.meal-card-context-menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.5em;
+
+    -fx-padding: 0.65em 0.85em;
+}
+
+.meal-card-context-menu .menu-item:focused {
+    -fx-background-color: transparent;
+}
+
+.meal-card-context-menu .menu-item:hover {
+    -fx-background-color: -app-popup-hover;
+}
+
+.meal-card-context-menu .menu-item .label {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 0.9em;
 }

@@ -1,5 +1,6 @@
 package com.fittrack.controller.auth;
 
+import com.fittrack.ui.SceneShortcuts;
 import javafx.scene.control.*;
 import com.fittrack.api.auth.LoginApi;
 import com.fittrack.api.profile.ProfileSetupApi;
@@ -44,6 +45,10 @@ public class LoginController extends AuthFormController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        // Keyboard Shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEnter(this::handleLogin);
 
         // Initialize all controls and images
         initializeAuthControls(rootLayout, backgroundImage, passwordField, passwordVisible);

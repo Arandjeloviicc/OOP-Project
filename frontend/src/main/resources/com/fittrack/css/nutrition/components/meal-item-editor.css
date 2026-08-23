@@ -2,10 +2,10 @@
 @import "../../common/overlay.css";
 
 /* ========================================================== */
-/* == FOOD DETAILS ========================================== */
+/* == FOOD EDITOR ========================================== */
 /* ========================================================== */
 
-.meal-item-details {
+.meal-item-editor {
     -fx-max-width: 43em;
     -fx-spacing: 1.15em;
 }
@@ -14,31 +14,31 @@
 /* == HEADER ================================================ */
 /* ========================================================== */
 
-.meal-item-details-title-group {
+.meal-item-editor-title-group {
     -fx-spacing: 0.2em;
 }
 
-.meal-item-details-header {
+.meal-item-editor-header {
     -fx-padding: 0 0 0.35em 0;
 }
 
-.meal-item-details-caption {
+.meal-item-editor-caption {
     -fx-font-size: 1em;
     -fx-font-weight: 600;
     -fx-text-fill: -app-primary-light;
 }
 
-.meal-item-details-title {
+.meal-item-editor-title {
     -fx-font-size: 1.65em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
 }
 
-.meal-item-details-serving-row .field-group {
+.meal-item-editor-serving-row .field-group {
     -fx-padding: 0;
 }
 
-.meal-item-details-serving-row {
+.meal-item-editor-serving-row {
     -fx-spacing: 0.65em;
     -fx-padding: 0 0 0.3em 0;
 }
@@ -47,13 +47,13 @@
 /* == BUTTONS =============================================== */
 /* ========================================================== */
 
-.meal-item-details-actions {
+.meal-item-editor-actions {
     -fx-max-width: Infinity;
     -fx-hgap: 0.65em;
     -fx-padding: 0.65em 0 0 0;
 }
 
-.meal-item-details-action-button {
+.meal-item-editor-action-button {
     -fx-font-size: 1em;
 
     -fx-min-height: 3.3em;
@@ -61,14 +61,14 @@
     -fx-max-height: 3.3em;
 }
 
-.meal-item-details .back-btn.meal-item-details-action-button,
-.meal-item-details .action-btn.meal-item-details-action-button,
-.meal-item-details .meal-item-details-remove-button {
+.meal-item-editor .back-btn.meal-item-editor-action-button,
+.meal-item-editor .action-btn.meal-item-editor-action-button,
+.meal-item-editor .meal-item-editor-remove-button {
     -fx-background-radius: 1.65em;
     -fx-border-radius: 1.65em;
 }
 
-.meal-item-details-remove-button {
+.meal-item-editor-remove-button {
     -fx-background-color: -app-control-background;
     -fx-border-color: -app-control-border;
     -fx-text-fill: -app-text-secondary;
@@ -79,13 +79,13 @@
     -fx-border-radius: 1.65em;
 }
 
-.meal-item-details-remove-button:hover {
+.meal-item-editor-remove-button:hover {
     -fx-background-color: -app-danger-background;
     -fx-border-color: -app-control-border;
     -fx-text-fill: -app-danger-text;
 }
 
-.meal-item-details-remove-button:pressed {
+.meal-item-editor-remove-button:pressed {
     -fx-background-color: -app-danger-background-pressed;
     -fx-border-color: -app-danger-border;
 }

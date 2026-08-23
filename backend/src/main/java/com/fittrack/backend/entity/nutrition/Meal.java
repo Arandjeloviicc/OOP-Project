@@ -11,7 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "meals")
+@Table(
+        name = "meals",
+        indexes = {
+                @Index(
+                        name = "idx_meals_user_date_kind_id",
+                        columnList = "user_id, meal_date, kind, id"
+                ),
+                @Index(
+                        name = "idx_meals_user_kind_name",
+                        columnList = "user_id, kind, name"
+                )
+        }
+)
 public class Meal {
 
     // Primary key
@@ -98,5 +110,11 @@ public class Meal {
 
     public List<MealItem> getItems() {
         return items;
+    }
+
+    // Setters
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

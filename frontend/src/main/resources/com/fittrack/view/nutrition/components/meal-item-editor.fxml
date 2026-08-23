@@ -12,22 +12,22 @@
 <VBox fx:id="rootLayout"
       xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fittrack.controller.nutrition.components.MealItemDetailsController"
-      stylesheets="@../../../css/nutrition/components/meal-item-details.css"
+      fx:controller="com.fittrack.controller.nutrition.components.MealItemEditorController"
+      stylesheets="@../../../css/nutrition/components/meal-item-editor.css"
       maxHeight="-Infinity"
-      styleClass="popup-dialog, meal-item-details">
+      styleClass="popup-dialog, meal-item-editor">
 
     <!-- Header -->
     <HBox alignment="TOP_CENTER"
-          styleClass="meal-item-details-header">
+          styleClass="meal-item-editor-header">
 
-        <VBox styleClass="meal-item-details-title-group">
+        <VBox styleClass="meal-item-editor-title-group">
             <Label fx:id="captionLabel"
-                   styleClass="meal-item-details-caption"/>
+                   styleClass="meal-item-editor-caption"/>
 
             <Label fx:id="selectedFoodTitleLabel"
                    text="Food name"
-                   styleClass="meal-item-details-title"/>
+                   styleClass="meal-item-editor-title"/>
         </VBox>
 
         <Region HBox.hgrow="ALWAYS"/>
@@ -47,7 +47,7 @@
 
     <!-- Servings -->
     <HBox fx:id="servingRow"
-          styleClass="meal-item-details-serving-row">
+          styleClass="meal-item-editor-serving-row">
 
         <!-- Serving size -->
         <VBox fx:id="servingSizeContainer"
@@ -92,7 +92,7 @@
     </VBox>
 
     <!-- Add/Update Button -->
-    <GridPane styleClass="meal-item-details-actions">
+    <GridPane styleClass="meal-item-editor-actions">
 
         <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS"
@@ -104,13 +104,13 @@
         <Button text="Cancel"
                 maxWidth="Infinity"
                 onAction="#handleCancel"
-                styleClass="back-btn, meal-item-details-action-button"
+                styleClass="back-btn, meal-item-editor-action-button"
                 GridPane.columnIndex="0"/>
 
         <Button fx:id="confirmButton"
                 maxWidth="Infinity"
                 onAction="#handleConfirm"
-                styleClass="action-btn, meal-item-details-action-button"
+                styleClass="action-btn, meal-item-editor-action-button"
                 GridPane.columnIndex="1"/>
 
     </GridPane>
@@ -122,6 +122,6 @@
             visible="false"
             managed="false"
             onAction="#handleRemove"
-            styleClass="meal-item-details-action-button, meal-item-details-remove-button"/>
+            styleClass="meal-item-editor-action-button, meal-item-editor-remove-button"/>
 
 </VBox>

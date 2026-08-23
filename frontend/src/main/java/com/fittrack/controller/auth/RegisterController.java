@@ -5,6 +5,7 @@ import com.fittrack.model.user.User;
 import com.fittrack.session.UserSession;
 import com.fittrack.config.AppConstants;
 import com.fittrack.async.AsyncTaskRunner;
+import com.fittrack.ui.SceneShortcuts;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -44,6 +45,11 @@ public class RegisterController extends AuthFormController implements Initializa
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Keyboard Shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEnter(this::handleRegister)
+                 .onEscape(this::handleLogin);
 
         // Initialize all controls and images
         initializeAuthControls(rootLayout, backgroundImage, passwordField, passwordVisible);

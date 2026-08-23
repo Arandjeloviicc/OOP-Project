@@ -2,10 +2,11 @@ package com.fittrack.controller.nutrition.components;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
+import com.fittrack.controller.common.components.DeleteConfirmationController;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
-import com.fittrack.dto.nutrition.meal.item.CreateMealItemRequest;
-import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
-import com.fittrack.model.nutrition.MealEditorMode;
+import com.fittrack.dto.nutrition.meal.MealResponse;
+import com.fittrack.dto.nutrition.meal.item.*;
+import com.fittrack.model.nutrition.SavedMealEditorMode;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
 import javafx.fxml.FXML;
@@ -24,10 +25,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class MealEditorController extends FormController implements Initializable {
+public class SavedMealEditorController extends FormController implements Initializable {
 
     // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(MealEditorController.class);
+    private static final Logger log = LoggerFactory.getLogger(SavedMealEditorController.class);
 
     @Override
     protected Logger getLogger() { return log; }
@@ -49,8 +50,10 @@ public class MealEditorController extends FormController implements Initializabl
 
     @FXML private StackPane itemDetailsContainer;
 
+    @FXML private StackPane confirmationContainer;
+
     // Mode (Create/Edit)
-    private MealEditorMode mode = MealEditorMode.CREATE;
+    private SavedMealEditorMode mode = SavedMealEditorMode.CREATE;
 
     // Macro Preview
     private NutritionMacroPreviewController macroPreview;
@@ -61,7 +64,9 @@ public class MealEditorController extends FormController implements Initializabl
     // Actions
     private Runnable onCancelAction;
     private Runnable onAddFoodAction;
-    private Consumer<CreateMealRequest> onSaveAction;
+    private Consumer<CreateMealRequest> onCreateAction;
+    private Consumer<UpdateSavedMealRequest> onUpdateAction;
+    private Runnable onDeleteAction;
 
     // ── Initialization ─────────────────────────────────────────
     @Override
@@ -97,12 +102,20 @@ public class MealEditorController extends FormController implements Initializabl
         this.onAddFoodAction = onAddFoodAction;
     }
 
-    public void setOnSaveAction(Consumer<CreateMealRequest> onSaveAction) {
-        this.onSaveAction = onSaveAction;
+    public void setOnCreateAction(Consumer<CreateMealRequest> onCreateAction) {
+        this.onCreateAction = onCreateAction;
+    }
+
+    public void setOnUpdateAction(Consumer<UpdateSavedMealRequest> onUpdateAction) {
+        this.onUpdateAction = onUpdateAction;
+    }
+
+    public void setOnDeleteAction(Runnable onDeleteAction) {
+        this.onDeleteAction = onDeleteAction;
     }
 
     public void setCreateMode() {
-        mode = MealEditorMode.CREATE;
+        mode = SavedMealEditorMode.CREATE;
 
         titleLabel.setText("Create Meal");
         saveButton.setText("Create meal");
@@ -115,16 +128,65 @@ public class MealEditorController extends FormController implements Initializabl
         refreshDraft();
     }
 
-    public void setEditMode() {
-        mode = MealEditorMode.EDIT;
+    public void setCreateMode(MealResponse sourceMeal) {
+        mode = SavedMealEditorMode.CREATE;
+
+        titleLabel.setText("Save as My Meal");
+        saveButton.setText("Save meal");
+
+        setVisible(deleteMealButton, false);
+
+        nameField.clear();
+        draftItems.clear();
+
+        for (MealItemResponse item : sourceMeal.items()) {
+            draftItems.add(
+                    new MealItemDraft(
+                            null,
+                            item.foodId(),
+                            item.foodName(),
+                            item.brand(),
+                            item.quantityGrams(),
+                            item.servingSizeGrams(),
+                            item.caloriesPerServing(),
+                            item.proteinPerServing(),
+                            item.carbsPerServing(),
+                            item.fatPerServing()
+                    )
+            );
+        }
+
+        refreshDraft();
+    }
+
+    public void setEditMode(MealResponse meal) {
+        mode = SavedMealEditorMode.EDIT;
 
         titleLabel.setText("Edit Meal");
         saveButton.setText("Save changes");
 
         setVisible(deleteMealButton, true);
 
-        nameField.clear();
+        nameField.setText(meal.name());
+
         draftItems.clear();
+
+        for (MealItemResponse item : meal.items()) {
+            draftItems.add(
+                    new MealItemDraft(
+                            item.id(),
+                            item.foodId(),
+                            item.foodName(),
+                            item.brand(),
+                            item.quantityGrams(),
+                            item.servingSizeGrams(),
+                            item.caloriesPerServing(),
+                            item.proteinPerServing(),
+                            item.carbsPerServing(),
+                            item.fatPerServing()
+                    )
+            );
+        }
 
         refreshDraft();
     }
@@ -183,7 +245,7 @@ public class MealEditorController extends FormController implements Initializabl
     }
 
     private void openDraftItemDetails(MealItemDraft item) {
-        LoadedComponent<MealItemDetailsController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_DETAILS);
+        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
 
         details.controller().setData(item);
         details.controller().setCaption("Edit food");
@@ -280,22 +342,89 @@ public class MealEditorController extends FormController implements Initializabl
 
         restoreNameHelper();
 
+        if (mode == SavedMealEditorMode.CREATE) {
+            createMeal(name);
+        } else {
+            updateMeal(name);
+        }
+    }
+
+    private void createMeal(String name) {
         List<CreateMealItemRequest> items = draftItems.stream()
-                        .map(item -> new CreateMealItemRequest(
-                                item.foodId(),
-                                item.quantityGrams()
-                        )).toList();
+                .map(item -> new CreateMealItemRequest(
+                        item.foodId(),
+                        item.quantityGrams()
+                )).toList();
 
         CreateMealRequest request = new CreateMealRequest(name, items);
 
-        if (onSaveAction != null) {
-            onSaveAction.accept(request);
+        if (onCreateAction != null) {
+            onCreateAction.accept(request);
+        }
+    }
+
+    private void updateMeal(String name) {
+        List<UpdateSavedMealItemRequest> items = draftItems.stream()
+                .map(item -> new UpdateSavedMealItemRequest(
+                        item.mealItemId(),
+                        item.foodId(),
+                        item.quantityGrams()
+                ))
+                .toList();
+
+        UpdateSavedMealRequest request = new UpdateSavedMealRequest(name, items);
+
+        if (onUpdateAction != null) {
+            onUpdateAction.accept(request);
         }
     }
 
     @FXML
     private void handleDeleteMeal() {
+        openDeleteConfirmation();
+    }
 
+    // ── Delete Confirmation ─────────────────────────────────────
+    private void openDeleteConfirmation() {
+        LoadedComponent<DeleteConfirmationController> confirmation = FxmlComponentLoader.load(AppConstants.Components.DELETE_CONFIRMATION);
+
+        String mealName = nameField.getText().trim();
+
+        confirmation.controller().setData(
+                "Delete meal?",
+                "Are you sure you want to delete \"" + mealName + "\"?",
+                "Delete"
+        );
+
+        confirmation.controller().setOnCancelAction(
+                this::closeDeleteConfirmation
+        );
+
+        confirmation.controller().setOnConfirmAction(() -> {
+            closeDeleteConfirmation();
+
+            if (onDeleteAction != null) {
+                onDeleteAction.run();
+            }
+        });
+
+        confirmationContainer.getChildren().setAll(
+                confirmation.root()
+        );
+
+        setVisible(confirmationContainer, true);
+    }
+
+    private void closeDeleteConfirmation() {
+        confirmationContainer.getChildren().clear();
+
+        setVisible(confirmationContainer, false);
+    }
+
+    // ── Submit State ─────────────────────────────────────────────
+    public void setSubmitting(boolean submitting) {
+        saveButton.setDisable(submitting);
+        deleteMealButton.setDisable(submitting);
     }
 
     // ── Name Helpers ────────────────────────────────────────────────

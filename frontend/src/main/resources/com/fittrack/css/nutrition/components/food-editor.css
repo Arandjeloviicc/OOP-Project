@@ -1,0 +1,113 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+@import "../../common/overlay.css";
+@import "../../common/scroll.css";
+
+/* ========================================================== */
+/* == FOOD EDITOR ====================================== */
+/* ========================================================== */
+
+.food-editor-root {
+    -fx-max-width: 40em;
+    -fx-max-height: Infinity;
+
+    -fx-spacing: 1.15em;
+}
+
+.food-editor-content {
+    -fx-spacing: 1em;
+    -fx-padding: 0 0.5em 0 0;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.food-editor-header {
+    -fx-padding: 0 0 0.3em 0;
+}
+
+.food-editor-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
+}
+
+.food-editor-title {
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == FIELDS ================================================ */
+/* ========================================================== */
+
+.food-editor-section-title {
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-secondary;
+    -fx-padding: 0.25em 0 0 0;
+}
+
+.food-editor-field-row {
+    -fx-spacing: 0.8em;
+}
+
+.food-editor-field-row .field-group {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: Infinity;
+}
+
+.food-editor-field-row .helper-label {
+    -fx-min-width: 0;
+    -fx-max-width: Infinity;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.food-editor-actions {
+    -fx-max-width: Infinity;
+    -fx-hgap: 0.65em;
+    -fx-padding: 0.65em 0 0 0;
+}
+
+.food-editor-action-button {
+    -fx-font-size: 1em;
+
+    -fx-min-height: 3.3em;
+    -fx-pref-height: 3.3em;
+    -fx-max-height: 3.3em;
+}
+
+.food-editor-root .back-btn.food-editor-action-button,
+.food-editor-root .action-btn.food-editor-action-button {
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
+}
+
+/* ========================================================== */
+/* == DELETE FOOD =========================================== */
+/* ========================================================== */
+
+.food-editor-delete-button {
+    -fx-background-color: -app-control-background;
+    -fx-border-color: -app-control-border;
+
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-weight: bold;
+
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
+
+    -fx-cursor: hand;
+}
+
+.food-editor-delete-button:hover {
+    -fx-background-color: -app-danger-background;
+    -fx-text-fill: -app-danger-text;
+}

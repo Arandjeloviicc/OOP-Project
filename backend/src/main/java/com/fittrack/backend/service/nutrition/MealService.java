@@ -2,11 +2,8 @@ package com.fittrack.backend.service.nutrition;
 
 import com.fittrack.backend.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.backend.dto.nutrition.meal.LogMealRequest;
-import com.fittrack.backend.dto.nutrition.meal.item.AddMealItemRequest;
-import com.fittrack.backend.dto.nutrition.meal.item.CreateMealItemRequest;
-import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
+import com.fittrack.backend.dto.nutrition.meal.item.*;
 import com.fittrack.backend.dto.nutrition.meal.MealResponse;
-import com.fittrack.backend.dto.nutrition.meal.item.UpdateMealItemRequest;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.entity.nutrition.Meal;
 import com.fittrack.backend.entity.nutrition.MealItem;
@@ -20,8 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MealService {
@@ -89,8 +85,10 @@ public class MealService {
 
     @Transactional
     public MealItemResponse updateMealItem(Integer userId, Integer mealItemId, UpdateMealItemRequest request) {
-        MealItem mealItem = mealItemRepository.findById(mealItemId)
-                .orElseThrow(() -> new IllegalArgumentException("Meal Item not found"));
+        MealItem mealItem = mealItemRepository.findByIdWithMeal(mealItemId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Meal Item not found")
+                );
 
         Meal currentMeal = mealItem.getMeal();
 
@@ -130,8 +128,10 @@ public class MealService {
 
     @Transactional
     public void deleteMealItem(Integer userId, Integer mealItemId) {
-        MealItem mealItem = mealItemRepository.findById(mealItemId)
-                .orElseThrow(() ->  new IllegalArgumentException("Meal Item not found"));
+        MealItem mealItem = mealItemRepository.findByIdWithMeal(mealItemId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Meal Item not found")
+                );
 
         Meal currentMeal = mealItem.getMeal();
 
@@ -182,14 +182,21 @@ public class MealService {
 
         meal = mealRepository.save(meal);
 
+        List<Integer> foodIds = request.items()
+                .stream()
+                .map(CreateMealItemRequest::foodId)
+                .toList();
+
+        List<Food> foods = foodRepository.findAllById(foodIds);
+
         for (CreateMealItemRequest itemRequest : request.items()) {
-            Food food = foodRepository.findById(itemRequest.foodId())
-                    .orElseThrow(() ->
-                            new IllegalArgumentException("Food not found")
-                    );
+            Food food = findFoodById(
+                    foods,
+                    itemRequest.foodId()
+            );
 
             if (food.getCreatedByUser() != null
-                && !food.getCreatedByUser().getId().equals(userId)) {
+                    && !food.getCreatedByUser().getId().equals(userId)) {
                 throw new IllegalArgumentException(
                         "Food does not belong to user."
                 );
@@ -209,8 +216,142 @@ public class MealService {
     }
 
     @Transactional
+    public MealResponse updateMyMeal(Integer userId, Integer mealId, UpdateSavedMealRequest request) {
+        Meal meal = mealRepository.findByIdWithItems(mealId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Meal not found")
+                );
+
+        if (meal.getKind() != MealKind.SAVED) {
+            throw new IllegalArgumentException(
+                    "Meal is not a saved meal."
+            );
+        }
+
+        if (!meal.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException(
+                    "Meal does not belong to user."
+            );
+        }
+
+        meal.setName(request.name().trim());
+
+        // Update existing items
+        for (UpdateSavedMealItemRequest itemRequest : request.items()) {
+            if (itemRequest.mealItemId() == null) {
+                continue;
+            }
+
+            MealItem mealItem = meal.getItems()
+                    .stream()
+                    .filter(item ->
+                            item.getId().equals(itemRequest.mealItemId())
+                    )
+                    .findFirst()
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
+                                    "Meal item does not belong to meal."
+                            )
+                    );
+
+            mealItem.setQuantityGrams(
+                    itemRequest.quantityGrams()
+            );
+        }
+
+        // Remove deleted items
+        Iterator<MealItem> iterator = meal.getItems().iterator();
+
+        while (iterator.hasNext()) {
+            MealItem mealItem = iterator.next();
+
+            boolean stillExists = request.items()
+                    .stream()
+                    .anyMatch(itemRequest ->
+                            itemRequest.mealItemId() != null
+                                    && itemRequest.mealItemId()
+                                    .equals(mealItem.getId())
+                    );
+
+            if (!stillExists) {
+                mealItemRepository.delete(mealItem);
+                iterator.remove();
+            }
+        }
+
+        // Collect new food IDs
+        List<Integer> newFoodIds = new ArrayList<>();
+
+        for (UpdateSavedMealItemRequest itemRequest : request.items()) {
+            if (itemRequest.mealItemId() != null) {
+                continue;
+            }
+
+            if (itemRequest.foodId() == null) {
+                throw new IllegalArgumentException(
+                        "Food is required for new meal item."
+                );
+            }
+
+            newFoodIds.add(itemRequest.foodId());
+        }
+
+        List<Food> newFoods = foodRepository.findAllById(newFoodIds);
+
+        // Add new items
+        for (UpdateSavedMealItemRequest itemRequest : request.items()) {
+            if (itemRequest.mealItemId() != null) {
+                continue;
+            }
+
+            Food food = findFoodById(
+                    newFoods,
+                    itemRequest.foodId()
+            );
+
+            if (food.getCreatedByUser() != null
+                    && !food.getCreatedByUser()
+                    .getId()
+                    .equals(userId)) {
+                throw new IllegalArgumentException(
+                        "Food does not belong to user."
+                );
+            }
+
+            MealItem mealItem = new MealItem(
+                    meal,
+                    food,
+                    itemRequest.quantityGrams()
+            );
+
+            mealItemRepository.save(mealItem);
+            meal.getItems().add(mealItem);
+        }
+
+        return toResponse(meal);
+    }
+
+    @Transactional
+    public void deleteMyMeal(Integer userId, Integer mealId) {
+        Meal meal = mealRepository.findById(mealId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Meal not found")
+                );
+
+        if (meal.getKind() != MealKind.SAVED) {
+            throw new IllegalArgumentException("Meal is not a saved meal.");
+        }
+
+        if (!meal.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("Meal does not belong to user.");
+        }
+
+        mealRepository.delete(meal);
+    }
+
+    @Transactional
     public void logMyMeal(Integer userId, Integer mealId, LogMealRequest request) {
-        Meal savedMeal = mealRepository.findById(mealId)
+        Meal savedMeal = mealRepository.findByIdWithItems(mealId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Meal not found")
                 );
@@ -247,6 +388,16 @@ public class MealService {
     private Meal findOrCreateMeal(User user, LocalDate mealDate, String mealName) {
         return mealRepository.findByUserIdAndMealDateAndNameAndKind(user.getId(), mealDate, mealName, MealKind.DAILY)
                 .orElseGet(() -> mealRepository.save(new Meal(user, mealName, mealDate, MealKind.DAILY)));
+    }
+
+    private Food findFoodById(List<Food> foods, Integer foodId) {
+        for (Food food : foods) {
+            if (food.getId().equals(foodId)) {
+                return food;
+            }
+        }
+
+        throw new IllegalArgumentException("Food not found");
     }
 
     public MealResponse toResponse(Meal meal) {

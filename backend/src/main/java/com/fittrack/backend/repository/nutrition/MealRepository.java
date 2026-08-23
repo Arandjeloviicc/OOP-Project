@@ -57,4 +57,14 @@ public interface MealRepository extends JpaRepository<@NonNull Meal, @NonNull In
             @Param("kind") MealKind kind,
             @Param("search") String search
     );
+
+    @Query("""
+    SELECT DISTINCT m
+    FROM Meal m
+    LEFT JOIN FETCH m.items
+    WHERE m.id = :mealId
+    """)
+    Optional<Meal> findByIdWithItems(
+            @Param("mealId") Integer mealId
+    );
 }

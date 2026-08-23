@@ -2,10 +2,10 @@
 @import "../../common/quick-actions.css";
 
 /* ========================================================== */
-/* == FOOD LIST ITEM ======================================== */
+/* == MEAL LIST ITEM ======================================== */
 /* ========================================================== */
 
-.food-list-item {
+.saved-meal-list-item {
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 0.75em;
 
@@ -17,16 +17,18 @@
     -fx-spacing: 0.75em;
 
     -fx-min-height: 4em;
-
-    -fx-cursor: default;
 }
 
-.food-list-item:hover {
+.saved-meal-list-item:hover {
     -fx-background-color: -app-control-background-soft;
     -fx-border-color: -app-border;
 }
 
-.food-list-item-content {
+/* ========================================================== */
+/* == CONTENT =============================================== */
+/* ========================================================== */
+
+.saved-meal-list-item-content {
     -fx-spacing: 0.25em;
 
     -fx-min-width: 0;
@@ -35,26 +37,39 @@
     -fx-cursor: hand;
 }
 
-.food-list-item-title {
+.saved-meal-list-item-title {
     -fx-font-size: 1em;
     -fx-font-weight: 700;
     -fx-text-fill: -app-text-primary;
 }
 
-.food-list-item-details {
+/* ========================================================== */
+/* == NUTRITION ============================================= */
+/* ========================================================== */
+
+.saved-meal-list-item-nutrition {
+    -fx-alignment: center-left;
+    -fx-hgap: 0.8em;
+    -fx-vgap: 0.2em;
+}
+
+.saved-meal-list-item-macros {
+    -fx-alignment: center-left;
+    -fx-spacing: 0.8em;
+}
+
+.saved-meal-list-item-detail {
     -fx-font-size: 0.875em;
     -fx-text-fill: -app-text-secondary;
 }
 
 /* ========================================================== */
-/* == ADD BUTTON ============================================ */
+/* == ADD BUTTON =========================================== */
 /* ========================================================== */
 
-.food-list-item-add {
+.saved-meal-list-item-add {
     -fx-background-color: -app-hover;
     -fx-background-radius: 0.5625em;
-
-    -fx-border-radius: 50%;
 
     -fx-text-fill: -app-primary-light;
     -fx-font-size: 1.25em;
@@ -73,11 +88,11 @@
     -fx-cursor: hand;
 }
 
-.food-list-item-add:hover {
+.saved-meal-list-item-add:hover {
     -fx-background-color: -app-primary;
     -fx-text-fill: -app-text-primary;
 }
 
-.food-list-item-add:pressed {
+.saved-meal-list-item-add:pressed {
     -fx-opacity: 0.85;
 }

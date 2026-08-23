@@ -7,7 +7,15 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "meal_items")
+@Table(
+        name = "meal_items",
+        indexes = {
+                @Index(
+                        name = "idx_meal_items_meal_id_id",
+                        columnList = "meal_id, id"
+                )
+        }
+)
 public class MealItem {
 
     // Primary key

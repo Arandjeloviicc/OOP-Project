@@ -1,5 +1,6 @@
 package com.fittrack.controller.calculator;
 
+import com.fittrack.ui.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -146,6 +147,10 @@ public class CalculatorsController extends FormController implements Initializab
         calculatorBodyStack.minHeightProperty().bind(
                 setupScroll.viewportBoundsProperty().map(Bounds::getHeight)
         );
+
+        // Keyboard Shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEnter(this::handleCalculate);
 
         // Initialize all form controls
         initializeCalculatorControls();

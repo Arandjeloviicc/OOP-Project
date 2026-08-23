@@ -9,111 +9,109 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.ScrollPane?>
+
 <StackPane fx:id="rootLayout"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.nutrition.AddFoodController"
-           stylesheets="@../../css/nutrition/add-food-view.css"
+           fx:controller="com.fittrack.controller.nutrition.AddToMealController"
+           stylesheets="@../../css/nutrition/add-to-meal.css"
            styleClass="popup-root">
 
-    <!-- Food list -->
-    <VBox fx:id="foodListContainer"
+    <!-- Selection -->
+    <VBox fx:id="selectionContainer"
           styleClass="popup-host">
 
-        <VBox fx:id="dialogContainer"
-              styleClass="popup-dialog, add-food-dialog">
+        <VBox fx:id="selectionDialog"
+              styleClass="popup-dialog, add-to-meal-dialog">
 
             <!-- Header -->
             <HBox alignment="CENTER_LEFT"
-                  styleClass="add-food-header">
+                  styleClass="add-to-meal-header">
 
                 <Button text="←"
                         onAction="#handleBack"
-                        styleClass="add-food-close-button"/>
+                        styleClass="add-to-meal-header-button"/>
 
                 <VBox spacing="2">
                     <Label text="Nutrition"
-                           styleClass="add-food-caption"/>
+                           styleClass="add-to-meal-caption"/>
 
                     <Label fx:id="titleLabel"
-                           text="Add Food"
-                           styleClass="add-food-title"/>
+                           text="Add to meal"
+                           styleClass="add-to-meal-title"/>
                 </VBox>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <Button text="✕"
                         onAction="#handleClose"
-                        styleClass="add-food-close-button"/>
+                        styleClass="add-to-meal-header-button"/>
             </HBox>
 
             <!-- Search -->
             <TextField fx:id="searchField"
                        promptText="Search foods..."
-                       styleClass="input-field, text-field, add-food-search"/>
+                       styleClass="input-field, text-field, add-to-meal-search"/>
 
-            <!-- Tabs -->
             <fx:define>
-                <ToggleGroup fx:id="foodCategoryGroup"/>
+                <ToggleGroup fx:id="searchSourceGroup"/>
             </fx:define>
 
-            <HBox styleClass="add-food-tabs">
+            <HBox styleClass="add-to-meal-tabs">
 
                 <ToggleButton fx:id="allFoodsButton"
                               text="All"
-                              toggleGroup="$foodCategoryGroup"
+                              toggleGroup="$searchSourceGroup"
                               selected="true"
                               maxWidth="Infinity"
                               HBox.hgrow="ALWAYS"
-                              styleClass="add-food-tab"/>
+                              styleClass="add-to-meal-tab"/>
 
                 <ToggleButton fx:id="myFoodsButton"
                               text="My Foods"
-                              toggleGroup="$foodCategoryGroup"
+                              toggleGroup="$searchSourceGroup"
                               maxWidth="Infinity"
                               HBox.hgrow="ALWAYS"
-                              styleClass="add-food-tab"/>
+                              styleClass="add-to-meal-tab"/>
 
                 <ToggleButton fx:id="myMealsButton"
                               text="My Meals"
-                              toggleGroup="$foodCategoryGroup"
+                              toggleGroup="$searchSourceGroup"
                               maxWidth="Infinity"
                               HBox.hgrow="ALWAYS"
-                              styleClass="add-food-tab"/>
+                              styleClass="add-to-meal-tab"/>
 
             </HBox>
 
-            <!-- Create Button -->
-            <VBox fx:id="createItemPanel"
+            <!-- Create -->
+            <VBox fx:id="createPanel"
                   alignment="CENTER"
                   visible="false"
                   managed="false"
                   onMouseClicked="#handleCreateItem"
-                  styleClass="add-food-create-panel">
+                  styleClass="add-to-meal-create-panel">
 
-                <Label fx:id="createItemIcon"
-                       text="+"
-                       styleClass="add-food-create-icon"/>
+                <Label text="+"
+                       styleClass="add-to-meal-create-icon"/>
 
-                <Label fx:id="createItemLabel"
+                <Label fx:id="createPanelLabel"
                        text="Create a food"
-                       styleClass="add-food-create-text"/>
+                       styleClass="add-to-meal-create-text"/>
 
             </VBox>
 
-            <!-- List -->
             <ScrollPane fitToWidth="true"
                         hbarPolicy="NEVER"
                         VBox.vgrow="ALWAYS"
                         styleClass="app-scroll">
 
-                <VBox fx:id="itemsContainer"
-                      styleClass="add-food-items">
+                <VBox fx:id="resultsContainer"
+                      styleClass="add-to-meal-results">
 
                     <Label text="Food list will be shown here."
-                           styleClass="add-food-placeholder"/>
+                           styleClass="add-to-meal-placeholder"/>
+
                 </VBox>
 
             </ScrollPane>
@@ -122,14 +120,14 @@
 
     </VBox>
 
-    <!-- Add food to a meal -->
-    <StackPane fx:id="foodDetailsContainer"
-          visible="false"
-          managed="false"
-          styleClass="popup-host"/>
+    <!-- Item details -->
+    <StackPane fx:id="itemDetailsContainer"
+               visible="false"
+               managed="false"
+               styleClass="popup-host"/>
 
-    <!-- Create item -->
-    <StackPane fx:id="createItemContainer"
+    <!-- Food / Meal editor -->
+    <StackPane fx:id="editorContainer"
                visible="false"
                managed="false"
                styleClass="popup-host"/>

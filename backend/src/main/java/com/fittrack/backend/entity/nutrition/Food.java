@@ -8,7 +8,19 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "foods")
+@Table(
+        name = "foods",
+        indexes = {
+                @Index(
+                        name = "idx_foods_name",
+                        columnList = "name"
+                ),
+                @Index(
+                        name = "idx_foods_created_by_user_name",
+                        columnList = "created_by_user_id, name"
+                )
+        }
+)
 public class Food {
 
     // Primary key

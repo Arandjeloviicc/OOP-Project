@@ -8,6 +8,7 @@ import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
+import com.fittrack.ui.SceneShortcuts;
 import com.fittrack.ui.TextFieldValidators;
 import com.fittrack.util.*;
 import javafx.fxml.FXML;
@@ -25,10 +26,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class MealItemDetailsController extends FormController implements Initializable {
+public class MealItemEditorController extends FormController implements Initializable {
 
     // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(MealItemDetailsController.class);
+    private static final Logger log = LoggerFactory.getLogger(MealItemEditorController.class);
 
     @Override
     protected Logger getLogger() { return log; }
@@ -63,6 +64,11 @@ public class MealItemDetailsController extends FormController implements Initial
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialize Serving Fields
         initializeServingLayout();
+
+        // Keyboard Shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEscape(this::handleCancel)
+                .onEnter(this::handleConfirm);
 
         // Listeners
         addListeners();

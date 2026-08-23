@@ -8,7 +8,7 @@
 /* == DIALOG ================================================ */
 /* ========================================================== */
 
-.meal-details-dialog {
+.daily-meal-details-dialog {
     -fx-pref-width: 42em;
     -fx-pref-height: 44em;
 
@@ -23,24 +23,24 @@
 /* == HEADER ================================================ */
 /* ========================================================== */
 
-.meal-details-header {
+.daily-meal-details-header {
     -fx-alignment: center-left;
     -fx-spacing: 1em;
 }
 
-.meal-details-caption {
+.daily-meal-details-caption {
     -fx-font-size: 1em;
     -fx-font-weight: 600;
     -fx-text-fill: -app-text-muted;
 }
 
-.meal-details-title {
+.daily-meal-details-title {
     -fx-font-size: 1.8em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
 }
 
-.meal-details-close-button {
+.daily-meal-details-close-button {
     -fx-background-color: transparent;
     -fx-text-fill: -app-text-secondary;
 
@@ -51,7 +51,7 @@
     -fx-cursor: hand;
 }
 
-.meal-details-close-button:hover {
+.daily-meal-details-close-button:hover {
     -fx-background-color: -app-control-background;
     -fx-text-fill: -app-text-primary;
 }
@@ -60,7 +60,7 @@
 /* == MACRO PREVIEW ========================================= */
 /* ========================================================== */
 
-.meal-details-macro-container {
+.daily-meal-details-macro-container {
     -fx-max-width: Infinity;
 }
 
@@ -68,18 +68,18 @@
 /* == SECTION HEADER ======================================== */
 /* ========================================================== */
 
-.meal-details-section-header {
+.daily-meal-details-section-header {
     -fx-alignment: center-left;
     -fx-spacing: 1em;
 }
 
-.meal-details-section-title {
+.daily-meal-details-section-title {
     -fx-font-size: 1.15em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
 }
 
-.meal-details-item-count {
+.daily-meal-details-item-count {
     -fx-font-size: 0.95em;
     -fx-text-fill: -app-text-muted;
 }
@@ -88,11 +88,11 @@
 /* == ITEMS ================================================= */
 /* ========================================================== */
 
-.meal-details-scroll {
+.daily-meal-details-scroll {
     -fx-background-color: transparent;
 }
 
-.meal-details-items {
+.daily-meal-details-items {
     -fx-spacing: 0.7em;
     -fx-padding: 0.15em 0.65em 0;
 }
@@ -101,6 +101,6 @@
 /* == FOOTER ================================================ */
 /* ========================================================== */
 
-.meal-details-log-button {
+.daily-meal-details-log-button {
     -fx-pref-height: 3.4em;
 }

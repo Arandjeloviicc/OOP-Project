@@ -1,0 +1,69 @@
+@import "../../theme.css";
+@import "../form-controls.css";
+
+/* ========================================================== */
+/* == DELETE CONFIRMATION =================================== */
+/* ========================================================== */
+
+.delete-confirmation-dialog {
+    -fx-pref-width: 28em;
+    -fx-max-width: 28em;
+
+    -fx-spacing: 1.5em;
+    -fx-padding: 1.75em;
+
+    -fx-background-color: -app-popup-background;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: -app-popup-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1em;
+}
+
+/* ========================================================== */
+/* == CONTENT =============================================== */
+/* ========================================================== */
+
+.delete-confirmation-title {
+    -fx-font-size: 1.45em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+.delete-confirmation-message {
+    -fx-font-size: 1em;
+    -fx-text-fill: -app-text-secondary;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.delete-confirmation-actions {
+    -fx-hgap: 0.65em;
+}
+
+.delete-confirmation-action-button {
+    -fx-font-size: 1em;
+
+    -fx-min-height: 3.2em;
+    -fx-pref-height: 3.2em;
+    -fx-max-height: 3.2em;
+
+    -fx-background-radius: 1.6em;
+    -fx-border-radius: 1.6em;
+}
+
+.delete-confirmation-delete-button {
+    -fx-background-color: -app-danger-background;
+    -fx-border-color: -app-danger-border;
+
+    -fx-text-fill: -app-danger-text;
+    -fx-font-weight: bold;
+
+    -fx-cursor: hand;
+}
+
+.delete-confirmation-delete-button:hover {
+    -fx-background-color: -app-danger-background-pressed;
+}

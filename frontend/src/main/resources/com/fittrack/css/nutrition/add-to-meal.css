@@ -5,10 +5,10 @@
 @import "../common/scroll.css";
 
 /* ========================================================== */
-/* == FOOD LIST DIALOG ====================================== */
+/* == SELECTION DIALOG ====================================== */
 /* ========================================================== */
 
-.add-food-dialog {
+.add-to-meal-dialog {
     -fx-pref-width: 53em;
     -fx-pref-height: 51em;
     -fx-max-width: 63em;
@@ -19,27 +19,27 @@
 }
 
 /* ========================================================== */
-/* == FOOD LIST HEADER ====================================== */
+/* == HEADER ================================================ */
 /* ========================================================== */
 
-.add-food-header {
+.add-to-meal-header {
     -fx-spacing: 1em;
     -fx-alignment: center-left;
 }
 
-.add-food-caption {
+.add-to-meal-caption {
     -fx-font-size: 1em;
     -fx-font-weight: 600;
     -fx-text-fill: -app-text-primary;
 }
 
-.add-food-title {
+.add-to-meal-title {
     -fx-font-size: 1.8em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;
 }
 
-.add-food-close-button {
+.add-to-meal-header-button {
     -fx-background-color: transparent;
     -fx-text-fill: -app-text-secondary;
 
@@ -50,7 +50,7 @@
     -fx-cursor: hand;
 }
 
-.add-food-close-button:hover {
+.add-to-meal-header-button:hover {
     -fx-background-color: -app-control-background;
     -fx-text-fill: -app-text-primary;
 }
@@ -59,7 +59,7 @@
 /* == SEARCH ================================================ */
 /* ========================================================== */
 
-.add-food-search {
+.add-to-meal-search {
     -fx-pref-height: 3.6em;
 }
 
@@ -67,7 +67,7 @@
 /* == TABS ================================================== */
 /* ========================================================== */
 
-.add-food-tabs {
+.add-to-meal-tabs {
     -fx-spacing: 0.5em;
     -fx-padding: 0.2em;
 
@@ -77,7 +77,7 @@
     -fx-alignment: center-left;
 }
 
-.add-food-tab {
+.add-to-meal-tab {
     -fx-background-color: transparent;
     -fx-background-radius: 0.7em;
 
@@ -91,21 +91,21 @@
     -fx-alignment: center;
 }
 
-.add-food-tab:hover {
+.add-to-meal-tab:hover {
     -fx-text-fill: -app-text-primary;
     -fx-background-color: -app-control-background-soft;
 }
 
-.add-food-tab:selected {
+.add-to-meal-tab:selected {
     -fx-background-color: -app-primary;
     -fx-text-fill: -app-text-primary;
 }
 
 /* ========================================================== */
-/* == CREATE ITEM PANEL ===================================== */
+/* == CREATE PANEL ========================================== */
 /* ========================================================== */
 
-.add-food-create-panel {
+.add-to-meal-create-panel {
     -fx-spacing: 0.15em;
     -fx-padding: 0.7em;
 
@@ -118,47 +118,47 @@
     -fx-cursor: hand;
 }
 
-.add-food-create-icon {
+.add-to-meal-create-icon {
     -fx-font-size: 1.4em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-primary-light;
 }
 
-.add-food-create-text {
+.add-to-meal-create-text {
     -fx-font-size: 1em;
     -fx-text-fill: -app-text-primary;
 }
 
 /* Create Food */
-.add-food-create-panel.create-food {
+.add-to-meal-create-panel.create-food {
     -fx-border-color: -app-primary;
 }
 
-.add-food-create-panel.create-food .add-food-create-icon,
-.add-food-create-panel.create-food .add-food-create-text {
+.add-to-meal-create-panel.create-food .add-to-meal-create-icon,
+.add-to-meal-create-panel.create-food .add-to-meal-create-text {
     -fx-text-fill: -app-primary-light;
 }
 
 /* Create Meal */
-.add-food-create-panel.create-meal {
+.add-to-meal-create-panel.create-meal {
     -fx-border-color: -app-nutrition-fat;
 }
 
-.add-food-create-panel.create-meal .add-food-create-icon,
-.add-food-create-panel.create-meal .add-food-create-text {
+.add-to-meal-create-panel.create-meal .add-to-meal-create-icon,
+.add-to-meal-create-panel.create-meal .add-to-meal-create-text {
     -fx-text-fill: -app-nutrition-fat;
 }
 
 /* ========================================================== */
-/* == FOOD ITEMS ============================================ */
+/* == RESULTS =============================================== */
 /* ========================================================== */
 
-.add-food-items {
+.add-to-meal-results {
     -fx-spacing: 0.65em;
     -fx-padding: 0.2em 0.35em 0.65em 0;
 }
 
-.add-food-placeholder {
+.add-to-meal-placeholder {
     -fx-text-fill: -app-text-secondary;
     -fx-padding: 1.5em 0.35em;
 }

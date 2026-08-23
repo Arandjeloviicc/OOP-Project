@@ -6,7 +6,7 @@ import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.MealItemCardController;
-import com.fittrack.controller.nutrition.components.MealItemDetailsController;
+import com.fittrack.controller.nutrition.components.MealItemEditorController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.dto.nutrition.meal.MealResponse;
@@ -32,10 +32,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-public class MealDetailsController extends FormController implements Initializable, ResponsiveLayout {
+public class DailyMealDetailsController extends FormController implements Initializable, ResponsiveLayout {
 
     // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(MealDetailsController.class);
+    private static final Logger log = LoggerFactory.getLogger(DailyMealDetailsController.class);
 
     @Override
     protected Logger getLogger() { return log; }
@@ -165,7 +165,7 @@ public class MealDetailsController extends FormController implements Initializab
 
         OverlayManager.close();
 
-        LoadedComponent<AddFoodController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_FOOD);
+        LoadedComponent<AddToMealController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
 
         addFood.controller().setData(mealType, mealDate);
 
@@ -224,7 +224,7 @@ public class MealDetailsController extends FormController implements Initializab
 
     // ── Open Food Details ───────────────────────────────────────────────────
     private void openFoodDetails(MealItemResponse mealItem) {
-        LoadedComponent<MealItemDetailsController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_DETAILS);
+        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
 
         details.controller().setData(mealItem, mealType);
         details.controller().setCaption("Edit food");

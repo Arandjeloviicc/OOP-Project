@@ -13,24 +13,24 @@
 <StackPane fx:id="rootLayout"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.nutrition.components.MealEditorController"
-           stylesheets="@../../../css/nutrition/components/meal-editor.css"
-           styleClass="popup-host, meal-editor-root">
+           fx:controller="com.fittrack.controller.nutrition.components.SavedMealEditorController"
+           stylesheets="@../../../css/nutrition/components/saved-meal-editor.css"
+           styleClass="popup-host, saved-meal-editor-root">
 
     <!-- Editor -->
     <VBox fx:id="editorContainer"
-          styleClass="popup-dialog, meal-editor-dialog">
+          styleClass="popup-dialog, saved-meal-editor-dialog">
 
         <!-- Header -->
-        <HBox styleClass="meal-editor-header">
+        <HBox styleClass="saved-meal-editor-header">
 
             <VBox spacing="0.2">
                 <Label text="My Meal"
-                       styleClass="meal-editor-caption"/>
+                       styleClass="saved-meal-editor-caption"/>
 
                 <Label fx:id="titleLabel"
                        text="Create Meal"
-                       styleClass="meal-editor-title"/>
+                       styleClass="saved-meal-editor-title"/>
             </VBox>
 
         </HBox>
@@ -56,19 +56,19 @@
 
         <!-- Macro Preview -->
         <VBox fx:id="macroPreviewContainer"
-              styleClass="meal-editor-macro-container"/>
+              styleClass="saved-meal-editor-macro-container"/>
 
         <!-- Foods Header -->
-        <HBox styleClass="meal-editor-section-header">
+        <HBox styleClass="saved-meal-editor-section-header">
 
             <Label text="Foods"
-                   styleClass="meal-editor-section-title"/>
+                   styleClass="saved-meal-editor-section-title"/>
 
             <HBox HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="itemCountLabel"
                    text="0 items"
-                   styleClass="meal-editor-item-count"/>
+                   styleClass="saved-meal-editor-item-count"/>
 
         </HBox>
 
@@ -76,10 +76,10 @@
         <ScrollPane fitToWidth="true"
                     hbarPolicy="NEVER"
                     VBox.vgrow="ALWAYS"
-                    styleClass="app-scroll, meal-editor-scroll">
+                    styleClass="app-scroll, saved-meal-editor-scroll">
 
             <VBox fx:id="itemsContainer"
-                  styleClass="meal-editor-items"/>
+                  styleClass="saved-meal-editor-items"/>
 
         </ScrollPane>
 
@@ -87,10 +87,10 @@
         <Button text="+  Add food"
                 maxWidth="Infinity"
                 onAction="#handleAddFood"
-                styleClass="action-btn, meal-editor-add-button"/>
+                styleClass="action-btn, saved-meal-editor-add-button"/>
 
         <!-- Cancel / Create or Save -->
-        <GridPane styleClass="meal-editor-actions">
+        <GridPane styleClass="saved-meal-editor-actions">
 
             <columnConstraints>
                 <ColumnConstraints hgrow="ALWAYS"
@@ -103,7 +103,7 @@
             <Button text="Cancel"
                     maxWidth="Infinity"
                     onAction="#handleCancel"
-                    styleClass="back-btn, meal-editor-action-button"
+                    styleClass="back-btn, saved-meal-editor-action-button"
                     GridPane.columnIndex="0"/>
 
             <Button fx:id="saveButton"
@@ -111,7 +111,7 @@
                     maxWidth="Infinity"
                     visible="false"
                     onAction="#handleSave"
-                    styleClass="action-btn, meal-editor-action-button"
+                    styleClass="action-btn, saved-meal-editor-action-button"
                     GridPane.columnIndex="1"/>
 
         </GridPane>
@@ -123,7 +123,7 @@
                 visible="false"
                 managed="false"
                 onAction="#handleDeleteMeal"
-                styleClass="meal-editor-action-button, meal-editor-delete-button"/>
+                styleClass="saved-meal-editor-action-button, saved-meal-editor-delete-button"/>
 
     </VBox>
 
@@ -131,6 +131,12 @@
     <StackPane fx:id="itemDetailsContainer"
                visible="false"
                managed="false"
-               styleClass="popup-host, meal-editor-item-details-container"/>
+               styleClass="popup-host, saved-meal-editor-item-details-container"/>
+
+    <!-- Delete confirmation -->
+    <StackPane fx:id="confirmationContainer"
+               visible="false"
+               managed="false"
+               styleClass="popup-host, saved-meal-editor-confirmation-container"/>
 
 </StackPane>
