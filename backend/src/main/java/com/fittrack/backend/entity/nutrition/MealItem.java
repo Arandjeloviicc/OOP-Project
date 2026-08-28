@@ -70,32 +70,25 @@ public class MealItem {
     // Constructor
     protected MealItem() {}
 
-    public MealItem(Meal meal, Food food, double quantityGrams) {
+    public MealItem(Meal meal, Food food, String foodName, String brand, double quantityGrams, double servingSizeGrams, double caloriesPerServing, double proteinPerServing, double carbsPerServing, double fatPerServing) {
         this.meal = meal;
         this.food = food;
+        this.foodName = foodName;
+        this.brand = brand;
         this.quantityGrams = quantityGrams;
+        this.servingSizeGrams = servingSizeGrams;
+        this.caloriesPerServing = caloriesPerServing;
+        this.proteinPerServing = proteinPerServing;
+        this.carbsPerServing = carbsPerServing;
+        this.fatPerServing = fatPerServing;
+    }
 
-        this.foodName = food.getName();
-        this.brand = food.getBrand();
-        this.servingSizeGrams = food.getServingSizeGrams();
-        this.caloriesPerServing = food.getCaloriesPerServing();
-        this.proteinPerServing = food.getProteinPerServing();
-        this.carbsPerServing = food.getCarbsPerServing();
-        this.fatPerServing = food.getFatPerServing();
+    public MealItem(Meal meal, Food food, double quantityGrams) {
+        this(meal, food, food.getName(), food.getBrand(), quantityGrams, food.getServingSizeGrams(), food.getCaloriesPerServing(), food.getProteinPerServing(), food.getCarbsPerServing(), food.getFatPerServing());
     }
 
     public MealItem(Meal meal, MealItem sourceItem) {
-        this.meal = meal;
-        this.food = sourceItem.getFood();
-        this.quantityGrams = sourceItem.getQuantityGrams();
-
-        this.foodName = sourceItem.getFoodName();
-        this.brand = sourceItem.getBrand();
-        this.servingSizeGrams = sourceItem.getServingSizeGrams();
-        this.caloriesPerServing = sourceItem.getCaloriesPerServing();
-        this.proteinPerServing = sourceItem.getProteinPerServing();
-        this.carbsPerServing = sourceItem.getCarbsPerServing();
-        this.fatPerServing = sourceItem.getFatPerServing();
+        this(meal, sourceItem.getFood(), sourceItem.getFoodName(), sourceItem.getBrand(), sourceItem.getQuantityGrams(), sourceItem.getServingSizeGrams(), sourceItem.getCaloriesPerServing(), sourceItem.getProteinPerServing(), sourceItem.getCarbsPerServing(), sourceItem.getFatPerServing());
     }
 
     // Default

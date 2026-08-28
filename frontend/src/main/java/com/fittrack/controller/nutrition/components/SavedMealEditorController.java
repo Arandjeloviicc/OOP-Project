@@ -5,6 +5,7 @@ import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.components.DeleteConfirmationController;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.dto.nutrition.meal.MealResponse;
+import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.dto.nutrition.meal.item.*;
 import com.fittrack.model.nutrition.SavedMealEditorMode;
 import com.fittrack.ui.FxmlComponentLoader;
@@ -52,6 +53,9 @@ public class SavedMealEditorController extends FormController implements Initial
 
     @FXML private StackPane confirmationContainer;
 
+    // Current Meal that is edited
+    private Integer mealId;
+
     // Mode (Create/Edit)
     private SavedMealEditorMode mode = SavedMealEditorMode.CREATE;
 
@@ -60,6 +64,10 @@ public class SavedMealEditorController extends FormController implements Initial
 
     // Added items
     private final List<MealItemDraft> draftItems = new ArrayList<>();
+
+    // Original Edit State
+    private String originalName;
+    private List<MealItemDraft> originalDraftItems = List.of();
 
     // Actions
     private Runnable onCancelAction;
@@ -89,7 +97,12 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     private void addListeners() {
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> restoreNameHelper());
+        nameField.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    restoreNameHelper();
+                    updateSaveButton();
+                }
+        );
         restoreNameHelper();
     }
 
@@ -115,7 +128,12 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     public void setCreateMode() {
+        mealId = null;
+
         mode = SavedMealEditorMode.CREATE;
+
+        originalName = null;
+        originalDraftItems = List.of();
 
         titleLabel.setText("Create Meal");
         saveButton.setText("Create meal");
@@ -129,7 +147,12 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     public void setCreateMode(MealResponse sourceMeal) {
+        mealId = null;
+
         mode = SavedMealEditorMode.CREATE;
+
+        originalName = null;
+        originalDraftItems = List.of();
 
         titleLabel.setText("Save as My Meal");
         saveButton.setText("Save meal");
@@ -160,6 +183,8 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     public void setEditMode(MealResponse meal) {
+        mealId = meal.id();
+
         mode = SavedMealEditorMode.EDIT;
 
         titleLabel.setText("Edit Meal");
@@ -167,7 +192,8 @@ public class SavedMealEditorController extends FormController implements Initial
 
         setVisible(deleteMealButton, true);
 
-        nameField.setText(meal.name());
+        originalName = meal.name().trim();
+        nameField.setText(originalName);
 
         draftItems.clear();
 
@@ -192,8 +218,24 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     // ── Draft State ────────────────────────────────────────────
+    private boolean hasChanges() {
+        if (mode != SavedMealEditorMode.EDIT) {
+            return true;
+        }
+
+        String currentName = nameField.getText().trim();
+
+        return !currentName.equals(originalName)
+                || !draftItems.equals(originalDraftItems);
+    }
+
     public void addDraftItem(MealItemDraft item) {
         draftItems.add(item);
+        refreshDraft();
+    }
+
+    public void addDraftItems(List<MealItemDraft> items) {
+        draftItems.addAll(items);
         refreshDraft();
     }
 
@@ -308,7 +350,15 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     private void updateSaveButton() {
-        saveButton.setVisible(!draftItems.isEmpty());
+        boolean hasItems = !draftItems.isEmpty();
+
+        saveButton.setVisible(hasItems);
+
+        if (mode == SavedMealEditorMode.EDIT) {
+            saveButton.setDisable(!hasChanges());
+        } else {
+            saveButton.setDisable(false);
+        }
     }
 
     // ── Button Actions ────────────────────────────────────────────────
@@ -345,6 +395,10 @@ public class SavedMealEditorController extends FormController implements Initial
         if (mode == SavedMealEditorMode.CREATE) {
             createMeal(name);
         } else {
+            if (!hasChanges()) {
+                return;
+            }
+
             updateMeal(name);
         }
     }
@@ -353,8 +407,16 @@ public class SavedMealEditorController extends FormController implements Initial
         List<CreateMealItemRequest> items = draftItems.stream()
                 .map(item -> new CreateMealItemRequest(
                         item.foodId(),
-                        item.quantityGrams()
-                )).toList();
+                        item.foodName(),
+                        item.brand(),
+                        item.quantityGrams(),
+                        item.servingSizeGrams(),
+                        item.caloriesPerServing(),
+                        item.proteinPerServing(),
+                        item.carbsPerServing(),
+                        item.fatPerServing()
+                ))
+                .toList();
 
         CreateMealRequest request = new CreateMealRequest(name, items);
 
@@ -368,11 +430,19 @@ public class SavedMealEditorController extends FormController implements Initial
                 .map(item -> new UpdateSavedMealItemRequest(
                         item.mealItemId(),
                         item.foodId(),
-                        item.quantityGrams()
+                        item.foodName(),
+                        item.brand(),
+                        item.quantityGrams(),
+                        item.servingSizeGrams(),
+                        item.caloriesPerServing(),
+                        item.proteinPerServing(),
+                        item.carbsPerServing(),
+                        item.fatPerServing()
                 ))
                 .toList();
 
-        UpdateSavedMealRequest request = new UpdateSavedMealRequest(name, items);
+        UpdateSavedMealRequest request =
+                new UpdateSavedMealRequest(name, items);
 
         if (onUpdateAction != null) {
             onUpdateAction.accept(request);
@@ -434,5 +504,10 @@ public class SavedMealEditorController extends FormController implements Initial
 
     private void restoreNameHelper() {
         setFieldMessage(nameMessage, AppConstants.Messages.HELPER_MEAL_NAME_MESSAGE, false, nameField);
+    }
+
+    // ── Getters ────────────────────────────────────────────────
+    public Integer getMealId() {
+        return mealId;
     }
 }

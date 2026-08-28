@@ -1,5 +1,6 @@
 package com.fittrack.service.nutrition;
 
+import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
@@ -56,5 +57,23 @@ public final class MealService {
         }
 
         return mealItem.quantityGrams() / mealItem.servingSizeGrams() * mealItem.caloriesPerServing();
+    }
+
+    public static List<MealItemDraft> createDraftItems(MealResponse meal) {
+        return meal.items()
+                .stream()
+                .map(item -> new MealItemDraft(
+                        null,
+                        item.foodId(),
+                        item.foodName(),
+                        item.brand(),
+                        item.quantityGrams(),
+                        item.servingSizeGrams(),
+                        item.caloriesPerServing(),
+                        item.proteinPerServing(),
+                        item.carbsPerServing(),
+                        item.fatPerServing()
+                ))
+                .toList();
     }
 }

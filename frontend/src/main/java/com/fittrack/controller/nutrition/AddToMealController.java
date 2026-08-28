@@ -8,6 +8,7 @@ import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.*;
+import com.fittrack.controller.nutrition.coordinator.AddToMealCoordinator;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.dto.nutrition.meal.LogMealRequest;
 import com.fittrack.dto.nutrition.meal.item.AddMealItemRequest;
@@ -15,7 +16,7 @@ import com.fittrack.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
-import com.fittrack.dto.nutrition.meal.item.UpdateSavedMealRequest;
+import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.model.nutrition.SearchSource;
@@ -76,15 +77,15 @@ public class AddToMealController extends FormController implements Initializable
     // Search Source Tabs
     private List<ToggleButton> searchTabs;
 
+    // Coordinator
+    private AddToMealCoordinator coordinator;
+
     // Actions
     private MealType mealType;
     private LocalDate mealDate;
     private Runnable onCloseAction;
     private Consumer<Boolean> onBackAction;
     private boolean dataChanged;
-
-    // Active Meal Editor
-    private SavedMealEditorController activeSavedMealEditor;
 
     // Search Helpers
     private final PauseTransition searchDebounce = new PauseTransition(Duration.millis(300));
@@ -101,6 +102,10 @@ public class AddToMealController extends FormController implements Initializable
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Coordinator
+        coordinator = new AddToMealCoordinator(selectionContainer, itemDetailsContainer, editorContainer);
+
         // Responsive Initialize
         initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
         initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
@@ -139,8 +144,8 @@ public class AddToMealController extends FormController implements Initializable
 
     @FXML
     private void handleBack() {
-        if (activeSavedMealEditor != null) {
-            returnToMealEditor();
+        if (coordinator.hasActiveSavedMealEditor()) {
+            coordinator.returnToMealEditor();
             return;
         }
 
@@ -153,7 +158,7 @@ public class AddToMealController extends FormController implements Initializable
 
     @FXML
     private void handleCreateItem() {
-        if (activeSavedMealEditor != null) {
+        if (coordinator.hasActiveSavedMealEditor()) {
             return;
         }
 
@@ -277,7 +282,7 @@ public class AddToMealController extends FormController implements Initializable
             }
 
             case MY_FOODS -> {
-                if (activeSavedMealEditor != null) {
+                if (coordinator.hasActiveSavedMealEditor()) {
                     setVisible(createPanel, false);
                 } else {
                     showCreateFoodPanel();
@@ -287,7 +292,12 @@ public class AddToMealController extends FormController implements Initializable
             }
 
             case MY_MEALS -> {
-                showCreateMealPanel();
+                if (coordinator.hasActiveSavedMealEditor()) {
+                    setVisible(createPanel, false);
+                } else {
+                    showCreateMealPanel();
+                }
+
                 loadMyMeals(searchField.getText());
             }
         }
@@ -447,7 +457,7 @@ public class AddToMealController extends FormController implements Initializable
     private void quickAddFood(FoodResponse food, Runnable onSuccess, Runnable onFailure) {
         double quantityGrams = food.servingSizeGrams();
 
-        if (activeSavedMealEditor != null) {
+        if (coordinator.hasActiveSavedMealEditor()) {
             addFoodToMealDraft(food, quantityGrams);
             return;
         }
@@ -459,6 +469,20 @@ public class AddToMealController extends FormController implements Initializable
         resultsContainer.getChildren().clear();
 
         for (MealResponse meal : meals) {
+
+            // If we are editing a saved meal, don't show that meal in My Meals
+            if (coordinator.hasActiveSavedMealEditor()) {
+                SavedMealEditorController activeEditor = coordinator.getActiveSavedMealEditor();
+
+                if (Objects.equals(meal.id(), activeEditor.getMealId())) {
+                    continue;
+                }
+
+                if (meal.items().isEmpty()) {
+                    continue;
+                }
+            }
+
             LoadedComponent<SavedMealListItemController> item = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_LIST_ITEM);
 
             DailyNutritionTotals totals = MealService.calculateMealNutritionTotals(meal);
@@ -471,101 +495,87 @@ public class AddToMealController extends FormController implements Initializable
                     totals.protein()
             );
 
-            item.controller().setOnEditAction(
-                    () -> openSavedMealEditor(meal)
-            );
+            if (coordinator.hasActiveSavedMealEditor()) {
+                item.controller().setOnAddAction(
+                        () -> addMealToMealDraft(meal)
+                );
+            } else {
+                item.controller().setOnEditAction(
+                        () -> openSavedMealEditor(meal)
+                );
 
-            item.controller().setOnAddAction(
-                    () -> logMyMeal(
-                            meal,
-                            item.controller()::showAddSuccess,
-                            item.controller()::resetAddFeedback
-                    )
-            );
+                item.controller().setOnAddAction(
+                        () -> logMyMeal(
+                                meal,
+                                item.controller()::showAddSuccess,
+                                item.controller()::resetAddFeedback
+                        )
+                );
+            }
 
             resultsContainer.getChildren().add(item.root());
         }
     }
 
+    private void addMealToMealDraft(MealResponse meal) {
+        coordinator.getActiveSavedMealEditor().addDraftItems(
+                MealService.createDraftItems(meal)
+        );
+
+        coordinator.returnToMealEditor();
+    }
+
     private void openSavedMealEditor(MealResponse meal) {
-        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
+        coordinator.openSavedMealEditor(
+                meal,
 
-        activeSavedMealEditor = editor.controller();
-        activeSavedMealEditor.setEditMode(meal);
+                this::restoreMyMealsIfNeeded,
 
-        activeSavedMealEditor.setOnCancelAction(() -> {
-            activeSavedMealEditor = null;
+                this::openFoodSelectionForMealDraft,
 
-            closeEditor();
-            resetSearchSource(myMealsButton);
-        });
+                request -> updateMeal(
+                        meal.id(),
+                        request
+                ),
 
-        activeSavedMealEditor.setOnAddFoodAction(
-                this::openFoodSelectionForMealDraft
-        );
-
-        activeSavedMealEditor.setOnUpdateAction(
-                request -> updateMeal(meal.id(), request)
-        );
-
-        activeSavedMealEditor.setOnDeleteAction(
                 () -> deleteMeal(meal.id())
         );
-
-        editorContainer.getChildren().setAll(editor.root());
-
-        setVisible(selectionContainer, false);
-        setVisible(editorContainer, true);
     }
 
     private void openSaveAsMealEditor(MealResponse sourceMeal) {
-        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
+        coordinator.openSaveAsMealEditor(
+                sourceMeal,
 
-        activeSavedMealEditor = editor.controller();
+                OverlayManager::close,
 
-        activeSavedMealEditor.setCreateMode(sourceMeal);
+                this::openFoodSelectionForMealDraft,
 
-        activeSavedMealEditor.setOnCancelAction(() -> {
-            activeSavedMealEditor = null;
-            OverlayManager.close();
-        });
-
-        activeSavedMealEditor.setOnAddFoodAction(
-                this::openFoodSelectionForMealDraft
-        );
-
-        activeSavedMealEditor.setOnCreateAction(
                 request -> createSavedMeal(
                         request,
-                        OverlayManager::close
+                        () -> {
+                            coordinator.closeEditor();
+                            OverlayManager.close();
+                        }
                 )
         );
-
-        editorContainer.getChildren().setAll(editor.root());
-
-        setVisible(selectionContainer, false);
-        setVisible(itemDetailsContainer, false);
-        setVisible(editorContainer, true);
     }
 
     private void updateMeal(Integer mealId, UpdateSavedMealRequest request) {
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
-        activeSavedMealEditor.setSubmitting(true);
+        coordinator.getActiveSavedMealEditor().setSubmitting(true);
 
         AsyncTaskRunner.run(
                 () -> mealApi.updateMyMeal(userId, mealId, request),
 
                 updatedMeal -> {
-                    activeSavedMealEditor = null;
-
-                    closeEditor();
+                    coordinator.closeEditor();
                     resetSearchSource(myMealsButton);
                 },
 
                 exception -> {
-                    if (activeSavedMealEditor != null) {
-                        activeSavedMealEditor.setSubmitting(false);
+                    if (coordinator.hasActiveSavedMealEditor()) {
+                        coordinator.getActiveSavedMealEditor().setSubmitting(false);
                     }
 
                     log.error(
@@ -579,7 +589,7 @@ public class AddToMealController extends FormController implements Initializable
     private void deleteMeal(Integer mealId) {
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
-        activeSavedMealEditor.setSubmitting(true);
+        coordinator.getActiveSavedMealEditor().setSubmitting(true);
 
         AsyncTaskRunner.run(
                 () -> {
@@ -588,15 +598,13 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 ignored -> {
-                    activeSavedMealEditor = null;
-
-                    closeEditor();
+                    coordinator.closeEditor();
                     resetSearchSource(myMealsButton);
                 },
 
                 exception -> {
-                    if (activeSavedMealEditor != null) {
-                        activeSavedMealEditor.setSubmitting(false);
+                    if (coordinator.hasActiveSavedMealEditor()) {
+                        coordinator.getActiveSavedMealEditor().setSubmitting(false);
                     }
 
                     log.error(
@@ -641,61 +649,23 @@ public class AddToMealController extends FormController implements Initializable
 
     // ── Food Details ───────────────────────────────────────────────────
     private void openFoodDetails(FoodResponse food) {
-        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
+        coordinator.openFoodDetails(
+                food,
+                mealType,
 
-        if (activeSavedMealEditor != null) {
-            details.controller().setDraftData(food);
-            details.controller().setCaption("Add food");
-            details.controller().setConfirmButtonText("Add food");
+                quantityGrams -> addFoodToMealDraft(
+                        food,
+                        quantityGrams
+                ),
 
-            details.controller().setOnConfirmAction(
-                    quantityGrams -> addFoodToMealDraft(
-                            food,
-                            quantityGrams
-                    )
-            );
-
-        } else {
-            details.controller().setData(food, mealType);
-            details.controller().setCaption("Add food");
-            details.controller().setConfirmButtonText("Add to meal");
-
-            details.controller().setOnConfirmAction(
-                    quantityGrams -> addFoodToMeal(
-                            food,
-                            details.controller().getSelectedMealType(),
-                            quantityGrams,
-                            this::closeFoodDetails,
-                            null
-                    )
-            );
-        }
-
-        details.controller().setOnCancelAction(
-                this::closeFoodDetails
+                (selectedMeal, quantityGrams) -> addFoodToMeal(
+                        food,
+                        selectedMeal,
+                        quantityGrams,
+                        coordinator::closeFoodDetails,
+                        null
+                )
         );
-
-        itemDetailsContainer.getChildren().setAll(details.root());
-
-        setVisible(selectionContainer, false);
-        setVisible(itemDetailsContainer, true);
-    }
-
-    private void closeFoodDetails() {
-        itemDetailsContainer.getChildren().clear();
-
-        setVisible(itemDetailsContainer, false);
-        setVisible(selectionContainer, true);
-    }
-
-    private void returnToMealEditor() {
-        itemDetailsContainer.getChildren().clear();
-
-        setVisible(myMealsButton, true);
-
-        setVisible(itemDetailsContainer, false);
-        setVisible(selectionContainer, false);
-        setVisible(editorContainer, true);
     }
 
     // ── Meal Item Actions ──────────────────────────────────────────────
@@ -746,38 +716,16 @@ public class AddToMealController extends FormController implements Initializable
                 food.fatPerServing()
         );
 
-        activeSavedMealEditor.addDraftItem(draftItem);
+        coordinator.getActiveSavedMealEditor().addDraftItem(draftItem);
 
-        returnToMealEditor();
+        coordinator.returnToMealEditor();
     }
 
     // ── Create/Edit Food Action ──────────────────────────────────────────────
     private void openCreateFood() {
-        LoadedComponent<FoodEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.FOOD_EDITOR);
-
-        editor.controller().setCreateMode();
-
-        editor.controller().setOnCancelAction(
-                this::closeEditor
+        coordinator.openCreateFood(
+                this::createFood
         );
-
-        editor.controller().setOnCreateAction(
-                request -> createFood(
-                        request,
-                        editor.controller()
-                )
-        );
-        editorContainer.getChildren().setAll(editor.root());
-
-        setVisible(selectionContainer, false);
-        setVisible(editorContainer, true);
-    }
-
-    private void closeEditor() {
-        editorContainer.getChildren().clear();
-
-        setVisible(editorContainer, false);
-        setVisible(selectionContainer, true);
     }
 
     private void createFood(CreateFoodRequest createFoodRequest, FoodEditorController editor) {
@@ -791,7 +739,7 @@ public class AddToMealController extends FormController implements Initializable
                 food -> {
                     FoodSearchCache.clear();
 
-                    closeEditor();
+                    coordinator.closeEditor();
                     resetSearchSource(myFoodsButton);
                 },
 
@@ -808,60 +756,41 @@ public class AddToMealController extends FormController implements Initializable
 
     // ── Create/Edit Meal Action ──────────────────────────────────────────────
     private void openCreateMeal() {
-        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
+        coordinator.openCreateMeal(
+                this::restoreMyMealsIfNeeded,
 
-        activeSavedMealEditor = editor.controller();
-        activeSavedMealEditor.setCreateMode();
+                this::openFoodSelectionForMealDraft,
 
-        activeSavedMealEditor.setOnCancelAction(() -> {
-            activeSavedMealEditor = null;
-
-            closeEditor();
-            resetSearchSource(myMealsButton);
-        });
-
-        activeSavedMealEditor.setOnAddFoodAction(
-                this::openFoodSelectionForMealDraft
-        );
-
-        activeSavedMealEditor.setOnCreateAction(
                 this::createSavedMeal
         );
+    }
 
-        editorContainer.getChildren().setAll(editor.root());
-
-        setVisible(selectionContainer, false);
-        setVisible(editorContainer, true);
+    private void returnToMyMeals() {
+        coordinator.closeEditor();
+        resetSearchSource(myMealsButton);
     }
 
     private void createSavedMeal(CreateMealRequest request) {
         createSavedMeal(request, this::returnToMyMeals);
     }
 
-    private void returnToMyMeals() {
-        closeEditor();
-        resetSearchSource(myMealsButton);
-    }
-
     private void createSavedMeal(CreateMealRequest request, Runnable onSuccess) {
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
-        activeSavedMealEditor.setSubmitting(true);
+        coordinator.getActiveSavedMealEditor().setSubmitting(true);
 
         AsyncTaskRunner.run(
                 () -> mealApi.createMyMeal(userId, request),
 
                 meal -> {
-                    activeSavedMealEditor = null;
-
                     if (onSuccess != null) {
                         onSuccess.run();
                     }
                 },
 
                 exception -> {
-                    if (activeSavedMealEditor != null) {
-                        activeSavedMealEditor.setSubmitting(false);
+                    if (coordinator.hasActiveSavedMealEditor()) {
+                        coordinator.getActiveSavedMealEditor().setSubmitting(false);
                     }
 
                     log.error(
@@ -873,11 +802,7 @@ public class AddToMealController extends FormController implements Initializable
     }
 
     private void openFoodSelectionForMealDraft() {
-        setVisible(editorContainer, false);
-        setVisible(itemDetailsContainer, false);
-        setVisible(selectionContainer, true);
-
-        setVisible(myMealsButton, false);
+        coordinator.showSelection();
 
         titleLabel.setText("Add to meal");
 
@@ -897,6 +822,14 @@ public class AddToMealController extends FormController implements Initializable
         }
 
         searchSourceGroup.selectToggle(targetButton);
+    }
+
+    private void restoreMyMealsIfNeeded() {
+        if (searchSourceGroup.getSelectedToggle() == myMealsButton) {
+            return;
+        }
+
+        resetSearchSource(myMealsButton);
     }
 
     // ── Cache Helpers ──────────────────────────────────────────────

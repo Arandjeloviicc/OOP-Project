@@ -7,7 +7,7 @@ import com.fittrack.backend.dto.nutrition.meal.item.AddMealItemRequest;
 import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.backend.dto.nutrition.meal.MealResponse;
 import com.fittrack.backend.dto.nutrition.meal.item.UpdateMealItemRequest;
-import com.fittrack.backend.dto.nutrition.meal.item.UpdateSavedMealRequest;
+import com.fittrack.backend.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.backend.service.nutrition.MealService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;

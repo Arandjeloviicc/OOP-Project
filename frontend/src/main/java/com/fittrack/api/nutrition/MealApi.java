@@ -3,6 +3,7 @@ package com.fittrack.api.nutrition;
 import com.fittrack.api.common.BaseApi;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.dto.nutrition.meal.LogMealRequest;
+import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.dto.nutrition.meal.item.*;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import tools.jackson.core.type.TypeReference;

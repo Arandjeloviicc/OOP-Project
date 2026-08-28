@@ -1,4 +1,6 @@
-package com.fittrack.dto.nutrition.meal.item;
+package com.fittrack.dto.nutrition.meal;
+
+import com.fittrack.dto.nutrition.meal.item.UpdateSavedMealItemRequest;
 
 import java.util.List;
 

@@ -2,6 +2,7 @@ package com.fittrack.backend.service.nutrition;
 
 import com.fittrack.backend.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.backend.dto.nutrition.meal.LogMealRequest;
+import com.fittrack.backend.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.backend.dto.nutrition.meal.item.*;
 import com.fittrack.backend.dto.nutrition.meal.MealResponse;
 import com.fittrack.backend.entity.nutrition.Food;
@@ -185,6 +186,7 @@ public class MealService {
         List<Integer> foodIds = request.items()
                 .stream()
                 .map(CreateMealItemRequest::foodId)
+                .filter(Objects::nonNull)
                 .toList();
 
         List<Food> foods = foodRepository.findAllById(foodIds);
@@ -195,7 +197,8 @@ public class MealService {
                     itemRequest.foodId()
             );
 
-            if (food.getCreatedByUser() != null
+            if (food != null
+                    && food.getCreatedByUser() != null
                     && !food.getCreatedByUser().getId().equals(userId)) {
                 throw new IllegalArgumentException(
                         "Food does not belong to user."
@@ -205,7 +208,14 @@ public class MealService {
             MealItem mealItem = new MealItem(
                     meal,
                     food,
-                    itemRequest.quantityGrams()
+                    itemRequest.foodName().trim(),
+                    itemRequest.brand(),
+                    itemRequest.quantityGrams(),
+                    itemRequest.servingSizeGrams(),
+                    itemRequest.caloriesPerServing(),
+                    itemRequest.proteinPerServing(),
+                    itemRequest.carbsPerServing(),
+                    itemRequest.fatPerServing()
             );
 
             mealItemRepository.save(mealItem);
@@ -287,13 +297,9 @@ public class MealService {
                 continue;
             }
 
-            if (itemRequest.foodId() == null) {
-                throw new IllegalArgumentException(
-                        "Food is required for new meal item."
-                );
+            if (itemRequest.foodId() != null) {
+                newFoodIds.add(itemRequest.foodId());
             }
-
-            newFoodIds.add(itemRequest.foodId());
         }
 
         List<Food> newFoods = foodRepository.findAllById(newFoodIds);
@@ -309,7 +315,8 @@ public class MealService {
                     itemRequest.foodId()
             );
 
-            if (food.getCreatedByUser() != null
+            if (food != null
+                    && food.getCreatedByUser() != null
                     && !food.getCreatedByUser()
                     .getId()
                     .equals(userId)) {
@@ -321,7 +328,14 @@ public class MealService {
             MealItem mealItem = new MealItem(
                     meal,
                     food,
-                    itemRequest.quantityGrams()
+                    itemRequest.foodName().trim(),
+                    itemRequest.brand(),
+                    itemRequest.quantityGrams(),
+                    itemRequest.servingSizeGrams(),
+                    itemRequest.caloriesPerServing(),
+                    itemRequest.proteinPerServing(),
+                    itemRequest.carbsPerServing(),
+                    itemRequest.fatPerServing()
             );
 
             mealItemRepository.save(mealItem);
@@ -391,13 +405,17 @@ public class MealService {
     }
 
     private Food findFoodById(List<Food> foods, Integer foodId) {
+        if (foodId == null) {
+            return null;
+        }
+
         for (Food food : foods) {
             if (food.getId().equals(foodId)) {
                 return food;
             }
         }
 
-        throw new IllegalArgumentException("Food not found");
+        return null;
     }
 
     public MealResponse toResponse(Meal meal) {
