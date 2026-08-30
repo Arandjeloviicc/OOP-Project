@@ -265,7 +265,7 @@ public class DailyMealDetailsController extends FormController implements Initia
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
         AsyncTaskRunner.run(
-                () -> mealApi.getMealsFromDate(userId, mealDate),
+                () -> mealApi.getMealsForDate(userId, mealDate),
 
                 meals -> {
                     MealResponse refreshedMeal = meals.stream()

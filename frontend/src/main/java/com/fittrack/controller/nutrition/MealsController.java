@@ -166,7 +166,7 @@ public class MealsController extends BaseController implements Initializable, Re
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
         AsyncTaskRunner.run(
-                () -> mealApi.getMealsFromDate(userId, currentDate),
+                () -> mealApi.getMealsForDate(userId, currentDate),
 
                 meals -> {
                     if (loadVersion != mealsLoadVersion) {

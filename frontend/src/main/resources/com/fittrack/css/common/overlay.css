@@ -18,6 +18,14 @@
 }
 
 /* ========================================================== */
+/* == CENTERED POPUP HOST =================================== */
+/* ========================================================== */
+
+.popup-root .popup-host.popup-host-centered {
+    -fx-alignment: center;
+}
+
+/* ========================================================== */
 /* == POPUP DIALOG ========================================== */
 /* ========================================================== */
 
@@ -45,6 +53,10 @@
     -fx-alignment: top-center;
 }
 
+.popup-root:narrow .popup-host.popup-host-centered {
+    -fx-alignment: center;
+}
+
 .popup-root:narrow .popup-dialog {
     -fx-max-width: Infinity;
     -fx-max-height: Infinity;
@@ -69,16 +81,16 @@
     -fx-alignment: top-center;
 }
 
+.popup-root:short .popup-host.popup-host-centered {
+    -fx-alignment: center;
+}
+
 .popup-root:short .popup-dialog {
     -fx-max-height: Infinity;
 
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-border-width: 0;
-}
-
-.popup-root:short .popup-host {
-    -fx-alignment: top-center;
 }
 
 .popup-root:short .popup-dialog {

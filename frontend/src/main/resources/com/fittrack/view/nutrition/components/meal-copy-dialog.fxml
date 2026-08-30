@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.components.MealCopyDialogController"
+           stylesheets="@../../../css/nutrition/components/meal-copy-dialog.css"
+           styleClass="popup-host, popup-host-centered">
+
+    <VBox styleClass="meal-copy-dialog">
+
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT">
+            <Label fx:id="titleLabel"
+                   text="Copy from"
+                   styleClass="meal-copy-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="✕"
+                    onAction="#handleClose"
+                    styleClass="meal-copy-close-button"/>
+        </HBox>
+
+        <!-- Fields -->
+        <GridPane styleClass="meal-copy-fields">
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
+            </columnConstraints>
+
+            <!-- Meal -->
+            <VBox GridPane.columnIndex="0"
+                  styleClass="field-group">
+
+                <Label text="Meal"
+                       styleClass="field-label"/>
+
+                <ComboBox fx:id="mealComboBox"
+                          maxWidth="Infinity"
+                          styleClass="input-field, combo-box-field"/>
+
+            </VBox>
+
+            <!-- Day -->
+            <VBox GridPane.columnIndex="1"
+                  styleClass="field-group">
+
+                <Label text="Day"
+                       styleClass="field-label"/>
+
+                <DatePicker fx:id="datePicker"
+                            maxWidth="Infinity"
+                            styleClass="input-field, date-picker-field"/>
+
+            </VBox>
+
+        </GridPane>
+
+        <!-- Availability -->
+        <Label fx:id="availabilityLabel"
+               text="No food logged for that meal."
+               visible="false"
+               wrapText="true"
+               maxWidth="Infinity"
+               styleClass="error-label, meal-copy-message"/>
+
+        <!-- Action -->
+        <Button fx:id="copyButton"
+                text="Copy"
+                maxWidth="Infinity"
+                onAction="#handleCopy"
+                styleClass="action-btn, meal-copy-action-button"/>
+
+    </VBox>
+
+</StackPane>

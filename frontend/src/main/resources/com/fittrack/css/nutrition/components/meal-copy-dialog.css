@@ -1,0 +1,89 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+@import "../../common/overlay.css";
+
+/* ========================================================== */
+/* == MEAL COPY DIALOG ====================================== */
+/* ========================================================== */
+
+.meal-copy-dialog {
+    -fx-pref-width: 32em;
+    -fx-max-width: 32em;
+
+    -fx-padding: 1.8em;
+    -fx-spacing: 1.25em;
+
+    -fx-background-color: -app-background;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.meal-copy-header {
+    -fx-alignment: center-left;
+    -fx-spacing: 1em;
+}
+
+.meal-copy-title {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-copy-close-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0.7em;
+
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 1.3em;
+
+    -fx-padding: 0.4em 0.65em;
+    -fx-cursor: hand;
+}
+
+.meal-copy-close-button:hover {
+    -fx-background-color: -app-control-background;
+    -fx-text-fill: -app-text-primary;
+}
+
+.meal-copy-close-button:pressed {
+    -fx-background-color: -app-hover;
+}
+
+/* ========================================================== */
+/* == FIELDS ================================================ */
+/* ========================================================== */
+
+.meal-copy-fields {
+    -fx-hgap: 1em;
+}
+
+.meal-copy-fields .field-group {
+    -fx-padding: 0;
+}
+
+/* ========================================================== */
+/* == AVAILABILITY ========================================== */
+/* ========================================================== */
+
+.meal-copy-message {
+    -fx-max-width: Infinity;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+/* ========================================================== */
+/* == ACTION ================================================ */
+/* ========================================================== */
+
+.meal-copy-action-button {
+    -fx-max-width: Infinity;
+}

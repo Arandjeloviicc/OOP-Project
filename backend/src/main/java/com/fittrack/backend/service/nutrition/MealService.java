@@ -1,10 +1,7 @@
 package com.fittrack.backend.service.nutrition;
 
-import com.fittrack.backend.dto.nutrition.meal.CreateMealRequest;
-import com.fittrack.backend.dto.nutrition.meal.LogMealRequest;
-import com.fittrack.backend.dto.nutrition.meal.UpdateSavedMealRequest;
+import com.fittrack.backend.dto.nutrition.meal.*;
 import com.fittrack.backend.dto.nutrition.meal.item.*;
-import com.fittrack.backend.dto.nutrition.meal.MealResponse;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.entity.nutrition.Meal;
 import com.fittrack.backend.entity.nutrition.MealItem;
@@ -396,6 +393,59 @@ public class MealService {
 
             mealItemRepository.save(mealItem);
         }
+    }
+
+    @Transactional
+    public MealResponse copyDailyMeal(Integer userId, CopyMealRequest request) {
+        if (request.sourceDate().equals(request.targetDate())
+            && request.sourceMealName().equals(request.targetMealName())) {
+            throw new IllegalArgumentException(
+                    "Source and target meal cannot be the same."
+            );
+        }
+
+        Meal sourceMeal = mealRepository.findByUserIdAndMealDateAndNameAndKindWithItems(
+                userId,
+                request.sourceDate(),
+                request.sourceMealName(),
+                MealKind.DAILY
+        )
+        .orElseThrow(() ->
+                new IllegalArgumentException("Source meal not found.")
+        );
+
+        if (sourceMeal.getItems().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Source meal has no items."
+            );
+        }
+
+        Meal targetMeal = findOrCreateMeal(
+                sourceMeal.getUser(),
+                request.targetDate(),
+                request.targetMealName()
+        );
+
+        for (MealItem sourceItem : sourceMeal.getItems()) {
+            MealItem copiedItem = new MealItem(
+                    targetMeal,
+                    sourceItem
+            );
+
+            mealItemRepository.save(copiedItem);
+            targetMeal.getItems().add(copiedItem);
+        }
+
+        return toResponse(targetMeal);
+    }
+
+    public boolean hasDailyMealItems(Integer userId, LocalDate mealDate, String mealName) {
+        return mealItemRepository.countDailyMealItems(
+                userId,
+                mealDate,
+                mealName,
+                MealKind.DAILY
+        ) > 0;
     }
 
     // ── Helpers ─────────────────────────────────────────────────

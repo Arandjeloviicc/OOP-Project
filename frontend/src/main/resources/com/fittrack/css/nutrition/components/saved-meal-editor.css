@@ -144,12 +144,3 @@
     -fx-alignment: center;
     -fx-padding: 1.5em;
 }
-
-/* ========================================================== */
-/* == DELETE CONFIRMATION RESPONSIVE ======================== */
-/* ========================================================== */
-
-.popup-root:narrow .saved-meal-editor-confirmation-container,
-.popup-root:short .saved-meal-editor-confirmation-container {
-    -fx-alignment: center;
-}

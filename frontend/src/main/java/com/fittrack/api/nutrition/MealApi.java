@@ -1,11 +1,8 @@
 package com.fittrack.api.nutrition;
 
 import com.fittrack.api.common.BaseApi;
-import com.fittrack.dto.nutrition.meal.CreateMealRequest;
-import com.fittrack.dto.nutrition.meal.LogMealRequest;
-import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
+import com.fittrack.dto.nutrition.meal.*;
 import com.fittrack.dto.nutrition.meal.item.*;
-import com.fittrack.dto.nutrition.meal.MealResponse;
 import tools.jackson.core.type.TypeReference;
 
 import java.io.IOException;
@@ -21,7 +18,7 @@ public class MealApi extends BaseApi {
 
     private static final String API_URL = NUTRITION_URL + "/meals";
 
-    public List<MealResponse> getMealsFromDate(Integer userId, LocalDate mealDate) {
+    public List<MealResponse> getMealsForDate(Integer userId, LocalDate mealDate) {
         try {
             String url = API_URL + "/user/" + userId + "?date=" + mealDate;
 
@@ -360,7 +357,6 @@ public class MealApi extends BaseApi {
 
     public void logMyMeal(Integer userId, Integer mealId, LogMealRequest requestData) {
         try {
-
             String url = API_URL +  "/mine/" + userId + "/" + mealId + "/log";
 
             String requestBody = objectMapper.writeValueAsString(requestData);
@@ -393,6 +389,97 @@ public class MealApi extends BaseApi {
 
             throw new IllegalStateException(
                     "My Meal log request was interrupted.",
+                    exception
+            );
+        }
+    }
+
+    public MealResponse copyDailyMeal(Integer userId, CopyMealRequest requestData) {
+        try {
+            String url = API_URL +  "/user/" + userId + "/copy";
+
+            String requestBody = objectMapper.writeValueAsString(requestData);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                throw new IOException(
+                        "Failed to copy meal. Status: " + response.statusCode()
+                );
+            }
+
+            return objectMapper.readValue(
+                    response.body(),
+                    MealResponse.class
+            );
+
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Could not communicate with the FitTrack server.",
+                    exception
+            );
+
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+
+            throw new IllegalStateException(
+                    "Copy meal request was interrupted.",
+                    exception
+            );
+        }
+    }
+
+    public boolean hasDailyMealItems(Integer userId, LocalDate date, String mealName) {
+        try {
+            String encodedMealName = URLEncoder.encode(
+                    mealName,
+                    StandardCharsets.UTF_8
+            );
+
+            String url = API_URL + "/user/" + userId + "/has-items" + "?date=" + date + "&mealName=" + encodedMealName;
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(
+                    request,
+                    HttpResponse.BodyHandlers.ofString()
+            );
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                throw new IllegalStateException(
+                        "Failed to check if a meal has items. Status: "
+                                + response.statusCode()
+                );
+            }
+
+            return objectMapper.readValue(
+                    response.body(),
+                    Boolean.class
+            );
+
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Could not communicate with the FitTrack server.",
+                    exception
+            );
+
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+
+            throw new IllegalStateException(
+                    "Has items request was interrupted.",
                     exception
             );
         }

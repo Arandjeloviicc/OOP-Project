@@ -137,6 +137,6 @@
     <StackPane fx:id="confirmationContainer"
                visible="false"
                managed="false"
-               styleClass="popup-host, saved-meal-editor-confirmation-container"/>
+               styleClass="popup-host, popup-host-centered, saved-meal-editor-confirmation-container"/>
 
 </StackPane>

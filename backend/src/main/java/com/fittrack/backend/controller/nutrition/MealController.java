@@ -1,16 +1,14 @@
 package com.fittrack.backend.controller.nutrition;
 
 
-import com.fittrack.backend.dto.nutrition.meal.CreateMealRequest;
-import com.fittrack.backend.dto.nutrition.meal.LogMealRequest;
+import com.fittrack.backend.dto.nutrition.meal.*;
 import com.fittrack.backend.dto.nutrition.meal.item.AddMealItemRequest;
 import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
-import com.fittrack.backend.dto.nutrition.meal.MealResponse;
 import com.fittrack.backend.dto.nutrition.meal.item.UpdateMealItemRequest;
-import com.fittrack.backend.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.backend.service.nutrition.MealService;
 import jakarta.validation.Valid;
 import org.jspecify.annotations.NonNull;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,5 +74,15 @@ public class MealController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody LogMealRequest request) {
         mealService.logMyMeal(userId, mealId, request);
+    }
+
+    @PostMapping("/user/{userId}/copy")
+    public MealResponse copyDailyMeal(@PathVariable Integer userId, @Valid @RequestBody CopyMealRequest request) {
+        return mealService.copyDailyMeal(userId, request);
+    }
+
+    @GetMapping("/user/{userId}/has-items")
+    public boolean hasDailyMealItems(@PathVariable Integer userId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealName) {
+        return mealService.hasDailyMealItems(userId, date, mealName);
     }
 }
