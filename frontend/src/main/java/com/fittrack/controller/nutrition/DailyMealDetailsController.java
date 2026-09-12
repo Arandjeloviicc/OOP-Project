@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class DailyMealDetailsController extends FormController implements Initializable, ResponsiveLayout {
@@ -57,6 +59,9 @@ public class DailyMealDetailsController extends FormController implements Initia
     // Attributes
     private MealType mealType;
     private LocalDate mealDate;
+
+    // Current Meal
+    private MealResponse currentMeal;
 
     // Action Helpers
     private Runnable onCloseAction;
@@ -90,14 +95,18 @@ public class DailyMealDetailsController extends FormController implements Initia
     public void setData(MealType mealType, LocalDate mealDate, MealResponse meal) {
         this.mealType = mealType;
         this.mealDate = mealDate;
-
+        this.currentMeal = meal;
         this.dataChanged = false;
 
+        renderMeal();
+    }
+
+    private void renderMeal() {
         // Title
         titleLabel.setText(mealType.getName());
 
         // Macro Preview
-        DailyNutritionTotals totals = MealService.calculateMealNutritionTotals(meal);
+        DailyNutritionTotals totals = MealService.calculateMealNutritionTotals(currentMeal);
         macroPreview.setData(
                 totals.calories(),
                 totals.carbs(),
@@ -106,21 +115,21 @@ public class DailyMealDetailsController extends FormController implements Initia
         );
 
         // Items
-        if (meal == null || meal.items().isEmpty()) {
+        if (currentMeal == null || currentMeal.items().isEmpty()) {
             itemCountLabel.setText("0 items");
             itemsContainer.getChildren().clear();
             return;
         }
 
         itemCountLabel.setText(
-                meal.items().size() == 1
+                currentMeal.items().size() == 1
                         ? "1 item"
-                        : meal.items().size() + " items"
+                        : currentMeal.items().size() + " items"
         );
 
         itemsContainer.getChildren().clear();
 
-        for (MealItemResponse mealItem : meal.items()) {
+        for (MealItemResponse mealItem : currentMeal.items()) {
             LoadedComponent<MealItemCardController> card = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_CARD);
 
             double calories = MealService.calculateFoodCalories(mealItem);
@@ -312,7 +321,12 @@ public class DailyMealDetailsController extends FormController implements Initia
                 response -> {
                     dataChanged = true;
                     closeFoodDetails();
-                    refreshMealDetails();
+
+                    if (mealChanged) {
+                        removeMealItem(mealItem.id());
+                    } else {
+                        replaceMealItem(mealItem.id(), response);
+                    }
                 },
 
                 exception -> log.error(
@@ -335,7 +349,7 @@ public class DailyMealDetailsController extends FormController implements Initia
                 ignored -> {
                     dataChanged = true;
                     closeFoodDetails();
-                    refreshMealDetails();
+                    removeMealItem(mealItem.id());
                 },
 
                 exception -> log.error(
@@ -343,5 +357,54 @@ public class DailyMealDetailsController extends FormController implements Initia
                         exception
                 )
         );
+    }
+
+    // ── MealItem Helpers ───────────────────────────────────────────────────
+    private void replaceMealItem(Integer oldItemId, MealItemResponse updatedItem) {
+        if (currentMeal == null) {
+            return;
+        }
+
+        List<MealItemResponse> updatedItems = new ArrayList<>(currentMeal.items());
+
+        for (int i = 0; i < updatedItems.size(); i++) {
+            if (updatedItems.get(i).id().equals(oldItemId)) {
+                updatedItems.set(i, updatedItem);
+                break;
+            }
+        }
+
+        currentMeal = new MealResponse(
+                currentMeal.id(),
+                currentMeal.name(),
+                currentMeal.mealDate(),
+                updatedItems
+        );
+
+        renderMeal();
+    }
+
+    private void removeMealItem(Integer mealItemId) {
+        if (currentMeal == null) {
+            return;
+        }
+
+        List<MealItemResponse> updatedItems =
+                currentMeal.items()
+                        .stream()
+                        .filter(item ->
+                                !item.id().equals(mealItemId)
+                        )
+                        .toList();
+
+        currentMeal = new MealResponse(
+                currentMeal.id(),
+                currentMeal.name(),
+                currentMeal.mealDate(),
+                updatedItems
+        );
+
+        renderMeal();
+
     }
 }

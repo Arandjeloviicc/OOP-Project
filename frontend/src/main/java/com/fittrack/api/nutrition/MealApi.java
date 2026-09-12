@@ -59,7 +59,7 @@ public class MealApi extends BaseApi {
         }
     }
 
-    public MealItemResponse addMealItem(Integer userId, AddMealItemRequest requestData) {
+    public void addMealItem(Integer userId, AddMealItemRequest requestData) {
         try {
             String url = API_URL + "/user/" + userId + "/items";
 
@@ -82,10 +82,6 @@ public class MealApi extends BaseApi {
                 );
             }
 
-            return objectMapper.readValue(
-                    response.body(),
-                    MealItemResponse.class
-            );
         } catch (IOException exception) {
             throw new IllegalStateException(
                     "Could not communicate with the FitTrack server.",
@@ -231,7 +227,7 @@ public class MealApi extends BaseApi {
         }
     }
 
-    public MealResponse createMyMeal(Integer userId, CreateMealRequest requestData) {
+    public void createSavedMeal(Integer userId, CreateMealRequest requestData) {
         try {
             String url = API_URL + "/mine/" + userId;
 
@@ -255,11 +251,6 @@ public class MealApi extends BaseApi {
                 );
             }
 
-            return objectMapper.readValue(
-                    response.body(),
-                    MealResponse.class
-            );
-
         } catch (IOException exception) {
             throw new IllegalStateException(
                     "Could not communicate with the FitTrack server.",
@@ -275,7 +266,7 @@ public class MealApi extends BaseApi {
         }
     }
 
-    public MealResponse updateMyMeal(Integer userId, Integer mealId, UpdateSavedMealRequest requestData) {
+    public void updateSavedMeal(Integer userId, Integer mealId, UpdateSavedMealRequest requestData) {
         try {
             String url = API_URL + "/mine/" + userId + "/" + mealId;
 
@@ -298,11 +289,6 @@ public class MealApi extends BaseApi {
                 );
             }
 
-            return objectMapper.readValue(
-                    response.body(),
-                    MealResponse.class
-            );
-
         } catch (IOException exception) {
             throw new IllegalStateException(
                     "Could not communicate with the FitTrack server.",
@@ -319,7 +305,7 @@ public class MealApi extends BaseApi {
         }
     }
 
-    public void deleteMyMeal(Integer userId, Integer mealId) {
+    public void deleteSavedMeal(Integer userId, Integer mealId) {
         try {
             String url = API_URL + "/mine/" + userId + "/" + mealId;
 
@@ -355,7 +341,7 @@ public class MealApi extends BaseApi {
         }
     }
 
-    public void logMyMeal(Integer userId, Integer mealId, LogMealRequest requestData) {
+    public void logSavedMeal(Integer userId, Integer mealId, LogSavedMealRequest requestData) {
         try {
             String url = API_URL +  "/mine/" + userId + "/" + mealId + "/log";
 
@@ -394,7 +380,7 @@ public class MealApi extends BaseApi {
         }
     }
 
-    public MealResponse copyDailyMeal(Integer userId, CopyMealRequest requestData) {
+    public void copyDailyMeal(Integer userId, CopyMealRequest requestData) {
         try {
             String url = API_URL +  "/user/" + userId + "/copy";
 
@@ -416,11 +402,6 @@ public class MealApi extends BaseApi {
                         "Failed to copy meal. Status: " + response.statusCode()
                 );
             }
-
-            return objectMapper.readValue(
-                    response.body(),
-                    MealResponse.class
-            );
 
         } catch (IOException exception) {
             throw new IllegalStateException(

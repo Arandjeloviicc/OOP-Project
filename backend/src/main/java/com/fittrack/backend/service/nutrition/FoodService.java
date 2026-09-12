@@ -3,24 +3,24 @@ package com.fittrack.backend.service.nutrition;
 import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
-import com.fittrack.backend.entity.user.User;
-import com.fittrack.backend.repository.nutrition.FoodRepository;
+import com.fittrack.backend.repository.nutrition.food.FoodJdbcRepository;
+import com.fittrack.backend.repository.nutrition.food.FoodRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FoodService {
 
     private final FoodRepository foodRepository;
+    private final FoodJdbcRepository foodJdbcRepository;
 
-    public FoodService(FoodRepository foodRepository) {
+    public FoodService(FoodRepository foodRepository, FoodJdbcRepository foodJdbcRepository) {
         this.foodRepository = foodRepository;
+        this.foodJdbcRepository = foodJdbcRepository;
     }
 
     public List<Food> searchFoods(String search) {
-
         if (search == null || search.isBlank()) {
             return foodRepository.findTop20ByOrderByNameAsc();
         }
@@ -36,29 +36,11 @@ public class FoodService {
         return foodRepository.findByCreatedByUserIdAndNameContainingIgnoreCaseOrderByNameAsc(userId, search.trim());
     }
 
-    public Food createFood(CreateFoodRequest request, User createdByUser) {
-        String brand = request.brand();
-
-        if (brand != null && brand.isBlank()) {
-            brand = null;
-        }
-
-        Food food = new Food(
-                request.name().trim(),
-                brand != null ? brand.trim() : null,
-                request.servingSizeGrams(),
-                request.caloriesPerServing(),
-                request.proteinPerServing(),
-                request.carbsPerServing(),
-                request.fatPerServing(),
-                createdByUser
+    public FoodResponse createFood(Integer userId, CreateFoodRequest request) {
+        return foodJdbcRepository.createFood(
+                userId,
+                request
         );
-
-        return foodRepository.save(food);
-    }
-
-    public Optional<Food> findById(Integer foodId) {
-        return foodRepository.findById(foodId);
     }
 
     public FoodResponse toResponse(Food food) {

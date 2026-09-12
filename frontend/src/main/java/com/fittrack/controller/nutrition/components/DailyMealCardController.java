@@ -33,11 +33,15 @@ public class DailyMealCardController implements Initializable {
     // ContextMenu
     private ContextMenu contextMenu;
     private MenuItem saveMealMenuItem;
+    private MenuItem copyFromMenuItem;
+    private MenuItem copyToMenuItem;
 
     // Button Action
     private Runnable onLogAction;
     private Runnable onOpenAction;
     private Runnable onSaveMealAction;
+    private Runnable onCopyFromAction;
+    private Runnable onCopyToAction;
 
     // ── Configuration ─────────────────────────────────────────────────
     public void setIcon(Image icon) {
@@ -56,10 +60,19 @@ public class DailyMealCardController implements Initializable {
         this.onSaveMealAction = onSaveMealAction;
     }
 
+    public void setOnCopyFromAction(Runnable onCopyFromAction) {
+        this.onCopyFromAction = onCopyFromAction;
+    }
+
+    public void setOnCopyToAction(Runnable onCopyToAction) {
+        this.onCopyToAction = onCopyToAction;
+    }
+
     // ── Set Data ─────────────────────────────────────────────────
     public void setData(String title, String firstFood, Integer otherFoodsCount, double calories) {
         boolean hasMealItems = firstFood != null;
-        saveMealMenuItem.setDisable(!hasMealItems);
+        setMenuItemVisible(saveMealMenuItem, hasMealItems);
+        setMenuItemVisible(copyToMenuItem, hasMealItems);
 
         titleLabel.setText(title);
 
@@ -88,6 +101,15 @@ public class DailyMealCardController implements Initializable {
     }
 
     private void initializeContextMenu() {
+        initializeSaveMealMenuItem();
+        initializeCopyFromMenuItem();
+        initializeCopyToMenuItem();
+
+        contextMenu = new ContextMenu(saveMealMenuItem, copyFromMenuItem, copyToMenuItem);
+        contextMenu.getStyleClass().add("meal-card-context-menu");
+    }
+
+    private void initializeSaveMealMenuItem() {
         ImageView bookmarkIcon = new ImageView(AppImages.BOOKMARK_ICON);
         bookmarkIcon.setFitWidth(16);
         bookmarkIcon.setFitHeight(16);
@@ -102,9 +124,40 @@ public class DailyMealCardController implements Initializable {
                 onSaveMealAction.run();
             }
         });
+    }
 
-        contextMenu = new ContextMenu(saveMealMenuItem);
-        contextMenu.getStyleClass().add("meal-card-context-menu");
+    private void initializeCopyFromMenuItem() {
+        ImageView copyFromIcon = new ImageView(AppImages.COPY_FROM_ICON);
+        copyFromIcon.setFitWidth(16);
+        copyFromIcon.setFitHeight(16);
+
+        copyFromMenuItem = new MenuItem(
+                "Copy from...",
+                copyFromIcon
+        );
+
+        copyFromMenuItem.setOnAction(event -> {
+            if (onCopyFromAction != null) {
+                onCopyFromAction.run();
+            }
+        });
+    }
+
+    private void initializeCopyToMenuItem() {
+        ImageView copyToIcon = new ImageView(AppImages.COPY_TO_ICON);
+        copyToIcon.setFitWidth(16);
+        copyToIcon.setFitHeight(16);
+
+        copyToMenuItem = new MenuItem(
+                "Copy to...",
+                copyToIcon
+        );
+
+        copyToMenuItem.setOnAction(event -> {
+            if (onCopyToAction != null) {
+                onCopyToAction.run();
+            }
+        });
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -149,5 +202,11 @@ public class DailyMealCardController implements Initializable {
         }
 
         return false;
+    }
+
+    // ── ContextMenu Helpers ─────────────────────────────────────────────────
+    private void setMenuItemVisible(MenuItem item, boolean visible) {
+        item.setVisible(visible);
+        item.setDisable(!visible);
     }
 }

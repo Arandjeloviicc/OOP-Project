@@ -1,4 +1,4 @@
-package com.fittrack.backend.repository.nutrition;
+package com.fittrack.backend.repository.nutrition.food;
 
 import com.fittrack.backend.entity.nutrition.Food;
 import org.jspecify.annotations.NonNull;
@@ -12,15 +12,14 @@ public interface FoodRepository extends JpaRepository<@NonNull Food, @NonNull In
 
     List<Food> findTop20ByOrderByNameAsc();
 
-    @Query(
-            value = """
-                    SELECT *
-                    FROM foods
-                    WHERE LOWER(name) LIKE LOWER(CONCAT('%', :name, '%'))
-                    ORDER BY name
-                    LIMIT 20
-                    """,
-            nativeQuery = true
+    @Query(value = """
+    SELECT *
+    FROM foods
+    WHERE LOWER(name) LIKE LOWER(CONCAT('%', :name, '%'))
+    ORDER BY name
+    LIMIT 20
+    """,
+    nativeQuery = true
     )
     List<Food> findTop20ByNameContainingIgnoreCaseOrderByNameAsc(
             @Param("name") String name
@@ -28,15 +27,14 @@ public interface FoodRepository extends JpaRepository<@NonNull Food, @NonNull In
 
     List<Food> findByCreatedByUserIdOrderByNameAsc(Integer userId);
 
-    @Query(
-            value = """
-                    SELECT *
-                    FROM foods
-                    WHERE created_by_user_id = :userId
-                      AND LOWER(name) LIKE LOWER(CONCAT('%', :name, '%'))
-                    ORDER BY name
-                    """,
-            nativeQuery = true
+    @Query(value = """
+    SELECT *
+    FROM foods
+    WHERE created_by_user_id = :userId
+      AND LOWER(name) LIKE LOWER(CONCAT('%', :name, '%'))
+    ORDER BY name
+    """,
+    nativeQuery = true
     )
     List<Food> findByCreatedByUserIdAndNameContainingIgnoreCaseOrderByNameAsc(
             @Param("userId") Integer userId,

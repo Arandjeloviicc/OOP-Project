@@ -3,7 +3,6 @@ package com.fittrack.controller.auth;
 import com.fittrack.ui.SceneShortcuts;
 import javafx.scene.control.*;
 import com.fittrack.api.auth.LoginApi;
-import com.fittrack.api.profile.ProfileSetupApi;
 import com.fittrack.model.user.User;
 import com.fittrack.session.UserSession;
 import com.fittrack.config.AppConstants;
@@ -41,7 +40,6 @@ public class LoginController extends AuthFormController implements Initializable
 
     // API
     private final LoginApi loginApi = new LoginApi();
-    private final ProfileSetupApi profileSetupApi = new ProfileSetupApi();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -114,27 +112,11 @@ public class LoginController extends AuthFormController implements Initializable
 
                             log.info("Logged in successfully: {}", user.email());
 
-                            AsyncTaskRunner.run(
-                                () -> profileSetupApi.isProfileSetupComplete(user.id()),
-
-                                profileSetupComplete -> {
-                                    if (profileSetupComplete) {
-                                        resetLoginButton();
-                                        navigateTo(AppConstants.Views.MAIN_LAYOUT);
-                                    } else {
-                                        resetLoginButton();
-                                        navigateTo(AppConstants.Views.PROFILE_SETUP);
-                                    }
-                                },
-
-                                exception -> {
-                                    session.end();
-
-                                    log.error("Failed to check profile setup.", exception);
-                                    showEmailMessage("Something went wrong while completing sign in. Please try again.");
-                                    resetLoginButton();
-                                }
-                            );
+                            if (result.profileSetupComplete()) {
+                                navigateTo(AppConstants.Views.MAIN_LAYOUT);
+                            } else {
+                                navigateTo(AppConstants.Views.PROFILE_SETUP);
+                            }
                         }
 
                         case USER_NOT_FOUND -> {

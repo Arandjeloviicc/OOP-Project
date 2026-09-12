@@ -33,8 +33,8 @@ public class MealController {
 
     @PostMapping("/user/{userId}/items")
     @ResponseStatus(HttpStatus.CREATED)
-    public MealItemResponse addMealItem(@PathVariable Integer userId, @Valid @RequestBody AddMealItemRequest request) {
-        return mealService.addMealItem(userId, request);
+    public void addMealItem(@PathVariable Integer userId, @Valid @RequestBody AddMealItemRequest request) {
+        mealService.addMealItem(userId, request);
     }
 
     @PutMapping("/user/{userId}/items/{mealItemId}")
@@ -55,30 +55,30 @@ public class MealController {
 
     @PostMapping("/mine/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MealResponse createMyMeal(@PathVariable Integer userId, @Valid @RequestBody CreateMealRequest request) {
-        return mealService.createMyMeal(userId, request);
+    public void createSavedMeal(@PathVariable Integer userId, @Valid @RequestBody CreateMealRequest request) {
+        mealService.createSavedMeal(userId, request);
     }
 
     @PutMapping("/mine/{userId}/{mealId}")
-    public MealResponse updateMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody UpdateSavedMealRequest request) {
-        return mealService.updateMyMeal(userId, mealId, request);
+    public void updateSavedMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody UpdateSavedMealRequest request) {
+        mealService.updateSavedMeal(userId, mealId, request);
     }
 
     @DeleteMapping("/mine/{userId}/{mealId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId) {
-        mealService.deleteMyMeal(userId, mealId);
+    public void deleteSavedMeal(@PathVariable Integer userId, @PathVariable Integer mealId) {
+        mealService.deleteSavedMeal(userId, mealId);
     }
 
     @PostMapping("/mine/{userId}/{mealId}/log")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void logMyMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody LogMealRequest request) {
-        mealService.logMyMeal(userId, mealId, request);
+    public void logSavedMeal(@PathVariable Integer userId, @PathVariable Integer mealId, @Valid @RequestBody LogSavedMealRequest request) {
+        mealService.logSavedMeal(userId, mealId, request);
     }
 
     @PostMapping("/user/{userId}/copy")
-    public MealResponse copyDailyMeal(@PathVariable Integer userId, @Valid @RequestBody CopyMealRequest request) {
-        return mealService.copyDailyMeal(userId, request);
+    public void copyDailyMeal(@PathVariable Integer userId, @Valid @RequestBody CopyMealRequest request) {
+        mealService.copyDailyMeal(userId, request);
     }
 
     @GetMapping("/user/{userId}/has-items")

@@ -8,7 +8,9 @@ import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.DailyMealCardController;
+import com.fittrack.controller.nutrition.components.MealCopyDialogController;
 import com.fittrack.controller.nutrition.components.NutritionProgressCardController;
+import com.fittrack.dto.nutrition.meal.CopyMealRequest;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
@@ -85,6 +87,9 @@ public class MealsController extends BaseController implements Initializable, Re
 
     // Load Helpers
     private long mealsLoadVersion;
+
+    // Meal Copy
+    private long mealAvailabilityCheckVersion;
 
     // Narrow Helpers
     private static final int NARROW_BREAKPOINT = 690;
@@ -493,6 +498,14 @@ public class MealsController extends BaseController implements Initializable, Re
             openMealDetails(mealType, selectedDate, meal);
         });
 
+        card.controller().setOnCopyFromAction(
+                () -> openCopyFrom(mealType, selectedDate)
+        );
+
+        card.controller().setOnCopyToAction(
+                () -> openCopyTo(mealType, selectedDate)
+        );
+
         if (meal == null || meal.items().isEmpty()) {
             card.controller().setOnSaveMealAction(null);
 
@@ -536,13 +549,140 @@ public class MealsController extends BaseController implements Initializable, Re
         OverlayManager.show(details.root());
     }
 
-    // ── Save As Meal ─────────────────────────────────────────────────
+    // ── ContextMenu Items Actions ─────────────────────────────────────────────────
     private void openSaveAsMeal(MealResponse meal) {
         LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
 
         addToMeal.controller().setSaveAsMealData(meal);
 
         OverlayManager.show(addToMeal.root());
+    }
+
+    private void openCopyFrom(MealType currentMealType, LocalDate currentDate) {
+        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Components.MEAL_COPY_DIALOG);
+
+        MealCopyDialogController controller = copyDialog.controller();
+
+        controller.setOnCloseAction(() -> {
+            mealAvailabilityCheckVersion++;
+            OverlayManager.close();
+        });
+
+        controller.setOnAvailabilityCheckAction(
+                (sourceMealType, sourceDate) ->
+                        checkMealAvailability(
+                                controller,
+                                sourceMealType,
+                                sourceDate
+                        )
+        );
+
+        controller.setOnCopyAction(
+                (sourceMealType, sourceDate) -> {
+                    CopyMealRequest request = new CopyMealRequest(
+                            sourceDate,
+                            sourceMealType.getName(),
+                            currentDate,
+                            currentMealType.getName()
+                    );
+
+                    copyMeal(request, currentDate);
+                }
+        );
+
+        controller.setCopyFrom(currentMealType, currentDate);
+
+        OverlayManager.show(copyDialog.root());
+    }
+
+    private void openCopyTo(MealType currentMealType, LocalDate currentDate) {
+        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Components.MEAL_COPY_DIALOG);
+
+        MealCopyDialogController controller = copyDialog.controller();
+
+        controller.setOnCloseAction(() -> {
+            OverlayManager.close();
+        });
+
+        controller.setOnCopyAction(
+                (targetMealType, targetDate) -> {
+                    CopyMealRequest request = new CopyMealRequest(
+                            currentDate,
+                            currentMealType.getName(),
+                            targetDate,
+                            targetMealType.getName()
+                    );
+
+                    copyMeal(request, targetDate);
+                }
+        );
+
+        controller.setCopyTo(currentMealType, currentDate);
+
+        OverlayManager.show(copyDialog.root());
+    }
+
+    private void checkMealAvailability(MealCopyDialogController controller, MealType mealType, LocalDate date) {
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+
+        long checkVersion = ++mealAvailabilityCheckVersion;
+
+        controller.setCheckingAvailability();
+
+        AsyncTaskRunner.run(
+                () -> mealApi.hasDailyMealItems(userId, date, mealType.getName()),
+
+                hasItems -> {
+                    if (checkVersion != mealAvailabilityCheckVersion) {
+                        return;
+                    }
+
+                    if (hasItems) {
+                        controller.setMealAvailable();
+                    } else {
+                        controller.setMealUnavailable();
+                    }
+                },
+
+                exception -> {
+                    if (checkVersion != mealAvailabilityCheckVersion) {
+                        return;
+                    }
+
+                    controller.setAvailabilityCheckFailed();
+
+                    log.error(
+                            "Failed to check meal availability.",
+                            exception
+                    );
+                }
+        );
+    }
+
+    private void copyMeal(CopyMealRequest request, LocalDate targetDate) {
+        Integer userId = UserSession.getInstance().getCurrentUser().id();
+
+        AsyncTaskRunner.run(
+                () -> {
+                    mealApi.copyDailyMeal(userId, request);
+                    return null;
+                },
+
+                ignored -> {
+                    invalidateMealsCache(targetDate);
+
+                    OverlayManager.close();
+
+                    if (targetDate.equals(datePicker.getValue())) {
+                        loadMealsForDate();
+                    }
+                },
+
+                exception -> log.error(
+                        "Failed to copy meal.",
+                        exception
+                )
+        );
     }
 
     // ── Cache Helpers ─────────────────────────────────────────────────

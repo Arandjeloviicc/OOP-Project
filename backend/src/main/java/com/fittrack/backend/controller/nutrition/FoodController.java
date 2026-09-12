@@ -3,13 +3,10 @@ package com.fittrack.backend.controller.nutrition;
 import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
-import com.fittrack.backend.entity.user.User;
-import com.fittrack.backend.repository.user.UserRepository;
 import com.fittrack.backend.service.nutrition.FoodService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +16,9 @@ import java.util.List;
 public class FoodController {
 
     private final FoodService foodService;
-    private final UserRepository userRepository;
 
-    public FoodController(FoodService foodService, UserRepository userRepository) {
+    public FoodController(FoodService foodService) {
         this.foodService = foodService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -55,13 +50,6 @@ public class FoodController {
     @PostMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
     public FoodResponse createFood(@PathVariable Integer userId, @Valid @RequestBody CreateFoodRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "User not found"
-                ));
-
-        Food food = foodService.createFood(request, user);
-
-        return foodService.toResponse(food);
+        return foodService.createFood(userId, request);
     }
 }

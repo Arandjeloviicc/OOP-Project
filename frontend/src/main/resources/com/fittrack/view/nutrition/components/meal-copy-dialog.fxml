@@ -10,10 +10,11 @@
            stylesheets="@../../../css/nutrition/components/meal-copy-dialog.css"
            styleClass="popup-host, popup-host-centered">
 
-    <VBox styleClass="meal-copy-dialog">
+    <VBox styleClass="meal-copy-dialog"
+          maxHeight="-Infinity">
 
         <!-- Header -->
-        <HBox alignment="CENTER_LEFT">
+        <HBox styleClass="meal-copy-header">
             <Label fx:id="titleLabel"
                    text="Copy from"
                    styleClass="meal-copy-title"/>

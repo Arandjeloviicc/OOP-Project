@@ -1,9 +1,10 @@
-package com.fittrack.backend.repository.nutrition;
+package com.fittrack.backend.repository.nutrition.meal;
 
 import com.fittrack.backend.entity.nutrition.Meal;
 import com.fittrack.backend.entity.nutrition.MealKind;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -86,6 +87,19 @@ public interface MealRepository extends JpaRepository<@NonNull Meal, @NonNull In
             @Param("userId") Integer userId,
             @Param("mealDate") LocalDate mealDate,
             @Param("mealName") String mealName,
+            @Param("kind") MealKind kind
+    );
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+    DELETE FROM Meal m
+    WHERE m.id = :mealId
+      AND m.user.id = :userId
+      AND m.kind = :kind
+    """)
+    int deleteByIdAndUserIdAndKind(
+            @Param("mealId") Integer mealId,
+            @Param("userId") Integer userId,
             @Param("kind") MealKind kind
     );
 }

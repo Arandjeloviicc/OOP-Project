@@ -50,7 +50,10 @@ public class LoginApi extends BaseApi {
                             responseUser.email()
                     );
 
-                    yield LoginResult.success(user);
+                    yield LoginResult.success(
+                            user,
+                            loginResponse.profileSetupComplete()
+                    );
                 }
 
                 case "USER_NOT_FOUND" -> LoginResult.userNotFound();

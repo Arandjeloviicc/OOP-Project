@@ -1,6 +1,7 @@
 package com.fittrack.backend.controller.auth;
 
 import com.fittrack.backend.dto.auth.*;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import com.fittrack.backend.service.auth.LoginResult;
 import com.fittrack.backend.service.auth.LoginService;
@@ -23,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<@NonNull LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<@NonNull LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResult result = loginService.login(
                 request.email(),
                 request.password()
@@ -31,18 +32,17 @@ public class AuthController {
 
         return switch (result.status()) {
             case SUCCESS -> {
-                User user = result.user();
-
                 UserResponse userResponse = new UserResponse(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail()
+                        result.userId(),
+                        result.username(),
+                        result.email()
                 );
 
                 yield ResponseEntity.ok(
                         new LoginResponse(
                                 "SUCCESS",
-                                userResponse
+                                userResponse,
+                                result.profileSetupComplete()
                         )
                 );
             }
@@ -50,21 +50,23 @@ public class AuthController {
             case USER_NOT_FOUND -> ResponseEntity.ok(
                     new LoginResponse(
                             "USER_NOT_FOUND",
-                            null
+                            null,
+                            false
                     )
             );
 
             case WRONG_PASSWORD -> ResponseEntity.ok(
                     new LoginResponse(
                             "WRONG_PASSWORD",
-                            null
+                            null,
+                            false
                     )
             );
         };
     }
 
     @PostMapping("/register")
-    public ResponseEntity<@NonNull RegisterResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<@NonNull RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         RegistrationResult result = registrationService.register(
                 request.username(),
                 request.email(),

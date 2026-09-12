@@ -10,7 +10,7 @@ import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.*;
 import com.fittrack.controller.nutrition.coordinator.AddToMealCoordinator;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
-import com.fittrack.dto.nutrition.meal.LogMealRequest;
+import com.fittrack.dto.nutrition.meal.LogSavedMealRequest;
 import com.fittrack.dto.nutrition.meal.item.AddMealItemRequest;
 import com.fittrack.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
@@ -505,7 +505,7 @@ public class AddToMealController extends FormController implements Initializable
                 );
 
                 item.controller().setOnAddAction(
-                        () -> logMyMeal(
+                        () -> logSavedMeal(
                                 meal,
                                 item.controller()::showAddSuccess,
                                 item.controller()::resetAddFeedback
@@ -566,9 +566,17 @@ public class AddToMealController extends FormController implements Initializable
         coordinator.getActiveSavedMealEditor().setSubmitting(true);
 
         AsyncTaskRunner.run(
-                () -> mealApi.updateMyMeal(userId, mealId, request),
+                () -> {
+                    mealApi.updateSavedMeal(
+                            userId,
+                            mealId,
+                            request
+                    );
 
-                updatedMeal -> {
+                    return null;
+                },
+
+                ignored -> {
                     coordinator.closeEditor();
                     resetSearchSource(myMealsButton);
                 },
@@ -593,7 +601,7 @@ public class AddToMealController extends FormController implements Initializable
 
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.deleteMyMeal(userId, mealId);
+                    mealApi.deleteSavedMeal(userId, mealId);
                     return null;
                 },
 
@@ -615,14 +623,14 @@ public class AddToMealController extends FormController implements Initializable
         );
     }
 
-    private void logMyMeal(MealResponse meal, Runnable onSuccess, Runnable onFailure) {
+    private void logSavedMeal(MealResponse meal, Runnable onSuccess, Runnable onFailure) {
         Integer userId = UserSession.getInstance().getCurrentUser().id();
 
-        LogMealRequest request = new LogMealRequest(mealDate, mealType.getName());
+        LogSavedMealRequest request = new LogSavedMealRequest(mealDate, mealType.getName());
 
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.logMyMeal(userId, meal.id(), request);
+                    mealApi.logSavedMeal(userId, meal.id(), request);
                     return null;
                 },
 
@@ -679,9 +687,12 @@ public class AddToMealController extends FormController implements Initializable
         );
 
         AsyncTaskRunner.run(
-                () -> mealApi.addMealItem(userId, request),
+                () -> {
+                    mealApi.addMealItem(userId, request);
+                    return null;
+                },
 
-                response -> {
+                ignored -> {
                     dataChanged = true;
 
                     if (onSuccess != null) {
@@ -780,9 +791,12 @@ public class AddToMealController extends FormController implements Initializable
         coordinator.getActiveSavedMealEditor().setSubmitting(true);
 
         AsyncTaskRunner.run(
-                () -> mealApi.createMyMeal(userId, request),
+                () -> {
+                    mealApi.createSavedMeal(userId, request);
+                    return null;
+                },
 
-                meal -> {
+                ignored -> {
                     if (onSuccess != null) {
                         onSuccess.run();
                     }

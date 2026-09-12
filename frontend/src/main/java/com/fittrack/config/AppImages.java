@@ -31,6 +31,8 @@ public final class AppImages {
     public static final Image SNACKS_ICON = load("/com/fittrack/images/icons/meals/snacks.png");
 
     public static final Image BOOKMARK_ICON = load("/com/fittrack/images/icons/bookmark.png");
+    public static final Image COPY_FROM_ICON = load("/com/fittrack/images/icons/copyFrom.png");
+    public static final Image COPY_TO_ICON = load("/com/fittrack/images/icons/copyTo.png");
 
     private AppImages() {}
 

@@ -47,42 +47,4 @@ public class ProfileSetupApi extends BaseApi {
             );
         }
     }
-
-    public boolean isProfileSetupComplete(int userId) {
-        try {
-            String url = PROFILE_URL + "/" + userId + "/setup-complete";
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(
-                    request,
-                    HttpResponse.BodyHandlers.ofString()
-            );
-
-            if (response.statusCode() != 200) {
-                throw new IllegalStateException(
-                        "Failed to check profile setup status."
-                );
-            }
-
-            return Boolean.parseBoolean(response.body());
-
-        } catch (IOException exception) {
-            throw new IllegalStateException(
-                    "Could not communicate with the FitTrack server.",
-                    exception
-            );
-
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-
-            throw new IllegalStateException(
-                    "Profile status request was interrupted.",
-                    exception
-            );
-        }
-    }
 }

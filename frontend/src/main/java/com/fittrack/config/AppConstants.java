@@ -42,6 +42,8 @@ public final class AppConstants {
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
         public static final String SAVED_MEAL_EDITOR = "nutrition/components/saved-meal-editor.fxml";
         public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
+
+        public static final String MEAL_COPY_DIALOG = "nutrition/components/meal-copy-dialog.fxml";
     }
 
     public static final class Validation {

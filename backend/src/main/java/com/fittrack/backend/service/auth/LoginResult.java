@@ -1,21 +1,45 @@
 package com.fittrack.backend.service.auth;
 
-import com.fittrack.backend.entity.user.User;
-
 public record LoginResult(
         LoginStatus status,
-        User user
+        Integer userId,
+        String username,
+        String email,
+        boolean profileSetupComplete
 ) {
 
-    public static LoginResult success(User user) {
-        return new LoginResult(LoginStatus.SUCCESS, user);
+    public static LoginResult success(
+            Integer userId,
+            String username,
+            String email,
+            boolean profileSetupComplete
+    ) {
+        return new LoginResult(
+                LoginStatus.SUCCESS,
+                userId,
+                username,
+                email,
+                profileSetupComplete
+        );
     }
 
     public static LoginResult userNotFound() {
-        return new LoginResult(LoginStatus.USER_NOT_FOUND, null);
+        return new LoginResult(
+                LoginStatus.USER_NOT_FOUND,
+                null,
+                null,
+                null,
+                false
+        );
     }
 
     public static LoginResult wrongPassword() {
-        return new LoginResult(LoginStatus.WRONG_PASSWORD, null);
+        return new LoginResult(
+                LoginStatus.WRONG_PASSWORD,
+                null,
+                null,
+                null,
+                false
+        );
     }
 }
