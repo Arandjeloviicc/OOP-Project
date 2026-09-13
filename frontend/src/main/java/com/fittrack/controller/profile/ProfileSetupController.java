@@ -1,15 +1,14 @@
 package com.fittrack.controller.profile;
 
+import com.fittrack.model.profile.ProfileSetupData;
+import com.fittrack.service.profile.ProfileSetupService;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
-import com.fittrack.api.profile.ProfileSetupApi;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
-import com.fittrack.dto.profile.ProfileSetupRequest;
 import com.fittrack.model.profile.ActivityLevel;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.model.profile.WeightGoal;
-import com.fittrack.session.UserSession;
 import com.fittrack.config.AppConstants;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.validation.FitnessInputValidator;
@@ -93,8 +92,8 @@ public class ProfileSetupController extends FormController implements Initializa
     // Is Narrow
     private Boolean narrowLayout;
 
-    // API
-    private final ProfileSetupApi profileSetupApi = new ProfileSetupApi();
+    // Service
+    private final ProfileSetupService profileSetupService = new ProfileSetupService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -227,7 +226,6 @@ public class ProfileSetupController extends FormController implements Initializa
         finishButton.setDisable(true);
         finishButton.setText("Saving...");
 
-        int userId = UserSession.getInstance().requireCurrentUser().id();
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
         LocalDate dateOfBirth = dateOfBirthPicker.getValue();
@@ -244,15 +242,14 @@ public class ProfileSetupController extends FormController implements Initializa
             goalWeightValue = goalWeight.isBlank() ? null : NumberUtils.parseDecimal(goalWeight);
         }
 
-        ProfileSetupRequest profileSetupRequest = new ProfileSetupRequest(
-                userId,
+        ProfileSetupData profileSetupData = new ProfileSetupData(
                 firstName,
                 lastName,
                 dateOfBirth,
-                gender.name(),
+                gender,
                 heightValue,
-                activityLevel.name(),
-                goalType.name(),
+                activityLevel,
+                goalType,
                 goalWeightValue,
                 weeklyGoalValue,
                 weightValue
@@ -260,12 +257,12 @@ public class ProfileSetupController extends FormController implements Initializa
 
         AsyncTaskRunner.run(
             () -> {
-                profileSetupApi.completeProfile(profileSetupRequest);
+                profileSetupService.completeSetup(profileSetupData);
                 return null;
             },
 
             ignored -> {
-                log.info("Profile setup completed for user ID: {}", userId);
+                log.info("Profile setup completed.");
                 navigateTo(AppConstants.Views.MAIN_LAYOUT);
             },
 

@@ -1,79 +1,108 @@
 package com.fittrack.service.nutrition;
 
-import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
+import com.fittrack.api.nutrition.MealApi;
+import com.fittrack.dto.nutrition.meal.*;
+import com.fittrack.dto.nutrition.meal.item.AddMealItemRequest;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
-import com.fittrack.dto.nutrition.meal.MealResponse;
-import com.fittrack.model.nutrition.DailyNutritionTotals;
+import com.fittrack.dto.nutrition.meal.item.UpdateMealItemRequest;
+import com.fittrack.session.UserSession;
 
+import java.time.LocalDate;
 import java.util.List;
 
-public final class MealService {
+public class MealService {
 
-    private MealService() {}
+    private final MealApi mealApi;
 
-    public static DailyNutritionTotals calculateDailyNutritionTotals(List<MealResponse> meals) {
-        double calories = 0;
-        double carbs = 0;
-        double fat = 0;
-        double protein = 0;
-
-        for (MealResponse meal : meals) {
-            for (MealItemResponse item : meal.items()) {
-                double servings = item.quantityGrams() / item.servingSizeGrams();
-
-                calories += servings * item.caloriesPerServing();
-
-                carbs += servings * item.carbsPerServing();
-                fat += servings * item.fatPerServing();
-                protein += servings * item.proteinPerServing();
-            }
-        }
-
-        return new DailyNutritionTotals(calories, carbs, fat, protein);
+    public MealService() {
+        this.mealApi = new MealApi();
     }
 
-    public static DailyNutritionTotals calculateMealNutritionTotals(MealResponse meal) {
-        if (meal == null || meal.items().isEmpty()) {
-            return new DailyNutritionTotals(0, 0, 0, 0);
-        }
-
-        return calculateDailyNutritionTotals(List.of(meal));
+    // ── Daily meals ─────────────────────────────────────────────
+    public List<MealResponse> getMealsForDate(LocalDate mealDate) {
+        return mealApi.getMealsForDate(
+                currentUserId(),
+                mealDate
+        );
     }
 
-    public static int calculateMealCalories(MealResponse meal) {
-        double totalCalories = 0;
-
-        for (MealItemResponse item : meal.items()) {
-            double servings = item.quantityGrams() / item.servingSizeGrams();
-            totalCalories += servings * item.caloriesPerServing();
-        }
-
-        return (int) Math.round(totalCalories);
+    public void addMealItem(AddMealItemRequest request) {
+        mealApi.addMealItem(
+                currentUserId(),
+                request
+        );
     }
 
-    public static double calculateFoodCalories(MealItemResponse mealItem) {
-        if (mealItem.servingSizeGrams() <= 0) {
-            return 0.0;
-        }
-
-        return mealItem.quantityGrams() / mealItem.servingSizeGrams() * mealItem.caloriesPerServing();
+    public MealItemResponse updateMealItem(Integer mealItemId, UpdateMealItemRequest request) {
+        return mealApi.updateMealItem(
+                currentUserId(),
+                mealItemId,
+                request
+        );
     }
 
-    public static List<MealItemDraft> createDraftItems(MealResponse meal) {
-        return meal.items()
-                .stream()
-                .map(item -> new MealItemDraft(
-                        null,
-                        item.foodId(),
-                        item.foodName(),
-                        item.brand(),
-                        item.quantityGrams(),
-                        item.servingSizeGrams(),
-                        item.caloriesPerServing(),
-                        item.proteinPerServing(),
-                        item.carbsPerServing(),
-                        item.fatPerServing()
-                ))
-                .toList();
+    public void deleteMealItem(Integer mealItemId) {
+        mealApi.deleteMealItem(
+                currentUserId(),
+                mealItemId
+        );
+    }
+
+    public boolean hasDailyMealItems(LocalDate date, String mealName) {
+        return mealApi.hasDailyMealItems(
+                currentUserId(),
+                date,
+                mealName
+        );
+    }
+
+    public void copyDailyMeal(CopyMealRequest request) {
+        mealApi.copyDailyMeal(
+                currentUserId(),
+                request
+        );
+    }
+
+    // ── Saved meals ─────────────────────────────────────────────
+    public List<MealResponse> searchMyMeals(String search) {
+        return mealApi.getMyMeals(
+                currentUserId(),
+                search
+        );
+    }
+
+    public void createSavedMeal(CreateMealRequest request) {
+        mealApi.createSavedMeal(
+                currentUserId(),
+                request
+        );
+    }
+
+    public void updateSavedMeal(Integer mealId, UpdateSavedMealRequest request) {
+        mealApi.updateSavedMeal(
+                currentUserId(),
+                mealId,
+                request
+        );
+    }
+
+    public void deleteSavedMeal(Integer mealId) {
+        mealApi.deleteSavedMeal(
+                currentUserId(),
+                mealId
+        );
+    }
+
+    public void logSavedMeal(Integer mealId, LogSavedMealRequest request) {
+        mealApi.logSavedMeal(
+                currentUserId(),
+                mealId,
+                request
+        );
+    }
+
+    // ── Helpers ─────────────────────────────────────────────
+    private Integer currentUserId() {
+        return UserSession.getInstance().getCurrentUser().id();
     }
 }

@@ -29,13 +29,6 @@ public interface MealRepository extends JpaRepository<@NonNull Meal, @NonNull In
             @Param("kind") MealKind kind
     );
 
-    Optional<Meal> findByUserIdAndMealDateAndNameAndKind(
-            Integer userId,
-            LocalDate mealDate,
-            String name,
-            MealKind kind
-    );
-
     @Query("""
     SELECT DISTINCT m
     FROM Meal m
@@ -72,22 +65,6 @@ public interface MealRepository extends JpaRepository<@NonNull Meal, @NonNull In
     """)
     Optional<Meal> findByIdWithItems(
             @Param("mealId") Integer mealId
-    );
-
-    @Query("""
-        SELECT DISTINCT m
-        FROM Meal m
-        LEFT JOIN FETCH m.items
-        WHERE m.user.id = :userId
-          AND m.mealDate = :mealDate
-          AND m.name = :mealName
-          AND m.kind = :kind
-        """)
-    Optional<Meal> findByUserIdAndMealDateAndNameAndKindWithItems(
-            @Param("userId") Integer userId,
-            @Param("mealDate") LocalDate mealDate,
-            @Param("mealName") String mealName,
-            @Param("kind") MealKind kind
     );
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)

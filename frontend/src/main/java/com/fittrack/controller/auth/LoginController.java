@@ -2,9 +2,7 @@ package com.fittrack.controller.auth;
 
 import com.fittrack.ui.SceneShortcuts;
 import javafx.scene.control.*;
-import com.fittrack.api.auth.LoginApi;
 import com.fittrack.model.user.User;
-import com.fittrack.session.UserSession;
 import com.fittrack.config.AppConstants;
 import com.fittrack.async.AsyncTaskRunner;
 import javafx.fxml.FXML;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@SuppressWarnings("squid:S5411")
 public class LoginController extends AuthFormController implements Initializable {
 
     // Custom console messages
@@ -37,9 +34,6 @@ public class LoginController extends AuthFormController implements Initializable
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button loginButton;
-
-    // API
-    private final LoginApi loginApi = new LoginApi();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -101,14 +95,12 @@ public class LoginController extends AuthFormController implements Initializable
         loginButton.setText("Logging in...");
 
         AsyncTaskRunner.run(
-                () -> loginApi.login(email, password),
+                () -> authService.login(email, password),
 
                 result -> {
                     switch (result.status()) {
                         case SUCCESS -> {
                             User user = result.user();
-                            UserSession session = UserSession.getInstance();
-                            session.start(user);
 
                             log.info("Logged in successfully: {}", user.email());
 
@@ -123,16 +115,14 @@ public class LoginController extends AuthFormController implements Initializable
                             showEmailMessage("No account exists with this email.");
                             shake(emailField);
 
-                            loginButton.setDisable(false);
-                            loginButton.setText("Log in");
+                            resetLoginButton();
                         }
 
                         case WRONG_PASSWORD -> {
                             showPasswordMessage("Incorrect password.");
                             shake(passwordShowing ? passwordVisible : passwordField);
 
-                            loginButton.setDisable(false);
-                            loginButton.setText("Log in");
+                            resetLoginButton();
                         }
                     }
                 },

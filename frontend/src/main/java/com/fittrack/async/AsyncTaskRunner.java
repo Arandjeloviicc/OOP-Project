@@ -9,11 +9,7 @@ public final class AsyncTaskRunner {
 
     private AsyncTaskRunner() {}
 
-    public static <T> void run(
-            Supplier<T> action,
-            Consumer<T> onSuccess,
-            Consumer<Throwable> onFailure
-    ) {
+    public static <T> void run(Supplier<T> action, Consumer<T> onSuccess, Consumer<Throwable> onFailure) {
         Task<T> task = new Task<>() {
             @Override
             protected T call() {

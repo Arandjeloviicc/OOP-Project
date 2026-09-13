@@ -7,6 +7,8 @@ public final class OverlayManager {
 
     private static StackPane overlayContainer;
 
+    private static Runnable onCloseAction = () -> {};
+
     private OverlayManager() {}
 
     public static void initialize(StackPane container) {
@@ -14,11 +16,15 @@ public final class OverlayManager {
     }
 
     public static void show(Node content) {
+        show(content, null);
+    }
+
+    public static void show(Node content, Runnable onClose) {
         if (overlayContainer == null) {
-            throw new IllegalStateException(
-                    "OverlayManager is not initialized."
-            );
+            throw new IllegalStateException("OverlayManager is not initialized.");
         }
+
+        onCloseAction = onClose != null ? onClose : () -> {};
 
         overlayContainer.getChildren().setAll(content);
         overlayContainer.setManaged(true);
@@ -33,5 +39,10 @@ public final class OverlayManager {
         overlayContainer.getChildren().clear();
         overlayContainer.setVisible(false);
         overlayContainer.setManaged(false);
+
+        Runnable action = onCloseAction;
+        onCloseAction = () -> {};
+
+        action.run();
     }
 }

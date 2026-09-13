@@ -8,7 +8,7 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fittrack.controller.nutrition.components.MealCopyDialogController"
            stylesheets="@../../../css/nutrition/components/meal-copy-dialog.css"
-           styleClass="popup-host, popup-host-centered">
+           styleClass="popup-host, meal-copy-root">
 
     <VBox styleClass="meal-copy-dialog"
           maxHeight="-Infinity">
@@ -27,7 +27,8 @@
         </HBox>
 
         <!-- Fields -->
-        <GridPane styleClass="meal-copy-fields">
+        <GridPane fx:id="fieldsGrid"
+                  styleClass="meal-copy-fields">
 
             <columnConstraints>
                 <ColumnConstraints percentWidth="50"/>
@@ -35,7 +36,8 @@
             </columnConstraints>
 
             <!-- Meal -->
-            <VBox GridPane.columnIndex="0"
+            <VBox fx:id="mealFieldBox"
+                  GridPane.columnIndex="0"
                   styleClass="field-group">
 
                 <Label text="Meal"
@@ -48,7 +50,8 @@
             </VBox>
 
             <!-- Day -->
-            <VBox GridPane.columnIndex="1"
+            <VBox fx:id="dayFieldBox"
+                  GridPane.columnIndex="1"
                   styleClass="field-group">
 
                 <Label text="Day"
@@ -63,7 +66,7 @@
         </GridPane>
 
         <!-- Availability -->
-        <Label fx:id="availabilityLabel"
+        <Label fx:id="availabilityMessage"
                text="No food logged for that meal."
                visible="false"
                wrapText="true"

@@ -78,6 +78,8 @@
     -fx-max-width: Infinity;
     -fx-alignment: center;
     -fx-text-alignment: center;
+
+    -fx-font-size: 1.05em;
 }
 
 /* ========================================================== */
@@ -86,4 +88,35 @@
 
 .meal-copy-action-button {
     -fx-max-width: Infinity;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.meal-copy-root:narrow {
+    -fx-alignment: bottom-center;
+}
+
+.meal-copy-root:narrow .meal-copy-dialog {
+    -fx-max-width: Infinity;
+
+    -fx-background-radius: 1.2em 1.2em 0 0;
+
+    -fx-border-radius: 1.2em 1.2em 0 0;
+    -fx-border-width: 1px 1px 0 1px;
+
+    -fx-padding: 1.5em;
+}
+
+/* ========================================================== */
+/* == ULTRA NARROW ========================================== */
+/* ========================================================== */
+
+.meal-copy-root:ultra-narrow .meal-copy-dialog {
+    -fx-padding: 1.25em;
+}
+
+.meal-copy-root:ultra-narrow .meal-copy-fields {
+    -fx-vgap: 1em;
 }

@@ -1,16 +1,15 @@
-package com.fittrack.dto.profile;
+package com.fittrack.model.profile;
 
 import java.time.LocalDate;
 
-public record ProfileSetupRequest(
-        int userId,
+public record ProfileSetupData(
         String firstName,
         String lastName,
         LocalDate dateOfBirth,
-        String gender,
+        Gender gender,
         double height,
-        String activityLevel,
-        String goalType,
+        ActivityLevel activityLevel,
+        WeightGoal goalType,
         Double goalWeight,
         Double weeklyGoal,
         double weight

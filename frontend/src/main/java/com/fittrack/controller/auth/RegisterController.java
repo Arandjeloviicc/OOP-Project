@@ -1,8 +1,6 @@
 package com.fittrack.controller.auth;
 
-import com.fittrack.api.auth.RegistrationApi;
 import com.fittrack.model.user.User;
-import com.fittrack.session.UserSession;
 import com.fittrack.config.AppConstants;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.ui.SceneShortcuts;
@@ -39,9 +37,6 @@ public class RegisterController extends AuthFormController implements Initializa
     @FXML private Label toggleLabel;
     @FXML private Label toggleIcon;
     @FXML private Button registerButton;
-
-    // API
-    private final RegistrationApi authApi = new RegistrationApi();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -107,14 +102,12 @@ public class RegisterController extends AuthFormController implements Initializa
         registerButton.setText("Registering...");
 
         AsyncTaskRunner.run(
-            () -> authApi.register(username, email, password),
+            () -> authService.register(username, email, password),
 
             result -> {
                 switch (result.status()) {
                     case SUCCESS -> {
                         User user = result.user();
-
-                        UserSession.getInstance().start(result.user());
 
                         log.info("User registered successfully: {}", user.email());
 

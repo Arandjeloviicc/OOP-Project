@@ -6,74 +6,40 @@ import com.fittrack.dto.auth.LoginResponse;
 import com.fittrack.dto.auth.UserResponse;
 import com.fittrack.model.user.User;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
 public class LoginApi extends BaseApi {
 
     private static final String API_URL = AUTH_URL + "/login";
 
     public LoginResult login(String email, String password) {
-        try {
-            LoginRequest loginRequest = new LoginRequest(email, password);
+        LoginRequest request = new LoginRequest(email, password);
 
-            String requestBody = objectMapper.writeValueAsString(loginRequest);
+        LoginResponse response = apiClient.post(
+                API_URL,
+                request,
+                200,
+                LoginResponse.class
+        );
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
+        return switch (response.status()) {
+            case "SUCCESS" -> {
+                UserResponse responseUser = response.user();
 
-            HttpResponse<String> response = httpClient.send(
-                    request,
-                    HttpResponse.BodyHandlers.ofString()
-            );
+                User user = new User(
+                        responseUser.id(),
+                        responseUser.username(),
+                        responseUser.email()
+                );
 
-            if (response.statusCode() != 200) {
-                throw new IllegalStateException(
-                        "Login request failed with status: " + response.statusCode()
+                yield LoginResult.success(
+                        user,
+                        response.profileSetupComplete()
                 );
             }
 
-            LoginResponse loginResponse = objectMapper.readValue(response.body(), LoginResponse.class);
+            case "USER_NOT_FOUND" -> LoginResult.userNotFound();
+            case "WRONG_PASSWORD" -> LoginResult.wrongPassword();
 
-            return switch (loginResponse.status()) {
-                case "SUCCESS" -> {
-                    UserResponse responseUser = loginResponse.user();
-
-                    User user = new User(
-                            responseUser.id(),
-                            responseUser.username(),
-                            responseUser.email()
-                    );
-
-                    yield LoginResult.success(
-                            user,
-                            loginResponse.profileSetupComplete()
-                    );
-                }
-
-                case "USER_NOT_FOUND" -> LoginResult.userNotFound();
-                case "WRONG_PASSWORD" -> LoginResult.wrongPassword();
-
-                default -> throw new IllegalStateException("Unexpected value: " + loginResponse.status());
-            };
-        } catch (IOException exception) {
-            throw new IllegalStateException(
-                    "Could not communicate with the FitTrack server.",
-                    exception
-            );
-
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-
-            throw new IllegalStateException(
-                    "Login request was interrupted.",
-                    exception
-            );
-        }
+            default -> throw new IllegalStateException("Unexpected login status: " + response.status());
+        };
     }
 }

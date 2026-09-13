@@ -1,4 +1,4 @@
-package com.fittrack.controller.nutrition.coordinator;
+package com.fittrack.coordinator.nutrition;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.nutrition.components.FoodEditorController;
@@ -9,6 +9,7 @@ import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
+import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
@@ -16,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -26,8 +28,9 @@ public class AddToMealCoordinator {
     private final StackPane itemDetailsContainer;
     private final StackPane editorContainer;
 
-    // Active Meal Editor
+    // Active Editors
     private SavedMealEditorController activeSavedMealEditor;
+    private FoodEditorController activeFoodEditor;
 
     // ── Constructor ──────────────────────────────────────────────────────
     public AddToMealCoordinator(VBox selectionContainer, StackPane itemDetailsContainer, StackPane editorContainer) {
@@ -39,10 +42,6 @@ public class AddToMealCoordinator {
     // ── State ──────────────────────────────────────────────────────
     public boolean hasActiveSavedMealEditor() {
         return activeSavedMealEditor != null;
-    }
-
-    public SavedMealEditorController getActiveSavedMealEditor() {
-        return activeSavedMealEditor;
     }
 
     public void openFoodDetails(FoodResponse food, MealType mealType, Consumer<Double> onAddToDraft, BiConsumer<MealType, Double> onAddToMeal) {
@@ -101,7 +100,9 @@ public class AddToMealCoordinator {
     public void openSavedMealEditor(MealResponse meal, Runnable onCancel, Runnable onAddFood, Consumer<UpdateSavedMealRequest> onUpdate, Runnable onDelete) {
         LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
 
-        activeSavedMealEditor = editor.controller();
+        SavedMealEditorController editorController = editor.controller();
+        activeSavedMealEditor = editorController;
+
         activeSavedMealEditor.setEditMode(meal);
 
         activeSavedMealEditor.setOnCancelAction(() -> {
@@ -112,11 +113,23 @@ public class AddToMealCoordinator {
             }
         });
 
-        activeSavedMealEditor.setOnAddFoodAction(onAddFood);
+        editorController.setOnAddFoodAction(onAddFood);
 
-        activeSavedMealEditor.setOnUpdateAction(onUpdate);
+        editorController.setOnUpdateAction(request -> {
+            editorController.setSubmitting(true);
 
-        activeSavedMealEditor.setOnDeleteAction(onDelete);
+            if (onUpdate != null) {
+                onUpdate.accept(request);
+            }
+        });
+
+        editorController.setOnDeleteAction(() -> {
+            editorController.setSubmitting(true);
+
+            if (onDelete != null) {
+                onDelete.run();
+            }
+        });
 
         showEditor(editor.root());
     }
@@ -124,10 +137,12 @@ public class AddToMealCoordinator {
     public void openSaveAsMealEditor(MealResponse sourceMeal, Runnable onCancel, Runnable onAddFood, Consumer<CreateMealRequest> onCreate) {
         LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
 
-        activeSavedMealEditor = editor.controller();
-        activeSavedMealEditor.setCreateMode(sourceMeal);
+        SavedMealEditorController editorController = editor.controller();
+        activeSavedMealEditor = editorController;
 
-        activeSavedMealEditor.setOnCancelAction(() -> {
+        editorController.setCreateMode(sourceMeal);
+
+        editorController.setOnCancelAction(() -> {
             closeEditor();
 
             if (onCancel != null) {
@@ -135,9 +150,15 @@ public class AddToMealCoordinator {
             }
         });
 
-        activeSavedMealEditor.setOnAddFoodAction(onAddFood);
+        editorController.setOnAddFoodAction(onAddFood);
 
-        activeSavedMealEditor.setOnCreateAction(onCreate);
+        editorController.setOnCreateAction(request -> {
+            editorController.setSubmitting(true);
+
+            if (onCreate != null) {
+                onCreate.accept(request);
+            }
+        });
 
         showEditor(editor.root());
     }
@@ -145,10 +166,12 @@ public class AddToMealCoordinator {
     public void openCreateMeal(Runnable onCancel, Runnable onAddFood, Consumer<CreateMealRequest> onCreate) {
         LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
 
-        activeSavedMealEditor = editor.controller();
-        activeSavedMealEditor.setCreateMode();
+        SavedMealEditorController editorController = editor.controller();
+        activeSavedMealEditor = editorController;
 
-        activeSavedMealEditor.setOnCancelAction(() -> {
+        editorController.setCreateMode();
+
+        editorController.setOnCancelAction(() -> {
             closeEditor();
 
             if (onCancel != null) {
@@ -156,9 +179,15 @@ public class AddToMealCoordinator {
             }
         });
 
-        activeSavedMealEditor.setOnAddFoodAction(onAddFood);
+        editorController.setOnAddFoodAction(onAddFood);
 
-        activeSavedMealEditor.setOnCreateAction(onCreate);
+        editorController.setOnCreateAction(request -> {
+            editorController.setSubmitting(true);
+
+            if (onCreate != null) {
+                onCreate.accept(request);
+            }
+        });
 
         showEditor(editor.root());
     }
@@ -172,10 +201,11 @@ public class AddToMealCoordinator {
     }
 
     // ── Food Editor ────────────────────────────────────────────────
-    public void openCreateFood(BiConsumer<CreateFoodRequest, FoodEditorController> onCreate) {
+    public void openCreateFood(Consumer<CreateFoodRequest> onCreate) {
         LoadedComponent<FoodEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.FOOD_EDITOR);
 
         FoodEditorController editorController = editor.controller();
+        activeFoodEditor = editorController;
 
         editorController.setCreateMode();
 
@@ -183,16 +213,13 @@ public class AddToMealCoordinator {
                 this::closeEditor
         );
 
-        editorController.setOnCreateAction(
-                request -> {
-                    if (onCreate != null) {
-                        onCreate.accept(
-                                request,
-                                editorController
-                        );
-                    }
-                }
-        );
+        editorController.setOnCreateAction(request -> {
+            editorController.setSubmitting(true);
+
+            if (onCreate != null) {
+                onCreate.accept(request);
+            }
+        });
 
         showEditor(editor.root());
     }
@@ -216,6 +243,7 @@ public class AddToMealCoordinator {
         editorContainer.getChildren().clear();
 
         activeSavedMealEditor = null;
+        activeFoodEditor = null;
 
         setVisible(editorContainer, false);
         setVisible(selectionContainer, true);
@@ -225,5 +253,39 @@ public class AddToMealCoordinator {
     private void setVisible(Node node, boolean visible) {
         node.setVisible(visible);
         node.setManaged(visible);
+    }
+
+    public boolean isEditingSavedMeal(Integer mealId) {
+        return activeSavedMealEditor != null
+                && activeSavedMealEditor.getMealId() != null
+                && activeSavedMealEditor.getMealId().equals(mealId);
+    }
+
+    public void addDraftItem(MealItemDraft draftItem) {
+        if (activeSavedMealEditor == null) {
+            throw new IllegalStateException("No active saved meal editor.");
+        }
+
+        activeSavedMealEditor.addDraftItem(draftItem);
+    }
+
+    public void addDraftItems(List<MealItemDraft> draftItems) {
+        if (activeSavedMealEditor == null) {
+            throw new IllegalStateException("No active saved meal editor.");
+        }
+
+        activeSavedMealEditor.addDraftItems(draftItems);
+    }
+
+    public void setSavedMealEditorSubmitting(boolean submitting) {
+        if (activeSavedMealEditor != null) {
+            activeSavedMealEditor.setSubmitting(submitting);
+        }
+    }
+
+    public void setFoodEditorSubmitting(boolean submitting) {
+        if (activeFoodEditor != null) {
+            activeFoodEditor.setSubmitting(submitting);
+        }
     }
 }

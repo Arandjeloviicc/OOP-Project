@@ -92,11 +92,3 @@
     -fx-border-radius: 0;
     -fx-border-width: 0;
 }
-
-.popup-root:short .popup-dialog {
-    -fx-max-height: Infinity;
-
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-border-width: 0;
-}

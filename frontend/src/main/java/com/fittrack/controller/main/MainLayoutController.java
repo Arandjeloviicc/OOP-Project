@@ -3,7 +3,7 @@ package com.fittrack.controller.main;
 import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.view.ViewInstance;
-import com.fittrack.session.UserSession;
+import com.fittrack.service.auth.AuthService;
 import com.fittrack.config.AppConstants;
 import com.fittrack.ui.OverlayManager;
 import com.fittrack.ui.SceneManager;
@@ -31,6 +31,9 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(MainLayoutController.class);
+
+    @Override
+    protected Logger getLogger() { return log; }
 
     // Saves the data from the controllers and views
     private final Map<String, ViewInstance> contentCache = new HashMap<>();
@@ -79,8 +82,8 @@ public class MainLayoutController extends BaseController implements Initializabl
     // Is Narrow
     private Boolean narrowLayout;
 
-    @Override
-    protected Logger getLogger() { return log; }
+    // Service
+    private final AuthService authService = new AuthService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -133,7 +136,7 @@ public class MainLayoutController extends BaseController implements Initializabl
     @FXML
     private void handleLogout() {
         OverlayManager.close();
-        UserSession.getInstance().end();
+        authService.logout();
         SceneManager.clearCache();
 
         navigateTo(AppConstants.Views.LOGIN);
@@ -141,7 +144,7 @@ public class MainLayoutController extends BaseController implements Initializabl
 
     /* ── Initialize Helpers ────────────────────────────────────────────── */
     private void initializeMainLayoutControls() {
-        String username = UserSession.getInstance().requireCurrentUser().username();
+        String username = authService.getCurrentUser().username();
         greetingLabel.setText("Hello, " + username);
         sidebarUsernameLabel.setText(username);
 

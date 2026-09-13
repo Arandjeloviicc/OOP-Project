@@ -1,14 +1,12 @@
 package com.fittrack.controller.nutrition;
 
-import com.fittrack.api.nutrition.FoodApi;
-import com.fittrack.api.nutrition.MealApi;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.cache.FoodSearchCache;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.*;
-import com.fittrack.controller.nutrition.coordinator.AddToMealCoordinator;
+import com.fittrack.coordinator.nutrition.AddToMealCoordinator;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.dto.nutrition.meal.LogSavedMealRequest;
 import com.fittrack.dto.nutrition.meal.item.AddMealItemRequest;
@@ -20,8 +18,9 @@ import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.model.nutrition.SearchSource;
+import com.fittrack.service.nutrition.FoodService;
 import com.fittrack.service.nutrition.MealService;
-import com.fittrack.session.UserSession;
+import com.fittrack.service.nutrition.NutritionCalculationService;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
 import com.fittrack.ui.OverlayManager;
@@ -96,9 +95,9 @@ public class AddToMealController extends FormController implements Initializable
     private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
     private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
 
-    // Api
-    private final FoodApi foodApi = new FoodApi();
-    private final MealApi mealApi = new MealApi();
+    // Service
+    private final FoodService foodService = new FoodService();
+    private final MealService mealService = new MealService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -343,7 +342,7 @@ public class AddToMealController extends FormController implements Initializable
         }
 
         AsyncTaskRunner.run(
-                () -> foodApi.searchFoods(search),
+                () -> foodService.searchAllFoods(search),
 
                 foods -> {
                     FoodSearchCache.put(cacheKey, foods);
@@ -370,11 +369,10 @@ public class AddToMealController extends FormController implements Initializable
 
     // ── My Foods ───────────────────────────────────────────────────
     private void loadMyFoods(String search) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
         String normalizedSearch = normalizeSearch(search);
 
         AsyncTaskRunner.run(
-                () -> foodApi.getMyFoods(userId, search),
+                () -> foodService.searchMyFoods(search),
 
                 foods -> {
                     if (!normalizedSearch.equals(normalizeSearch(searchField.getText()))) {
@@ -399,11 +397,10 @@ public class AddToMealController extends FormController implements Initializable
 
     // ── My Meals ───────────────────────────────────────────────────
     private void loadMyMeals(String search) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
         String normalizedSearch = normalizeSearch(search);
 
         AsyncTaskRunner.run(
-                () -> mealApi.getMyMeals(userId, search),
+                () -> mealService.searchMyMeals(search),
 
                 meals -> {
                     if (!normalizedSearch.equals(normalizeSearch(searchField.getText()))) {
@@ -472,9 +469,7 @@ public class AddToMealController extends FormController implements Initializable
 
             // If we are editing a saved meal, don't show that meal in My Meals
             if (coordinator.hasActiveSavedMealEditor()) {
-                SavedMealEditorController activeEditor = coordinator.getActiveSavedMealEditor();
-
-                if (Objects.equals(meal.id(), activeEditor.getMealId())) {
+                if (coordinator.isEditingSavedMeal(meal.id())) {
                     continue;
                 }
 
@@ -485,7 +480,7 @@ public class AddToMealController extends FormController implements Initializable
 
             LoadedComponent<SavedMealListItemController> item = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_LIST_ITEM);
 
-            DailyNutritionTotals totals = MealService.calculateMealNutritionTotals(meal);
+            DailyNutritionTotals totals = NutritionCalculationService.calculateMealNutritionTotals(meal);
 
             item.controller().setData(
                     meal.name(),
@@ -518,8 +513,8 @@ public class AddToMealController extends FormController implements Initializable
     }
 
     private void addMealToMealDraft(MealResponse meal) {
-        coordinator.getActiveSavedMealEditor().addDraftItems(
-                MealService.createDraftItems(meal)
+        coordinator.addDraftItems(
+                NutritionCalculationService.createDraftItems(meal)
         );
 
         coordinator.returnToMealEditor();
@@ -561,17 +556,9 @@ public class AddToMealController extends FormController implements Initializable
     }
 
     private void updateMeal(Integer mealId, UpdateSavedMealRequest request) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
-        coordinator.getActiveSavedMealEditor().setSubmitting(true);
-
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.updateSavedMeal(
-                            userId,
-                            mealId,
-                            request
-                    );
+                    mealService.updateSavedMeal(mealId, request);
 
                     return null;
                 },
@@ -582,9 +569,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    if (coordinator.hasActiveSavedMealEditor()) {
-                        coordinator.getActiveSavedMealEditor().setSubmitting(false);
-                    }
+                    coordinator.setSavedMealEditorSubmitting(false);
 
                     log.error(
                             "Failed to update meal.",
@@ -595,13 +580,9 @@ public class AddToMealController extends FormController implements Initializable
     }
 
     private void deleteMeal(Integer mealId) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
-        coordinator.getActiveSavedMealEditor().setSubmitting(true);
-
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.deleteSavedMeal(userId, mealId);
+                    mealService.deleteSavedMeal(mealId);
                     return null;
                 },
 
@@ -611,9 +592,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    if (coordinator.hasActiveSavedMealEditor()) {
-                        coordinator.getActiveSavedMealEditor().setSubmitting(false);
-                    }
+                    coordinator.setSavedMealEditorSubmitting(false);
 
                     log.error(
                             "Failed to delete meal.",
@@ -624,13 +603,11 @@ public class AddToMealController extends FormController implements Initializable
     }
 
     private void logSavedMeal(MealResponse meal, Runnable onSuccess, Runnable onFailure) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         LogSavedMealRequest request = new LogSavedMealRequest(mealDate, mealType.getName());
 
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.logSavedMeal(userId, meal.id(), request);
+                    mealService.logSavedMeal(meal.id(), request);
                     return null;
                 },
 
@@ -678,8 +655,6 @@ public class AddToMealController extends FormController implements Initializable
 
     // ── Meal Item Actions ──────────────────────────────────────────────
     private void addFoodToMeal(FoodResponse food, MealType selectedMeal, double quantityGrams, Runnable onSuccess, Runnable onFailure) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         AddMealItemRequest request = new AddMealItemRequest(
                 mealDate,
                 selectedMeal.getName(),
@@ -688,7 +663,7 @@ public class AddToMealController extends FormController implements Initializable
 
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.addMealItem(userId, request);
+                    mealService.addMealItem(request);
                     return null;
                 },
 
@@ -727,7 +702,7 @@ public class AddToMealController extends FormController implements Initializable
                 food.fatPerServing()
         );
 
-        coordinator.getActiveSavedMealEditor().addDraftItem(draftItem);
+        coordinator.addDraftItem(draftItem);
 
         coordinator.returnToMealEditor();
     }
@@ -739,13 +714,9 @@ public class AddToMealController extends FormController implements Initializable
         );
     }
 
-    private void createFood(CreateFoodRequest createFoodRequest, FoodEditorController editor) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
-        editor.setSubmitting(true);
-
+    private void createFood(CreateFoodRequest createFoodRequest) {
         AsyncTaskRunner.run(
-                () -> foodApi.createFood(userId, createFoodRequest),
+                () -> foodService.createFood(createFoodRequest),
 
                 food -> {
                     FoodSearchCache.clear();
@@ -755,7 +726,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    editor.setSubmitting(false);
+                    coordinator.setFoodEditorSubmitting(false);
 
                     log.error(
                             "Failed to create a food.",
@@ -786,13 +757,9 @@ public class AddToMealController extends FormController implements Initializable
     }
 
     private void createSavedMeal(CreateMealRequest request, Runnable onSuccess) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
-        coordinator.getActiveSavedMealEditor().setSubmitting(true);
-
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.createSavedMeal(userId, request);
+                    mealService.createSavedMeal(request);
                     return null;
                 },
 
@@ -803,9 +770,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    if (coordinator.hasActiveSavedMealEditor()) {
-                        coordinator.getActiveSavedMealEditor().setSubmitting(false);
-                    }
+                    coordinator.setSavedMealEditorSubmitting(false);
 
                     log.error(
                             "Failed to create meal.",

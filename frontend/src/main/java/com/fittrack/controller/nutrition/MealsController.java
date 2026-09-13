@@ -1,6 +1,5 @@
 package com.fittrack.controller.nutrition;
 
-import com.fittrack.api.nutrition.MealApi;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.config.AppConstants;
 import com.fittrack.config.AppImages;
@@ -8,17 +7,19 @@ import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.DailyMealCardController;
-import com.fittrack.controller.nutrition.components.MealCopyDialogController;
 import com.fittrack.controller.nutrition.components.NutritionProgressCardController;
+import com.fittrack.coordinator.nutrition.MealsCoordinator;
 import com.fittrack.dto.nutrition.meal.CopyMealRequest;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
+import com.fittrack.model.nutrition.NutritionTargets;
 import com.fittrack.service.nutrition.MealService;
-import com.fittrack.session.UserSession;
+import com.fittrack.service.nutrition.NutritionCalculationService;
+import com.fittrack.service.profile.ProfileService;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
-import com.fittrack.ui.OverlayManager;
+import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -85,6 +86,9 @@ public class MealsController extends BaseController implements Initializable, Re
     private LoadedComponent<DailyMealCardController> dinnerCard;
     private LoadedComponent<DailyMealCardController> snacksCard;
 
+    // ScrollPane position (prevents resetting to top)
+    private double overlayScrollPosition;
+
     // Load Helpers
     private long mealsLoadVersion;
 
@@ -102,8 +106,15 @@ public class MealsController extends BaseController implements Initializable, Re
     // Cache
     private final Map<LocalDate, List<MealResponse>> mealsCache = new HashMap<>();
 
-    // Api
-    private final MealApi mealApi = new MealApi();
+    // Coordinator
+    private final MealsCoordinator coordinator = new MealsCoordinator();
+
+    // Nutrition Targets for Progress Cards
+    private NutritionTargets nutritionTargets;
+
+    // Service
+    private final MealService mealService = new MealService();
+    private final ProfileService profileService = new ProfileService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -111,6 +122,15 @@ public class MealsController extends BaseController implements Initializable, Re
         // Setup ScrollPane
         mealsContent.minHeightProperty().bind(
                 mealsScroll.viewportBoundsProperty().map(Bounds::getHeight)
+        );
+
+        // ScrollPane Position Listener
+        coordinator.setOverlayLifecycle(
+                () -> overlayScrollPosition = mealsScroll.getVvalue(),
+
+                () -> Platform.runLater(() ->
+                        mealsScroll.setVvalue(overlayScrollPosition)
+                )
         );
 
         // Initialize Summary and Diary Cards
@@ -122,6 +142,9 @@ public class MealsController extends BaseController implements Initializable, Re
 
         // Initialize Controls
         initializeMealsControls();
+
+        // Load Targets
+        loadNutritionTargets();
     }
 
     // ── Refresh Actions ─────────────────────────────────────────────────
@@ -168,10 +191,8 @@ public class MealsController extends BaseController implements Initializable, Re
             return;
         }
 
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         AsyncTaskRunner.run(
-                () -> mealApi.getMealsForDate(userId, currentDate),
+                () -> mealService.getMealsForDate(currentDate),
 
                 meals -> {
                     if (loadVersion != mealsLoadVersion) {
@@ -190,9 +211,26 @@ public class MealsController extends BaseController implements Initializable, Re
         );
     }
 
+    private void loadNutritionTargets() {
+        AsyncTaskRunner.run(
+                profileService::getNutritionTargets,
+
+                targets -> {
+                    nutritionTargets = targets;
+
+                    datePicker.setValue(LocalDate.now());
+                },
+
+                exception -> log.error(
+                        "Failed to load nutrition targets.",
+                        exception
+                )
+        );
+    }
+
     private void showMeals(List<MealResponse> meals) {
         // Update Summary Cards
-        DailyNutritionTotals totals = MealService.calculateDailyNutritionTotals(meals);
+        DailyNutritionTotals totals = NutritionCalculationService.calculateDailyNutritionTotals(meals);
         updateSummary(totals);
 
         // Update Diary Cards
@@ -300,7 +338,6 @@ public class MealsController extends BaseController implements Initializable, Re
                 loadMealsForDate();
             }
         });
-        datePicker.setValue(LocalDate.now());
     }
 
     // ── Summary Helpers ─────────────────────────────────────────────────
@@ -308,7 +345,7 @@ public class MealsController extends BaseController implements Initializable, Re
         caloriesCard.setData(
                 "Calories",
                 totals.calories(),
-                2200,
+                nutritionTargets.calories(),
                 "cal",
                 true
         );
@@ -316,7 +353,7 @@ public class MealsController extends BaseController implements Initializable, Re
         wideCarbsCard.setData(
                 "Carbs",
                 totals.carbs(),
-                250,
+                nutritionTargets.carbs(),
                 "g",
                 false
         );
@@ -324,7 +361,7 @@ public class MealsController extends BaseController implements Initializable, Re
         wideFatCard.setData(
                 "Fat",
                 totals.fat(),
-                70,
+                nutritionTargets.fat(),
                 "g",
                 false
         );
@@ -332,7 +369,7 @@ public class MealsController extends BaseController implements Initializable, Re
         wideProteinCard.setData(
                 "Protein",
                 totals.protein(),
-                160,
+                nutritionTargets.protein(),
                 "g",
                 false
         );
@@ -340,7 +377,7 @@ public class MealsController extends BaseController implements Initializable, Re
         narrowCarbsCard.setData(
                 "Carbs",
                 totals.carbs(),
-                250,
+                nutritionTargets.carbs(),
                 "g",
                 false
         );
@@ -348,7 +385,7 @@ public class MealsController extends BaseController implements Initializable, Re
         narrowFatCard.setData(
                 "Fat",
                 totals.fat(),
-                70,
+                nutritionTargets.fat(),
                 "g",
                 false
         );
@@ -356,7 +393,7 @@ public class MealsController extends BaseController implements Initializable, Re
         narrowProteinCard.setData(
                 "Protein",
                 totals.protein(),
-                160,
+                nutritionTargets.protein(),
                 "g",
                 false
         );
@@ -456,25 +493,14 @@ public class MealsController extends BaseController implements Initializable, Re
         component.controller().setOnLogAction(() -> {
             LocalDate selectedDate = datePicker.getValue();
 
-            LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
-
-            addToMeal.controller().setData(MealType.fromName(title), selectedDate);
-
-            addToMeal.controller().setOnCloseAction(() -> {
-                invalidateMealsCache(selectedDate);
-                loadMealsForDate();
-            });
-
-            addToMeal.controller().setOnBackAction(changed -> {
-                OverlayManager.close();
-
-                if (changed) {
-                    invalidateMealsCache(selectedDate);
-                    loadMealsForDate();
-                }
-            });
-
-            OverlayManager.show(addToMeal.root());
+            coordinator.openAddToMeal(
+                    MealType.fromName(title),
+                    selectedDate,
+                    () -> {
+                        invalidateMealsCache(selectedDate);
+                        loadMealsForDate();
+                    }
+            );
         });
 
         return component;
@@ -495,7 +521,15 @@ public class MealsController extends BaseController implements Initializable, Re
         MealType mealType = MealType.fromName(mealName);
 
         card.controller().setOnOpenAction(() -> {
-            openMealDetails(mealType, selectedDate, meal);
+            coordinator.openMealDetails(
+                    mealType,
+                    selectedDate,
+                    meal,
+                    () -> {
+                        invalidateMealsCache(selectedDate);
+                        loadMealsForDate();
+                    }
+            );
         });
 
         card.controller().setOnCopyFromAction(
@@ -520,12 +554,12 @@ public class MealsController extends BaseController implements Initializable, Re
         }
 
         card.controller().setOnSaveMealAction(
-                () -> openSaveAsMeal(meal)
+                () -> coordinator.openSaveAsMeal(meal)
         );
 
         String firstFoodName = meal.items().getFirst().foodName();
         int otherFoodsCount = meal.items().size() - 1;
-        int calories = MealService.calculateMealCalories(meal);
+        int calories = NutritionCalculationService.calculateMealCalories(meal);
 
         card.controller().setData(
                 mealName,
@@ -535,113 +569,67 @@ public class MealsController extends BaseController implements Initializable, Re
         );
     }
 
-    // ── Meal Details Helpers ─────────────────────────────────────────────────
-    private void openMealDetails(MealType mealType, LocalDate mealDate, MealResponse meal) {
-        LoadedComponent<DailyMealDetailsController> details = FxmlComponentLoader.load(AppConstants.Views.DAILY_MEAL_DETAILS);
-
-        details.controller().setData(mealType, mealDate, meal);
-
-        details.controller().setOnCloseAction(() -> {
-            invalidateMealsCache(mealDate);
-            loadMealsForDate();
-        });
-
-        OverlayManager.show(details.root());
-    }
-
     // ── ContextMenu Items Actions ─────────────────────────────────────────────────
-    private void openSaveAsMeal(MealResponse meal) {
-        LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
-
-        addToMeal.controller().setSaveAsMealData(meal);
-
-        OverlayManager.show(addToMeal.root());
-    }
-
     private void openCopyFrom(MealType currentMealType, LocalDate currentDate) {
-        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Components.MEAL_COPY_DIALOG);
+        coordinator.openCopyFrom(
+                currentMealType,
+                currentDate,
 
-        MealCopyDialogController controller = copyDialog.controller();
+                this::checkMealAvailability,
 
-        controller.setOnCloseAction(() -> {
-            mealAvailabilityCheckVersion++;
-            OverlayManager.close();
-        });
-
-        controller.setOnAvailabilityCheckAction(
-                (sourceMealType, sourceDate) ->
-                        checkMealAvailability(
-                                controller,
-                                sourceMealType,
-                                sourceDate
-                        )
-        );
-
-        controller.setOnCopyAction(
                 (sourceMealType, sourceDate) -> {
-                    CopyMealRequest request = new CopyMealRequest(
-                            sourceDate,
-                            sourceMealType.getName(),
-                            currentDate,
-                            currentMealType.getName()
+                    CopyMealRequest request =
+                            new CopyMealRequest(
+                                    sourceDate,
+                                    sourceMealType.getName(),
+                                    currentDate,
+                                    currentMealType.getName()
+                            );
+
+                    copyMeal(
+                            request,
+                            currentDate
                     );
+                },
 
-                    copyMeal(request, currentDate);
-                }
+                () -> mealAvailabilityCheckVersion++
         );
-
-        controller.setCopyFrom(currentMealType, currentDate);
-
-        OverlayManager.show(copyDialog.root());
     }
 
     private void openCopyTo(MealType currentMealType, LocalDate currentDate) {
-        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Components.MEAL_COPY_DIALOG);
+        coordinator.openCopyTo(
+                currentMealType,
+                currentDate,
 
-        MealCopyDialogController controller = copyDialog.controller();
-
-        controller.setOnCloseAction(() -> {
-            OverlayManager.close();
-        });
-
-        controller.setOnCopyAction(
                 (targetMealType, targetDate) -> {
-                    CopyMealRequest request = new CopyMealRequest(
-                            currentDate,
-                            currentMealType.getName(),
-                            targetDate,
-                            targetMealType.getName()
-                    );
+                    CopyMealRequest request =
+                            new CopyMealRequest(
+                                    currentDate,
+                                    currentMealType.getName(),
+                                    targetDate,
+                                    targetMealType.getName()
+                            );
 
-                    copyMeal(request, targetDate);
+                    copyMeal(
+                            request,
+                            targetDate
+                    );
                 }
         );
-
-        controller.setCopyTo(currentMealType, currentDate);
-
-        OverlayManager.show(copyDialog.root());
     }
 
-    private void checkMealAvailability(MealCopyDialogController controller, MealType mealType, LocalDate date) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
+    private void checkMealAvailability(MealType mealType, LocalDate date) {
         long checkVersion = ++mealAvailabilityCheckVersion;
 
-        controller.setCheckingAvailability();
-
         AsyncTaskRunner.run(
-                () -> mealApi.hasDailyMealItems(userId, date, mealType.getName()),
+                () -> mealService.hasDailyMealItems(date, mealType.getName()),
 
                 hasItems -> {
                     if (checkVersion != mealAvailabilityCheckVersion) {
                         return;
                     }
 
-                    if (hasItems) {
-                        controller.setMealAvailable();
-                    } else {
-                        controller.setMealUnavailable();
-                    }
+                    coordinator.setMealAvailability(hasItems);
                 },
 
                 exception -> {
@@ -649,7 +637,7 @@ public class MealsController extends BaseController implements Initializable, Re
                         return;
                     }
 
-                    controller.setAvailabilityCheckFailed();
+                    coordinator.setMealAvailabilityCheckFailed();
 
                     log.error(
                             "Failed to check meal availability.",
@@ -660,18 +648,16 @@ public class MealsController extends BaseController implements Initializable, Re
     }
 
     private void copyMeal(CopyMealRequest request, LocalDate targetDate) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.copyDailyMeal(userId, request);
+                    mealService.copyDailyMeal(request);
                     return null;
                 },
 
                 ignored -> {
                     invalidateMealsCache(targetDate);
 
-                    OverlayManager.close();
+                    coordinator.closeCopyDialog();
 
                     if (targetDate.equals(datePicker.getValue())) {
                         loadMealsForDate();

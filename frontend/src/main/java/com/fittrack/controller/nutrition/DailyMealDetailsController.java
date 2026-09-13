@@ -1,6 +1,5 @@
 package com.fittrack.controller.nutrition;
 
-import com.fittrack.api.nutrition.MealApi;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
@@ -14,7 +13,7 @@ import com.fittrack.dto.nutrition.meal.item.UpdateMealItemRequest;
 import com.fittrack.model.nutrition.DailyNutritionTotals;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.service.nutrition.MealService;
-import com.fittrack.session.UserSession;
+import com.fittrack.service.nutrition.NutritionCalculationService;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
 import com.fittrack.ui.OverlayManager;
@@ -73,8 +72,8 @@ public class DailyMealDetailsController extends FormController implements Initia
     private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
     private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
 
-    // Api
-    private final MealApi mealApi = new MealApi();
+    // Service
+    private final MealService mealService = new MealService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -106,7 +105,7 @@ public class DailyMealDetailsController extends FormController implements Initia
         titleLabel.setText(mealType.getName());
 
         // Macro Preview
-        DailyNutritionTotals totals = MealService.calculateMealNutritionTotals(currentMeal);
+        DailyNutritionTotals totals = NutritionCalculationService.calculateMealNutritionTotals(currentMeal);
         macroPreview.setData(
                 totals.calories(),
                 totals.carbs(),
@@ -132,7 +131,7 @@ public class DailyMealDetailsController extends FormController implements Initia
         for (MealItemResponse mealItem : currentMeal.items()) {
             LoadedComponent<MealItemCardController> card = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_CARD);
 
-            double calories = MealService.calculateFoodCalories(mealItem);
+            double calories = NutritionCalculationService.calculateFoodCalories(mealItem);
 
             card.controller().setData(
                     mealItem.foodName(),
@@ -271,10 +270,8 @@ public class DailyMealDetailsController extends FormController implements Initia
 
     // ── Refresh Meal Details ───────────────────────────────────────────────────
     private void refreshMealDetails() {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         AsyncTaskRunner.run(
-                () -> mealApi.getMealsForDate(userId, mealDate),
+                () -> mealService.getMealsForDate(mealDate),
 
                 meals -> {
                     MealResponse refreshedMeal = meals.stream()
@@ -308,15 +305,13 @@ public class DailyMealDetailsController extends FormController implements Initia
             return;
         }
 
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         UpdateMealItemRequest request = new UpdateMealItemRequest(
                 quantityGrams,
                 selectedMeal.getName()
         );
 
         AsyncTaskRunner.run(
-                () -> mealApi.updateMealItem(userId, mealItem.id(), request),
+                () -> mealService.updateMealItem(mealItem.id(), request),
 
                 response -> {
                     dataChanged = true;
@@ -338,11 +333,9 @@ public class DailyMealDetailsController extends FormController implements Initia
 
     // ── Delete MealItem ───────────────────────────────────────────────────
     private void deleteMealItem(MealItemResponse mealItem) {
-        Integer userId = UserSession.getInstance().getCurrentUser().id();
-
         AsyncTaskRunner.run(
                 () -> {
-                    mealApi.deleteMealItem(userId, mealItem.id());
+                    mealService.deleteMealItem(mealItem.id());
                     return null;
                 },
 
@@ -405,6 +398,5 @@ public class DailyMealDetailsController extends FormController implements Initia
         );
 
         renderMeal();
-
     }
 }

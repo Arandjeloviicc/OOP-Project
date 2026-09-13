@@ -4,6 +4,7 @@ import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.config.AppConstants;
 import com.fittrack.config.AppImages;
+import com.fittrack.service.auth.AuthService;
 import javafx.css.PseudoClass;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -28,6 +29,9 @@ public abstract class AuthFormController extends FormController implements Respo
 
     // Root StackPane
     private StackPane authRootPane;
+
+    // Service
+    protected final AuthService authService = new AuthService();
 
     // ── Initialize Helpers ──────────────────────────────────────────────
     protected void initializeAuthControls(StackPane rootLayout, ImageView backgroundImage, PasswordField passwordField, TextField passwordVisible) {

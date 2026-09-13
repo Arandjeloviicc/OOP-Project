@@ -8,7 +8,6 @@ import com.fittrack.util.NumberUtils;
 import com.fittrack.validation.FitnessInputValidator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -85,12 +84,6 @@ public class FoodEditorController extends FormController implements Initializabl
     // ── Initialization ─────────────────────────────────────────
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        // Setup ScrollPane
-        editorContent.minHeightProperty().bind(
-                setupScroll.viewportBoundsProperty().map(Bounds::getHeight)
-        );
-
         // Keyboard shortcuts
         SceneShortcuts.forNode(rootLayout)
                 .onEscape(this::handleCancel)

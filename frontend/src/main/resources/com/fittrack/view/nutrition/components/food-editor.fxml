@@ -11,11 +11,12 @@
 <?import javafx.scene.control.ScrollPane?>
 
 <VBox fx:id="rootLayout"
-      xmlns="http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fittrack.controller.nutrition.components.FoodEditorController"
-      stylesheets="@../../../css/nutrition/components/food-editor.css"
-      styleClass="popup-dialog, food-editor-root">
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.components.FoodEditorController"
+           stylesheets="@../../../css/nutrition/components/food-editor.css"
+           maxHeight="-Infinity"
+           styleClass="popup-dialog, food-editor-root">
 
     <ScrollPane fx:id="setupScroll"
                 fitToWidth="true"

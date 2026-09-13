@@ -10,8 +10,6 @@
 
 .food-editor-root {
     -fx-max-width: 40em;
-    -fx-max-height: Infinity;
-
     -fx-spacing: 1.15em;
 }
 
