@@ -136,17 +136,17 @@ Spring Boot Backend
 
 #### Login
 
-![Login](docs/screenshots/login.png)
+![Login](docs/screenshots/loginV2.png)
 
 #### Register
 
-![Register](docs/screenshots/register.png)
+![Register](docs/screenshots/registerV2.png)
 
 ### Fitness Calculators
 
 #### BMI Calculator
 
-![BMI Calculator](docs/screenshots/bmiCalculator.png)
+![BMI Calculator](docs/screenshots/bmiCalculatorV2.png)
 
 #### TDEE Calculator
 
@@ -154,7 +154,7 @@ Spring Boot Backend
 
 #### Body Fat Calculator
 
-![Body Fat Calculator](docs/screenshots/bodyFatCalculator.png)
+![Body Fat Calculator](docs/screenshots/bodyFatCalculatorV2.png)
 
 ### Meals and Nutrition
 
