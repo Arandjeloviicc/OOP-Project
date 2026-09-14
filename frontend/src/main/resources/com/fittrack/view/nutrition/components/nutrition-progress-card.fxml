@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.fittrack.controller.nutrition.components.NutritionProgressCardController"
@@ -50,9 +51,22 @@
     </HBox>
 
     <!-- Progress Bar -->
-    <ProgressBar fx:id="progressBar"
-                 progress="0"
-                 maxWidth="Infinity"
-                 styleClass="nutrition-progress-bar"/>
+    <StackPane fx:id="progressBarContainer"
+               alignment="CENTER_RIGHT"
+               maxWidth="Infinity">
+
+        <ProgressBar fx:id="progressBar"
+                     progress="0"
+                     maxWidth="Infinity"
+                     styleClass="nutrition-progress-bar"/>
+
+        <Region fx:id="overflowOverlay"
+                minWidth="0"
+                prefWidth="0"
+                maxWidth="Infinity"
+                styleClass="nutrition-progress-overflow"
+                visible="false"/>
+
+    </StackPane>
 
 </VBox>

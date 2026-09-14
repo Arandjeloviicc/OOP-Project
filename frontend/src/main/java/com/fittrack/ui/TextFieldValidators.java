@@ -19,6 +19,19 @@ public class TextFieldValidators {
         }));
     }
 
+    public static void applyDecimalFilter(TextField textField, int maxDecimals) {
+        Pattern pattern = Pattern.compile(
+                "\\d*([,.]\\d{0," + maxDecimals + "})?"
+        );
+
+        textField.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+            return pattern.matcher(newText).matches()
+                    ? change
+                    : null;
+        }));
+    }
+
     public static void applyIntegerFilter(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();

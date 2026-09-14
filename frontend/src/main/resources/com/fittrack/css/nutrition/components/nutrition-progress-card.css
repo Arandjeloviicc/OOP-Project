@@ -112,6 +112,26 @@
 }
 
 /* ========================================================== */
+/* == OVERFLOW OVERLAY ======================================= */
+/* ========================================================== */
+
+.nutrition-progress-overflow {
+    -fx-pref-height: 0.55em;
+    -fx-max-height: 0.55em;
+
+    -fx-background-color: linear-gradient(
+            from 0px 0px to 8px 8px, repeat,
+            rgba(0, 0, 0, 0.32) 0%,
+            rgba(0, 0, 0, 0.32) 50%,
+            transparent 50%,
+            transparent 100%
+    );
+
+    -fx-background-radius: 0 1em 1em 0;
+    -fx-background-insets: 0;
+}
+
+/* ========================================================== */
 /* == NARROW ================================================ */
 /* ========================================================== */
 
@@ -148,6 +168,11 @@
 }
 
 .nutrition-progress-card.narrow .nutrition-progress-bar {
+    -fx-pref-height: 0.45em;
+    -fx-max-height: 0.45em;
+}
+
+.nutrition-progress-card.narrow .nutrition-progress-overflow {
     -fx-pref-height: 0.45em;
     -fx-max-height: 0.45em;
 }

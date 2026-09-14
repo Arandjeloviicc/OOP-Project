@@ -112,14 +112,14 @@ public class MealItemEditorController extends FormController implements Initiali
         mealComboBox.setValue(mealType);
 
         servingSizeComboBox.getItems().setAll(
-                Math.round(mealItem.servingSizeGrams()) + " g"
+                NumberUtils.formatInputDecimal(mealItem.servingSizeGrams()) + " g"
         );
 
         servingSizeComboBox.getSelectionModel().selectFirst();
 
         double numberOfServings = mealItem.quantityGrams() / mealItem.servingSizeGrams();
 
-        servingsField.setText(NumberUtils.formatDecimal(numberOfServings));
+        servingsField.setText(NumberUtils.formatInputDecimal(numberOfServings));
 
         setVisible(removeButton, true);
 
@@ -137,14 +137,14 @@ public class MealItemEditorController extends FormController implements Initiali
         setVisible(mealContainer, false);
 
         servingSizeComboBox.getItems().setAll(
-                Math.round(item.servingSizeGrams()) + " g"
+                NumberUtils.formatInputDecimal(item.servingSizeGrams()) + " g"
         );
 
         servingSizeComboBox.getSelectionModel().selectFirst();
 
         double numberOfServings = item.quantityGrams() / item.servingSizeGrams();
 
-        servingsField.setText(NumberUtils.formatDecimal(numberOfServings));
+        servingsField.setText(NumberUtils.formatInputDecimal(numberOfServings));
 
         setVisible(removeButton, true);
 
@@ -159,7 +159,7 @@ public class MealItemEditorController extends FormController implements Initiali
         selectedFoodTitleLabel.setText(food.name());
 
         servingSizeComboBox.getItems().setAll(
-                Math.round(food.servingSizeGrams()) + " g"
+                NumberUtils.formatInputDecimal(food.servingSizeGrams()) + " g"
         );
 
         servingSizeComboBox.getSelectionModel().selectFirst();
@@ -259,7 +259,7 @@ public class MealItemEditorController extends FormController implements Initiali
     }
 
     private void addListeners() {
-        TextFieldValidators.applyDecimalFilter(servingsField);
+        TextFieldValidators.applyDecimalFilter(servingsField, 3);
 
         servingsField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {

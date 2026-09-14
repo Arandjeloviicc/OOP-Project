@@ -1,6 +1,7 @@
 package com.fittrack.controller.nutrition.components;
 
 import com.fittrack.ui.QuickAddFeedback;
+import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,7 +31,7 @@ public class FoodListItemController {
     public void setData(String title, double calories, double servingSizeGrams) {
         titleLabel.setText(title);
 
-        detailsLabel.setText(Math.round(calories) + " cal, " + Math.round(servingSizeGrams) + " g");
+        detailsLabel.setText(Math.round(calories) + " cal, " + NumberUtils.formatInputDecimal(servingSizeGrams) + " g");
     }
 
     // ── Button Actions ──────────────────────────────────────────

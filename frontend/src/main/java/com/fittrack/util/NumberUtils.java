@@ -38,4 +38,11 @@ public final class NumberUtils {
 
         return rounded.toPlainString();
     }
+
+    public static String formatInputDecimal(double value) {
+        return BigDecimal.valueOf(value)
+                .setScale(3, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString();
+    }
 }

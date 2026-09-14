@@ -42,9 +42,8 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @SuppressWarnings("unused")
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<@NonNull ApiError> handleDataIntegrity(DataIntegrityViolationException exception) {
+    public ResponseEntity<@NonNull ApiError> handleDataIntegrity() {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new ApiError(
                         HttpStatus.CONFLICT.value(),

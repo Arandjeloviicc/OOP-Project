@@ -128,8 +128,10 @@ public class MealsController extends BaseController implements Initializable, Re
         coordinator.setOverlayLifecycle(
                 () -> overlayScrollPosition = mealsScroll.getVvalue(),
 
-                () -> Platform.runLater(() ->
-                        mealsScroll.setVvalue(overlayScrollPosition)
+                () -> Platform.runLater(() -> {
+                            mealsScroll.setVvalue(overlayScrollPosition);
+                            mealsScroll.requestFocus();
+                        }
                 )
         );
 
