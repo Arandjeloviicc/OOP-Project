@@ -13,8 +13,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.control.ScrollPane?>
-
 <?import javafx.scene.control.ComboBox?>
+
 <StackPane fx:id="rootLayout"
            styleClass="root"
            stylesheets="@../../css/profile/profile-setup-view.css"

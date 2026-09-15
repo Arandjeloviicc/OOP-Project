@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.profile.components.ProfileTargetsCardController"
+      stylesheets="@../../../css/profile/components/profile-targets-card.css"
+      styleClass="profile-section">
+
+    <!-- Header -->
+    <Label text="DAILY TARGETS"
+           styleClass="profile-section-title"/>
+
+    <!-- Card -->
+    <VBox styleClass="profile-card, profile-targets-card">
+
+        <!-- Calories -->
+        <HBox styleClass="profile-target-calories-row">
+
+            <Label text="Calories"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <HBox styleClass="profile-target-calories-value">
+
+                <Label fx:id="caloriesLabel"
+                       text="2,200"
+                       styleClass="profile-target-calories-number"/>
+
+                <Label text=" cal"
+                       styleClass="profile-target-unit"/>
+
+            </HBox>
+
+        </HBox>
+
+        <!-- Macros -->
+        <HBox styleClass="profile-macros">
+
+            <VBox styleClass="profile-macro"
+                  HBox.hgrow="ALWAYS"
+                  maxWidth="Infinity">
+
+                <Region styleClass="profile-macro-bar, carbs"/>
+
+                <Label text="Carbs"
+                       styleClass="profile-macro-name"/>
+
+                <Label fx:id="carbsLabel"
+                       text="250 g"
+                       styleClass="profile-macro-value"/>
+
+            </VBox>
+
+            <VBox styleClass="profile-macro"
+                  HBox.hgrow="ALWAYS"
+                  maxWidth="Infinity">
+
+                <Region styleClass="profile-macro-bar, fat"/>
+
+                <Label text="Fat"
+                       styleClass="profile-macro-name"/>
+
+                <Label fx:id="fatLabel"
+                       text="70 g"
+                       styleClass="profile-macro-value"/>
+
+            </VBox>
+
+            <VBox styleClass="profile-macro"
+                  HBox.hgrow="ALWAYS"
+                  maxWidth="Infinity">
+
+                <Region styleClass="profile-macro-bar, protein"/>
+
+                <Label text="Protein"
+                       styleClass="profile-macro-name"/>
+
+                <Label fx:id="proteinLabel"
+                       text="160 g"
+                       styleClass="profile-macro-value"/>
+
+            </VBox>
+
+        </HBox>
+
+    </VBox>
+
+</VBox>

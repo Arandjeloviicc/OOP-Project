@@ -1,0 +1,92 @@
+@import "../../theme.css";
+
+/* ========================================================== */
+/* == WEIGHT CARD =========================================== */
+/* ========================================================== */
+
+.profile-weight-card {
+    -fx-padding: 1em;
+    -fx-spacing: 0.375em;
+}
+
+.profile-weight-title {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 0.75em;
+}
+
+.profile-weight-current {
+    -fx-alignment: baseline-left;
+}
+
+.profile-weight-current-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.625em;
+    -fx-font-weight: 700;
+}
+
+.profile-weight-current-unit {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 0.8125em;
+}
+
+/* ========================================================== */
+/* == PROGRESS CONTENT ====================================== */
+/* ========================================================== */
+
+.profile-weight-progress-content {
+    -fx-spacing: 0.5em;
+    -fx-padding: 0.5em 0 0 0;
+}
+
+.profile-weight-range {
+    -fx-alignment: center;
+}
+
+.profile-weight-range-item {
+    -fx-alignment: center-left;
+    -fx-spacing: 0.125em;
+}
+
+.profile-weight-range-item-right {
+    -fx-alignment: center-right;
+    -fx-spacing: 0.125em;
+}
+
+.profile-weight-range-label {
+    -fx-text-fill: -app-text-muted;
+    -fx-font-size: 0.625em;
+}
+
+.profile-weight-range-value {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 0.75em;
+    -fx-font-weight: 600;
+}
+
+/* ========================================================== */
+/* == PROGRESS BAR ========================================== */
+/* ========================================================== */
+
+.profile-weight-progress {
+    -fx-pref-height: 6px;
+    -fx-min-height: 6px;
+    -fx-max-height: 6px;
+}
+
+.profile-weight-progress > .track {
+    -fx-background-color: -app-nutrition-track;
+    -fx-background-radius: 999px;
+    -fx-background-insets: 0;
+}
+
+.profile-weight-progress > .bar {
+    -fx-background-color: -app-nutrition-progress;
+    -fx-background-radius: 999px;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.profile-weight-progress-message {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 0.6875em;
+}

@@ -4,7 +4,6 @@
 /* == LOGO ================================================== */
 /* ========================================================== */
 
-/* ── Logo ────────────────────────────────────────────── */
 .logo-bar {
     -fx-min-height: 4.5em;
     -fx-pref-height: 4.5em;
@@ -38,7 +37,6 @@
 /* == MAIN / CENTER AREA ==================================== */
 /* ========================================================== */
 
-/* ── Main & Center ────────────────────────────────────────────── */
 .main-layout {
     -fx-background-color: -app-background;
 }
@@ -56,7 +54,6 @@
 /* == TOP AREA ============================================== */
 /* ========================================================== */
 
-/* ── Top bar ────────────────────────────────────────────── */
 .top-bar {
     -fx-min-height: 4.5em;
     -fx-pref-height: 4.5em;
@@ -122,14 +119,6 @@
     -fx-border-width: 1px 0 0 0;
 }
 
-.sidebar-user-container {
-    -fx-padding: 1.4em;
-    -fx-spacing: 0.45em;
-
-    -fx-border-color: -app-border-soft transparent transparent transparent;
-}
-
-/* ── Navigation ────────────────────────────────────────────── */
 .navigation-container {
     -fx-spacing: 0;
     -fx-fill-width: true;
@@ -209,79 +198,6 @@
 
 .navigation-button:selected:hover {
     -fx-background-color: -app-selected;
-}
-
-/* ========================================================== */
-/* == LOGOUT SECTION ======================================== */
-/* ========================================================== */
-
-/* ── Logout section ────────────────────────────────────────────── */
-.sidebar-user-caption {
-    -fx-text-fill: -app-text-muted;
-    -fx-font-size: 0.78em;
-}
-
-.sidebar-username {
-    -fx-text-fill: -app-text-primary;
-    -fx-font-size: 1.05em;
-    -fx-font-weight: bold;
-    -fx-padding: 0 0 0.65em 0;
-    -fx-text-overrun: ellipsis;
-}
-
-/* ── Logout Button ────────────────────────────────────────────── */
-.logout-button-compact {
-    -fx-background-color: -app-control-background;
-    -fx-background-radius: 0.6em;
-
-    -fx-border-color: -app-control-border;
-    -fx-border-radius: 0.6em;
-
-    -fx-text-fill: -app-text-secondary;
-    -fx-font-size: 0.85em;
-    -fx-font-weight: bold;
-
-    -fx-padding: 0.5em 1em;
-    -fx-cursor: hand;
-}
-
-.logout-button-compact:hover {
-    -fx-background-color: -app-danger-background;
-    -fx-border-color: -app-danger-border;
-    -fx-text-fill: -app-danger-text;
-}
-
-/* ── Logout Button ────────────────────────────────────────────── */
-.logout-button-base {
-    -fx-background-color: -app-control-background;
-    -fx-border-color: -app-control-border;
-    -fx-text-fill: -app-text-secondary;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-}
-
-.logout-button-base:hover {
-    -fx-background-color: -app-danger-background;
-    -fx-border-color: -app-danger-border;
-    -fx-text-fill: -app-danger-text;
-}
-
-.logout-button-base:pressed {
-    -fx-background-color: -app-danger-background-pressed;
-}
-
-.logout-button-sidebar {
-    -fx-background-radius: 0.65em;
-    -fx-border-radius: 0.65em;
-    -fx-font-size: 0.95em;
-    -fx-padding: 0.75em 1em;
-}
-
-.logout-button-header {
-    -fx-background-radius: 0.6em;
-    -fx-border-radius: 0.6em;
-    -fx-font-size: 0.85em;
-    -fx-padding: 0.5em 1em;
 }
 
 /* ========================================================== */

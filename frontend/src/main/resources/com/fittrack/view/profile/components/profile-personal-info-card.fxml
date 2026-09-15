@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.profile.components.ProfilePersonalInfoCardController"
+      styleClass="profile-section">
+
+    <!-- Header -->
+    <HBox styleClass="profile-section-header">
+
+        <Label text="PERSONAL INFO"
+               styleClass="profile-section-title"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Edit"
+                onAction="#handleEdit"
+                styleClass="profile-edit-button"/>
+
+    </HBox>
+
+    <!-- Card -->
+    <VBox styleClass="profile-card">
+
+        <HBox styleClass="profile-row">
+            <Label text="Date of birth"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="dateOfBirthLabel"
+                   text="14.3.2003"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+        <Separator/>
+
+        <HBox styleClass="profile-row">
+            <Label text="Gender"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="genderLabel"
+                   text="Male"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+        <Separator/>
+
+        <HBox styleClass="profile-row">
+            <Label text="Height"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="heightLabel"
+                   text="183 cm"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+    </VBox>
+
+</VBox>

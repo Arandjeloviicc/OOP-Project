@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.profile.ProfileController"
+           stylesheets="@../../css/profile/profile-view.css"
+           styleClass="profile-root">
+
+    <ScrollPane fx:id="profileScroll"
+                fitToWidth="true"
+                hbarPolicy="NEVER"
+                styleClass="app-scroll">
+
+        <VBox styleClass="app-scroll-content, profile-scroll-content">
+
+            <VBox fx:id="contentContainer"
+                  styleClass="profile-content">
+
+                <!-- Header -->
+                <HBox fx:id="profileHeader"
+                      styleClass="profile-header">
+
+                    <Label fx:id="initialsLabel"
+                           styleClass="profile-avatar"/>
+
+                    <VBox styleClass="profile-identity">
+                        <Label fx:id="fullNameLabel"
+                               styleClass="profile-name"/>
+
+                        <Label fx:id="emailLabel"
+                               styleClass="profile-email"/>
+                    </VBox>
+
+                </HBox>
+
+                <!-- Weight -->
+                <VBox fx:id="weightCardContainer"/>
+
+                <!-- Goals -->
+                <VBox fx:id="goalsCardContainer"/>
+
+                <!-- Daily Targets -->
+                <VBox fx:id="targetsCardContainer"/>
+
+                <!-- Personal Info -->
+                <VBox fx:id="personalInfoCardContainer"/>
+
+                <!-- Account -->
+                <VBox fx:id="accountCardContainer"/>
+
+                <!-- Logout Button -->
+                <HBox styleClass="profile-account-actions">
+                    <Button text="Log out"
+                            focusTraversable="false"
+                            onAction="#handleLogout"
+                            HBox.hgrow="ALWAYS"
+                            styleClass="profile-logout-button"/>
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
+    </ScrollPane>
+
+</StackPane>

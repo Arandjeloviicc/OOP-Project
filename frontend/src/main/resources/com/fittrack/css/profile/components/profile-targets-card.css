@@ -1,0 +1,80 @@
+@import "../../theme.css";
+
+/* ========================================================== */
+/* == DAILY TARGETS ========================================= */
+/* ========================================================== */
+
+.profile-targets-card {
+    -fx-padding: 0.875em;
+    -fx-spacing: 0.875em;
+}
+
+.profile-target-calories-row {
+    -fx-alignment: center-left;
+}
+
+.profile-target-calories-row > .label {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 0.8125em;
+}
+
+.profile-target-calories-value {
+    -fx-alignment: baseline-right;
+}
+
+.profile-target-calories-number {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.125em;
+    -fx-font-weight: 700;
+}
+
+.profile-target-unit {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 0.6875em;
+}
+
+/* ========================================================== */
+/* == MACROS ================================================ */
+/* ========================================================== */
+
+.profile-macros {
+    -fx-spacing: 0.625em;
+}
+
+.profile-macro {
+    -fx-alignment: center;
+    -fx-spacing: 0.1875em;
+
+    -fx-max-width: Infinity;
+}
+
+.profile-macro-bar {
+    -fx-pref-height: 4px;
+    -fx-min-height: 4px;
+    -fx-max-height: 4px;
+
+    -fx-background-radius: 999px;
+}
+
+.profile-macro-bar.carbs {
+    -fx-background-color: -app-nutrition-carbs;
+}
+
+.profile-macro-bar.fat {
+    -fx-background-color: -app-nutrition-fat;
+}
+
+.profile-macro-bar.protein {
+    -fx-background-color: -app-nutrition-protein;
+}
+
+.profile-macro-name {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 0.6875em;
+}
+
+.profile-macro-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 0.75em;
+    -fx-font-weight: 700;
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.profile.components.ProfileGoalsCardController"
+      styleClass="profile-section">
+
+    <!-- Header -->
+    <HBox styleClass="profile-section-header">
+
+        <Label text="GOALS"
+               styleClass="profile-section-title"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Edit"
+                onAction="#handleEdit"
+                styleClass="profile-edit-button"/>
+
+    </HBox>
+
+    <!-- Card -->
+    <VBox styleClass="profile-card">
+
+        <HBox styleClass="profile-row">
+            <Label text="Goal"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="goalTypeLabel"
+                   text="Lose weight"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+        <Separator/>
+
+        <HBox styleClass="profile-row">
+            <Label text="Weekly pace"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="weeklyPaceLabel"
+                   text="0.5 kg / week"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+        <Separator/>
+
+        <HBox styleClass="profile-row">
+            <Label text="Activity level"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="activityLevelLabel"
+                   text="Moderately active"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+    </VBox>
+
+</VBox>

@@ -45,13 +45,6 @@
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <!-- Logout Button -->
-                <Button fx:id="logoutButtonHeader"
-                        text="Log out"
-                        onAction="#handleLogout"
-                        styleClass="logout-button-base, logout-button-header"
-                        visible="false"
-                        managed="false"/>
             </HBox>
         </top>
 
@@ -167,8 +160,6 @@
                     <ToggleButton fx:id="profileButton"
                                   text="Profile"
                                   maxWidth="Infinity"
-                                  visible="false"
-                                  managed="false"
                                   toggleGroup="$navigationGroup"
                                   onAction="#handleProfile"
                                   styleClass="navigation-button">
@@ -184,23 +175,6 @@
                 </FlowPane>
 
                 <Region VBox.vgrow="ALWAYS"/>
-
-                <!-- Logged-in user - Only on wide screens -->
-                <VBox fx:id="sidebarUserContainer"
-                      styleClass="sidebar-user-container">
-
-                    <Label text="Signed in as"
-                           styleClass="sidebar-user-caption"/>
-
-                    <Label fx:id="sidebarUsernameLabel"
-                           text="username"
-                           styleClass="sidebar-username"/>
-
-                    <Button text="Log out"
-                            maxWidth="Infinity"
-                            onAction="#handleLogout"
-                            styleClass="logout-button-base, logout-button-sidebar"/>
-                </VBox>
 
             </VBox>
         </left>

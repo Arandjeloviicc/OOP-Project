@@ -17,8 +17,8 @@ public final class AppConstants {
         public static final String CALCULATORS = "calculator/calculators-view.fxml";
         public static final String MEALS = "nutrition/meals-view.fxml";
         public static final String WORKOUTS = "workout/workouts-view.fxml";
-        public static final String MEASUREMENTS = "";
-        public static final String USER_PROFILE = "profile/user-profile-view.fxml";
+        public static final String MEASUREMENTS = "measurements/measurements-view.fxml";
+        public static final String PROFILE = "profile/profile-view.fxml";
 
         // PopUp Views
         public static final String ADD_TO_MEAL = "nutrition/add-to-meal.fxml";
@@ -42,8 +42,14 @@ public final class AppConstants {
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
         public static final String SAVED_MEAL_EDITOR = "nutrition/components/saved-meal-editor.fxml";
         public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
-
         public static final String MEAL_COPY_DIALOG = "nutrition/components/meal-copy-dialog.fxml";
+
+        // Profile
+        public static final String PROFILE_WEIGHT_CARD = "profile/components/profile-weight-card.fxml";
+        public static final String PROFILE_GOALS_CARD = "profile/components/profile-goals-card.fxml";
+        public static final String PROFILE_TARGETS_CARD = "profile/components/profile-targets-card.fxml";
+        public static final String PROFILE_INFO_CARD = "profile/components/profile-personal-info-card.fxml";
+        public static final String PROFILE_ACCOUNT_CARD = "profile/components/profile-account-card.fxml";
     }
 
     public static final class Validation {

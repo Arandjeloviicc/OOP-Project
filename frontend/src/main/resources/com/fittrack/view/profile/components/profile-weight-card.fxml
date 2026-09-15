@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.profile.components.ProfileWeightCardController"
+      stylesheets="@../../../css/profile/components/profile-weight-card.css"
+      styleClass="profile-card, profile-weight-card">
+
+    <Label text="Current weight"
+           styleClass="profile-weight-title"/>
+
+    <HBox styleClass="profile-weight-current">
+        <Label fx:id="currentWeightLabel"
+               text="78.4"
+               styleClass="profile-weight-current-value"/>
+
+        <Label text=" kg"
+               styleClass="profile-weight-current-unit"/>
+    </HBox>
+
+    <VBox fx:id="progressContent"
+          styleClass="profile-weight-progress-content">
+
+        <HBox styleClass="profile-weight-range">
+
+            <VBox styleClass="profile-weight-range-item">
+                <Label text="Start"
+                       styleClass="profile-weight-range-label"/>
+
+                <Label fx:id="startWeightLabel"
+                       text="84 kg"
+                       styleClass="profile-weight-range-value"/>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <VBox styleClass="profile-weight-range-item-right">
+                <Label text="Goal"
+                       styleClass="profile-weight-range-label"/>
+
+                <Label fx:id="goalWeightLabel"
+                       text="72 kg"
+                       styleClass="profile-weight-range-value"/>
+            </VBox>
+
+        </HBox>
+
+        <ProgressBar fx:id="weightProgressBar"
+                     progress="0.47"
+                     maxWidth="Infinity"
+                     styleClass="profile-weight-progress"/>
+
+        <Label fx:id="progressMessageLabel"
+               text="5.6 kg lost · 6.4 kg to go"
+               styleClass="profile-weight-progress-message"/>
+
+    </VBox>
+
+</VBox>

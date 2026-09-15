@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.profile.components.ProfileAccountCardController"
+      styleClass="profile-section">
+
+    <!-- Header -->
+    <Label text="ACCOUNT"
+           styleClass="profile-section-title"/>
+
+    <!-- Card -->
+    <VBox styleClass="profile-card">
+
+        <HBox styleClass="profile-row">
+            <Label text="Username"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="usernameLabel"
+                   text="petar"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+        <Separator/>
+
+        <HBox styleClass="profile-row">
+            <Label text="Email"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="emailLabel"
+                   text="petar@example.com"
+                   styleClass="profile-row-value"/>
+        </HBox>
+
+    </VBox>
+
+</VBox>

@@ -6,7 +6,6 @@ import com.fittrack.model.view.ViewInstance;
 import com.fittrack.service.auth.AuthService;
 import com.fittrack.config.AppConstants;
 import com.fittrack.ui.OverlayManager;
-import com.fittrack.ui.SceneManager;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
@@ -43,17 +42,14 @@ public class MainLayoutController extends NavigableController implements Initial
     // Top
     @FXML private HBox headerBox;
     @FXML private FlowPane navigationContainer;
-    @FXML private VBox sidebarUserContainer;
     @FXML private StackPane contentArea;
     @FXML private Label greetingLabel;
     @FXML private VBox sidebar;
     @FXML private HBox topBar;
     @FXML private HBox logoTopBar;
     @FXML private HBox logoSidebar;
-    @FXML private Button logoutButtonHeader;
 
     // Sidebar
-    @FXML private Label sidebarUsernameLabel;
     @FXML private ToggleGroup navigationGroup;
     @FXML private ToggleButton dashboardButton;
     @FXML private ToggleButton calculatorsButton;
@@ -127,23 +123,13 @@ public class MainLayoutController extends NavigableController implements Initial
 
     @FXML
     private void handleProfile() {
-        showContent(profileButton, AppConstants.Views.USER_PROFILE);
-    }
-
-    @FXML
-    private void handleLogout() {
-        OverlayManager.close();
-        authService.logout();
-        SceneManager.clearCache();
-
-        navigateTo(AppConstants.Views.LOGIN);
+        showContent(profileButton, AppConstants.Views.PROFILE);
     }
 
     /* ── Initialize Helpers ────────────────────────────────────────────── */
     private void initializeMainLayoutControls() {
         String username = authService.getCurrentUser().username();
         greetingLabel.setText("Hello, " + username);
-        sidebarUsernameLabel.setText(username);
 
         // List of all Sidebar buttons
         navButtons = List.of(dashboardButton, calculatorsButton, mealsButton, workoutsButton, measurementsButton, profileButton);
@@ -226,13 +212,9 @@ public class MainLayoutController extends NavigableController implements Initial
 
         setVisible(logoTopBar, narrow);
 
-        setVisible(logoutButtonHeader, narrow);
-
         setVisible(logoSidebar, !narrow);
 
         setVisible(headerBox, !narrow);
-
-        setVisible(sidebarUserContainer, !narrow);
 
         sidebar.pseudoClassStateChanged(HORIZONTAL, narrow);
 
