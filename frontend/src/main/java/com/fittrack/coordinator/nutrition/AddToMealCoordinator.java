@@ -31,6 +31,7 @@ public class AddToMealCoordinator {
     // Active Editors
     private SavedMealEditorController activeSavedMealEditor;
     private FoodEditorController activeFoodEditor;
+    private MealItemEditorController activeMealItemEditor;
 
     // ── Constructor ──────────────────────────────────────────────────────
     public AddToMealCoordinator(VBox selectionContainer, StackPane itemDetailsContainer, StackPane editorContainer) {
@@ -48,6 +49,7 @@ public class AddToMealCoordinator {
         LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
 
         MealItemEditorController detailsController = details.controller();
+        activeMealItemEditor = detailsController;
 
         if (activeSavedMealEditor != null) {
             detailsController.setDraftData(food);
@@ -69,6 +71,8 @@ public class AddToMealCoordinator {
             detailsController.setOnConfirmAction(
                     quantityGrams -> {
                         if (onAddToMeal != null) {
+                            detailsController.startConfirmLoading("Adding...");
+
                             onAddToMeal.accept(
                                     detailsController.getSelectedMealType(),
                                     quantityGrams
@@ -90,6 +94,8 @@ public class AddToMealCoordinator {
     }
 
     public void closeFoodDetails() {
+        activeMealItemEditor = null;
+
         itemDetailsContainer.getChildren().clear();
 
         setVisible(itemDetailsContainer, false);
@@ -116,7 +122,7 @@ public class AddToMealCoordinator {
         editorController.setOnAddFoodAction(onAddFood);
 
         editorController.setOnUpdateAction(request -> {
-            editorController.setSubmitting(true);
+            editorController.setSaving(true);
 
             if (onUpdate != null) {
                 onUpdate.accept(request);
@@ -124,7 +130,7 @@ public class AddToMealCoordinator {
         });
 
         editorController.setOnDeleteAction(() -> {
-            editorController.setSubmitting(true);
+            editorController.setDeleting(true);
 
             if (onDelete != null) {
                 onDelete.run();
@@ -153,7 +159,7 @@ public class AddToMealCoordinator {
         editorController.setOnAddFoodAction(onAddFood);
 
         editorController.setOnCreateAction(request -> {
-            editorController.setSubmitting(true);
+            editorController.setSaving(true);
 
             if (onCreate != null) {
                 onCreate.accept(request);
@@ -182,7 +188,7 @@ public class AddToMealCoordinator {
         editorController.setOnAddFoodAction(onAddFood);
 
         editorController.setOnCreateAction(request -> {
-            editorController.setSubmitting(true);
+            editorController.setSaving(true);
 
             if (onCreate != null) {
                 onCreate.accept(request);
@@ -193,6 +199,8 @@ public class AddToMealCoordinator {
     }
 
     public void returnToMealEditor() {
+        activeMealItemEditor = null;
+
         itemDetailsContainer.getChildren().clear();
 
         setVisible(itemDetailsContainer, false);
@@ -244,6 +252,7 @@ public class AddToMealCoordinator {
 
         activeSavedMealEditor = null;
         activeFoodEditor = null;
+        activeMealItemEditor = null;
 
         setVisible(editorContainer, false);
         setVisible(selectionContainer, true);
@@ -277,15 +286,27 @@ public class AddToMealCoordinator {
         activeSavedMealEditor.addDraftItems(draftItems);
     }
 
-    public void setSavedMealEditorSubmitting(boolean submitting) {
+    public void setSavedMealEditorSaving(boolean saving) {
         if (activeSavedMealEditor != null) {
-            activeSavedMealEditor.setSubmitting(submitting);
+            activeSavedMealEditor.setSaving(saving);
+        }
+    }
+
+    public void setSavedMealEditorDeleting(boolean deleting) {
+        if (activeSavedMealEditor != null) {
+            activeSavedMealEditor.setDeleting(deleting);
         }
     }
 
     public void setFoodEditorSubmitting(boolean submitting) {
         if (activeFoodEditor != null) {
             activeFoodEditor.setSubmitting(submitting);
+        }
+    }
+
+    public void resetMealItemAdding() {
+        if (activeMealItemEditor != null) {
+            activeMealItemEditor.stopConfirmLoading();
         }
     }
 }

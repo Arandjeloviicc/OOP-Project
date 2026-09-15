@@ -1,6 +1,6 @@
 package com.fittrack.controller.main;
 
-import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.view.ViewInstance;
 import com.fittrack.service.auth.AuthService;
@@ -27,13 +27,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class MainLayoutController extends BaseController implements Initializable, ResponsiveLayout {
+public class MainLayoutController extends NavigableController implements Initializable, ResponsiveLayout {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(MainLayoutController.class);
-
-    @Override
-    protected Logger getLogger() { return log; }
 
     // Saves the data from the controllers and views
     private final Map<String, ViewInstance> contentCache = new HashMap<>();

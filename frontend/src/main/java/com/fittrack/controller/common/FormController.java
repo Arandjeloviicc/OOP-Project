@@ -4,7 +4,7 @@ import javafx.animation.TranslateTransition;
 import javafx.scene.control.*;
 import javafx.util.Duration;
 
-public abstract class FormController extends BaseController {
+public abstract class FormController extends NavigableController {
 
     // ── Field messages ────────────────────────────────────────────
     protected void setFieldMessage(Label messageLabel, String message, boolean error, Control... fields) {

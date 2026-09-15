@@ -20,9 +20,6 @@ public class LoginController extends AuthFormController implements Initializable
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
-    @Override
-    protected Logger getLogger() { return log; }
-
     @FXML private StackPane rootLayout;
 
     @FXML private ImageView backgroundImage;
@@ -70,6 +67,10 @@ public class LoginController extends AuthFormController implements Initializable
     // ── Login action ────────────────────────────────────────────
     @FXML
     private void handleLogin() {
+        if (isLoading(loginButton)) {
+            return;
+        }
+
         String email = emailField.getText().trim();
         String password = passwordShowing
                 ? passwordVisible.getText()
@@ -91,8 +92,7 @@ public class LoginController extends AuthFormController implements Initializable
 
         if (!valid) return;
 
-        loginButton.setDisable(true);
-        loginButton.setText("Logging in...");
+        setLoading(loginButton, "Logging in...");
 
         AsyncTaskRunner.run(
                 () -> authService.login(email, password),
@@ -115,14 +115,14 @@ public class LoginController extends AuthFormController implements Initializable
                             showEmailMessage("No account exists with this email.");
                             shake(emailField);
 
-                            resetLoginButton();
+                            resetLoading(loginButton);
                         }
 
                         case WRONG_PASSWORD -> {
                             showPasswordMessage("Incorrect password.");
                             shake(passwordShowing ? passwordVisible : passwordField);
 
-                            resetLoginButton();
+                            resetLoading(loginButton);
                         }
                     }
                 },
@@ -130,7 +130,7 @@ public class LoginController extends AuthFormController implements Initializable
                 exception -> {
                     log.error("Login request failed.", exception);
                     showEmailMessage("Something went wrong while signing in. Please try again.");
-                    resetLoginButton();
+                    resetLoading(loginButton);
                 }
         );
     }
@@ -138,6 +138,10 @@ public class LoginController extends AuthFormController implements Initializable
     // ── Register action ─────────────────────────────────────────
     @FXML
     private void handleRegister() {
+        if (isLoading(loginButton)) {
+            return;
+        }
+
         String enteredEmail = emailField.getText().trim();
 
         log.info("Navigate to register");
@@ -176,11 +180,5 @@ public class LoginController extends AuthFormController implements Initializable
 
     private void restorePasswordHelper() {
         setFieldMessage(passwordMessage, "", false, passwordField, passwordVisible);
-    }
-
-    // ── Login Button Helpers ─────────────────────────────────────────────────
-    private void resetLoginButton() {
-        loginButton.setDisable(false);
-        loginButton.setText("Log in");
     }
 }

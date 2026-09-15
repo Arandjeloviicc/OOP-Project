@@ -1,10 +1,11 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class MealItemCardController {
+public class MealItemCardController extends BaseController {
 
     @FXML private Label titleLabel;
     @FXML private Label quantityLabel;
@@ -22,7 +23,7 @@ public class MealItemCardController {
     public void setData(String title, double quantityGrams, double calories) {
         titleLabel.setText(title);
 
-        quantityLabel.setText(NumberUtils.formatWhole(quantityGrams) + " g");
+        quantityLabel.setText(NumberUtils.formatInputDecimal(quantityGrams) + " g");
 
         caloriesLabel.setText(NumberUtils.formatWhole(calories) + " cal");
     }

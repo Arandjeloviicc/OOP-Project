@@ -1,17 +1,47 @@
 package com.fittrack.controller.common;
 
-import com.fittrack.ui.SceneManager;
 import javafx.scene.Node;
-import org.slf4j.Logger;
+import javafx.scene.control.Button;
 
 public abstract class BaseController {
 
-    protected abstract Logger getLogger();
+    private static final Object LOADING_STATE = new Object();
 
-    protected <T> T navigateTo(String fxml) {
-        return SceneManager.switchTo(fxml);
+    private record ButtonState(
+            String text,
+            boolean disabled
+    ) {}
+
+    // ── Button Disable/Enable for Api call ────────────────────────────────────────────
+    protected void setLoading(Button button, String loadingText) {
+        if (!button.getProperties().containsKey(LOADING_STATE)) {
+            button.getProperties().put(
+                    LOADING_STATE,
+                    new ButtonState(
+                            button.getText(),
+                            button.isDisable()
+                    )
+            );
+        }
+
+        button.setDisable(true);
+        button.setText(loadingText);
     }
 
+    protected void resetLoading(Button button) {
+        Object value = button.getProperties().remove(LOADING_STATE);
+
+        if (value instanceof ButtonState(String text, boolean disabled)) {
+            button.setText(text);
+            button.setDisable(disabled);
+        }
+    }
+
+    protected boolean isLoading(Button button) {
+        return button.getProperties().containsKey(LOADING_STATE);
+    }
+
+    // ── Visibility ────────────────────────────────────────────
     protected void setVisible(Node node, boolean visible) {
         node.setVisible(visible);
         node.setManaged(visible);

@@ -17,8 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,12 +25,6 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class SavedMealEditorController extends FormController implements Initializable {
-
-    // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(SavedMealEditorController.class);
-
-    @Override
-    protected Logger getLogger() { return log; }
 
     @FXML private StackPane rootLayout;
     @FXML private VBox editorContainer;
@@ -214,6 +206,8 @@ public class SavedMealEditorController extends FormController implements Initial
             );
         }
 
+        originalDraftItems = List.copyOf(draftItems);
+
         refreshDraft();
     }
 
@@ -364,6 +358,10 @@ public class SavedMealEditorController extends FormController implements Initial
     // ── Button Actions ────────────────────────────────────────────────
     @FXML
     private void handleAddFood() {
+        if (isLoading(saveButton) || isLoading(deleteMealButton)) {
+            return;
+        }
+
         if (onAddFoodAction != null) {
             onAddFoodAction.run();
         }
@@ -371,6 +369,10 @@ public class SavedMealEditorController extends FormController implements Initial
 
     @FXML
     private void handleCancel() {
+        if (isLoading(saveButton) || isLoading(deleteMealButton)) {
+            return;
+        }
+
         if (onCancelAction != null) {
             onCancelAction.run();
         }
@@ -378,6 +380,10 @@ public class SavedMealEditorController extends FormController implements Initial
 
     @FXML
     private void handleSave() {
+        if (isLoading(saveButton) || isLoading(deleteMealButton)) {
+            return;
+        }
+
         String name = nameField.getText().trim();
 
         if (name.isEmpty()) {
@@ -451,6 +457,10 @@ public class SavedMealEditorController extends FormController implements Initial
 
     @FXML
     private void handleDeleteMeal() {
+        if (isLoading(saveButton) || isLoading(deleteMealButton)) {
+            return;
+        }
+
         openDeleteConfirmation();
     }
 
@@ -491,10 +501,33 @@ public class SavedMealEditorController extends FormController implements Initial
         setVisible(confirmationContainer, false);
     }
 
-    // ── Submit State ─────────────────────────────────────────────
-    public void setSubmitting(boolean submitting) {
-        saveButton.setDisable(submitting);
-        deleteMealButton.setDisable(submitting);
+    // ── Save/Delete State ─────────────────────────────────────────────
+    public void setSaving(boolean saving) {
+        if (saving) {
+            String loadingText =
+                    mode == SavedMealEditorMode.CREATE
+                            ? "Creating..."
+                            : "Saving...";
+
+            setLoading(saveButton, loadingText);
+            deleteMealButton.setDisable(true);
+        } else {
+            resetLoading(saveButton);
+            deleteMealButton.setDisable(false);
+
+            updateSaveButton();
+        }
+    }
+
+    public void setDeleting(boolean deleting) {
+        if (deleting) {
+            setLoading(deleteMealButton, "Deleting...");
+            saveButton.setDisable(true);
+        } else {
+            resetLoading(deleteMealButton);
+
+            updateSaveButton();
+        }
     }
 
     // ── Name Helpers ────────────────────────────────────────────────

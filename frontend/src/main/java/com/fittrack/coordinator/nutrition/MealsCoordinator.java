@@ -130,6 +130,8 @@ public class MealsCoordinator {
         controller.setOnCopyAction(
                 (sourceMealType, sourceDate) -> {
                     if (onCopy != null) {
+                        controller.setCopying(true);
+
                         onCopy.accept(
                                 sourceMealType,
                                 sourceDate
@@ -163,6 +165,8 @@ public class MealsCoordinator {
         controller.setOnCopyAction(
                 (targetMealType, targetDate) -> {
                     if (onCopy != null) {
+                        controller.setCopying(true);
+
                         onCopy.accept(
                                 targetMealType,
                                 targetDate
@@ -214,5 +218,12 @@ public class MealsCoordinator {
 
     private void closeOverlay() {
         OverlayManager.close();
+    }
+
+    // ── Loading Helpers ─────────────────────────────────────────────────
+    public void setCopying(boolean copying) {
+        if (activeCopyDialog != null) {
+            activeCopyDialog.setCopying(copying);
+        }
     }
 }

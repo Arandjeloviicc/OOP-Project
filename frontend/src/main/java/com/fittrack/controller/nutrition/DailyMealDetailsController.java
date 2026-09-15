@@ -38,9 +38,6 @@ public class DailyMealDetailsController extends FormController implements Initia
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(DailyMealDetailsController.class);
 
-    @Override
-    protected Logger getLogger() { return log; }
-
     // Meal Details
     @FXML private StackPane rootLayout;
     @FXML private VBox dialogContainer;
@@ -246,12 +243,16 @@ public class DailyMealDetailsController extends FormController implements Initia
                 quantityGrams -> updateMealItem(
                         mealItem,
                         details.controller().getSelectedMealType(),
-                        quantityGrams
+                        quantityGrams,
+                        details.controller()
                 )
         );
 
         details.controller().setOnRemoveAction(
-                () -> deleteMealItem(mealItem)
+                () -> deleteMealItem(
+                        mealItem,
+                        details.controller()
+                )
         );
 
         foodDetailsContainer.getChildren().setAll(details.root());
@@ -291,7 +292,7 @@ public class DailyMealDetailsController extends FormController implements Initia
     }
 
     // ── Update MealItem ───────────────────────────────────────────────────
-    private void updateMealItem(MealItemResponse mealItem, MealType selectedMeal, double quantityGrams) {
+    private void updateMealItem(MealItemResponse mealItem, MealType selectedMeal, double quantityGrams,  MealItemEditorController editor) {
         boolean quantityChanged =
                 Double.compare(
                         mealItem.quantityGrams(),
@@ -310,6 +311,8 @@ public class DailyMealDetailsController extends FormController implements Initia
                 selectedMeal.getName()
         );
 
+        editor.startConfirmLoading("Saving...");
+
         AsyncTaskRunner.run(
                 () -> mealService.updateMealItem(mealItem.id(), request),
 
@@ -324,15 +327,21 @@ public class DailyMealDetailsController extends FormController implements Initia
                     }
                 },
 
-                exception -> log.error(
-                        "Failed to update meal item.",
-                        exception
-                )
+                exception -> {
+                    editor.stopConfirmLoading();
+
+                    log.error(
+                            "Failed to update meal item.",
+                            exception
+                    );
+                }
         );
     }
 
     // ── Delete MealItem ───────────────────────────────────────────────────
-    private void deleteMealItem(MealItemResponse mealItem) {
+    private void deleteMealItem(MealItemResponse mealItem, MealItemEditorController editor) {
+        editor.setRemoveLoading(true);
+
         AsyncTaskRunner.run(
                 () -> {
                     mealService.deleteMealItem(mealItem.id());
@@ -345,10 +354,14 @@ public class DailyMealDetailsController extends FormController implements Initia
                     removeMealItem(mealItem.id());
                 },
 
-                exception -> log.error(
-                        "Failed to delete meal item.",
-                        exception
-                )
+                exception -> {
+                    editor.setRemoveLoading(false);
+
+                    log.error(
+                            "Failed to delete meal item.",
+                            exception
+                    );
+                }
         );
     }
 

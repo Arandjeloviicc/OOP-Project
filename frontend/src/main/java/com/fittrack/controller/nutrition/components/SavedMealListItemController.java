@@ -1,12 +1,13 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.ui.QuickAddFeedback;
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class SavedMealListItemController {
+public class SavedMealListItemController extends BaseController {
 
     @FXML private Label nameLabel;
     @FXML private Label caloriesLabel;

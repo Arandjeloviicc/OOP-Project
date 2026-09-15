@@ -44,9 +44,6 @@ public class AddToMealController extends FormController implements Initializable
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(AddToMealController.class);
 
-    @Override
-    protected Logger getLogger() { return log; }
-
     // Root
     @FXML private StackPane rootLayout;
 
@@ -569,7 +566,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    coordinator.setSavedMealEditorSubmitting(false);
+                    coordinator.setSavedMealEditorSaving(false);
 
                     log.error(
                             "Failed to update meal.",
@@ -592,7 +589,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    coordinator.setSavedMealEditorSubmitting(false);
+                    coordinator.setSavedMealEditorDeleting(false);
 
                     log.error(
                             "Failed to delete meal.",
@@ -648,7 +645,7 @@ public class AddToMealController extends FormController implements Initializable
                         selectedMeal,
                         quantityGrams,
                         coordinator::closeFoodDetails,
-                        null
+                        coordinator::resetMealItemAdding
                 )
         );
     }
@@ -770,7 +767,7 @@ public class AddToMealController extends FormController implements Initializable
                 },
 
                 exception -> {
-                    coordinator.setSavedMealEditorSubmitting(false);
+                    coordinator.setSavedMealEditorSaving(false);
 
                     log.error(
                             "Failed to create meal.",

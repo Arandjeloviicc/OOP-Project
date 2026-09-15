@@ -1,6 +1,6 @@
-package com.fittrack.dto.profile;
+package com.fittrack.backend.dto.nutrition.goal;
 
-public record NutritionTargetsResponse(
+public record NutritionTargets(
         int calories,
         double carbs,
         double fat,

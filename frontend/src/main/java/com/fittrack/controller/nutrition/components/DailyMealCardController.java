@@ -1,6 +1,7 @@
 package com.fittrack.controller.nutrition.components;
 
 import com.fittrack.config.AppImages;
+import com.fittrack.controller.common.BaseController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
@@ -18,7 +19,7 @@ import javafx.scene.input.MouseEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class DailyMealCardController implements Initializable {
+public class DailyMealCardController extends BaseController implements Initializable {
 
     // Labels
     @FXML private Label titleLabel;

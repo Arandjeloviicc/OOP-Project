@@ -38,9 +38,6 @@ public class ProfileSetupController extends FormController implements Initializa
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(ProfileSetupController.class);
 
-    @Override
-    protected Logger getLogger() { return log; }
-
     // Root and Scroll
     @FXML private StackPane rootLayout;
     @FXML private ScrollPane setupScroll;
@@ -159,6 +156,10 @@ public class ProfileSetupController extends FormController implements Initializa
 
     @FXML
     public void handleBack() {
+        if (isLoading(finishButton)) {
+            return;
+        }
+
         // Hide Step 2 page
         setVisible(fitnessGoalsStep, false);
 
@@ -168,6 +169,10 @@ public class ProfileSetupController extends FormController implements Initializa
 
     @FXML
     public void handleFinish() {
+        if (isLoading(finishButton)) {
+            return;
+        }
+
         String height = heightField.getText().trim();
         String weight = weightField.getText().trim();
         ActivityLevel activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
@@ -223,8 +228,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
         if(!valid) return;
 
-        finishButton.setDisable(true);
-        finishButton.setText("Saving...");
+        setLoading(finishButton, "Saving...");
 
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
@@ -269,8 +273,7 @@ public class ProfileSetupController extends FormController implements Initializa
             exception -> {
                 log.error("Failed to complete profile setup.", exception);
 
-                finishButton.setDisable(false);
-                finishButton.setText("Finish");
+                resetLoading(finishButton);
             }
         );
     }

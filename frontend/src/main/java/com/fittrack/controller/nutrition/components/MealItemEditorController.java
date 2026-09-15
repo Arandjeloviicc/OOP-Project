@@ -19,20 +19,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class MealItemEditorController extends FormController implements Initializable {
-
-    // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(MealItemEditorController.class);
-
-    @Override
-    protected Logger getLogger() { return log; }
 
     @FXML private VBox rootLayout;
 
@@ -87,7 +79,7 @@ public class MealItemEditorController extends FormController implements Initiali
         mealComboBox.setValue(mealType);
 
         servingSizeComboBox.getItems().setAll(
-                Math.round(food.servingSizeGrams()) + " g"
+                NumberUtils.formatInputDecimal(food.servingSizeGrams()) + " g"
         );
 
         servingSizeComboBox.getSelectionModel().selectFirst();
@@ -197,6 +189,10 @@ public class MealItemEditorController extends FormController implements Initiali
     // ── Button Actions ─────────────────────────────────────────────────
     @FXML
     private void handleCancel() {
+        if (isSubmitting()) {
+            return;
+        }
+
         if (onCancelAction != null) {
             onCancelAction.run();
         }
@@ -204,6 +200,10 @@ public class MealItemEditorController extends FormController implements Initiali
 
     @FXML
     private void handleConfirm() {
+        if (isSubmitting()) {
+            return;
+        }
+
         String servingsText = servingsField.getText();
 
         if (servingsText.isEmpty()) {
@@ -238,6 +238,10 @@ public class MealItemEditorController extends FormController implements Initiali
 
     @FXML
     private void handleRemove() {
+        if (isSubmitting()) {
+            return;
+        }
+
         if (onRemoveAction != null) {
             onRemoveAction.run();
         }
@@ -351,6 +355,31 @@ public class MealItemEditorController extends FormController implements Initiali
         double protein = proteinPerServing * ratio;
 
         nutritionMacroPreviewController.setData(calories, carbs, fat, protein);
+    }
+
+    // ── Loading Helpers ─────────────────────────────────────────────────
+    public void startConfirmLoading(String loadingText) {
+        setLoading(confirmButton, loadingText);
+        removeButton.setDisable(true);
+    }
+
+    public void stopConfirmLoading() {
+        resetLoading(confirmButton);
+        removeButton.setDisable(false);
+    }
+
+    public void setRemoveLoading(boolean loading) {
+        if (loading) {
+            setLoading(removeButton, "Deleting...");
+            confirmButton.setDisable(true);
+        } else {
+            resetLoading(removeButton);
+            confirmButton.setDisable(false);
+        }
+    }
+
+    private boolean isSubmitting() {
+        return isLoading(confirmButton) || isLoading(removeButton);
     }
 
     // ── Meal Helpers ─────────────────────────────────────────────────

@@ -1,22 +1,22 @@
-package com.fittrack.service.profile;
+package com.fittrack.service.nutrition;
 
-import com.fittrack.api.profile.ProfileApi;
+import com.fittrack.api.nutrition.NutritionGoalApi;
 import com.fittrack.dto.nutrition.goal.NutritionTargetsResponse;
 import com.fittrack.model.nutrition.NutritionTargets;
 import com.fittrack.session.UserSession;
 
-public class ProfileService {
+import java.time.LocalDate;
 
-    private final ProfileApi profileApi;
-    private final UserSession userSession;
+public class NutritionGoalService {
 
-    public ProfileService() {
-        this.profileApi = new ProfileApi();
-        this.userSession = UserSession.getInstance();
+    private final NutritionGoalApi nutritionGoalApi;
+
+    public NutritionGoalService() {
+        this.nutritionGoalApi = new NutritionGoalApi();
     }
 
-    public NutritionTargets getNutritionTargets() {
-        NutritionTargetsResponse response = profileApi.getNutritionTargets(currentUserId());
+    public NutritionTargets getNutritionTargetsForDate(LocalDate date) {
+        NutritionTargetsResponse response = nutritionGoalApi.getTargetsForDate(currentUserId(), date);
 
         return new NutritionTargets(
                 response.calories(),
@@ -28,6 +28,6 @@ public class ProfileService {
 
     // ── Helpers ─────────────────────────────────────────────
     private Integer currentUserId() {
-        return userSession.requireCurrentUser().id();
+        return UserSession.getInstance().requireCurrentUser().id();
     }
 }

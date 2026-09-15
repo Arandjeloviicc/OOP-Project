@@ -21,9 +21,6 @@ public class RegisterController extends AuthFormController implements Initializa
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(RegisterController.class);
 
-    @Override
-    protected Logger getLogger() { return log; }
-
     @FXML private StackPane rootLayout;
     @FXML private ImageView backgroundImage;
 
@@ -70,6 +67,10 @@ public class RegisterController extends AuthFormController implements Initializa
     //  ── Register action ──────────────────────────────
     @FXML
     public void handleRegister() {
+        if (isLoading(registerButton)) {
+            return;
+        }
+
         String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordShowing
@@ -98,8 +99,7 @@ public class RegisterController extends AuthFormController implements Initializa
 
         if (!valid) return;
 
-        registerButton.setDisable(true);
-        registerButton.setText("Registering...");
+        setLoading(registerButton, "Registering...");
 
         AsyncTaskRunner.run(
             () -> authService.register(username, email, password),
@@ -117,13 +117,13 @@ public class RegisterController extends AuthFormController implements Initializa
                     case USERNAME_TAKEN -> {
                         showUsernameMessage("This username is already taken.");
                         shake(usernameField);
-                        resetRegisterButton();
+                        resetLoading(registerButton);
                     }
 
                     case EMAIL_TAKEN -> {
                         showEmailMessage("An account with this email already exists.");
                         shake(emailField);
-                        resetRegisterButton();
+                        resetLoading(registerButton);
                     }
                 }
             },
@@ -131,7 +131,7 @@ public class RegisterController extends AuthFormController implements Initializa
             exception -> {
                 log.warn("Registration failed: {}", exception.getMessage());
 
-                resetRegisterButton();
+                resetLoading(registerButton);
             }
         );
     }
@@ -139,6 +139,10 @@ public class RegisterController extends AuthFormController implements Initializa
     //  ── Login action ──────────────────────────────
     @FXML
     public void handleLogin() {
+        if (isLoading(registerButton)) {
+            return;
+        }
+
         String enteredEmail = emailField.getText().trim();
 
         log.info("Navigate to login");
@@ -200,11 +204,5 @@ public class RegisterController extends AuthFormController implements Initializa
 
     private void restorePasswordHelper() {
         setFieldMessage(passwordMessage, AppConstants.Messages.HELPER_PASSWORD_MESSAGE, false, passwordField, passwordVisible);
-    }
-
-    // ── Register Button Helpers ─────────────────────────────────────────────────
-    private void resetRegisterButton() {
-        registerButton.setDisable(false);
-        registerButton.setText("Create account");
     }
 }

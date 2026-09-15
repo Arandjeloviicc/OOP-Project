@@ -1,5 +1,6 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.model.nutrition.MealCopyMode;
 import com.fittrack.model.nutrition.MealType;
@@ -22,7 +23,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 import java.util.function.BiConsumer;
 
-public class MealCopyDialogController implements Initializable, ResponsiveLayout {
+public class MealCopyDialogController extends BaseController implements Initializable, ResponsiveLayout {
 
     @FXML private StackPane rootLayout;
     @FXML private Label titleLabel;
@@ -251,6 +252,10 @@ public class MealCopyDialogController implements Initializable, ResponsiveLayout
     // ── Button Actions ─────────────────────────────────────────────
     @FXML
     private void handleClose() {
+        if (isLoading(copyButton)) {
+            return;
+        }
+
         if (onCloseAction != null) {
             onCloseAction.run();
         }
@@ -258,6 +263,10 @@ public class MealCopyDialogController implements Initializable, ResponsiveLayout
 
     @FXML
     private void handleCopy() {
+        if (isLoading(copyButton)) {
+            return;
+        }
+
         MealType selectedMealType = mealComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
 
@@ -301,5 +310,19 @@ public class MealCopyDialogController implements Initializable, ResponsiveLayout
     private boolean isCurrentMeal(MealType mealType, LocalDate date) {
         return mealType == currentMealType
                 && date.equals(currentDate);
+    }
+
+    public void setCopying(boolean copying) {
+        if (copying) {
+            setLoading(copyButton, "Copying...");
+
+            mealComboBox.setDisable(true);
+            datePicker.setDisable(true);
+        } else {
+            resetLoading(copyButton);
+
+            mealComboBox.setDisable(false);
+            datePicker.setDisable(false);
+        }
     }
 }

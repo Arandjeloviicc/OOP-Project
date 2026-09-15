@@ -67,5 +67,4 @@ public class FoodListItemController {
     public void resetAddFeedback() {
         getAddFeedback().reset();
     }
-
 }

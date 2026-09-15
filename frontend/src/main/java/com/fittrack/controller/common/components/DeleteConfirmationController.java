@@ -1,10 +1,11 @@
 package com.fittrack.controller.common.components;
 
+import com.fittrack.controller.common.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class DeleteConfirmationController {
+public class DeleteConfirmationController extends BaseController {
 
     @FXML private Label titleLabel;
     @FXML private Label messageLabel;

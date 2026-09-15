@@ -11,12 +11,17 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public abstract class AuthFormController extends FormController implements ResponsiveLayout {
+
+    // Custom console messages
+    private static final Logger log = LoggerFactory.getLogger(AuthFormController.class);
 
     // Responsive breakpoint
     private static final int NARROW_BREAKPOINT = 450;
@@ -117,7 +122,7 @@ public abstract class AuthFormController extends FormController implements Respo
             backgroundImage.setPreserveRatio(false);
 
         } catch (RuntimeException | ExceptionInInitializerError exception) {
-            getLogger().info(
+            log.info(
                     "Background image could not be loaded: {}",
                     exception.getMessage()
             );

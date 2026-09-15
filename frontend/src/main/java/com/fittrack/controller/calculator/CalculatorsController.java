@@ -30,10 +30,7 @@ import java.util.ResourceBundle;
 public class CalculatorsController extends FormController implements Initializable, ResponsiveLayout {
 
     // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(CalculatorsController.class);
-
-    @Override
-    protected Logger getLogger() { return log; }
+    //private static final Logger log = LoggerFactory.getLogger(CalculatorsController.class);
 
     // Layouts
     @FXML private BorderPane rootLayout;

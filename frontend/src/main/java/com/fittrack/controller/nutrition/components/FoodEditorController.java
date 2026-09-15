@@ -13,20 +13,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class FoodEditorController extends FormController implements Initializable {
-
-    // Custom console messages
-    private static final Logger log = LoggerFactory.getLogger(FoodEditorController.class);
-
-    @Override
-    protected Logger getLogger() { return log; }
 
     @FXML private VBox rootLayout;
     @FXML private ScrollPane setupScroll;
@@ -109,6 +101,10 @@ public class FoodEditorController extends FormController implements Initializabl
     // ── Button Actions ─────────────────────────────────────────────────
     @FXML
     private void handleCancel() {
+        if (isLoading(saveButton)) {
+            return;
+        }
+
         if (onCancelAction != null) {
             onCancelAction.run();
         }
@@ -116,6 +112,10 @@ public class FoodEditorController extends FormController implements Initializabl
 
     @FXML
     private void handleSave() {
+        if (isLoading(saveButton)) {
+            return;
+        }
+
         if (!validateInputs()) {
             return;
         }
@@ -152,9 +152,9 @@ public class FoodEditorController extends FormController implements Initializabl
             brand,
             servingSize,
             calories,
+            protein,
             carbs,
-            fat,
-            protein
+            fat
         );
     }
 
@@ -260,7 +260,11 @@ public class FoodEditorController extends FormController implements Initializabl
 
     // ── Submit State ─────────────────────────────────────────────
     public void setSubmitting(boolean submitting) {
-        saveButton.setDisable(submitting);
+        if (submitting) {
+            setLoading(saveButton, "Creating...");
+        } else {
+            resetLoading(saveButton);
+        }
     }
 
     // ── Name Helpers ─────────────────────────────────────────────────

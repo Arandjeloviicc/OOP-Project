@@ -41,22 +41,6 @@ public class UserProfile {
     @Column(nullable = false)
     private double height;
 
-    // Enum
-    @Enumerated(EnumType.STRING)
-    @Column(name = "activity_level", nullable = false)
-    private ActivityLevel activityLevel;
-
-    // Enum
-    @Enumerated(EnumType.STRING)
-    @Column(name = "goal_type", nullable = false)
-    private WeightGoal goalType;
-
-    @Column(name = "goal_weight")
-    private Double goalWeight;
-
-    @Column(name = "weekly_goal")
-    private Double weeklyGoal;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -69,11 +53,7 @@ public class UserProfile {
             String lastName,
             LocalDate dateOfBirth,
             Gender gender,
-            double height,
-            ActivityLevel activityLevel,
-            WeightGoal goalType,
-            Double goalWeight,
-            Double weeklyGoal
+            double height
     ) {
         this.user = user;
         this.firstName = firstName;
@@ -81,10 +61,6 @@ public class UserProfile {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.height = height;
-        this.activityLevel = activityLevel;
-        this.goalType = goalType;
-        this.goalWeight = goalWeight;
-        this.weeklyGoal = weeklyGoal;
     }
 
     // Default
@@ -120,22 +96,6 @@ public class UserProfile {
 
     public double getHeight() {
         return height;
-    }
-
-    public ActivityLevel getActivityLevel() {
-        return activityLevel;
-    }
-
-    public WeightGoal getGoalType() {
-        return goalType;
-    }
-
-    public Double getGoalWeight() {
-        return goalWeight;
-    }
-
-    public Double getWeeklyGoal() {
-        return weeklyGoal;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -1,5 +1,6 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.util.NumberUtils;
 import javafx.css.PseudoClass;
@@ -15,7 +16,7 @@ import javafx.scene.shape.StrokeLineCap;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class NutritionMacroPreviewController implements Initializable, ResponsiveLayout {
+public class NutritionMacroPreviewController extends BaseController implements Initializable, ResponsiveLayout {
 
     // Fields
     @FXML private HBox rootLayout;

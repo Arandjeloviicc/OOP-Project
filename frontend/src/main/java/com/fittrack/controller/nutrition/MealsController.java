@@ -3,7 +3,7 @@ package com.fittrack.controller.nutrition;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.config.AppConstants;
 import com.fittrack.config.AppImages;
-import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.DailyMealCardController;
@@ -16,7 +16,7 @@ import com.fittrack.model.nutrition.MealType;
 import com.fittrack.model.nutrition.NutritionTargets;
 import com.fittrack.service.nutrition.MealService;
 import com.fittrack.service.nutrition.NutritionCalculationService;
-import com.fittrack.service.profile.ProfileService;
+import com.fittrack.service.nutrition.NutritionGoalService;
 import com.fittrack.ui.FxmlComponentLoader;
 import com.fittrack.ui.LoadedComponent;
 import javafx.application.Platform;
@@ -40,13 +40,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-public class MealsController extends BaseController implements Initializable, ResponsiveLayout, Refreshable {
+public class MealsController extends NavigableController implements Initializable, ResponsiveLayout, Refreshable {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(MealsController.class);
-
-    @Override
-    protected Logger getLogger() { return log; }
 
     // Root
     @FXML private StackPane rootLayout;
@@ -114,7 +111,7 @@ public class MealsController extends BaseController implements Initializable, Re
 
     // Service
     private final MealService mealService = new MealService();
-    private final ProfileService profileService = new ProfileService();
+    private final NutritionGoalService nutritionGoalService = new NutritionGoalService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -146,7 +143,7 @@ public class MealsController extends BaseController implements Initializable, Re
         initializeMealsControls();
 
         // Load Targets
-        loadNutritionTargets();
+        datePicker.setValue(LocalDate.now());
     }
 
     // ── Refresh Actions ─────────────────────────────────────────────────
@@ -159,7 +156,7 @@ public class MealsController extends BaseController implements Initializable, Re
         }
 
         invalidateMealsCache(currentDate);
-        loadMealsForDate();
+        reloadMealsForDate(currentDate);
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -184,49 +181,84 @@ public class MealsController extends BaseController implements Initializable, Re
     }
 
     // ── Load Data ─────────────────────────────────────────────────
-    private void loadMealsForDate() {
-        LocalDate currentDate = datePicker.getValue();
-        long loadVersion = ++mealsLoadVersion;
+    private void loadMealsForDate(LocalDate date, long loadVersion) {
+        List<MealResponse> cachedMeals = mealsCache.get(date);
 
-        if (mealsCache.containsKey(currentDate)) {
-            showMeals(mealsCache.get(currentDate));
+        if (cachedMeals != null) {
+            if (loadVersion != mealsLoadVersion
+                    || !date.equals(datePicker.getValue())) {
+                return;
+            }
+
+            showMeals(cachedMeals);
             return;
         }
 
         AsyncTaskRunner.run(
-                () -> mealService.getMealsForDate(currentDate),
+                () -> mealService.getMealsForDate(date),
 
                 meals -> {
                     if (loadVersion != mealsLoadVersion) {
                         return;
                     }
 
-                    if (!currentDate.equals(datePicker.getValue())) {
+                    if (!date.equals(datePicker.getValue())) {
                         return;
                     }
 
-                    mealsCache.put(currentDate, meals);
+                    mealsCache.put(date, meals);
                     showMeals(meals);
                 },
 
-                exception -> log.error("Failed to load meals for date: {}", currentDate, exception)
+                exception -> {
+                    if (loadVersion != mealsLoadVersion) {
+                        return;
+                    }
+
+                    log.error(
+                            "Failed to load meals for date: {}",
+                            date,
+                            exception
+                    );
+                }
         );
     }
 
-    private void loadNutritionTargets() {
+    private void reloadMealsForDate(LocalDate date) {
+        if (date == null || !date.equals(datePicker.getValue())) {
+            return;
+        }
+
+        long loadVersion = ++mealsLoadVersion;
+        loadMealsForDate(date, loadVersion);
+    }
+
+    private void loadNutritionTargets(LocalDate date) {
+        long loadVersion = ++mealsLoadVersion;
+
         AsyncTaskRunner.run(
-                profileService::getNutritionTargets,
+                () -> nutritionGoalService.getNutritionTargetsForDate(date),
 
                 targets -> {
-                    nutritionTargets = targets;
+                    if (loadVersion != mealsLoadVersion) {
+                        return;
+                    }
 
-                    datePicker.setValue(LocalDate.now());
+                    nutritionTargets = targets;
+                    loadMealsForDate(date, loadVersion);
                 },
 
-                exception -> log.error(
-                        "Failed to load nutrition targets.",
-                        exception
-                )
+                exception -> {
+                    if (loadVersion != mealsLoadVersion) {
+                        return;
+                    }
+
+                    log.error(
+                            "Failed to load nutrition targets for date: {}",
+                            date,
+                            exception
+                    );
+                }
         );
     }
 
@@ -337,7 +369,7 @@ public class MealsController extends BaseController implements Initializable, Re
 
         datePicker.valueProperty().addListener((observable, oldDate, newDate) -> {
             if (newDate != null) {
-                loadMealsForDate();
+                loadNutritionTargets(newDate);
             }
         });
     }
@@ -500,7 +532,7 @@ public class MealsController extends BaseController implements Initializable, Re
                     selectedDate,
                     () -> {
                         invalidateMealsCache(selectedDate);
-                        loadMealsForDate();
+                        reloadMealsForDate(selectedDate);
                     }
             );
         });
@@ -529,7 +561,7 @@ public class MealsController extends BaseController implements Initializable, Re
                     meal,
                     () -> {
                         invalidateMealsCache(selectedDate);
-                        loadMealsForDate();
+                        reloadMealsForDate(selectedDate);
                     }
             );
         });
@@ -662,14 +694,18 @@ public class MealsController extends BaseController implements Initializable, Re
                     coordinator.closeCopyDialog();
 
                     if (targetDate.equals(datePicker.getValue())) {
-                        loadMealsForDate();
+                        reloadMealsForDate(targetDate);
                     }
                 },
 
-                exception -> log.error(
-                        "Failed to copy meal.",
-                        exception
-                )
+                exception -> {
+                    coordinator.setCopying(false);
+
+                    log.error(
+                            "Failed to copy meal.",
+                            exception
+                    );
+                }
         );
     }
 

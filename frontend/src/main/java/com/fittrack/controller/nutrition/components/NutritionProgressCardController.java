@@ -1,5 +1,6 @@
 package com.fittrack.controller.nutrition.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -9,7 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
-public class NutritionProgressCardController {
+public class NutritionProgressCardController extends BaseController {
 
     @FXML private Label titleLabel;
     @FXML private Label currentValueLabel;
@@ -120,7 +121,7 @@ public class NutritionProgressCardController {
             return;
         }
 
-        int difference = (int) Math.abs(goal - current);
+        double difference = Math.abs(goal - current);
 
         remainingValueLabel.setText(NumberUtils.formatWhole(difference));
 

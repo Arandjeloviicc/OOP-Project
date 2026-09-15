@@ -1,7 +1,7 @@
 package com.fittrack.api.profile;
 
 import com.fittrack.api.common.BaseApi;
-import com.fittrack.dto.profile.NutritionTargetsResponse;
+import com.fittrack.dto.nutrition.goal.NutritionTargetsResponse;
 
 public class ProfileApi extends BaseApi {
 
