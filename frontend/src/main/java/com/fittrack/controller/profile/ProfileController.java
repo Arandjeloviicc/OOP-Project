@@ -6,6 +6,8 @@ import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.profile.components.*;
+import com.fittrack.coordinator.profile.ProfileCoordinator;
+import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.ProfileData;
 import com.fittrack.service.auth.AuthService;
 import com.fittrack.service.profile.ProfileService;
@@ -18,11 +20,10 @@ import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,9 @@ public class ProfileController extends NavigableController implements Initializa
     @FXML private VBox personalInfoCardContainer;
     @FXML private VBox accountCardContainer;
 
+    // Logout
+    @FXML private Button logoutButton;
+
     // Cards
     private ProfileWeightCardController weightCardController;
     private ProfileGoalsCardController goalsCardController;
@@ -67,6 +71,10 @@ public class ProfileController extends NavigableController implements Initializa
 
     // Date Format
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.yyyy");
+
+    // Coordinator
+    private final ProfileCoordinator coordinator = new ProfileCoordinator();
+    private ProfileData profileData;
 
     // Service
     private final AuthService authService = new AuthService();
@@ -118,9 +126,13 @@ public class ProfileController extends NavigableController implements Initializa
     }
 
     private void initializePersonalInfoCardController() {
-        LoadedComponent<ProfilePersonalInfoCardController> infoCard = FxmlComponentLoader.load(AppConstants.Components.PROFILE_INFO_CARD);
+        LoadedComponent<ProfilePersonalInfoCardController> infoCard = FxmlComponentLoader.load(AppConstants.Components.PROFILE_PERSONAL_INFO_CARD);
 
         personalInfoCardController = infoCard.controller();
+
+        personalInfoCardController.setOnEditAction(
+                this::openPersonalInfoEditor
+        );
 
         personalInfoCardContainer.getChildren().setAll(infoCard.root());
     }
@@ -147,6 +159,8 @@ public class ProfileController extends NavigableController implements Initializa
     }
 
     private void showProfile(ProfileData profile) {
+        this.profileData = profile;
+
         showHeader(profile);
 
         weightCardController.setData(
@@ -195,6 +209,41 @@ public class ProfileController extends NavigableController implements Initializa
         );
     }
 
+    // ── Editor Popup Actions ─────────────────────────────────────────────────
+    private void openPersonalInfoEditor() {
+        if (profileData == null) {
+            return;
+        }
+
+        coordinator.openPersonalInfoEditor(
+                profileData,
+                this::updatePersonalInfo
+        );
+    }
+
+    private void updatePersonalInfo(PersonalInfoUpdateRequest request) {
+        AsyncTaskRunner.run(
+                () -> {
+                    profileService.updatePersonalInfo(request);
+                    return null;
+                },
+
+                ignored -> {
+                    coordinator.closePersonalInfoEditor();
+                    loadProfile();
+                },
+
+                exception -> {
+                    log.error(
+                            "Failed to update personal info.",
+                            exception
+                    );
+
+                    coordinator.setPersonalInfoSaving(false);
+                }
+        );
+    }
+
     // ── Format Helpers ─────────────────────────────────────────────────
     private String getInitials(String firstName, String lastName) {
         StringBuilder initials = new StringBuilder();
@@ -230,6 +279,11 @@ public class ProfileController extends NavigableController implements Initializa
     @Override
     public void updateWidthLayout(boolean narrow) {
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
+
+        HBox.setHgrow(
+                logoutButton,
+                narrow ? Priority.ALWAYS : Priority.NEVER
+        );
     }
 
     // ── Refresh Helpers ─────────────────────────────────────────────────

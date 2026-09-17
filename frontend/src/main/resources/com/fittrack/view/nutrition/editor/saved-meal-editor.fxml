@@ -13,8 +13,8 @@
 <StackPane fx:id="rootLayout"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.nutrition.components.SavedMealEditorController"
-           stylesheets="@../../../css/nutrition/components/saved-meal-editor.css"
+           fx:controller="com.fittrack.controller.nutrition.editor.SavedMealEditorController"
+           stylesheets="@../../../css/nutrition/editor/saved-meal-editor.css"
            styleClass="popup-host, saved-meal-editor-root">
 
     <!-- Editor -->

@@ -215,7 +215,6 @@ public class MealsCoordinator {
         OverlayManager.show(root, onOverlayClosed);
     }
 
-
     private void closeOverlay() {
         OverlayManager.close();
     }

@@ -187,8 +187,6 @@
     -fx-font-size: 0.8125em;
     -fx-font-weight: 600;
 
-    -fx-max-width: 10em;
-
     -fx-padding: 0.5625em 1em;
     -fx-cursor: hand;
 }
@@ -238,10 +236,5 @@
 }
 
 .profile-root:narrow .profile-account-actions {
-    -fx-alignment: center;
     -fx-padding: 0.25em 0 0 0;
-}
-
-.profile-root:narrow .profile-logout-button {
-    -fx-max-width: Infinity;
 }

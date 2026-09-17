@@ -1,7 +1,8 @@
-package com.fittrack.controller.nutrition.components;
+package com.fittrack.controller.nutrition.editor;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
+import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
 import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;

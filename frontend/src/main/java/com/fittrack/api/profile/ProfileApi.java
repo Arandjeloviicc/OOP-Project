@@ -2,6 +2,7 @@ package com.fittrack.api.profile;
 
 import com.fittrack.api.common.BaseApi;
 import com.fittrack.dto.profile.ProfileResponse;
+import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 
 public class ProfileApi extends BaseApi {
 
@@ -14,6 +15,16 @@ public class ProfileApi extends BaseApi {
                 url,
                 200,
                 ProfileResponse.class
+        );
+    }
+
+    public void updatePersonalInfo(Integer userId, PersonalInfoUpdateRequest request) {
+        String url = API_URL + "/user/" + userId + "/personal-info";
+
+        apiClient.put(
+                url,
+                request,
+                204
         );
     }
 }

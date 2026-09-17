@@ -1,28 +1,34 @@
-package com.fittrack.controller.nutrition.components;
+package com.fittrack.controller.nutrition.editor;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
+import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.ui.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import com.fittrack.validation.FitnessInputValidator;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-public class FoodEditorController extends FormController implements Initializable {
+public class FoodEditorController extends FormController implements Initializable, ResponsiveLayout {
 
     @FXML private VBox rootLayout;
-    @FXML private ScrollPane setupScroll;
+    @FXML private StackPane contentHost;
     @FXML private VBox editorContent;
+    @FXML private ScrollPane setupScroll;
+
 
     @FXML private Label titleLabel;
 
@@ -53,6 +59,15 @@ public class FoodEditorController extends FormController implements Initializabl
     // Actions
     private Runnable onCancelAction;
     private Consumer<CreateFoodRequest> onCreateAction;
+
+    // Responsive
+    private static final double NARROW_BREAKPOINT = 560;
+    private static final double SHORT_BREAKPOINT = 790;
+    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
+    private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
+
+    // Scroll Mode (Change when short responsive mode)
+    private boolean scrollMode;
 
     // ── Configuration ──────────────────────────────────────────
     public void setOnCancelAction(Runnable onCancelAction) {
@@ -96,6 +111,67 @@ public class FoodEditorController extends FormController implements Initializabl
         carbsField.textProperty().addListener((observable, oldValue, newValue) -> restoreCarbsHelper());
         fatField.textProperty().addListener((observable, oldValue, newValue) -> restoreFatHelper());
         proteinField.textProperty().addListener((observable, oldValue, newValue) -> restoreProteinHelper());
+    }
+
+    // ── Responsive ─────────────────────────────────────────────────
+    @Override
+    public void updateWidthLayout(boolean narrow) {
+        rootLayout.pseudoClassStateChanged(NARROW, narrow);
+
+        rootLayout.setMaxWidth(
+                narrow
+                        ? Double.MAX_VALUE
+                        : Region.USE_PREF_SIZE
+        );
+    }
+
+    @Override
+    public void updateHeightLayout(boolean shortLayout) {
+        rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
+
+        if (shortLayout) {
+            enableScrollMode();
+
+            rootLayout.setMaxHeight(Double.MAX_VALUE);
+        } else {
+            disableScrollMode();
+
+            rootLayout.setMaxHeight(Region.USE_PREF_SIZE);
+        }
+    }
+
+    public void initializeResponsiveLayout(Region observedRegion) {
+        initializeResponsiveWidthLayout(observedRegion, NARROW_BREAKPOINT);
+        initializeResponsiveHeightLayout(observedRegion, SHORT_BREAKPOINT);
+    }
+
+    // ── ScrollPane Helpers ─────────────────────────────────────────────────
+    private void enableScrollMode() {
+        if (scrollMode) {
+            return;
+        }
+
+        contentHost.getChildren().remove(editorContent);
+
+        setupScroll.setContent(editorContent);
+        setupScroll.setManaged(true);
+        setupScroll.setVisible(true);
+
+        scrollMode = true;
+    }
+
+    private void disableScrollMode() {
+        if (!scrollMode) {
+            return;
+        }
+
+        setupScroll.setContent(null);
+        setupScroll.setManaged(false);
+        setupScroll.setVisible(false);
+
+        contentHost.getChildren().add(editorContent);
+
+        scrollMode = false;
     }
 
     // ── Button Actions ─────────────────────────────────────────────────

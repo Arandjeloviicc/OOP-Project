@@ -48,7 +48,7 @@
 /* ========================================================== */
 
 .meal-item-editor-actions {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-hgap: 0.65em;
     -fx-padding: 0.65em 0 0 0;
 }

@@ -1,7 +1,9 @@
 package com.fittrack.controller.profile;
 
-import com.fittrack.model.profile.ProfileSetupData;
+import com.fittrack.model.profile.ProfileSetupRequest;
 import com.fittrack.service.profile.ProfileSetupService;
+import com.fittrack.ui.DateOfBirthPickerConfigurer;
+import com.fittrack.ui.GenderToggleConfigurer;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import com.fittrack.controller.common.FormController;
@@ -18,14 +20,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -73,20 +73,12 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private Label weeklyGoalMessage;
     @FXML private Button finishButton;
 
-    // Constants
-    private static final DateTimeFormatter DATE_OF_BIRTH_INPUT_FORMATTER = DateTimeFormatter.ofPattern("d.M.uuuu");
-    private static final DateTimeFormatter DATE_OF_BIRTH_DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.uuuu");
-
     // Adding PseudoClass to ComboBox (Change text color when nothing is selected)
     private static final PseudoClass NO_SELECTION = PseudoClass.getPseudoClass("no-selection");
 
-    // Responsive breakpoint
+    // Responsive
     private static final int NARROW_BREAKPOINT = 460;
-
-    // PseudoClass for Narrow screen size
     private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
-
-    // Is Narrow
     private Boolean narrowLayout;
 
     // Service
@@ -128,24 +120,24 @@ public class ProfileSetupController extends FormController implements Initializa
 
         boolean valid = true;
 
-        if(!isNameValid(firstName)) {
+        if (!FitnessInputValidator.isNameValid(firstName)) {
             showFirstNameMessage();
             shake(firstNameField);
             valid = false;
         }
 
-        if(!isNameValid(lastName)) {
+        if (!FitnessInputValidator.isNameValid(lastName)) {
             showLastNameMessage();
             shake(lastNameField);
             valid = false;
         }
 
-        if(!validateDateOfBirth()) {
+        if (!validateDateOfBirth()) {
             shake(dateOfBirthPicker);
             valid = false;
         }
 
-        if(!valid) return;
+        if (!valid) return;
 
         // Hide Step 1 page
         setVisible(personalInfoStep, false);
@@ -182,31 +174,31 @@ public class ProfileSetupController extends FormController implements Initializa
 
         boolean valid = true;
 
-        if(!FitnessInputValidator.isHeightValid(height)) {
+        if (!FitnessInputValidator.isHeightValid(height)) {
             showHeightMessage();
             shake(heightField);
             valid = false;
         }
 
-        if(!FitnessInputValidator.isWeightValid(weight)) {
+        if (!FitnessInputValidator.isWeightValid(weight)) {
             showWeightMessage();
             shake(weightField);
             valid = false;
         }
 
-        if(activityLevel == null) {
+        if (activityLevel == null) {
             showActivityLevelMessage();
             shake(activityLevelComboBox);
             valid = false;
         }
 
-        if(goalType == null) {
+        if (goalType == null) {
             showGoalTypeMessage();
             shake(goalTypeComboBox);
             valid = false;
         }
 
-        if((goalType == LOSE_WEIGHT || goalType == GAIN_WEIGHT)
+        if ((goalType == LOSE_WEIGHT || goalType == GAIN_WEIGHT)
         && FitnessInputValidator.isWeightValid(weight)
         && !isGoalWeightValid(goalWeight, weight, goalType)) {
 
@@ -226,7 +218,7 @@ public class ProfileSetupController extends FormController implements Initializa
             valid = false;
         }
 
-        if(!valid) return;
+        if (!valid) return;
 
         setLoading(finishButton, "Saving...");
 
@@ -246,7 +238,7 @@ public class ProfileSetupController extends FormController implements Initializa
             goalWeightValue = goalWeight.isBlank() ? null : NumberUtils.parseDecimal(goalWeight);
         }
 
-        ProfileSetupData profileSetupData = new ProfileSetupData(
+        ProfileSetupRequest profileSetupRequest = new ProfileSetupRequest(
                 firstName,
                 lastName,
                 dateOfBirth,
@@ -261,7 +253,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
         AsyncTaskRunner.run(
             () -> {
-                profileSetupService.completeSetup(profileSetupData);
+                profileSetupService.completeSetup(profileSetupRequest);
                 return null;
             },
 
@@ -283,13 +275,6 @@ public class ProfileSetupController extends FormController implements Initializa
         firstNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreFirstNameHelper());
         lastNameField.textProperty().addListener((obs, oldValue, newValue) -> restoreLastNameHelper());
         dateOfBirthPicker.getEditor().textProperty().addListener((obs, oldValue, newValue) -> restoreDateOfBirthHelper());
-        genderGroup.selectedToggleProperty().addListener(
-                (obs, oldToggle, newToggle) -> {
-                    if (newToggle == null && oldToggle != null) {
-                        genderGroup.selectToggle(oldToggle);
-                    }
-                }
-        );
 
         heightField.textProperty().addListener((obs, oldValue, newValue) -> restoreHeightHelper());
         weightField.textProperty().addListener((obs, oldValue, newValue) -> restoreWeightHelper());
@@ -311,53 +296,11 @@ public class ProfileSetupController extends FormController implements Initializa
 
     private void initializeProfileSetupControls() {
         // DatePicker initialize
-        LocalDate latestAllowedDateOfBirth = LocalDate.now().minusYears(AppConstants.Validation.MIN_AGE);
-
-        dateOfBirthPicker.setDayCellFactory(picker -> new DateCell() {
-
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-
-                setDisable(
-                        empty || date.isAfter(latestAllowedDateOfBirth)
-                );
-            }
-        });
-
-        dateOfBirthPicker.setConverter(new StringConverter<>() {
-
-            @Override
-            public String toString(LocalDate date) {
-                if (date == null) {
-                    return "";
-                }
-
-                return date.format(DATE_OF_BIRTH_DISPLAY_FORMATTER);
-            }
-
-            @Override
-            public LocalDate fromString(String text) {
-                if (text == null || text.isBlank()) {
-                    return dateOfBirthPicker.getValue();
-                }
-
-                try {
-                    return LocalDate.parse(
-                            text.trim(),
-                            DATE_OF_BIRTH_INPUT_FORMATTER
-                    );
-                } catch (DateTimeParseException _) {
-                    return dateOfBirthPicker.getValue();
-                }
-            }
-        });
+        DateOfBirthPickerConfigurer.configure(dateOfBirthPicker);
         dateOfBirthPicker.setValue(null);
-        dateOfBirthPicker.setShowWeekNumbers(false);
 
         // Gender ToggleButton value initialize
-        maleButton.setUserData(Gender.MALE);
-        femaleButton.setUserData(Gender.FEMALE);
+        GenderToggleConfigurer.configure(genderGroup, maleButton, femaleButton);
         genderGroup.selectToggle(maleButton);
 
         // ComboBox fill and PseudoClass add
@@ -382,12 +325,6 @@ public class ProfileSetupController extends FormController implements Initializa
     }
 
     // ── First name Helpers ─────────────────────────────────────────────────
-    private boolean isNameValid(String name) {
-        return name.trim().length() >= AppConstants.Validation.MIN_NAME_LENGTH
-                && name.trim().length() <= AppConstants.Validation.MAX_NAME_LENGTH
-                && name.trim().matches("^\\p{L}[\\p{L} '\\-]*\\p{L}$");
-    }
-
     private void showFirstNameMessage() {
         setFieldMessage(firstNameMessage, AppConstants.Messages.INVALID_FIRST_NAME_MESSAGE, true, firstNameField);
     }
@@ -419,7 +356,7 @@ public class ProfileSetupController extends FormController implements Initializa
         try {
             dateOfBirth = LocalDate.parse(
                     enteredDate,
-                    DATE_OF_BIRTH_INPUT_FORMATTER
+                    DateOfBirthPickerConfigurer.inputFormatter()
             );
         } catch (DateTimeParseException _) {
             showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
@@ -445,7 +382,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
         dateOfBirthPicker.setValue(dateOfBirth);
         dateOfBirthPicker.getEditor().setText(
-                dateOfBirth.format(DATE_OF_BIRTH_DISPLAY_FORMATTER)
+                dateOfBirth.format(DateOfBirthPickerConfigurer.displayFormatter())
         );
 
         restoreDateOfBirthHelper();

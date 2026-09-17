@@ -31,7 +31,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="goalTypeLabel"
-                   text="Lose weight"
                    styleClass="profile-row-value"/>
         </HBox>
 
@@ -43,7 +42,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="weeklyPaceLabel"
-                   text="0.5 kg / week"
                    styleClass="profile-row-value"/>
         </HBox>
 
@@ -55,7 +53,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="activityLevelLabel"
-                   text="Moderately active"
                    styleClass="profile-row-value"/>
         </HBox>
 

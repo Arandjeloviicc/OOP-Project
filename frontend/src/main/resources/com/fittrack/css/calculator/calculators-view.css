@@ -19,7 +19,7 @@
 
 .calculators-container:narrow .calculator-form-content {
     -fx-pref-width: -1;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 }
 
 .calculators-container:narrow .calculator-body-col {
@@ -59,8 +59,6 @@
     -fx-min-height: 3.2em;
     -fx-pref-height: 3.2em;
     -fx-max-height: 3.2em;
-
-    -fx-max-width: Infinity;
 
     -fx-background-color: -app-control-background-soft;
     -fx-background-radius: 0;
@@ -152,7 +150,7 @@
 
 .form-panel {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-background-color: transparent;
     -fx-border-color: transparent;
@@ -163,7 +161,7 @@
 
 .field-group {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-padding: 0 0 1.6em 0;
     -fx-spacing: 0.45em;
@@ -180,12 +178,7 @@
 
 .calculator-form-content .field-group {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
-}
-
-.calculator-form-content .input-field,
-.calculator-form-content .action-btn {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 }
 
 /* ========================================================== */
@@ -194,7 +187,7 @@
 
 .result-panel {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-background-color: -app-surface;
     -fx-background-radius: 0.9em;
@@ -293,7 +286,7 @@
 
 /* ── BMI Detail Rows ──────────────────────────────────────── */
 .result-details {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-spacing: 0.75em;
     -fx-padding: 1.4em 0 0 0;
 }
@@ -327,7 +320,7 @@
 
 /* ── BMI Categories ─────────────────────────────────────── */
 .bmi-categories {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-spacing: 0.6em;
     -fx-padding: 1.2em 0 0 0;
 }
@@ -340,7 +333,7 @@
 }
 
 .bmi-categories-list {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 0.65em;
@@ -438,8 +431,6 @@
 
 /* ── BMR Result Description ──────────────────────────────────────── */
 .result-description {
-    -fx-max-width: Infinity;
-
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 0.65em;
 

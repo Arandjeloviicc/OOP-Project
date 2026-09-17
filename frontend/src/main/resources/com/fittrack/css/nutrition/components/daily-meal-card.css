@@ -6,7 +6,7 @@
 
 .daily-meal-card {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 1.15em;
     -fx-padding: 1.25em 1.4em 1.35em 1.4em;

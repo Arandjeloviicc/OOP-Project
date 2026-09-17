@@ -200,20 +200,21 @@ public class MainLayoutController extends NavigableController implements Initial
             rootLayout.setTop(topBar);
             rootLayout.setLeft(null);
             rootLayout.setBottom(sidebar);
+
             navigationContainer.setOrientation(Orientation.HORIZONTAL);
+            navigationContainer.setPrefWrapLength(Double.MAX_VALUE);
         } else {
             rootLayout.setTop(null);
             rootLayout.setBottom(null);
             rootLayout.setLeft(sidebar);
+
             navigationContainer.setOrientation(Orientation.VERTICAL);
+            navigationContainer.setPrefWrapLength(3000);
         }
 
         setVisible(topBar, narrow);
-
         setVisible(logoTopBar, narrow);
-
         setVisible(logoSidebar, !narrow);
-
         setVisible(headerBox, !narrow);
 
         sidebar.pseudoClassStateChanged(HORIZONTAL, narrow);

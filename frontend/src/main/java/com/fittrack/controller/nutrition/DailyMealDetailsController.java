@@ -5,7 +5,7 @@ import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.MealItemCardController;
-import com.fittrack.controller.nutrition.components.MealItemEditorController;
+import com.fittrack.controller.nutrition.editor.MealItemEditorController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.dto.nutrition.meal.MealResponse;

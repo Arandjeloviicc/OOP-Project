@@ -58,8 +58,8 @@
 }
 
 .popup-root:narrow .popup-dialog {
-    -fx-max-width: Infinity;
-    -fx-max-height: Infinity;
+    -fx-max-width: -1;
+    -fx-max-height: -1;
 
     -fx-background-radius: 0;
     -fx-border-radius: 0;
@@ -86,9 +86,10 @@
 }
 
 .popup-root:short .popup-dialog {
-    -fx-max-height: Infinity;
+    -fx-max-height: -1;
 
     -fx-background-radius: 0;
     -fx-border-radius: 0;
     -fx-border-width: 0;
 }
+

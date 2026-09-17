@@ -34,22 +34,23 @@ public final class AppConstants {
 
         // Nutrition
         public static final String DAILY_MEAL_CARD = "nutrition/components/daily-meal-card.fxml";
-        public static final String FOOD_EDITOR = "nutrition/components/food-editor.fxml";
         public static final String FOOD_LIST_ITEM = "nutrition/components/food-list-item.fxml";
         public static final String MEAL_ITEM_CARD = "nutrition/components/meal-item-card.fxml";
-        public static final String MEAL_ITEM_EDITOR = "nutrition/components/meal-item-editor.fxml";
         public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
-        public static final String SAVED_MEAL_EDITOR = "nutrition/components/saved-meal-editor.fxml";
         public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
         public static final String MEAL_COPY_DIALOG = "nutrition/components/meal-copy-dialog.fxml";
+        public static final String FOOD_EDITOR = "nutrition/editor/food-editor.fxml";
+        public static final String MEAL_ITEM_EDITOR = "nutrition/editor/meal-item-editor.fxml";
+        public static final String SAVED_MEAL_EDITOR = "nutrition/editor/saved-meal-editor.fxml";
 
         // Profile
         public static final String PROFILE_WEIGHT_CARD = "profile/components/profile-weight-card.fxml";
         public static final String PROFILE_GOALS_CARD = "profile/components/profile-goals-card.fxml";
         public static final String PROFILE_TARGETS_CARD = "profile/components/profile-targets-card.fxml";
-        public static final String PROFILE_INFO_CARD = "profile/components/profile-personal-info-card.fxml";
+        public static final String PROFILE_PERSONAL_INFO_CARD = "profile/components/profile-personal-info-card.fxml";
         public static final String PROFILE_ACCOUNT_CARD = "profile/components/profile-account-card.fxml";
+        public static final String PROFILE_PERSONAL_INFO_EDITOR = "profile/editor/profile-personal-info-editor.fxml";
     }
 
     public static final class Validation {

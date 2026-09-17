@@ -7,8 +7,7 @@ import java.io.IOException;
 
 public class FxmlComponentLoader {
 
-    private FxmlComponentLoader() {
-    }
+    private FxmlComponentLoader() {}
 
     public static <T> LoadedComponent<T> load(String fxml) {
         try {

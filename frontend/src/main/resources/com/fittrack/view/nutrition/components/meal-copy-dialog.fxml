@@ -78,7 +78,7 @@
                 text="Copy"
                 maxWidth="Infinity"
                 onAction="#handleCopy"
-                styleClass="action-btn, meal-copy-action-button"/>
+                styleClass="action-btn"/>
 
     </VBox>
 

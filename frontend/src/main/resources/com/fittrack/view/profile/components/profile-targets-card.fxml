@@ -26,7 +26,6 @@
             <HBox styleClass="profile-target-calories-value">
 
                 <Label fx:id="caloriesLabel"
-                       text="2,200"
                        styleClass="profile-target-calories-number"/>
 
                 <Label text=" cal"
@@ -49,7 +48,6 @@
                        styleClass="profile-macro-name"/>
 
                 <Label fx:id="carbsLabel"
-                       text="250 g"
                        styleClass="profile-macro-value"/>
 
             </VBox>
@@ -64,7 +62,6 @@
                        styleClass="profile-macro-name"/>
 
                 <Label fx:id="fatLabel"
-                       text="70 g"
                        styleClass="profile-macro-value"/>
 
             </VBox>
@@ -79,7 +76,6 @@
                        styleClass="profile-macro-name"/>
 
                 <Label fx:id="proteinLabel"
-                       text="160 g"
                        styleClass="profile-macro-value"/>
 
             </VBox>

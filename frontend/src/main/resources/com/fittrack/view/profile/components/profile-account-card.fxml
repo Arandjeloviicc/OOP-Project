@@ -21,7 +21,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="usernameLabel"
-                   text="petar"
                    styleClass="profile-row-value"/>
         </HBox>
 
@@ -33,7 +32,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="emailLabel"
-                   text="petar@example.com"
                    styleClass="profile-row-value"/>
         </HBox>
 

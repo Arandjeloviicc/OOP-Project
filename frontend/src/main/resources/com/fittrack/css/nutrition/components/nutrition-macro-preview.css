@@ -77,7 +77,7 @@
     -fx-spacing: 0.2em;
 
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 }
 
 .macro-preview-value-row {

@@ -1,8 +1,7 @@
 package com.fittrack.service.profile;
 
 import com.fittrack.api.profile.ProfileSetupApi;
-import com.fittrack.dto.profile.ProfileSetupRequest;
-import com.fittrack.model.profile.ProfileSetupData;
+import com.fittrack.model.profile.ProfileSetupRequest;
 import com.fittrack.session.UserSession;
 
 public class ProfileSetupService {
@@ -15,8 +14,8 @@ public class ProfileSetupService {
         this.userSession = UserSession.getInstance();
     }
 
-    public void completeSetup(ProfileSetupData data) {
-        ProfileSetupRequest request = new ProfileSetupRequest(
+    public void completeSetup(ProfileSetupRequest data) {
+        com.fittrack.dto.profile.ProfileSetupRequest request = new com.fittrack.dto.profile.ProfileSetupRequest(
                 currentUserId(),
                 data.firstName(),
                 data.lastName(),

@@ -26,7 +26,7 @@
 }
 
 .meals-container:narrow .meals-date-navigation {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-padding: 0 1em;
 }
 
@@ -39,7 +39,6 @@
 .meals-container:narrow .meals-date-picker {
     -fx-min-width: 0;
     -fx-pref-width: 0;
-    -fx-max-width: Infinity;
 }
 
 .meals-date-button {
@@ -87,7 +86,7 @@
 /* ========================================================== */
 
 .meals-wide-container {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 1.5em;
     -fx-alignment: TOP_CENTER;
@@ -96,7 +95,7 @@
 }
 
 .meals-narrow-container {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 2.5em;
     -fx-alignment: TOP_CENTER;
@@ -118,7 +117,7 @@
 
 .summary-container {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 1em;
     -fx-alignment: TOP_CENTER;
@@ -127,19 +126,19 @@
 }
 
 .macros-wide-container {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-spacing: 1em;
     -fx-alignment: TOP_CENTER;
 }
 
 .macros-wide-container > .nutrition-progress-card {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 }
 
 .macros-narrow-container {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 0;
     -fx-padding: 0.7em;
@@ -160,7 +159,7 @@
 
 .diary-container {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 0.9em;
     -fx-alignment: TOP_CENTER;

@@ -9,21 +9,20 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
 
 <VBox fx:id="rootLayout"
-           xmlns="http://javafx.com/javafx/22"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.nutrition.components.FoodEditorController"
-           stylesheets="@../../../css/nutrition/components/food-editor.css"
-           maxHeight="-Infinity"
-           styleClass="popup-dialog, food-editor-root">
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.nutrition.editor.FoodEditorController"
+      stylesheets="@../../../css/nutrition/editor/food-editor.css"
+      maxHeight="-Infinity"
+      styleClass="food-editor-root">
 
-    <ScrollPane fx:id="setupScroll"
-                fitToWidth="true"
-                hbarPolicy="NEVER"
-                VBox.vgrow="ALWAYS"
-                styleClass="app-scroll">
+    <StackPane fx:id="contentHost"
+               VBox.vgrow="ALWAYS">
 
+        <!-- Normal width and height -->
         <VBox fx:id="editorContent"
               styleClass="food-editor-content">
 
@@ -48,6 +47,7 @@
                        styleClass="field-label"/>
 
                 <TextField fx:id="nameField"
+                           maxWidth="Infinity"
                            promptText="e.g. Greek yogurt"
                            styleClass="input-field, text-field"/>
 
@@ -64,6 +64,7 @@
                        styleClass="field-label"/>
 
                 <TextField fx:id="brandField"
+                           maxWidth="Infinity"
                            promptText="Optional"
                            styleClass="input-field, text-field"/>
 
@@ -82,6 +83,7 @@
                        styleClass="field-label"/>
 
                 <TextField fx:id="servingSizeField"
+                           maxWidth="Infinity"
                            promptText="e.g. 100"
                            styleClass="input-field, text-field"/>
 
@@ -215,6 +217,14 @@
 
         </VBox>
 
-    </ScrollPane>
+        <!-- Short mode -->
+        <ScrollPane fx:id="setupScroll"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    visible="false"
+                    managed="false"
+                    styleClass="app-scroll"/>
+
+    </StackPane>
 
 </VBox>

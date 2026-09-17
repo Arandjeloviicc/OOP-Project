@@ -31,7 +31,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="dateOfBirthLabel"
-                   text="14.3.2003"
                    styleClass="profile-row-value"/>
         </HBox>
 
@@ -43,7 +42,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="genderLabel"
-                   text="Male"
                    styleClass="profile-row-value"/>
         </HBox>
 
@@ -55,7 +53,6 @@
             <Region HBox.hgrow="ALWAYS"/>
 
             <Label fx:id="heightLabel"
-                   text="183 cm"
                    styleClass="profile-row-value"/>
         </HBox>
 

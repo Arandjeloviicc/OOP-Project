@@ -18,8 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.util.Duration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.List;
@@ -28,9 +26,6 @@ import java.util.ResourceBundle;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class CalculatorsController extends FormController implements Initializable, ResponsiveLayout {
-
-    // Custom console messages
-    //private static final Logger log = LoggerFactory.getLogger(CalculatorsController.class);
 
     // Layouts
     @FXML private BorderPane rootLayout;

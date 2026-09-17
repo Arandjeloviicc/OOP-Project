@@ -54,10 +54,11 @@
 
                 <!-- Logout Button -->
                 <HBox styleClass="profile-account-actions">
-                    <Button text="Log out"
+                    <Button fx:id="logoutButton"
+                            text="Log out"
+                            maxWidth="Infinity"
                             focusTraversable="false"
                             onAction="#handleLogout"
-                            HBox.hgrow="ALWAYS"
                             styleClass="profile-logout-button"/>
                 </HBox>
 

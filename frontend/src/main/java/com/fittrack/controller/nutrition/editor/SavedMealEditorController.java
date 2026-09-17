@@ -1,8 +1,10 @@
-package com.fittrack.controller.nutrition.components;
+package com.fittrack.controller.nutrition.editor;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.components.DeleteConfirmationController;
+import com.fittrack.controller.nutrition.components.MealItemCardController;
+import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;

@@ -92,6 +92,9 @@ public class AddToMealController extends FormController implements Initializable
     private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
     private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
 
+    // Turn Off Responsive to not affect child popup
+    private boolean suspendResponsiveLayout;
+
     // Service
     private final FoodService foodService = new FoodService();
     private final MealService mealService = new MealService();
@@ -100,7 +103,13 @@ public class AddToMealController extends FormController implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Coordinator
-        coordinator = new AddToMealCoordinator(selectionContainer, itemDetailsContainer, editorContainer);
+        coordinator = new AddToMealCoordinator(
+                rootLayout,
+                selectionContainer,
+                itemDetailsContainer,
+                editorContainer,
+                this::setResponsiveLayoutSuspended
+        );
 
         // Responsive Initialize
         initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
@@ -237,6 +246,10 @@ public class AddToMealController extends FormController implements Initializable
     // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
     public void updateWidthLayout(boolean narrow) {
+        if (suspendResponsiveLayout) {
+            return;
+        }
+
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
 
         if (narrow) {
@@ -266,6 +279,10 @@ public class AddToMealController extends FormController implements Initializable
 
     @Override
     public void updateHeightLayout(boolean shortLayout) {
+        if (suspendResponsiveLayout) {
+            return;
+        }
+
         rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
     }
 
@@ -297,6 +314,19 @@ public class AddToMealController extends FormController implements Initializable
                 loadMyMeals(searchField.getText());
             }
         }
+    }
+
+    private void setResponsiveLayoutSuspended(boolean suspended) {
+        suspendResponsiveLayout = suspended;
+
+        if (suspended) {
+            rootLayout.pseudoClassStateChanged(NARROW, false);
+            rootLayout.pseudoClassStateChanged(SHORT, false);
+            return;
+        }
+
+        updateWidthLayout(rootLayout.getWidth() < NARROW_BREAKPOINT);
+        updateHeightLayout(rootLayout.getHeight() < SHORT_BREAKPOINT);
     }
 
     private void showCreateFoodPanel() {

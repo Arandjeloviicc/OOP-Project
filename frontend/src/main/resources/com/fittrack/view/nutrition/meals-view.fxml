@@ -80,6 +80,7 @@
 
                     <DatePicker fx:id="datePicker"
                                 editable="false"
+                                maxWidth="Infinity"
                                 styleClass="input-field, date-picker-field, meals-date-picker"/>
 
                     <Button text="›"

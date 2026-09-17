@@ -48,8 +48,9 @@
                            text="Age"/>
 
                     <TextField fx:id="ageField"
+                               maxWidth="Infinity"
                                promptText="Enter your age"
-                               styleClass="input-field,text-field"/>
+                               styleClass="input-field, text-field"/>
 
                     <Label fx:id="ageMessage"
                            styleClass="helper-label"
@@ -91,6 +92,7 @@
                            text="Height (cm)"/>
 
                     <TextField fx:id="heightField"
+                               maxWidth="Infinity"
                                promptText="Enter your height"
                                styleClass="input-field,text-field"/>
 
@@ -108,6 +110,7 @@
                            text="Weight (kg)"/>
 
                     <TextField fx:id="weightField"
+                               maxWidth="Infinity"
                                promptText="Enter your weight"
                                styleClass="input-field,text-field"/>
 
@@ -161,6 +164,7 @@
                                styleClass="field-label"/>
 
                         <TextField fx:id="bodyFatField"
+                                   maxWidth="Infinity"
                                    promptText="Enter your body fat percentage"
                                    styleClass="input-field, text-field"/>
 
@@ -186,6 +190,7 @@
                                text="Neck (cm)"/>
 
                         <TextField fx:id="neckField"
+                                   maxWidth="Infinity"
                                    promptText="Enter your nect circumference"
                                    styleClass="input-field,text-field"/>
 
@@ -203,6 +208,7 @@
                                text="Waist (cm)"/>
 
                         <TextField fx:id="waistField"
+                                   maxWidth="Infinity"
                                    promptText="Enter your waist circumference"
                                    styleClass="input-field,text-field"/>
 
@@ -224,6 +230,7 @@
                                text="Hip (cm)"/>
 
                         <TextField fx:id="hipField"
+                                   maxWidth="Infinity"
                                    promptText="Enter your hip circumference"
                                    styleClass="input-field,text-field"/>
 
@@ -829,17 +836,20 @@
             <ToggleButton fx:id="bmiTab"
                           text="BMI"
                           toggleGroup="$calculatorGroup"
+                          maxWidth="Infinity"
                           styleClass="calculator-tab-button"
                           selected="true"/>
 
             <ToggleButton fx:id="tdeeTab"
                           text="TDEE"
                           toggleGroup="$calculatorGroup"
+                          maxWidth="Infinity"
                           styleClass="calculator-tab-button"/>
 
             <ToggleButton fx:id="bodyFatTab"
                           text="Body Fat"
                           toggleGroup="$calculatorGroup"
+                          maxWidth="Infinity"
                           styleClass="calculator-tab-button"/>
         </HBox>
     </top>

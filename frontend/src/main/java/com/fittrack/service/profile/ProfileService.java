@@ -1,6 +1,7 @@
 package com.fittrack.service.profile;
 
 import com.fittrack.api.profile.ProfileApi;
+import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.ProfileData;
 import com.fittrack.dto.profile.ProfileResponse;
 import com.fittrack.model.profile.ActivityLevel;
@@ -44,6 +45,10 @@ public class ProfileService {
                 response.targetFat(),
                 response.targetProtein()
         );
+    }
+
+    public void updatePersonalInfo(PersonalInfoUpdateRequest request) {
+        profileApi.updatePersonalInfo(currentUserId(), request);
     }
 
     // ── Helpers ─────────────────────────────────────────────────

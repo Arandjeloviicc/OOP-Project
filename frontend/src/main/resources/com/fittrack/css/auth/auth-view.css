@@ -146,7 +146,7 @@
 .root:narrow .glass-card {
     -fx-min-width: 0;
     -fx-pref-width: 100%;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-padding: 0;
 }
 

@@ -32,7 +32,7 @@
     -fx-spacing: 0.25em;
 
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-cursor: hand;
 }

@@ -9,7 +9,7 @@
     -fx-padding: 1.3em 1.5em;
 
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-background-color: -app-surface-light;
     -fx-background-radius: 1em;
@@ -137,7 +137,7 @@
 
 .nutrition-progress-card.narrow {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-spacing: 0.55em;
     -fx-padding: 0.8em;

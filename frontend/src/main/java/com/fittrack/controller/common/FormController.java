@@ -9,8 +9,7 @@ public abstract class FormController extends NavigableController {
     // ── Field messages ────────────────────────────────────────────
     protected void setFieldMessage(Label messageLabel, String message, boolean error, Control... fields) {
         messageLabel.setText(message);
-        messageLabel.setVisible(true);
-        messageLabel.setManaged(true);
+        setVisible(messageLabel, true);
 
         messageLabel.getStyleClass().removeAll(
                 "helper-label",
@@ -29,6 +28,15 @@ public abstract class FormController extends NavigableController {
             } else {
                 field.getStyleClass().removeAll("error");
             }
+        }
+    }
+
+    protected void clearFieldMessage(Label messageLabel, Control... fields) {
+        messageLabel.setText("");
+        setVisible(messageLabel, false);
+
+        for (Control field : fields) {
+            field.getStyleClass().removeAll("error");
         }
     }
 

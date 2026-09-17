@@ -12,8 +12,8 @@
 <VBox fx:id="rootLayout"
       xmlns="http://javafx.com/javafx/22"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fittrack.controller.nutrition.components.MealItemEditorController"
-      stylesheets="@../../../css/nutrition/components/meal-item-editor.css"
+      fx:controller="com.fittrack.controller.nutrition.editor.MealItemEditorController"
+      stylesheets="@../../../css/nutrition/editor/meal-item-editor.css"
       maxHeight="-Infinity"
       styleClass="popup-dialog, meal-item-editor">
 

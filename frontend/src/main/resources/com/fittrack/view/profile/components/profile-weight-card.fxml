@@ -14,7 +14,6 @@
 
     <HBox styleClass="profile-weight-current">
         <Label fx:id="currentWeightLabel"
-               text="78.4"
                styleClass="profile-weight-current-value"/>
 
         <Label text=" kg"
@@ -31,7 +30,6 @@
                        styleClass="profile-weight-range-label"/>
 
                 <Label fx:id="startWeightLabel"
-                       text="84 kg"
                        styleClass="profile-weight-range-value"/>
             </VBox>
 
@@ -42,19 +40,16 @@
                        styleClass="profile-weight-range-label"/>
 
                 <Label fx:id="goalWeightLabel"
-                       text="72 kg"
                        styleClass="profile-weight-range-value"/>
             </VBox>
 
         </HBox>
 
         <ProgressBar fx:id="weightProgressBar"
-                     progress="0.47"
                      maxWidth="Infinity"
                      styleClass="profile-weight-progress"/>
 
         <Label fx:id="progressMessageLabel"
-               text="5.6 kg lost · 6.4 kg to go"
                styleClass="profile-weight-progress-message"/>
 
     </VBox>

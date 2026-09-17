@@ -8,6 +8,19 @@ public final class FitnessInputValidator {
 
     private FitnessInputValidator() {}
 
+    // ── Profile Helpers ─────────────────────────────────────────────────
+    public static boolean isNameValid(String name) {
+        if (name == null) {
+            return false;
+        }
+
+        String value = name.trim();
+
+        return value.length() >= AppConstants.Validation.MIN_NAME_LENGTH
+                && value.length() <= AppConstants.Validation.MAX_NAME_LENGTH
+                && value.matches("^\\p{L}[\\p{L} '\\-]*\\p{L}$");
+    }
+
     // ── Calculator Helpers ─────────────────────────────────────────────────
     private static boolean isDecimalMeasurementValid(String value, double min, double max) {
         if (value == null || !value.trim().matches("^\\d{1,3}([.,]\\d{1,2})?$")) {

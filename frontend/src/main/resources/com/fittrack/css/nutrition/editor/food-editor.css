@@ -9,7 +9,17 @@
 /* ========================================================== */
 
 .food-editor-root {
+    -fx-pref-width: 40em;
     -fx-max-width: 40em;
+
+    -fx-background-color: -app-background;
+    -fx-background-radius: 1.125em;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1.125em;
+
+    -fx-padding: 2em;
     -fx-spacing: 1.15em;
 }
 
@@ -56,12 +66,11 @@
 .food-editor-field-row .field-group {
     -fx-min-width: 0;
     -fx-pref-width: 0;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 }
 
 .food-editor-field-row .helper-label {
     -fx-min-width: 0;
-    -fx-max-width: Infinity;
 }
 
 /* ========================================================== */
@@ -69,7 +78,7 @@
 /* ========================================================== */
 
 .food-editor-actions {
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
     -fx-hgap: 0.65em;
     -fx-padding: 0.65em 0 0 0;
 }
@@ -108,4 +117,29 @@
 .food-editor-delete-button:hover {
     -fx-background-color: -app-danger-background;
     -fx-text-fill: -app-danger-text;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.food-editor-root:narrow {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-padding: 1.65em;
+}
+
+.food-editor-root:narrow .food-editor-field-row {
+    -fx-spacing: 0.5em;
+}
+
+/* ========================================================== */
+/* == SHORT ================================================= */
+/* ========================================================== */
+
+.food-editor-root:short {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
 }

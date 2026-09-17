@@ -106,7 +106,7 @@
 .sidebar:horizontal {
     -fx-min-width: -1;
     -fx-pref-width: -1;
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 
     -fx-min-height: 4.8em;
     -fx-pref-height: 4.8em;
@@ -130,7 +130,6 @@
 
 .sidebar:horizontal .navigation-container {
     -fx-alignment: CENTER;
-    -fx-pref-wrap-length: Infinity;
 }
 
 .navigation-button {
@@ -248,22 +247,4 @@
 .context-menu .menu-item {
     -fx-background-color: transparent;
     -fx-padding: 0;
-}
-
-.context-menu-navigation-button {
-    -fx-content-display: left;
-    -fx-alignment: center-left;
-    -fx-graphic-text-gap: 0.8em;
-
-    -fx-min-width: 12em;
-    -fx-pref-width: 12em;
-    -fx-max-width: Infinity;
-
-    -fx-min-height: 4.5em;
-    -fx-pref-height: 4.5em;
-    -fx-max-height: 4.5em;
-
-    -fx-padding: 0 1.2em;
-
-    -fx-font-size: 0.85em;
 }

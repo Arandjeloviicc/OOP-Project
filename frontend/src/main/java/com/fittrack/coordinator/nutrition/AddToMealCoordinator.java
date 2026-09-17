@@ -1,9 +1,9 @@
 package com.fittrack.coordinator.nutrition;
 
 import com.fittrack.config.AppConstants;
-import com.fittrack.controller.nutrition.components.FoodEditorController;
-import com.fittrack.controller.nutrition.components.MealItemEditorController;
-import com.fittrack.controller.nutrition.components.SavedMealEditorController;
+import com.fittrack.controller.nutrition.editor.FoodEditorController;
+import com.fittrack.controller.nutrition.editor.MealItemEditorController;
+import com.fittrack.controller.nutrition.editor.SavedMealEditorController;
 import com.fittrack.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 public class AddToMealCoordinator {
 
     // Containers
+    private final StackPane rootLayout;
     private final VBox selectionContainer;
     private final StackPane itemDetailsContainer;
     private final StackPane editorContainer;
@@ -33,11 +34,16 @@ public class AddToMealCoordinator {
     private FoodEditorController activeFoodEditor;
     private MealItemEditorController activeMealItemEditor;
 
+    // Turn Off Responsive to not affect child popup
+    private final Consumer<Boolean> responsiveSuspension;
+
     // ── Constructor ──────────────────────────────────────────────────────
-    public AddToMealCoordinator(VBox selectionContainer, StackPane itemDetailsContainer, StackPane editorContainer) {
+    public AddToMealCoordinator(StackPane rootLayout, VBox selectionContainer, StackPane itemDetailsContainer, StackPane editorContainer, Consumer<Boolean> responsiveSuspension) {
+        this.rootLayout = rootLayout;
         this.selectionContainer = selectionContainer;
         this.itemDetailsContainer = itemDetailsContainer;
         this.editorContainer = editorContainer;
+        this.responsiveSuspension = responsiveSuspension;
     }
 
     // ── State ──────────────────────────────────────────────────────
@@ -210,6 +216,8 @@ public class AddToMealCoordinator {
 
     // ── Food Editor ────────────────────────────────────────────────
     public void openCreateFood(Consumer<CreateFoodRequest> onCreate) {
+        responsiveSuspension.accept(true);
+
         LoadedComponent<FoodEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.FOOD_EDITOR);
 
         FoodEditorController editorController = editor.controller();
@@ -230,6 +238,8 @@ public class AddToMealCoordinator {
         });
 
         showEditor(editor.root());
+
+        editorController.initializeResponsiveLayout(rootLayout);
     }
 
     // ── Navigation ─────────────────────────────────────────────────
@@ -248,6 +258,8 @@ public class AddToMealCoordinator {
     }
 
     public void closeEditor() {
+        boolean wasFoodEditor = activeFoodEditor != null;
+
         editorContainer.getChildren().clear();
 
         activeSavedMealEditor = null;
@@ -256,6 +268,10 @@ public class AddToMealCoordinator {
 
         setVisible(editorContainer, false);
         setVisible(selectionContainer, true);
+
+        if (wasFoodEditor) {
+            responsiveSuspension.accept(false);
+        }
     }
 
     // ── Helpers ────────────────────────────────────────────────────

@@ -2,7 +2,7 @@ package com.fittrack.model.profile;
 
 import java.time.LocalDate;
 
-public record ProfileSetupData(
+public record ProfileSetupRequest(
         String firstName,
         String lastName,
         LocalDate dateOfBirth,

@@ -9,14 +9,23 @@ public class ProfilePersonalInfoCardController {
     @FXML private Label genderLabel;
     @FXML private Label heightLabel;
 
+    // Action
+    private Runnable onEditAction;
+
     public void setData(String dateOfBirth, String gender, String height) {
         dateOfBirthLabel.setText(dateOfBirth);
         genderLabel.setText(gender);
         heightLabel.setText(height);
     }
 
+    public void setOnEditAction(Runnable onEditAction) {
+        this.onEditAction = onEditAction;
+    }
+
     @FXML
     private void handleEdit() {
-        // TODO document why this method is empty
+        if (onEditAction != null) {
+            onEditAction.run();
+        }
     }
 }

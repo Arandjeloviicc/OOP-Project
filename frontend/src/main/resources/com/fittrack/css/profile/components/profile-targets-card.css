@@ -45,7 +45,7 @@
     -fx-alignment: center;
     -fx-spacing: 0.1875em;
 
-    -fx-max-width: Infinity;
+    -fx-max-width: -1;
 }
 
 .profile-macro-bar {
