@@ -44,6 +44,9 @@ public class UserProfile {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     // Constructor
     protected UserProfile() {}
 
@@ -67,6 +70,11 @@ public class UserProfile {
     @PrePersist
     private void prePersist() {
         createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
     // Getters
@@ -100,5 +108,9 @@ public class UserProfile {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

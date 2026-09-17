@@ -1,4 +1,4 @@
-package com.fittrack.backend.service.nutrition;
+package com.fittrack.backend.service.calculation;
 
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
 import com.fittrack.backend.entity.profile.ActivityLevel;

@@ -1,5 +1,6 @@
 package com.fittrack.backend.repository.profile;
 
+import com.fittrack.backend.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.backend.entity.profile.ActivityLevel;
 import com.fittrack.backend.entity.profile.Gender;
 import com.fittrack.backend.entity.profile.WeightGoal;
@@ -20,6 +21,8 @@ public class ProfileJdbcRepository {
     }
 
     public Optional<ProfileData> findByUserId(Integer userId) {
+        //
+
         String sql = """
                 SELECT
                     u.username,
@@ -102,5 +105,29 @@ public class ProfileJdbcRepository {
         );
 
         return results.stream().findFirst();
+    }
+
+    public int updatePersonalInfo(Integer userId, PersonalInfoUpdateRequest request) {
+        String sql = """
+            UPDATE user_profiles
+            SET
+                first_name = ?,
+                last_name = ?,
+                date_of_birth = ?,
+                gender = ?,
+                height = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE user_id = ?
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                request.firstName().trim(),
+                request.lastName().trim(),
+                request.dateOfBirth(),
+                request.gender().name(),
+                request.height(),
+                userId
+        );
     }
 }

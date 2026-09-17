@@ -357,7 +357,7 @@ public class MealItemJdbcRepository {
 
         List<MealItemResponse> results = jdbcTemplate.query(
                 sql,
-                (resultSet, rowNum) -> new MealItemResponse(
+                (resultSet, _) -> new MealItemResponse(
                         resultSet.getInt("id"),
                         resultSet.getObject(
                                 "food_id",
@@ -617,7 +617,7 @@ public class MealItemJdbcRepository {
 
         CreateSavedMealResult result = jdbcTemplate.queryForObject(
                 sql,
-                (resultSet, rowNum) ->
+                (resultSet, _) ->
                         new CreateSavedMealResult(
                                 resultSet.getBoolean("user_exists"),
                                 resultSet.getInt("requested_count"),

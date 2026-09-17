@@ -3,7 +3,7 @@ package com.fittrack.backend.service.profile;
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
 import com.fittrack.backend.dto.profile.ProfileSetupRequest;
 import com.fittrack.backend.repository.profile.ProfileSetupJdbcRepository;
-import com.fittrack.backend.service.nutrition.NutritionGoalCalculationService;
+import com.fittrack.backend.service.calculation.NutritionGoalCalculationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

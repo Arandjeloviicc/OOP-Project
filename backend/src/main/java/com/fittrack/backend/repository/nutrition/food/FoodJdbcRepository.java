@@ -64,7 +64,7 @@ public class FoodJdbcRepository {
 
         List<FoodResponse> results = jdbcTemplate.query(
                 sql,
-                (resultSet, rowNum) -> new FoodResponse(
+                (resultSet, _) -> new FoodResponse(
                         resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("brand"),
