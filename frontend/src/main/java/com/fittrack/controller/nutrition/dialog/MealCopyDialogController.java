@@ -1,4 +1,4 @@
-package com.fittrack.controller.nutrition.components;
+package com.fittrack.controller.nutrition.dialog;
 
 import com.fittrack.controller.common.BaseController;
 import com.fittrack.controller.common.ResponsiveLayout;
@@ -28,7 +28,6 @@ public class MealCopyDialogController extends BaseController implements Initiali
     @FXML private StackPane rootLayout;
     @FXML private Label titleLabel;
     @FXML private ComboBox<MealType> mealComboBox;
-    @FXML private GridPane fieldsGrid;
     @FXML private VBox mealFieldBox;
     @FXML private VBox dayFieldBox;
     @FXML private DatePicker datePicker;
@@ -151,7 +150,7 @@ public class MealCopyDialogController extends BaseController implements Initiali
         }
     }
 
-    // ── Responsive Helpers ─────────────────────────────────────────────────
+    // ── Selection ───────────────────────────────────────────────
     private void handleSelectionChanged() {
         if (mode == null) {
             return;

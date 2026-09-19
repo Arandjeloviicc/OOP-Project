@@ -8,221 +8,209 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fittrack.controller.profile.editor.ProfilePersonalInfoEditorController"
       stylesheets="@../../../css/profile/editor/profile-personal-info-editor.css"
-      styleClass="popup-root">
+      styleClass="profile-personal-info-editor-view">
 
     <VBox fx:id="dialogContainer"
+          maxWidth="Infinity"
           maxHeight="-Infinity"
-          styleClass="popup-dialog, profile-personal-info-editor-root">
+          StackPane.alignment="TOP_CENTER"
+          styleClass="profile-personal-info-editor-root">
 
-        <!-- Normal width and height -->
-        <StackPane fx:id="contentHost"
-                   VBox.vgrow="ALWAYS">
+        <VBox fx:id="contentContainer"
+              styleClass="profile-personal-info-editor-content">
 
-            <VBox fx:id="contentContainer"
-                  styleClass="app-scroll-content, profile-personal-info-editor-content">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT"
+                  styleClass="profile-personal-info-editor-header">
 
-                <!-- Header -->
-                <HBox alignment="CENTER_LEFT"
-                      styleClass="profile-personal-info-editor-header">
+                <VBox spacing="0.2">
+                    <Label text="Personal info"
+                           styleClass="profile-personal-info-editor-caption"/>
 
-                    <VBox spacing="0.2">
-                        <Label text="Personal info"
-                               styleClass="profile-personal-info-editor-caption"/>
+                    <Label text="Edit personal information"
+                           styleClass="profile-personal-info-editor-title"/>
+                </VBox>
 
-                        <Label text="Edit personal information"
-                               styleClass="profile-personal-info-editor-title"/>
-                    </VBox>
+            </HBox>
 
-                </HBox>
+            <!-- Fields -->
+            <GridPane fx:id="formGrid"
+                      styleClass="profile-personal-info-editor-grid">
 
-                <!-- Fields -->
-                <GridPane fx:id="formGrid"
-                          styleClass="profile-personal-info-editor-grid">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
 
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS"
-                                           minWidth="0"/>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+                </columnConstraints>
 
-                        <ColumnConstraints hgrow="ALWAYS"
-                                           minWidth="0"/>
-                    </columnConstraints>
+                <!-- First name -->
+                <VBox fx:id="firstNameGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="0"
+                      GridPane.rowIndex="0">
 
-                    <!-- First name -->
-                    <VBox fx:id="firstNameGroup"
-                          styleClass="field-group"
-                          GridPane.columnIndex="0"
-                          GridPane.rowIndex="0">
+                    <Label text="First name"
+                           styleClass="field-label"/>
 
-                        <Label text="First name"
-                               styleClass="field-label"/>
+                    <TextField fx:id="firstNameField"
+                               maxWidth="Infinity"
+                               promptText="Enter your first name"
+                               styleClass="input-field, text-field"/>
 
-                        <TextField fx:id="firstNameField"
+                    <Label fx:id="firstNameMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Last name -->
+                <VBox fx:id="lastNameGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="0">
+
+                    <Label text="Last name"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="lastNameField"
+                               maxWidth="Infinity"
+                               promptText="Enter your last name"
+                               styleClass="input-field, text-field"/>
+
+                    <Label fx:id="lastNameMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Date of birth -->
+                <VBox fx:id="dateOfBirthGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="0"
+                      GridPane.rowIndex="1"
+                      GridPane.columnSpan="2">
+
+                    <Label text="Date of birth"
+                           styleClass="field-label"/>
+
+                    <DatePicker fx:id="dateOfBirthPicker"
+                                maxWidth="Infinity"
+                                promptText="Select your date of birth"
+                                styleClass="input-field, date-picker-field"/>
+
+                    <Label fx:id="dateOfBirthMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Gender Button Group -->
+                <fx:define>
+                    <ToggleGroup fx:id="genderGroup"/>
+                </fx:define>
+
+                <!-- Gender -->
+                <VBox fx:id="genderGroupContainer"
+                      styleClass="field-group"
+                      GridPane.columnIndex="0"
+                      GridPane.rowIndex="2">
+
+                    <Label text="Gender"
+                           styleClass="field-label"/>
+
+                    <HBox styleClass="gender-options, profile-personal-info-gender-options">
+
+                        <ToggleButton fx:id="maleButton"
+                                      text="Male"
+                                      maxWidth="Infinity"
+                                      HBox.hgrow="ALWAYS"
+                                      styleClass="gender-option"/>
+
+                        <ToggleButton fx:id="femaleButton"
+                                      text="Female"
+                                      maxWidth="Infinity"
+                                      HBox.hgrow="ALWAYS"
+                                      styleClass="gender-option"/>
+
+                    </HBox>
+
+                </VBox>
+
+                <!-- Height -->
+                <VBox fx:id="heightGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="2">
+
+                    <Label text="Height"
+                           styleClass="field-label"/>
+
+                    <StackPane>
+                        <TextField fx:id="heightField"
                                    maxWidth="Infinity"
-                                   promptText="Enter your first name"
-                                   styleClass="input-field, text-field"/>
+                                   promptText="Enter your height"
+                                   styleClass="input-field, text-field, profile-personal-info-height-field"/>
 
-                        <Label fx:id="firstNameMessage"
-                               styleClass="helper-label"
-                               visible="false"
-                               managed="false"
-                               wrapText="true"
-                               minHeight="-Infinity"
-                               maxHeight="Infinity"
-                               maxWidth="Infinity"/>
-                    </VBox>
+                        <Label text="cm"
+                               mouseTransparent="true"
+                               StackPane.alignment="CENTER_RIGHT"
+                               styleClass="profile-personal-info-height-unit"/>
+                    </StackPane>
 
-                    <!-- Last name -->
-                    <VBox fx:id="lastNameGroup"
-                          styleClass="field-group"
-                          GridPane.columnIndex="1"
-                          GridPane.rowIndex="0">
+                    <Label fx:id="heightMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
 
-                        <Label text="Last name"
-                               styleClass="field-label"/>
+            </GridPane>
 
-                        <TextField fx:id="lastNameField"
-                                   maxWidth="Infinity"
-                                   promptText="Enter your last name"
-                                   styleClass="input-field, text-field"/>
+            <!-- Actions -->
+            <GridPane styleClass="profile-personal-info-editor-actions">
 
-                        <Label fx:id="lastNameMessage"
-                               styleClass="helper-label"
-                               visible="false"
-                               managed="false"
-                               wrapText="true"
-                               minHeight="-Infinity"
-                               maxHeight="Infinity"
-                               maxWidth="Infinity"/>
-                    </VBox>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
 
-                    <!-- Date of birth -->
-                    <VBox fx:id="dateOfBirthGroup"
-                          styleClass="field-group"
-                          GridPane.columnIndex="0"
-                          GridPane.rowIndex="1"
-                          GridPane.columnSpan="2">
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+                </columnConstraints>
 
-                        <Label text="Date of birth"
-                               styleClass="field-label"/>
+                <Button text="Cancel"
+                        maxWidth="Infinity"
+                        focusTraversable="false"
+                        onAction="#handleCancel"
+                        styleClass="back-btn, profile-personal-info-editor-action-button"
+                        GridPane.columnIndex="0"/>
 
-                        <DatePicker fx:id="dateOfBirthPicker"
-                                    maxWidth="Infinity"
-                                    promptText="Select your date of birth"
-                                    styleClass="input-field, date-picker-field"/>
+                <Button fx:id="saveButton"
+                        text="Save changes"
+                        maxWidth="Infinity"
+                        onAction="#handleSave"
+                        styleClass="action-btn, profile-personal-info-editor-action-button"
+                        GridPane.columnIndex="1"/>
 
-                        <Label fx:id="dateOfBirthMessage"
-                               styleClass="helper-label"
-                               visible="false"
-                               managed="false"
-                               wrapText="true"
-                               minHeight="-Infinity"
-                               maxHeight="Infinity"
-                               maxWidth="Infinity"/>
-                    </VBox>
+            </GridPane>
 
-                    <!-- Gender Button Group -->
-                    <fx:define>
-                        <ToggleGroup fx:id="genderGroup"/>
-                    </fx:define>
-
-                    <!-- Gender -->
-                    <VBox fx:id="genderGroupContainer"
-                          styleClass="field-group"
-                          GridPane.columnIndex="0"
-                          GridPane.rowIndex="2">
-
-                        <Label text="Gender"
-                               styleClass="field-label"/>
-
-                        <HBox styleClass="gender-options, profile-personal-info-gender-options">
-
-                            <ToggleButton fx:id="maleButton"
-                                          text="Male"
-                                          maxWidth="Infinity"
-                                          HBox.hgrow="ALWAYS"
-                                          styleClass="gender-option"/>
-
-                            <ToggleButton fx:id="femaleButton"
-                                          text="Female"
-                                          maxWidth="Infinity"
-                                          HBox.hgrow="ALWAYS"
-                                          styleClass="gender-option"/>
-
-                        </HBox>
-
-                    </VBox>
-
-                    <!-- Height -->
-                    <VBox fx:id="heightGroup"
-                          styleClass="field-group"
-                          GridPane.columnIndex="1"
-                          GridPane.rowIndex="2">
-
-                        <Label text="Height"
-                               styleClass="field-label"/>
-
-                        <StackPane>
-                            <TextField fx:id="heightField"
-                                       maxWidth="Infinity"
-                                       promptText="Enter your height"
-                                       styleClass="input-field, text-field, profile-personal-info-height-field"/>
-
-                            <Label text="cm"
-                                   mouseTransparent="true"
-                                   StackPane.alignment="CENTER_RIGHT"
-                                   styleClass="profile-personal-info-height-unit"/>
-                        </StackPane>
-
-                        <Label fx:id="heightMessage"
-                               styleClass="helper-label"
-                               visible="false"
-                               managed="false"
-                               wrapText="true"
-                               minHeight="-Infinity"
-                               maxHeight="Infinity"
-                               maxWidth="Infinity"/>
-                    </VBox>
-
-                </GridPane>
-
-                <!-- Actions -->
-                <GridPane styleClass="profile-personal-info-editor-actions">
-
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="ALWAYS"
-                                           minWidth="0"/>
-
-                        <ColumnConstraints hgrow="ALWAYS"
-                                           minWidth="0"/>
-                    </columnConstraints>
-
-                    <Button text="Cancel"
-                            maxWidth="Infinity"
-                            focusTraversable="false"
-                            onAction="#handleCancel"
-                            styleClass="back-btn, profile-personal-info-editor-action-button"
-                            GridPane.columnIndex="0"/>
-
-                    <Button fx:id="saveButton"
-                            text="Save changes"
-                            maxWidth="Infinity"
-                            onAction="#handleSave"
-                            styleClass="action-btn, profile-personal-info-editor-action-button"
-                            GridPane.columnIndex="1"/>
-
-                </GridPane>
-
-            </VBox>
-
-            <!-- Short mode -->
-            <ScrollPane fx:id="scrollPane"
-                        fitToWidth="true"
-                        hbarPolicy="NEVER"
-                        visible="false"
-                        managed="false"
-                        styleClass="app-scroll"/>
-
-        </StackPane>
+        </VBox>
 
     </VBox>
 

@@ -1,13 +1,13 @@
 package com.fittrack.controller.calculator;
 
-import com.fittrack.ui.SceneShortcuts;
+import com.fittrack.ui.scene.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
-import com.fittrack.model.calculators.CalculatorType;
-import com.fittrack.model.calculators.EnergyMode;
+import com.fittrack.model.calculator.CalculatorType;
+import com.fittrack.model.calculator.EnergyMode;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.service.calculator.CalculationService;
 import com.fittrack.config.AppConstants;

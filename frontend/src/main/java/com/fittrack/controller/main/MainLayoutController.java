@@ -2,22 +2,20 @@ package com.fittrack.controller.main;
 
 import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.ResponsiveLayout;
+import com.fittrack.controller.popup.PopupShellController;
 import com.fittrack.model.view.ViewInstance;
 import com.fittrack.service.auth.AuthService;
 import com.fittrack.config.AppConstants;
-import com.fittrack.ui.OverlayManager;
-import javafx.application.Platform;
+import com.fittrack.ui.overlay.OverlayManager;
 import javafx.css.PseudoClass;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,23 +55,24 @@ public class MainLayoutController extends NavigableController implements Initial
     @FXML private ToggleButton workoutsButton;
     @FXML private ToggleButton measurementsButton;
     @FXML private ToggleButton profileButton;
-    @FXML private Button moreButton;
+    @FXML private ToggleButton moreButton;
 
     // Constants
     private static final int NARROW_BREAKPOINT = 900;
     private static final int MAX_VISIBLE_NARROW = 4;
 
-    // Adding PseudoClass for specific css styles
+    // Responsive
     private static final PseudoClass HORIZONTAL = PseudoClass.getPseudoClass("horizontal");
+    private Boolean narrowLayout;
+
+    // More Button
+    private boolean morePopupOpen;
 
     // List of sidebar buttons
     private List<ToggleButton> navButtons;
 
     // Selected view
     private String currentView;
-
-    // Is Narrow
-    private Boolean narrowLayout;
 
     // Service
     private final AuthService authService = new AuthService();
@@ -178,23 +177,43 @@ public class MainLayoutController extends NavigableController implements Initial
 
     // Switch scenes and toggle button
     private void showContent(ToggleButton button, String view) {
-        if(view.equals(currentView)) return;
+        closeMorePopupIfOpen();
+
+        if(view.equals(currentView)) {
+            return;
+        }
 
         try {
             loadContent(view);
             navigationGroup.selectToggle(button);
             currentView = view;
         } catch (IllegalArgumentException | IllegalStateException exception) {
-            log.error("Failed to open view: {}", view, exception);
+            log.error(
+                    "Failed to open view: {}",
+                    view,
+                    exception
+            );
         }
     }
 
     // ── Responsive Helpers ─────────────────────────────────────────────────
     @Override
     public void updateWidthLayout(boolean narrow) {
-        if (Objects.equals(narrowLayout, narrow)) return;
+        if (Objects.equals(narrowLayout, narrow)) {
+            return;
+        }
 
         narrowLayout = narrow;
+
+        if (!narrow) {
+            closeMorePopupIfOpen();
+
+            if (navigationGroup.getSelectedToggle() == moreButton) {
+                navigationGroup.selectToggle(
+                        getCurrentViewButton()
+                );
+            }
+        }
 
         if (narrow) {
             rootLayout.setTop(topBar);
@@ -274,7 +293,10 @@ public class MainLayoutController extends NavigableController implements Initial
 
         if (!overflow.isEmpty()) {
             navigationContainer.getChildren().add(moreButton);
-            moreButton.setOnAction(e -> showContextMenu(overflow));
+
+            moreButton.setOnAction(
+                    event -> showMorePopup(overflow)
+            );
         }
 
         updateButtonWidths(narrow, visible, !overflow.isEmpty());
@@ -299,60 +321,117 @@ public class MainLayoutController extends NavigableController implements Initial
         }
     }
 
-    // ── ContextMenu Helpers ─────────────────────────────────────────────────
-    private void showContextMenu(List<ToggleButton> buttons) {
-        ContextMenu menu = new ContextMenu();
-        menu.getStyleClass().add("context-menu");
-
-        List<CustomMenuItem> menuItems = new ArrayList<>();
-        Map<ToggleButton, EventHandler<ActionEvent>> closeHandlers =
-                new HashMap<>();
-
-        for (ToggleButton button : buttons) {
-            button.prefWidthProperty().unbind();
-            button.getStyleClass().add("context-menu-navigation-button");
-
-            CustomMenuItem item = new CustomMenuItem(button, false);
-
-            menuItems.add(item);
-            menu.getItems().add(item);
-
-            EventHandler<ActionEvent> closeHandler = event -> menu.hide();
-
-            button.addEventHandler(ActionEvent.ACTION, closeHandler);
-            closeHandlers.put(button, closeHandler);
+    // ── More Popup ──────────────────────────────────────────────
+    private void showMorePopup(List<ToggleButton> buttons) {
+        if (!Boolean.TRUE.equals(narrowLayout) || morePopupOpen) {
+            return;
         }
 
-        menu.setOnHidden(event ->
-                Platform.runLater(() -> {
-                    for (int i = 0; i < buttons.size(); i++) {
-                        ToggleButton button = buttons.get(i);
-                        CustomMenuItem item = menuItems.get(i);
+        VBox content = new VBox();
+        content.getStyleClass().add("more-navigation-popup");
 
-                        button.removeEventHandler(ActionEvent.ACTION, closeHandlers.get(button));
+        for (ToggleButton sourceButton : buttons) {
+            ToggleButton popupButton = createMoreNavigationButton(sourceButton);
 
-                        item.setContent(null);
+            content.getChildren().add(popupButton);
+        }
 
-                        button.getStyleClass().remove("context-menu-navigation-button");
-                    }
-                })
+        StackPane.setMargin(
+                overlayContainer,
+                new Insets(
+                        0,
+                        0,
+                        sidebar.getHeight(),
+                        0
+                )
         );
 
-        menu.show(moreButton, Side.TOP, 0, 0);
+        setMorePopupOpen(true);
 
-        // Custom width and height depending on buttons
-        Platform.runLater(() -> {
-            Bounds moreButtonBounds = moreButton.localToScreen(moreButton.getBoundsInLocal());
+        PopupShellController shell =
+                OverlayManager.showInPopup(
+                        content,
+                        () -> {
+                            setMorePopupOpen(false);
 
-            if (moreButtonBounds == null) {
-                return;
-            }
+                            StackPane.setMargin(
+                                    overlayContainer,
+                                    null
+                            );
+                        }
+                );
 
-            double menuX = moreButtonBounds.getMaxX() - menu.getWidth();
-            double menuY = moreButtonBounds.getMinY() - menu.getHeight();
+        shell.setForceNarrow(true);
+        shell.setContentTopAlignmentRequested(true);
+    }
 
-            menu.setX(menuX);
-            menu.setY(menuY);
-        });
+    private ToggleButton createMoreNavigationButton(ToggleButton sourceButton) {
+        ToggleButton popupButton = new ToggleButton(sourceButton.getText());
+
+        popupButton.setMaxWidth(Double.MAX_VALUE);
+
+        popupButton.getStyleClass().addAll(
+                "navigation-button",
+                "more-navigation-popup-button"
+        );
+
+        popupButton.setSelected(sourceButton.isSelected());
+        popupButton.setDisable(sourceButton.isDisable());
+        popupButton.setVisible(sourceButton.isVisible());
+        popupButton.setManaged(sourceButton.isManaged());
+
+        if (sourceButton.getGraphic() instanceof ImageView sourceImage) {
+            ImageView popupImage = new ImageView(sourceImage.getImage());
+
+            popupImage.setFitWidth(sourceImage.getFitWidth());
+            popupImage.setFitHeight(sourceImage.getFitHeight());
+            popupImage.setPreserveRatio(sourceImage.isPreserveRatio());
+            popupButton.setGraphic(popupImage);
+        }
+
+        popupButton.setOnAction(
+                event -> sourceButton.fire()
+        );
+
+        return popupButton;
+    }
+
+    private void setMorePopupOpen(boolean open) {
+        morePopupOpen = open;
+    }
+
+    private void closeMorePopupIfOpen() {
+        if (morePopupOpen) {
+            OverlayManager.close();
+        }
+    }
+
+    // ── Helpers ──────────────────────────────────────────────
+    private ToggleButton getCurrentViewButton() {
+        if (AppConstants.Views.DASHBOARD.equals(currentView)) {
+            return dashboardButton;
+        }
+
+        if (AppConstants.Views.CALCULATORS.equals(currentView)) {
+            return calculatorsButton;
+        }
+
+        if (AppConstants.Views.MEALS.equals(currentView)) {
+            return mealsButton;
+        }
+
+        if (AppConstants.Views.WORKOUTS.equals(currentView)) {
+            return workoutsButton;
+        }
+
+        if (AppConstants.Views.MEASUREMENTS.equals(currentView)) {
+            return measurementsButton;
+        }
+
+        if (AppConstants.Views.PROFILE.equals(currentView)) {
+            return profileButton;
+        }
+
+        return dashboardButton;
     }
 }

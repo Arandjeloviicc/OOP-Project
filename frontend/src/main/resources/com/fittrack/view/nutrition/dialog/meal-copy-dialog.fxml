@@ -6,9 +6,9 @@
 <StackPane fx:id="rootLayout"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.nutrition.components.MealCopyDialogController"
-           stylesheets="@../../../css/nutrition/components/meal-copy-dialog.css"
-           styleClass="popup-host, meal-copy-root">
+           fx:controller="com.fittrack.controller.nutrition.dialog.MealCopyDialogController"
+           stylesheets="@../../../css/nutrition/dialog/meal-copy-dialog.css"
+           styleClass="meal-copy-root">
 
     <VBox styleClass="meal-copy-dialog"
           maxHeight="-Infinity">
@@ -27,8 +27,7 @@
         </HBox>
 
         <!-- Fields -->
-        <GridPane fx:id="fieldsGrid"
-                  styleClass="meal-copy-fields">
+        <GridPane styleClass="meal-copy-fields">
 
             <columnConstraints>
                 <ColumnConstraints percentWidth="50"/>

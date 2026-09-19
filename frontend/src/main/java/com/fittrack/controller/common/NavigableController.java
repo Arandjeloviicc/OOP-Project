@@ -1,6 +1,6 @@
 package com.fittrack.controller.common;
 
-import com.fittrack.ui.SceneManager;
+import com.fittrack.ui.scene.SceneManager;
 
 public abstract class NavigableController extends BaseController {
 

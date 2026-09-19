@@ -16,14 +16,14 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fittrack.controller.nutrition.AddToMealController"
            stylesheets="@../../css/nutrition/add-to-meal.css"
-           styleClass="popup-root">
+           styleClass="add-to-meal-view">
 
     <!-- Selection -->
-    <VBox fx:id="selectionContainer"
-          styleClass="popup-host">
+    <VBox alignment="TOP_CENTER">
 
-        <VBox fx:id="selectionDialog"
-              styleClass="popup-dialog, add-to-meal-dialog">
+        <VBox maxHeight="Infinity"
+              VBox.vgrow="ALWAYS"
+              styleClass="add-to-meal-dialog">
 
             <!-- Header -->
             <HBox alignment="CENTER_LEFT"
@@ -119,17 +119,5 @@
         </VBox>
 
     </VBox>
-
-    <!-- Item details -->
-    <StackPane fx:id="itemDetailsContainer"
-               visible="false"
-               managed="false"
-               styleClass="popup-host"/>
-
-    <!-- Food / Meal editor -->
-    <StackPane fx:id="editorContainer"
-               visible="false"
-               managed="false"
-               styleClass="popup-host"/>
 
 </StackPane>

@@ -1,4 +1,4 @@
-package com.fittrack.ui;
+package com.fittrack.ui.form;
 
 import com.fittrack.model.profile.Gender;
 import javafx.scene.control.ToggleButton;

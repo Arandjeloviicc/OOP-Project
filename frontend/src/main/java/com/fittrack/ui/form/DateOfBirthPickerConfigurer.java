@@ -1,4 +1,4 @@
-package com.fittrack.ui;
+package com.fittrack.ui.form;
 
 import com.fittrack.config.AppConstants;
 import javafx.scene.control.DateCell;

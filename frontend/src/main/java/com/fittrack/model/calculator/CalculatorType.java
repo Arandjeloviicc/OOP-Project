@@ -1,4 +1,4 @@
-package com.fittrack.model.calculators;
+package com.fittrack.model.calculator;
 
 public enum CalculatorType {
     BMI,

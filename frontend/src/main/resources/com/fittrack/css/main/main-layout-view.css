@@ -216,8 +216,7 @@
     -fx-text-fill: -app-text-primary;
 }
 
-.more-button:pressed,
-.more-button:showing {
+.more-button:pressed {
     -fx-background-color: -app-hover-strong;
     -fx-text-fill: -app-text-primary;
 }
@@ -228,23 +227,21 @@
     -fx-font-weight: bold;
 }
 
-/* ========================================================== */
-/* == CONTEXT MENU ========================================== */
-/* ========================================================== */
-
-/* ── ContextMenu ────────────────────────────────────────────── */
-.context-menu {
-    -fx-background-color: -app-surface-light;
-    -fx-background-radius: 0.7em 0 0 0;
-
-    -fx-border-color: -app-border-strong;
-    -fx-border-width: 1px;
-
-    -fx-padding: 0;
-    -fx-background-insets: 0;
+.more-button:selected .more-icon {
+    -fx-text-fill: -app-text-primary;
 }
 
-.context-menu .menu-item {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
+/* ========================================================== */
+/* == MORE NAVIGATION POPUP ================================= */
+/* ========================================================== */
+
+.more-navigation-popup {
+    -fx-pref-width: 20em;
+    -fx-spacing: 0.4em;
+}
+
+.more-navigation-popup-button {
+    -fx-border-width: 0;
+    -fx-background-radius: 0.65em;
+    -fx-border-radius: 0;
 }

@@ -1,4 +1,4 @@
-package com.fittrack.ui;
+package com.fittrack.ui.loader;
 
 import javafx.scene.Parent;
 

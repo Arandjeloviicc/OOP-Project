@@ -5,26 +5,23 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<VBox fx:id="rootLayout"
-      xmlns="http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fittrack.controller.nutrition.editor.FoodEditorController"
-      stylesheets="@../../../css/nutrition/editor/food-editor.css"
-      maxHeight="-Infinity"
-      styleClass="food-editor-root">
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.editor.FoodEditorController"
+           stylesheets="@../../../css/nutrition/editor/food-editor.css"
+           styleClass="food-editor-view">
 
-    <StackPane fx:id="contentHost"
-               VBox.vgrow="ALWAYS">
+    <VBox maxWidth="Infinity"
+          maxHeight="-Infinity"
+          StackPane.alignment="TOP_CENTER"
+          styleClass="food-editor-root">
 
-        <!-- Normal width and height -->
-        <VBox fx:id="editorContent"
-              styleClass="food-editor-content">
+        <VBox styleClass="food-editor-content">
 
             <!-- Header -->
             <HBox alignment="CENTER_LEFT"
@@ -217,14 +214,6 @@
 
         </VBox>
 
-        <!-- Short mode -->
-        <ScrollPane fx:id="setupScroll"
-                    fitToWidth="true"
-                    hbarPolicy="NEVER"
-                    visible="false"
-                    managed="false"
-                    styleClass="app-scroll"/>
+    </VBox>
 
-    </StackPane>
-
-</VBox>
+</StackPane>

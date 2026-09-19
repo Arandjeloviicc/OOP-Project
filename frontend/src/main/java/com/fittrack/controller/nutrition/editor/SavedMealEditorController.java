@@ -2,7 +2,6 @@ package com.fittrack.controller.nutrition.editor;
 
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
-import com.fittrack.controller.common.components.DeleteConfirmationController;
 import com.fittrack.controller.nutrition.components.MealItemCardController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
@@ -10,8 +9,8 @@ import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.dto.nutrition.meal.item.*;
 import com.fittrack.model.nutrition.SavedMealEditorMode;
-import com.fittrack.ui.FxmlComponentLoader;
-import com.fittrack.ui.LoadedComponent;
+import com.fittrack.ui.loader.FxmlComponentLoader;
+import com.fittrack.ui.loader.LoadedComponent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -29,7 +28,6 @@ import java.util.function.Consumer;
 public class SavedMealEditorController extends FormController implements Initializable {
 
     @FXML private StackPane rootLayout;
-    @FXML private VBox editorContainer;
 
     @FXML private Label titleLabel;
     @FXML private TextField nameField;
@@ -42,10 +40,6 @@ public class SavedMealEditorController extends FormController implements Initial
 
     @FXML private Button saveButton;
     @FXML private Button deleteMealButton;
-
-    @FXML private StackPane itemDetailsContainer;
-
-    @FXML private StackPane confirmationContainer;
 
     // Current Meal that is edited
     private Integer mealId;
@@ -69,6 +63,7 @@ public class SavedMealEditorController extends FormController implements Initial
     private Consumer<CreateMealRequest> onCreateAction;
     private Consumer<UpdateSavedMealRequest> onUpdateAction;
     private Runnable onDeleteAction;
+    private Consumer<MealItemDraft> onEditItemAction;
 
     // ── Initialization ─────────────────────────────────────────
     @Override
@@ -119,6 +114,10 @@ public class SavedMealEditorController extends FormController implements Initial
 
     public void setOnDeleteAction(Runnable onDeleteAction) {
         this.onDeleteAction = onDeleteAction;
+    }
+
+    public void setOnEditItemAction(Consumer<MealItemDraft> onEditItemAction) {
+        this.onEditItemAction = onEditItemAction;
     }
 
     public void setCreateMode() {
@@ -235,18 +234,32 @@ public class SavedMealEditorController extends FormController implements Initial
         refreshDraft();
     }
 
-    private void updateDraftItem(MealItemDraft currentItem, MealItemDraft updatedItem) {
+    public void updateDraftItem(MealItemDraft currentItem, double quantityGrams) {
         int index = draftItems.indexOf(currentItem);
 
         if (index == -1) {
             return;
         }
 
+        MealItemDraft updatedItem = new MealItemDraft(
+                currentItem.mealItemId(),
+                currentItem.foodId(),
+                currentItem.foodName(),
+                currentItem.brand(),
+                quantityGrams,
+                currentItem.servingSizeGrams(),
+                currentItem.caloriesPerServing(),
+                currentItem.proteinPerServing(),
+                currentItem.carbsPerServing(),
+                currentItem.fatPerServing()
+        );
+
         draftItems.set(index, updatedItem);
+
         refreshDraft();
     }
 
-    private void removeDraftItem(MealItemDraft item) {
+    public void removeDraftItem(MealItemDraft item) {
         draftItems.remove(item);
         refreshDraft();
     }
@@ -274,47 +287,14 @@ public class SavedMealEditorController extends FormController implements Initial
                     calories
             );
 
-            card.controller().setOnOpenAction(
-                    () -> openDraftItemDetails(item)
-            );
+            card.controller().setOnOpenAction(() -> {
+                    if (onEditItemAction != null) {
+                        onEditItemAction.accept(item);
+                    }
+            });
 
             itemsContainer.getChildren().add(card.root());
         }
-    }
-
-    private void openDraftItemDetails(MealItemDraft item) {
-        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
-
-        details.controller().setData(item);
-        details.controller().setCaption("Edit food");
-        details.controller().setConfirmButtonText("Save changes");
-
-        details.controller().setOnCancelAction(
-                this::closeItemDetails
-        );
-
-        details.controller().setOnConfirmAction(quantityGrams -> {
-            updateDraftItem(item, item.withQuantity(quantityGrams));
-
-            closeItemDetails();
-        });
-
-        details.controller().setOnRemoveAction(() -> {
-            removeDraftItem(item);
-            closeItemDetails();
-        });
-
-        itemDetailsContainer.getChildren().setAll(details.root());
-
-        setVisible(editorContainer, false);
-        setVisible(itemDetailsContainer, true);
-    }
-
-    private void closeItemDetails() {
-        itemDetailsContainer.getChildren().clear();
-
-        setVisible(itemDetailsContainer, false);
-        setVisible(editorContainer, true);
     }
 
     private void updateMacroPreview() {
@@ -463,44 +443,9 @@ public class SavedMealEditorController extends FormController implements Initial
             return;
         }
 
-        openDeleteConfirmation();
-    }
-
-    // ── Delete Confirmation ─────────────────────────────────────
-    private void openDeleteConfirmation() {
-        LoadedComponent<DeleteConfirmationController> confirmation = FxmlComponentLoader.load(AppConstants.Components.DELETE_CONFIRMATION);
-
-        String mealName = nameField.getText().trim();
-
-        confirmation.controller().setData(
-                "Delete meal?",
-                "Are you sure you want to delete \"" + mealName + "\"?",
-                "Delete"
-        );
-
-        confirmation.controller().setOnCancelAction(
-                this::closeDeleteConfirmation
-        );
-
-        confirmation.controller().setOnConfirmAction(() -> {
-            closeDeleteConfirmation();
-
-            if (onDeleteAction != null) {
-                onDeleteAction.run();
-            }
-        });
-
-        confirmationContainer.getChildren().setAll(
-                confirmation.root()
-        );
-
-        setVisible(confirmationContainer, true);
-    }
-
-    private void closeDeleteConfirmation() {
-        confirmationContainer.getChildren().clear();
-
-        setVisible(confirmationContainer, false);
+        if (onDeleteAction != null) {
+            onDeleteAction.run();
+        }
     }
 
     // ── Save/Delete State ─────────────────────────────────────────────
@@ -544,5 +489,9 @@ public class SavedMealEditorController extends FormController implements Initial
     // ── Getters ────────────────────────────────────────────────
     public Integer getMealId() {
         return mealId;
+    }
+
+    public String getMealName() {
+        return nameField.getText().trim();
     }
 }

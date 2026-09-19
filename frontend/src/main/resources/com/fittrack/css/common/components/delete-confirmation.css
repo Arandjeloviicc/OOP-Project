@@ -1,8 +1,19 @@
 @import "../../theme.css";
+@import "../base-view.css";
 @import "../form-controls.css";
 
 /* ========================================================== */
 /* == DELETE CONFIRMATION =================================== */
+/* ========================================================== */
+
+.delete-confirmation-overlay {
+    -fx-background-color: -app-modal-overlay;
+    -fx-alignment: center;
+    -fx-padding: 1.5em;
+}
+
+/* ========================================================== */
+/* == DIALOG =============================================== */
 /* ========================================================== */
 
 .delete-confirmation-dialog {

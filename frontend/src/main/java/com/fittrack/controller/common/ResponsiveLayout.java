@@ -1,6 +1,5 @@
 package com.fittrack.controller.common;
 
-import javafx.application.Platform;
 import javafx.scene.layout.Region;
 
 public interface ResponsiveLayout {
@@ -12,20 +11,18 @@ public interface ResponsiveLayout {
         observedRegion.widthProperty().addListener(
                 (observable, oldWidth, newWidth) -> {
                     double width = newWidth.doubleValue();
+
                     if (width > 50) {
                         updateWidthLayout(width < breakpoint);
                     }
                 }
         );
 
-        Platform.runLater(() ->
-                Platform.runLater(() -> {
-                    double width = observedRegion.getWidth();
-                    if (width > 50) {
-                        updateWidthLayout(width < breakpoint);
-                    }
-                })
-        );
+        double width = observedRegion.getWidth();
+
+        if (width > 50) {
+            updateWidthLayout(width < breakpoint);
+        }
     }
 
     // ── Height ─────────────────────────────────────────────────
@@ -42,14 +39,10 @@ public interface ResponsiveLayout {
                 }
         );
 
-        Platform.runLater(() ->
-                Platform.runLater(() -> {
-                    double height = observedRegion.getHeight();
+        double height = observedRegion.getHeight();
 
-                    if (height > 50) {
-                        updateHeightLayout(height < breakpoint);
-                    }
-                })
-        );
+        if (height > 50) {
+            updateHeightLayout(height < breakpoint);
+        }
     }
 }

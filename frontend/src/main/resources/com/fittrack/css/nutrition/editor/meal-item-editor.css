@@ -1,12 +1,16 @@
 @import "../../theme.css";
-@import "../../common/overlay.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
 
 /* ========================================================== */
 /* == FOOD EDITOR ========================================== */
 /* ========================================================== */
 
+.meal-item-editor-view {
+    -fx-pref-width: 43em;
+}
+
 .meal-item-editor {
-    -fx-max-width: 43em;
     -fx-spacing: 1.15em;
 }
 

@@ -1,4 +1,4 @@
-package com.fittrack.ui;
+package com.fittrack.ui.form;
 
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;

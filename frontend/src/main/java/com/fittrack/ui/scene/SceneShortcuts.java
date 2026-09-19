@@ -1,4 +1,4 @@
-package com.fittrack.ui;
+package com.fittrack.ui.scene;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;

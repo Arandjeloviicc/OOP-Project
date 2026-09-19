@@ -6,9 +6,9 @@ import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.model.profile.ProfileData;
-import com.fittrack.ui.DateOfBirthPickerConfigurer;
-import com.fittrack.ui.GenderToggleConfigurer;
-import com.fittrack.ui.SceneShortcuts;
+import com.fittrack.ui.form.DateOfBirthPickerConfigurer;
+import com.fittrack.ui.form.GenderToggleConfigurer;
+import com.fittrack.ui.scene.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import com.fittrack.validation.FitnessInputValidator;
 import javafx.css.PseudoClass;
@@ -29,11 +29,9 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     // Root
     @FXML private StackPane rootLayout;
     @FXML private VBox dialogContainer;
-    @FXML private StackPane contentHost;
     @FXML private GridPane formGrid;
 
     // ScrollPane
-    @FXML private ScrollPane scrollPane;
     @FXML private VBox contentContainer;
 
     // Groups
@@ -65,14 +63,13 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     private Runnable onCancelAction;
     private Consumer<PersonalInfoUpdateRequest> onSaveAction;
 
-    // Responsive
-    private static final int NARROW_BREAKPOINT = 430;
-    private static final int SHORT_BREAKPOINT = 540;
-    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
-    private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
+    // Change alignment to TOP_CENTER
+    private boolean narrowLayout;
+    private Consumer<Boolean> onNarrowLayoutChanged;
 
-    // Scroll Mode (Change when short responsive mode)
-    private boolean scrollMode;
+    // Responsive
+    private static final int NARROW_BREAKPOINT = 440;
+    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
 
     // ── Initialization ─────────────────────────────────────────────────
     @Override
@@ -81,9 +78,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         initializeControls();
         addListeners();
 
-        // Initialize Responsive
-        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
-        initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
+        setWideLayout();
 
         // Keyboard Shortcuts
         SceneShortcuts.forNode(rootLayout)
@@ -95,6 +90,10 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     private void initializeControls() {
         GenderToggleConfigurer.configure(genderGroup, maleButton, femaleButton);
         DateOfBirthPickerConfigurer.configure(dateOfBirthPicker);
+    }
+
+    public void initializeResponsiveLayout(Region observedRegion) {
+        initializeResponsiveWidthLayout(observedRegion, NARROW_BREAKPOINT);
     }
 
     private void addListeners() {
@@ -126,9 +125,19 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         this.onSaveAction = onSaveAction;
     }
 
+    public void setOnNarrowLayoutChanged(Consumer<Boolean> onNarrowLayoutChanged) {
+        this.onNarrowLayoutChanged = onNarrowLayoutChanged;
+
+        if (onNarrowLayoutChanged != null) {
+            onNarrowLayoutChanged.accept(narrowLayout);
+        }
+    }
+
     // ── Responsive ─────────────────────────────────────────────────
     @Override
     public void updateWidthLayout(boolean narrow) {
+        narrowLayout = narrow;
+
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
 
         if (narrow) {
@@ -144,26 +153,15 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
                     Region.USE_COMPUTED_SIZE
             );
         }
+
+        if (onNarrowLayoutChanged != null) {
+            onNarrowLayoutChanged.accept(narrow);
+        }
     }
 
     @Override
     public void updateHeightLayout(boolean shortLayout) {
-        rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
-
-        dialogContainer.prefHeightProperty().unbind();
-
-        if (shortLayout) {
-            enableScrollMode();
-
-            dialogContainer.prefHeightProperty()
-                    .bind(rootLayout.heightProperty());
-        } else {
-            disableScrollMode();
-
-            dialogContainer.setPrefHeight(
-                    Region.USE_COMPUTED_SIZE
-            );
-        }
+        // TODO document why this method is empty
     }
 
     private void setWideLayout() {
@@ -200,35 +198,6 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
 
             formGrid.getColumnConstraints().add(column);
         }
-    }
-
-    // ── ScrollPane Helpers ─────────────────────────────────────────────────
-    private void enableScrollMode() {
-        if (scrollMode) {
-            return;
-        }
-
-        contentHost.getChildren().remove(contentContainer);
-
-        scrollPane.setContent(contentContainer);
-        scrollPane.setManaged(true);
-        scrollPane.setVisible(true);
-
-        scrollMode = true;
-    }
-
-    private void disableScrollMode() {
-        if (!scrollMode) {
-            return;
-        }
-
-        scrollPane.setContent(null);
-        scrollPane.setManaged(false);
-        scrollPane.setVisible(false);
-
-        contentHost.getChildren().add(contentContainer);
-
-        scrollMode = false;
     }
 
     // ── Button Actions ─────────────────────────────────────────────────

@@ -3,12 +3,15 @@ package com.fittrack.coordinator.nutrition;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.nutrition.AddToMealController;
 import com.fittrack.controller.nutrition.DailyMealDetailsController;
-import com.fittrack.controller.nutrition.components.MealCopyDialogController;
+import com.fittrack.controller.nutrition.dialog.MealCopyDialogController;
+import com.fittrack.controller.popup.PopupAlignment;
+import com.fittrack.controller.popup.PopupOverflow;
+import com.fittrack.controller.popup.PopupShellController;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.MealType;
-import com.fittrack.ui.FxmlComponentLoader;
-import com.fittrack.ui.LoadedComponent;
-import com.fittrack.ui.OverlayManager;
+import com.fittrack.ui.loader.FxmlComponentLoader;
+import com.fittrack.ui.loader.LoadedComponent;
+import com.fittrack.ui.overlay.OverlayManager;
 import javafx.scene.Node;
 
 import java.time.LocalDate;
@@ -23,7 +26,7 @@ public class MealsCoordinator {
     private Runnable onOverlayOpening = () -> {};
     private Runnable onOverlayClosed = () -> {};
 
-    // ── Constructor ─────────────────────────────────────────────────
+    // ── Overlay Lifecycle ────────────────────────────────────────────
     public void setOverlayLifecycle(Runnable onOverlayOpening, Runnable onOverlayClosed) {
         this.onOverlayOpening = onOverlayOpening;
         this.onOverlayClosed = onOverlayClosed;
@@ -58,7 +61,14 @@ public class MealsCoordinator {
                 }
         );
 
-        showOverlay(addToMeal.root());
+        showAddToMealPopup(addToMeal.root());
+    }
+
+    private void showAddToMealPopup(Node root) {
+        PopupShellController shell = showPopup(root);
+
+        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
+        shell.setFillHeightOnNarrow(true);
     }
 
     // ── Meal Details Actions ─────────────────────────────────────────────────
@@ -81,7 +91,14 @@ public class MealsCoordinator {
                 }
         );
 
-        showOverlay(details.root());
+        showDailyMealDetailsPopup(details.root());
+    }
+
+    private void showDailyMealDetailsPopup(Node root) {
+        PopupShellController shell = showPopup(root);
+
+        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
+        shell.setFillHeightOnNarrow(true);
     }
 
     // ── ContextMenu Items Actions ─────────────────────────────────────────────────
@@ -90,9 +107,9 @@ public class MealsCoordinator {
 
         LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
 
-        addToMeal.controller().setSaveAsMealData(meal);
+        showAddToMealPopup(addToMeal.root());
 
-        showOverlay(addToMeal.root());
+        addToMeal.controller().setSaveAsMealData(meal);
     }
 
     public void openCopyFrom(MealType currentMealType, LocalDate currentDate, BiConsumer<MealType, LocalDate> onAvailabilityCheck, BiConsumer<MealType, LocalDate> onCopy, Runnable onClose) {
@@ -206,13 +223,21 @@ public class MealsCoordinator {
         closeOverlay();
     }
 
-    // ── ScrollPane Helpers ─────────────────────────────────────────────────
+    // ── Overlay Helpers ──────────────────────────────────────────────
     private void beforeOverlayOpen() {
         onOverlayOpening.run();
     }
 
     private void showOverlay(Node root) {
         OverlayManager.show(root, onOverlayClosed);
+    }
+
+    private PopupShellController showPopup(Node root) {
+        PopupShellController shell = OverlayManager.showInPopup(root, onOverlayClosed);
+
+        shell.setOverflow(PopupOverflow.CONTENT_MANAGED);
+
+        return shell;
     }
 
     private void closeOverlay() {

@@ -1,11 +1,15 @@
 @import "../../theme.css";
 @import "../../common/base-view.css";
 @import "../../common/form-controls.css";
-@import "../../common/overlay.css";
 
 /* ========================================================== */
 /* == MEAL COPY DIALOG ====================================== */
 /* ========================================================== */
+
+.meal-copy-root {
+    -fx-alignment: center;
+    -fx-background-color: -app-modal-overlay;
+}
 
 .meal-copy-dialog {
     -fx-pref-width: 32em;

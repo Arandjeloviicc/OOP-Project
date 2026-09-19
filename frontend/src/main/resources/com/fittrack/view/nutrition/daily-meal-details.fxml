@@ -11,10 +11,13 @@
            fx:controller="com.fittrack.controller.nutrition.DailyMealDetailsController"
            stylesheets="@../../css/nutrition/daily-meal-details.css"
            fx:id="rootLayout"
-           styleClass="popup-root">
+           maxWidth="Infinity"
+           maxHeight="Infinity"
+           styleClass="daily-meal-details-view">
 
-    <VBox fx:id="dialogContainer"
-          styleClass="popup-dialog, daily-meal-details-dialog">
+    <VBox maxWidth="Infinity"
+          maxHeight="Infinity"
+          styleClass="daily-meal-details-dialog">
 
         <!-- Header -->
         <HBox styleClass="daily-meal-details-header">
@@ -70,11 +73,5 @@
                 styleClass="action-btn, daily-meal-details-log-button"/>
 
     </VBox>
-
-    <!-- Update Meal Item -->
-    <VBox fx:id="foodDetailsContainer"
-          visible="false"
-          managed="false"
-          styleClass="popup-host"/>
 
 </StackPane>

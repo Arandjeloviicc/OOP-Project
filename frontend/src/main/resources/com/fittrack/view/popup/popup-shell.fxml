@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.popup.PopupShellController"
+           stylesheets="@../../css/popup/popup-shell.css"
+           styleClass="popup-shell-root">
+
+    <VBox fx:id="popupHost"
+          alignment="CENTER">
+
+        <StackPane fx:id="dialogContainer"
+                   maxWidth="-Infinity"
+                   maxHeight="-Infinity"
+                   styleClass="popup-shell-dialog">
+
+            <ScrollPane fx:id="scrollPane"
+                        fitToWidth="true"
+                        hbarPolicy="NEVER"
+                        styleClass="app-scroll">
+
+                <StackPane fx:id="contentHost"
+                           styleClass="popup-shell-content"/>
+            </ScrollPane>
+
+        </StackPane>
+
+    </VBox>
+
+</StackPane>

@@ -1,6 +1,6 @@
 package com.fittrack.controller.auth;
 
-import com.fittrack.ui.SceneShortcuts;
+import com.fittrack.ui.scene.SceneShortcuts;
 import javafx.scene.control.*;
 import com.fittrack.model.user.User;
 import com.fittrack.config.AppConstants;

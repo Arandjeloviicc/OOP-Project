@@ -8,120 +8,128 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.StackPane?>
 
-<VBox fx:id="rootLayout"
-      xmlns="http://javafx.com/javafx/22"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fittrack.controller.nutrition.editor.MealItemEditorController"
-      stylesheets="@../../../css/nutrition/editor/meal-item-editor.css"
-      maxHeight="-Infinity"
-      styleClass="popup-dialog, meal-item-editor">
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.editor.MealItemEditorController"
+           stylesheets="@../../../css/nutrition/editor/meal-item-editor.css"
+           styleClass="meal-item-editor-view">
 
-    <!-- Header -->
-    <HBox alignment="TOP_CENTER"
-          styleClass="meal-item-editor-header">
+    <VBox maxWidth="Infinity"
+          maxHeight="-Infinity"
+          StackPane.alignment="TOP_CENTER"
+          styleClass="meal-item-editor">
 
-        <VBox styleClass="meal-item-editor-title-group">
-            <Label fx:id="captionLabel"
-                   styleClass="meal-item-editor-caption"/>
+        <!-- Header -->
+        <HBox alignment="TOP_CENTER"
+              styleClass="meal-item-editor-header">
 
-            <Label fx:id="selectedFoodTitleLabel"
-                   text="Food name"
-                   styleClass="meal-item-editor-title"/>
-        </VBox>
+            <VBox styleClass="meal-item-editor-title-group">
+                <Label fx:id="captionLabel"
+                       styleClass="meal-item-editor-caption"/>
 
-        <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="selectedFoodTitleLabel"
+                       text="Food name"
+                       styleClass="meal-item-editor-title"/>
+            </VBox>
 
-    </HBox>
+            <Region HBox.hgrow="ALWAYS"/>
 
-    <!-- Meal -->
-    <VBox fx:id="mealContainer"
-          styleClass="field-group">
-        <Label text="Meal"
-               styleClass="field-label"/>
+        </HBox>
 
-        <ComboBox fx:id="mealComboBox"
-                  maxWidth="Infinity"
-                  styleClass="input-field, combo-box-field"/>
-    </VBox>
-
-    <!-- Servings -->
-    <HBox fx:id="servingRow"
-          styleClass="meal-item-editor-serving-row">
-
-        <!-- Serving size -->
-        <VBox fx:id="servingSizeContainer"
+        <!-- Meal -->
+        <VBox fx:id="mealContainer"
               styleClass="field-group">
-
-            <Label text="Serving size"
+            <Label text="Meal"
                    styleClass="field-label"/>
 
-            <ComboBox fx:id="servingSizeComboBox"
+            <ComboBox fx:id="mealComboBox"
                       maxWidth="Infinity"
                       styleClass="input-field, combo-box-field"/>
         </VBox>
 
-        <!-- Number of servings -->
-        <VBox fx:id="servingsContainer"
-              styleClass="field-group">
+        <!-- Servings -->
+        <HBox fx:id="servingRow"
+              styleClass="meal-item-editor-serving-row">
 
-            <Label text="Number of servings"
-                   styleClass="field-label"/>
+            <!-- Serving size -->
+            <VBox fx:id="servingSizeContainer"
+                  styleClass="field-group">
 
-            <TextField fx:id="servingsField"
-                       promptText="Enter a number of servings"
-                       maxWidth="Infinity"
-                       styleClass="input-field, text-field"/>
+                <Label text="Serving size"
+                       styleClass="field-label"/>
 
-            <Label fx:id="servingsMessage"
-                   styleClass="helper-label"
-                   wrapText="true"
-                   minHeight="-Infinity"
-                   maxHeight="Infinity"
-                   maxWidth="Infinity"/>
+                <ComboBox fx:id="servingSizeComboBox"
+                          maxWidth="Infinity"
+                          styleClass="input-field, combo-box-field"/>
+            </VBox>
+
+            <!-- Number of servings -->
+            <VBox fx:id="servingsContainer"
+                  styleClass="field-group">
+
+                <Label text="Number of servings"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="servingsField"
+                           promptText="Enter a number of servings"
+                           maxWidth="Infinity"
+                           styleClass="input-field, text-field"/>
+
+                <Label fx:id="servingsMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+            </VBox>
+
+        </HBox>
+
+        <!-- Nutrition preview -->
+        <VBox fx:id="nutrientPreview"
+              alignment="CENTER_LEFT">
+
+            <!-- Add Nutrition Preview Card -->
+
         </VBox>
 
-    </HBox>
+        <!-- Add/Update Button -->
+        <GridPane styleClass="meal-item-editor-actions">
 
-    <!-- Nutrition preview -->
-    <VBox fx:id="nutrientPreview"
-          alignment="CENTER_LEFT">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS"
+                                   minWidth="0"/>
+                <ColumnConstraints hgrow="ALWAYS"
+                                   minWidth="0"/>
+            </columnConstraints>
 
-        <!-- Add Nutrition Preview Card -->
+            <Button text="Cancel"
+                    maxWidth="Infinity"
+                    onAction="#handleCancel"
+                    styleClass="back-btn, meal-item-editor-action-button"
+                    GridPane.columnIndex="0"/>
+
+            <Button fx:id="confirmButton"
+                    maxWidth="Infinity"
+                    onAction="#handleConfirm"
+                    styleClass="action-btn, meal-item-editor-action-button"
+                    GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+        <!-- Remove Button -->
+        <Button fx:id="removeButton"
+                text="Remove Food"
+                maxWidth="Infinity"
+                visible="false"
+                managed="false"
+                onAction="#handleRemove"
+                styleClass="meal-item-editor-action-button, meal-item-editor-remove-button"/>
+
 
     </VBox>
 
-    <!-- Add/Update Button -->
-    <GridPane styleClass="meal-item-editor-actions">
-
-        <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS"
-                               minWidth="0"/>
-            <ColumnConstraints hgrow="ALWAYS"
-                               minWidth="0"/>
-        </columnConstraints>
-
-        <Button text="Cancel"
-                maxWidth="Infinity"
-                onAction="#handleCancel"
-                styleClass="back-btn, meal-item-editor-action-button"
-                GridPane.columnIndex="0"/>
-
-        <Button fx:id="confirmButton"
-                maxWidth="Infinity"
-                onAction="#handleConfirm"
-                styleClass="action-btn, meal-item-editor-action-button"
-                GridPane.columnIndex="1"/>
-
-    </GridPane>
-
-    <!-- Remove Button -->
-    <Button fx:id="removeButton"
-            text="Remove Food"
-            maxWidth="Infinity"
-            visible="false"
-            managed="false"
-            onAction="#handleRemove"
-            styleClass="meal-item-editor-action-button, meal-item-editor-remove-button"/>
-
-</VBox>
+</StackPane>

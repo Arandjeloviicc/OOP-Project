@@ -7,10 +7,10 @@ import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.model.nutrition.MealType;
-import com.fittrack.ui.FxmlComponentLoader;
-import com.fittrack.ui.LoadedComponent;
-import com.fittrack.ui.SceneShortcuts;
-import com.fittrack.ui.TextFieldValidators;
+import com.fittrack.ui.loader.FxmlComponentLoader;
+import com.fittrack.ui.loader.LoadedComponent;
+import com.fittrack.ui.scene.SceneShortcuts;
+import com.fittrack.ui.form.TextFieldValidators;
 import com.fittrack.util.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
@@ -27,7 +28,7 @@ import java.util.function.Consumer;
 
 public class MealItemEditorController extends FormController implements Initializable {
 
-    @FXML private VBox rootLayout;
+    @FXML private StackPane rootLayout;
 
     @FXML private Label captionLabel;
     @FXML private Label selectedFoodTitleLabel;

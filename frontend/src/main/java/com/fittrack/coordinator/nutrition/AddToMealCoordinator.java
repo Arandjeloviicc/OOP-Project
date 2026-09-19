@@ -1,9 +1,13 @@
 package com.fittrack.coordinator.nutrition;
 
 import com.fittrack.config.AppConstants;
+import com.fittrack.controller.common.components.DeleteConfirmationController;
 import com.fittrack.controller.nutrition.editor.FoodEditorController;
 import com.fittrack.controller.nutrition.editor.MealItemEditorController;
 import com.fittrack.controller.nutrition.editor.SavedMealEditorController;
+import com.fittrack.controller.popup.PopupAlignment;
+import com.fittrack.controller.popup.PopupOverflow;
+import com.fittrack.controller.popup.PopupShellController;
 import com.fittrack.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
@@ -11,11 +15,11 @@ import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.UpdateSavedMealRequest;
 import com.fittrack.dto.nutrition.meal.item.MealItemDraft;
 import com.fittrack.model.nutrition.MealType;
-import com.fittrack.ui.FxmlComponentLoader;
-import com.fittrack.ui.LoadedComponent;
+import com.fittrack.ui.loader.FxmlComponentLoader;
+import com.fittrack.ui.loader.LoadedComponent;
+import com.fittrack.ui.overlay.OverlayManager;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -23,27 +27,20 @@ import java.util.function.Consumer;
 
 public class AddToMealCoordinator {
 
-    // Containers
-    private final StackPane rootLayout;
-    private final VBox selectionContainer;
-    private final StackPane itemDetailsContainer;
-    private final StackPane editorContainer;
+    // Selection View
+    private final StackPane selectionRoot;
+
+    // Active Editor View
+    private Node activeEditorRoot;
 
     // Active Editors
     private SavedMealEditorController activeSavedMealEditor;
     private FoodEditorController activeFoodEditor;
     private MealItemEditorController activeMealItemEditor;
 
-    // Turn Off Responsive to not affect child popup
-    private final Consumer<Boolean> responsiveSuspension;
-
     // ── Constructor ──────────────────────────────────────────────────────
-    public AddToMealCoordinator(StackPane rootLayout, VBox selectionContainer, StackPane itemDetailsContainer, StackPane editorContainer, Consumer<Boolean> responsiveSuspension) {
-        this.rootLayout = rootLayout;
-        this.selectionContainer = selectionContainer;
-        this.itemDetailsContainer = itemDetailsContainer;
-        this.editorContainer = editorContainer;
-        this.responsiveSuspension = responsiveSuspension;
+    public AddToMealCoordinator(StackPane selectionRoot) {
+        this.selectionRoot = selectionRoot;
     }
 
     // ── State ──────────────────────────────────────────────────────
@@ -92,20 +89,47 @@ public class AddToMealCoordinator {
                 this::closeFoodDetails
         );
 
-        itemDetailsContainer.getChildren().setAll(details.root());
+        showMealItemEditorPopup(details.root());
+    }
 
-        setVisible(selectionContainer, false);
-        setVisible(editorContainer, false);
-        setVisible(itemDetailsContainer, true);
+    private void openDraftItemEditor(MealItemDraft item) {
+        if (activeSavedMealEditor == null) {
+            throw new IllegalStateException("No active saved meal editor.");
+        }
+
+        LoadedComponent<MealItemEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
+
+        MealItemEditorController editorController =
+                editor.controller();
+
+        activeMealItemEditor = editorController;
+
+        editorController.setData(item);
+        editorController.setCaption("Edit food");
+        editorController.setConfirmButtonText("Save changes");
+
+        editorController.setOnCancelAction(
+                this::returnToMealEditor
+        );
+
+        editorController.setOnConfirmAction(quantityGrams -> {
+            activeSavedMealEditor.updateDraftItem(item, quantityGrams);
+
+            returnToMealEditor();
+        });
+
+        editorController.setOnRemoveAction(() -> {
+            activeSavedMealEditor.removeDraftItem(item);
+
+            returnToMealEditor();
+        });
+
+        showMealItemEditorPopup(editor.root());
     }
 
     public void closeFoodDetails() {
         activeMealItemEditor = null;
-
-        itemDetailsContainer.getChildren().clear();
-
-        setVisible(itemDetailsContainer, false);
-        setVisible(selectionContainer, true);
+        showSelectionPopup();
     }
 
     // ── Saved Meal Editor ──────────────────────────────────────────
@@ -127,6 +151,10 @@ public class AddToMealCoordinator {
 
         editorController.setOnAddFoodAction(onAddFood);
 
+        editorController.setOnEditItemAction(
+                this::openDraftItemEditor
+        );
+
         editorController.setOnUpdateAction(request -> {
             editorController.setSaving(true);
 
@@ -135,15 +163,15 @@ public class AddToMealCoordinator {
             }
         });
 
-        editorController.setOnDeleteAction(() -> {
-            editorController.setDeleting(true);
+        editorController.setOnDeleteAction(
+                () -> openDeleteConfirmation(
+                        editorController,
+                        onDelete
+                )
+        );
 
-            if (onDelete != null) {
-                onDelete.run();
-            }
-        });
-
-        showEditor(editor.root());
+        activeEditorRoot = editor.root();
+        showSavedMealEditorPopup(editor.root());
     }
 
     public void openSaveAsMealEditor(MealResponse sourceMeal, Runnable onCancel, Runnable onAddFood, Consumer<CreateMealRequest> onCreate) {
@@ -154,6 +182,10 @@ public class AddToMealCoordinator {
 
         editorController.setCreateMode(sourceMeal);
 
+        editorController.setOnEditItemAction(
+                this::openDraftItemEditor
+        );
+
         editorController.setOnCancelAction(() -> {
             closeEditor();
 
@@ -172,7 +204,8 @@ public class AddToMealCoordinator {
             }
         });
 
-        showEditor(editor.root());
+        activeEditorRoot = editor.root();
+        showSavedMealEditorPopup(editor.root());
     }
 
     public void openCreateMeal(Runnable onCancel, Runnable onAddFood, Consumer<CreateMealRequest> onCreate) {
@@ -183,6 +216,10 @@ public class AddToMealCoordinator {
 
         editorController.setCreateMode();
 
+        editorController.setOnEditItemAction(
+                this::openDraftItemEditor
+        );
+
         editorController.setOnCancelAction(() -> {
             closeEditor();
 
@@ -201,27 +238,25 @@ public class AddToMealCoordinator {
             }
         });
 
-        showEditor(editor.root());
+        activeEditorRoot = editor.root();
+        showSavedMealEditorPopup(editor.root());
     }
 
-    public void returnToMealEditor() {
-        activeMealItemEditor = null;
+    private void showSavedMealEditorPopup(Node root) {
+        PopupShellController shell = OverlayManager.replaceInPopup(root);
 
-        itemDetailsContainer.getChildren().clear();
-
-        setVisible(itemDetailsContainer, false);
-        setVisible(selectionContainer, false);
-        setVisible(editorContainer, true);
+        shell.setOverflow(PopupOverflow.CONTENT_MANAGED);
+        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
+        shell.setFillHeightOnNarrow(true);
     }
 
     // ── Food Editor ────────────────────────────────────────────────
     public void openCreateFood(Consumer<CreateFoodRequest> onCreate) {
-        responsiveSuspension.accept(true);
-
         LoadedComponent<FoodEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.FOOD_EDITOR);
 
         FoodEditorController editorController = editor.controller();
         activeFoodEditor = editorController;
+        activeEditorRoot = editor.root();
 
         editorController.setCreateMode();
 
@@ -237,49 +272,89 @@ public class AddToMealCoordinator {
             }
         });
 
-        showEditor(editor.root());
+        showFoodEditorPopup(editor.root());
+    }
 
-        editorController.initializeResponsiveLayout(rootLayout);
+    private void showFoodEditorPopup(Node root) {
+        PopupShellController shell = OverlayManager.replaceInPopup(root);
+
+        shell.setOverflow(PopupOverflow.SHELL_SCROLL);
+        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
+        shell.setFillHeightOnNarrow(true);
+    }
+
+    // ── Delete Confirmation ─────────────────────────────────────────────────
+    private void openDeleteConfirmation(SavedMealEditorController editor, Runnable onDelete) {
+        LoadedComponent<DeleteConfirmationController> confirmation = FxmlComponentLoader.load(AppConstants.Components.DELETE_CONFIRMATION);
+
+        DeleteConfirmationController controller = confirmation.controller();
+
+        controller.setData(
+                "Delete meal?",
+                "Are you sure you want to delete \""
+                        + editor.getMealName()
+                        + "\"?",
+                "Delete"
+        );
+
+        controller.setOnCancelAction(
+                OverlayManager::closeModal
+        );
+
+        controller.setOnConfirmAction(() -> {
+            OverlayManager.closeModal();
+
+            if (onDelete != null) {
+                editor.setDeleting(true);
+                onDelete.run();
+            }
+        });
+
+        OverlayManager.showModal(
+                confirmation.root()
+        );
     }
 
     // ── Navigation ─────────────────────────────────────────────────
     public void showSelection() {
-        setVisible(editorContainer, false);
-        setVisible(itemDetailsContainer, false);
-        setVisible(selectionContainer, true);
-    }
-
-    private void showEditor(Node editorRoot) {
-        editorContainer.getChildren().setAll(editorRoot);
-
-        setVisible(selectionContainer, false);
-        setVisible(itemDetailsContainer, false);
-        setVisible(editorContainer, true);
+        showSelectionPopup();
     }
 
     public void closeEditor() {
-        boolean wasFoodEditor = activeFoodEditor != null;
-
-        editorContainer.getChildren().clear();
-
         activeSavedMealEditor = null;
         activeFoodEditor = null;
         activeMealItemEditor = null;
+        activeEditorRoot = null;
 
-        setVisible(editorContainer, false);
-        setVisible(selectionContainer, true);
+        showSelectionPopup();
+    }
 
-        if (wasFoodEditor) {
-            responsiveSuspension.accept(false);
+    public void returnToMealEditor() {
+        activeMealItemEditor = null;
+
+        if (activeEditorRoot == null) {
+            throw new IllegalStateException("No active meal editor.");
         }
+
+        showSavedMealEditorPopup(activeEditorRoot);
+    }
+
+    private void showSelectionPopup() {
+        PopupShellController shell = OverlayManager.replaceInPopup(selectionRoot);
+
+        shell.setOverflow(PopupOverflow.CONTENT_MANAGED);
+        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
+        shell.setFillHeightOnNarrow(true);
+    }
+
+    private void showMealItemEditorPopup(Node root) {
+        PopupShellController shell = OverlayManager.replaceInPopup(root);
+
+        shell.setOverflow(PopupOverflow.SHELL_SCROLL);
+        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
     }
 
     // ── Helpers ────────────────────────────────────────────────────
-    private void setVisible(Node node, boolean visible) {
-        node.setVisible(visible);
-        node.setManaged(visible);
-    }
-
     public boolean isEditingSavedMeal(Integer mealId) {
         return activeSavedMealEditor != null
                 && activeSavedMealEditor.getMealId() != null

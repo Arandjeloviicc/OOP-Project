@@ -2,20 +2,19 @@
 @import "../common/base-view.css";
 @import "../common/form-controls.css";
 @import "../common/scroll.css";
-@import "../common/overlay.css";
 
 /* ========================================================== */
-/* == DIALOG ================================================ */
+/* == DAILY MEAL DETAILS ==================================== */
 /* ========================================================== */
 
-.daily-meal-details-dialog {
+.daily-meal-details-view {
     -fx-pref-width: 42em;
     -fx-pref-height: 44em;
+    -fx-min-height: 0;
+}
 
-    -fx-max-width: 48em;
-    -fx-max-height: 50em;
-
-    -fx-padding: 2em;
+.daily-meal-details-dialog {
+    -fx-min-height: 0;
     -fx-spacing: 1.35em;
 }
 
@@ -89,6 +88,7 @@
 /* ========================================================== */
 
 .daily-meal-details-scroll {
+    -fx-min-height: 0;
     -fx-background-color: transparent;
 }
 

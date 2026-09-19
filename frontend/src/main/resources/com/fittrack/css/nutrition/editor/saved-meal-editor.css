@@ -1,20 +1,20 @@
 @import "../../theme.css";
 @import "../../common/base-view.css";
 @import "../../common/form-controls.css";
-@import "../../common/overlay.css";
 @import "../../common/scroll.css";
 
 /* ========================================================== */
 /* == MEAL EDITOR =========================================== */
 /* ========================================================== */
 
-.saved-meal-editor-dialog {
+.saved-meal-editor-view {
     -fx-pref-width: 42em;
-    -fx-pref-height: 48em;
+    -fx-pref-height: 64em;
+    -fx-min-height: 0;
+}
 
-    -fx-max-width: 48em;
-    -fx-max-height: 54em;
-
+.saved-meal-editor-dialog {
+    -fx-min-height: 0;
     -fx-spacing: 1.25em;
 }
 
@@ -67,6 +67,7 @@
 }
 
 .saved-meal-editor-scroll {
+    -fx-min-height: 0;
     -fx-background-color: transparent;
 }
 
@@ -99,8 +100,8 @@
     -fx-max-height: 3.3em;
 }
 
-.saved-meal-editor-root .back-btn.saved-meal-editor-action-button,
-.saved-meal-editor-root .action-btn.saved-meal-editor-action-button {
+.saved-meal-editor-dialog .back-btn.saved-meal-editor-action-button,
+.saved-meal-editor-dialog .action-btn.saved-meal-editor-action-button {
     -fx-background-radius: 1.65em;
     -fx-border-radius: 1.65em;
 }
@@ -125,22 +126,4 @@
 .saved-meal-editor-delete-button:hover {
     -fx-background-color: -app-danger-background;
     -fx-text-fill: -app-danger-text;
-}
-
-/* ========================================================== */
-/* == ITEM DETAILS ========================================== */
-/* ========================================================== */
-
-.saved-meal-editor-item-details-container {
-    -fx-alignment: center;
-}
-
-/* ========================================================== */
-/* == DELETE CONFIRMATION =================================== */
-/* ========================================================== */
-
-.saved-meal-editor-confirmation-container {
-    -fx-background-color: -app-modal-overlay;
-    -fx-alignment: center;
-    -fx-padding: 1.5em;
 }

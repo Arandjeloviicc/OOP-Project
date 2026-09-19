@@ -2,8 +2,8 @@ package com.fittrack.controller.profile;
 
 import com.fittrack.model.profile.ProfileSetupRequest;
 import com.fittrack.service.profile.ProfileSetupService;
-import com.fittrack.ui.DateOfBirthPickerConfigurer;
-import com.fittrack.ui.GenderToggleConfigurer;
+import com.fittrack.ui.form.DateOfBirthPickerConfigurer;
+import com.fittrack.ui.form.GenderToggleConfigurer;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import com.fittrack.controller.common.FormController;

@@ -1,31 +1,22 @@
 @import "../../theme.css";
 @import "../../common/base-view.css";
 @import "../../common/form-controls.css";
-@import "../../common/overlay.css";
-@import "../../common/scroll.css";
 
 /* ========================================================== */
 /* == FOOD EDITOR ====================================== */
 /* ========================================================== */
 
-.food-editor-root {
+.food-editor-view {
     -fx-pref-width: 40em;
     -fx-max-width: 40em;
+}
 
-    -fx-background-color: -app-background;
-    -fx-background-radius: 1.125em;
-
-    -fx-border-color: -app-input-border;
-    -fx-border-width: 1px;
-    -fx-border-radius: 1.125em;
-
-    -fx-padding: 2em;
-    -fx-spacing: 1.15em;
+.food-editor-root {
+    -fx-max-width: 40em;
 }
 
 .food-editor-content {
     -fx-spacing: 1em;
-    -fx-padding: 0 0.5em 0 0;
 }
 
 /* ========================================================== */
@@ -117,29 +108,4 @@
 .food-editor-delete-button:hover {
     -fx-background-color: -app-danger-background;
     -fx-text-fill: -app-danger-text;
-}
-
-/* ========================================================== */
-/* == NARROW ================================================ */
-/* ========================================================== */
-
-.food-editor-root:narrow {
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-border-width: 0;
-    -fx-padding: 1.65em;
-}
-
-.food-editor-root:narrow .food-editor-field-row {
-    -fx-spacing: 0.5em;
-}
-
-/* ========================================================== */
-/* == SHORT ================================================= */
-/* ========================================================== */
-
-.food-editor-root:short {
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
-    -fx-border-width: 0;
 }

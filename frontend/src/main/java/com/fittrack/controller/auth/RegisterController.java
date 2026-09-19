@@ -3,7 +3,7 @@ package com.fittrack.controller.auth;
 import com.fittrack.model.user.User;
 import com.fittrack.config.AppConstants;
 import com.fittrack.async.AsyncTaskRunner;
-import com.fittrack.ui.SceneShortcuts;
+import com.fittrack.ui.scene.SceneShortcuts;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

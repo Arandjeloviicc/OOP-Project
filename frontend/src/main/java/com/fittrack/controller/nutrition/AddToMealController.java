@@ -4,7 +4,6 @@ import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.cache.FoodSearchCache;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
-import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.nutrition.components.*;
 import com.fittrack.coordinator.nutrition.AddToMealCoordinator;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
@@ -21,11 +20,10 @@ import com.fittrack.model.nutrition.SearchSource;
 import com.fittrack.service.nutrition.FoodService;
 import com.fittrack.service.nutrition.MealService;
 import com.fittrack.service.nutrition.NutritionCalculationService;
-import com.fittrack.ui.FxmlComponentLoader;
-import com.fittrack.ui.LoadedComponent;
-import com.fittrack.ui.OverlayManager;
+import com.fittrack.ui.loader.FxmlComponentLoader;
+import com.fittrack.ui.loader.LoadedComponent;
+import com.fittrack.ui.overlay.OverlayManager;
 import javafx.animation.PauseTransition;
-import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -39,17 +37,12 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class AddToMealController extends FormController implements Initializable, ResponsiveLayout {
+public class AddToMealController extends FormController implements Initializable {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(AddToMealController.class);
 
-    // Root
     @FXML private StackPane rootLayout;
-
-    // Selection
-    @FXML private VBox selectionContainer;
-    @FXML private VBox selectionDialog;
 
     @FXML private Label titleLabel;
     @FXML private TextField searchField;
@@ -63,12 +56,6 @@ public class AddToMealController extends FormController implements Initializable
     @FXML private Label createPanelLabel;
 
     @FXML private VBox resultsContainer;
-
-    // Item Details
-    @FXML private StackPane itemDetailsContainer;
-
-    // Editor
-    @FXML private StackPane editorContainer;
 
     // Search Source Tabs
     private List<ToggleButton> searchTabs;
@@ -86,15 +73,6 @@ public class AddToMealController extends FormController implements Initializable
     // Search Helpers
     private final PauseTransition searchDebounce = new PauseTransition(Duration.millis(300));
 
-    // Responsive Helpers
-    private static final int NARROW_BREAKPOINT = 760;
-    private static final int SHORT_BREAKPOINT = 650;
-    private static final PseudoClass NARROW = PseudoClass.getPseudoClass("narrow");
-    private static final PseudoClass SHORT = PseudoClass.getPseudoClass("short");
-
-    // Turn Off Responsive to not affect child popup
-    private boolean suspendResponsiveLayout;
-
     // Service
     private final FoodService foodService = new FoodService();
     private final MealService mealService = new MealService();
@@ -103,17 +81,7 @@ public class AddToMealController extends FormController implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         // Coordinator
-        coordinator = new AddToMealCoordinator(
-                rootLayout,
-                selectionContainer,
-                itemDetailsContainer,
-                editorContainer,
-                this::setResponsiveLayoutSuspended
-        );
-
-        // Responsive Initialize
-        initializeResponsiveWidthLayout(rootLayout, NARROW_BREAKPOINT);
-        initializeResponsiveHeightLayout(rootLayout, SHORT_BREAKPOINT);
+        coordinator = new AddToMealCoordinator(rootLayout);
 
         initializeSearchTabs();
 
@@ -243,49 +211,6 @@ public class AddToMealController extends FormController implements Initializable
         }
     }
 
-    // ── Responsive Helpers ─────────────────────────────────────────────────
-    @Override
-    public void updateWidthLayout(boolean narrow) {
-        if (suspendResponsiveLayout) {
-            return;
-        }
-
-        rootLayout.pseudoClassStateChanged(NARROW, narrow);
-
-        if (narrow) {
-            selectionDialog.prefWidthProperty().bind(rootLayout.widthProperty());
-            selectionDialog.prefHeightProperty().bind(rootLayout.heightProperty());
-
-            itemDetailsContainer.prefWidthProperty().bind(rootLayout.widthProperty());
-            itemDetailsContainer.prefHeightProperty().bind(rootLayout.heightProperty());
-        } else {
-            selectionDialog.prefWidthProperty().unbind();
-            selectionDialog.prefHeightProperty().unbind();
-
-            itemDetailsContainer.prefWidthProperty().unbind();
-            itemDetailsContainer.prefHeightProperty().unbind();
-
-            selectionDialog.setPrefSize(
-                    Region.USE_COMPUTED_SIZE,
-                    Region.USE_COMPUTED_SIZE
-            );
-
-            itemDetailsContainer.setPrefSize(
-                    Region.USE_COMPUTED_SIZE,
-                    Region.USE_COMPUTED_SIZE
-            );
-        }
-    }
-
-    @Override
-    public void updateHeightLayout(boolean shortLayout) {
-        if (suspendResponsiveLayout) {
-            return;
-        }
-
-        rootLayout.pseudoClassStateChanged(SHORT, shortLayout);
-    }
-
     // ── Selection Loading ───────────────────────────────────────────────────
     private void loadSearchSource(SearchSource source) {
         switch (source) {
@@ -314,19 +239,6 @@ public class AddToMealController extends FormController implements Initializable
                 loadMyMeals(searchField.getText());
             }
         }
-    }
-
-    private void setResponsiveLayoutSuspended(boolean suspended) {
-        suspendResponsiveLayout = suspended;
-
-        if (suspended) {
-            rootLayout.pseudoClassStateChanged(NARROW, false);
-            rootLayout.pseudoClassStateChanged(SHORT, false);
-            return;
-        }
-
-        updateWidthLayout(rootLayout.getWidth() < NARROW_BREAKPOINT);
-        updateHeightLayout(rootLayout.getHeight() < SHORT_BREAKPOINT);
     }
 
     private void showCreateFoodPanel() {

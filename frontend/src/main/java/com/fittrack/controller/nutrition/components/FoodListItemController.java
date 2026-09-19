@@ -1,6 +1,6 @@
 package com.fittrack.controller.nutrition.components;
 
-import com.fittrack.ui.QuickAddFeedback;
+import com.fittrack.ui.feedback.QuickAddFeedback;
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

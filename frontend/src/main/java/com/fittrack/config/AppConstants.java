@@ -20,7 +20,7 @@ public final class AppConstants {
         public static final String MEASUREMENTS = "measurements/measurements-view.fxml";
         public static final String PROFILE = "profile/profile-view.fxml";
 
-        // PopUp Views
+        // Popup Views
         public static final String ADD_TO_MEAL = "nutrition/add-to-meal.fxml";
         public static final String DAILY_MEAL_DETAILS = "nutrition/daily-meal-details.fxml";
     }
@@ -28,6 +28,9 @@ public final class AppConstants {
     public static final class Components {
 
         private Components() {}
+
+        // Popup Shell
+        public static final String POPUP_SHELL = "popup/popup-shell.fxml";
 
         // Common
         public static final String DELETE_CONFIRMATION = "common/components/delete-confirmation.fxml";
@@ -39,7 +42,7 @@ public final class AppConstants {
         public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
         public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
-        public static final String MEAL_COPY_DIALOG = "nutrition/components/meal-copy-dialog.fxml";
+        public static final String MEAL_COPY_DIALOG = "nutrition/dialog/meal-copy-dialog.fxml";
         public static final String FOOD_EDITOR = "nutrition/editor/food-editor.fxml";
         public static final String MEAL_ITEM_EDITOR = "nutrition/editor/meal-item-editor.fxml";
         public static final String SAVED_MEAL_EDITOR = "nutrition/editor/saved-meal-editor.fxml";

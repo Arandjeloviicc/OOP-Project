@@ -1,19 +1,21 @@
 @import "../../theme.css";
 @import "../../common/base-view.css";
 @import "../../common/form-controls.css";
-@import "../../common/overlay.css";
-@import "../../common/scroll.css";
 
 /* ========================================================== */
 /* == PERSONAL INFO EDITOR ================================== */
 /* ========================================================== */
 
-.profile-personal-info-editor-root {
+.profile-personal-info-editor-view {
+    -fx-pref-width: 32em;
     -fx-max-width: 32em;
 }
 
+.profile-personal-info-editor-root {
+    -fx-max-width: 32em;
+}
 /* ========================================================== */
-/* == SCROLLPANE CONTENT ==================================== */
+/* == CONTENT =============================================== */
 /* ========================================================== */
 
 .profile-personal-info-editor-content {
@@ -111,18 +113,10 @@
 /* == NARROW ================================================ */
 /* ========================================================== */
 
-.popup-root:narrow .profile-personal-info-editor-content {
+.profile-personal-info-editor-view:narrow .profile-personal-info-editor-content {
     -fx-padding: 0 0.5em 0 0;
 }
 
-.popup-root:narrow .profile-personal-info-editor-grid {
+.profile-personal-info-editor-view:narrow .profile-personal-info-editor-grid {
     -fx-hgap: 0;
-}
-
-/* ========================================================== */
-/* == SHORT ================================================= */
-/* ========================================================== */
-
-.popup-root:short .profile-personal-info-editor-content {
-    -fx-padding: 0 0.5em 0 0;
 }

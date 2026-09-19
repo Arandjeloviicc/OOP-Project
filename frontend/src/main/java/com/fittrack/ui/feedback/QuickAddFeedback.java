@@ -1,4 +1,4 @@
-package com.fittrack.ui;
+package com.fittrack.ui.feedback;
 
 import javafx.animation.PauseTransition;
 import javafx.css.PseudoClass;

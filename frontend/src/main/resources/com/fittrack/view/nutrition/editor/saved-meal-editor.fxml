@@ -15,11 +15,14 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.fittrack.controller.nutrition.editor.SavedMealEditorController"
            stylesheets="@../../../css/nutrition/editor/saved-meal-editor.css"
-           styleClass="popup-host, saved-meal-editor-root">
+           maxWidth="Infinity"
+           maxHeight="Infinity"
+           styleClass="saved-meal-editor-view">
 
     <!-- Editor -->
-    <VBox fx:id="editorContainer"
-          styleClass="popup-dialog, saved-meal-editor-dialog">
+    <VBox maxWidth="Infinity"
+          maxHeight="Infinity"
+          styleClass="saved-meal-editor-dialog">
 
         <!-- Header -->
         <HBox styleClass="saved-meal-editor-header">
@@ -126,17 +129,5 @@
                 styleClass="saved-meal-editor-action-button, saved-meal-editor-delete-button"/>
 
     </VBox>
-
-    <!-- Edit one draft MealItem -->
-    <StackPane fx:id="itemDetailsContainer"
-               visible="false"
-               managed="false"
-               styleClass="popup-host, saved-meal-editor-item-details-container"/>
-
-    <!-- Delete confirmation -->
-    <StackPane fx:id="confirmationContainer"
-               visible="false"
-               managed="false"
-               styleClass="popup-host, popup-host-centered, saved-meal-editor-confirmation-container"/>
 
 </StackPane>
