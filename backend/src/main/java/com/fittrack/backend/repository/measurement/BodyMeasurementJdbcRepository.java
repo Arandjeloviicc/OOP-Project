@@ -26,7 +26,7 @@ public class BodyMeasurementJdbcRepository {
 
         return jdbcTemplate.query(
                 sql,
-                (rs, rowNum) -> new LatestBodyMeasurement(
+                (rs, _) -> new LatestBodyMeasurement(
                         rs.getObject("neck", Double.class),
                         rs.getObject("waist", Double.class),
                         rs.getObject("hip", Double.class)

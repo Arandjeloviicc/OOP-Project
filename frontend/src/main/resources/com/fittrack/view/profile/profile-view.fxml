@@ -41,7 +41,7 @@
                 <VBox fx:id="weightCardContainer"/>
 
                 <!-- Goals -->
-                <VBox fx:id="goalsCardContainer"/>
+                <VBox fx:id="nutritionGoalCardContainer"/>
 
                 <!-- Daily Targets -->
                 <VBox fx:id="targetsCardContainer"/>

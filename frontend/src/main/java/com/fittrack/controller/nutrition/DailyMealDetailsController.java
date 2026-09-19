@@ -6,9 +6,9 @@ import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.nutrition.components.MealItemCardController;
 import com.fittrack.controller.nutrition.editor.MealItemEditorController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
-import com.fittrack.controller.popup.PopupAlignment;
-import com.fittrack.controller.popup.PopupOverflow;
-import com.fittrack.controller.popup.PopupShellController;
+import com.fittrack.ui.popup.PopupAlignment;
+import com.fittrack.ui.popup.PopupOverflow;
+import com.fittrack.ui.popup.PopupShellController;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.item.UpdateMealItemRequest;
@@ -163,7 +163,7 @@ public class DailyMealDetailsController extends FormController implements Initia
             dataChanged = false;
         }
 
-        LoadedComponent<AddToMealController> addFood = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
+        LoadedComponent<AddToMealController> addFood = FxmlComponentLoader.load(AppConstants.Popups.ADD_TO_MEAL);
 
         AddToMealController controller = addFood.controller();
 
@@ -188,7 +188,7 @@ public class DailyMealDetailsController extends FormController implements Initia
 
     // ── Meal Item Editor ────────────────────────────────────────────
     private void openFoodDetails(MealItemResponse mealItem) {
-        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
+        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Popups.MEAL_ITEM_EDITOR);
 
         details.controller().setData(mealItem, mealType);
         details.controller().setCaption("Edit food");

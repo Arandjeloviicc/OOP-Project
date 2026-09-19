@@ -16,8 +16,7 @@
           StackPane.alignment="TOP_CENTER"
           styleClass="profile-personal-info-editor-root">
 
-        <VBox fx:id="contentContainer"
-              styleClass="profile-personal-info-editor-content">
+        <VBox styleClass="profile-personal-info-editor-content">
 
             <!-- Header -->
             <HBox alignment="CENTER_LEFT"

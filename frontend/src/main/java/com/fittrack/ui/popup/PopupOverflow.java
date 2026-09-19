@@ -1,4 +1,4 @@
-package com.fittrack.controller.popup;
+package com.fittrack.ui.popup;
 
 public enum PopupOverflow {
     SHELL_SCROLL,

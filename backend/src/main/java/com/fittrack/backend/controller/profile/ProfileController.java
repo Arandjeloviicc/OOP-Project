@@ -1,8 +1,11 @@
 package com.fittrack.backend.controller.profile;
 
 import com.fittrack.backend.dto.profile.ProfileResponse;
+import com.fittrack.backend.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.backend.dto.profile.editor.PersonalInfoUpdateRequest;
+import com.fittrack.backend.service.nutrition.NutritionGoalService;
 import com.fittrack.backend.service.profile.ProfileService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final NutritionGoalService nutritionGoalService;
 
-    public ProfileController(ProfileService profileService) {
+    public ProfileController(ProfileService profileService, NutritionGoalService nutritionGoalService) {
         this.profileService = profileService;
+        this.nutritionGoalService = nutritionGoalService;
     }
 
     @GetMapping("/user/{userId}")
@@ -23,7 +28,13 @@ public class ProfileController {
 
     @PutMapping("/user/{userId}/personal-info")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePersonalInfo(@PathVariable Integer userId, @RequestBody PersonalInfoUpdateRequest request) {
+    public void updatePersonalInfo(@PathVariable Integer userId, @Valid @RequestBody PersonalInfoUpdateRequest request) {
         profileService.updatePersonalInfo(userId, request);
+    }
+
+    @PutMapping("/user/{userId}/nutrition-goal")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateNutritionGoal(@PathVariable Integer userId, @Valid @RequestBody NutritionGoalUpdateRequest request) {
+        nutritionGoalService.updateGoal(userId, request);
     }
 }

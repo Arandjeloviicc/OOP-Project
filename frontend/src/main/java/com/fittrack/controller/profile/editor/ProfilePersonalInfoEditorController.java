@@ -31,9 +31,6 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     @FXML private VBox dialogContainer;
     @FXML private GridPane formGrid;
 
-    // ScrollPane
-    @FXML private VBox contentContainer;
-
     // Groups
     @FXML private VBox firstNameGroup;
     @FXML private VBox lastNameGroup;

@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class BodyMeasurementService {
+public class BodyFatService {
 
     private final BodyMeasurementJdbcRepository bodyMeasurementJdbcRepository;
     private final BodyFatCalculationService bodyFatCalculationService;
 
-    public BodyMeasurementService(BodyMeasurementJdbcRepository bodyMeasurementJdbcRepository, BodyFatCalculationService bodyFatCalculationService) {
+    public BodyFatService(BodyMeasurementJdbcRepository bodyMeasurementJdbcRepository, BodyFatCalculationService bodyFatCalculationService) {
         this.bodyMeasurementJdbcRepository = bodyMeasurementJdbcRepository;
         this.bodyFatCalculationService = bodyFatCalculationService;
     }
@@ -27,6 +27,14 @@ public class BodyMeasurementService {
         }
 
         LatestBodyMeasurement measurement = latestMeasurement.get();
+
+        if (measurement.neck() == null || measurement.waist() == null) {
+            return null;
+        }
+
+        if (gender == Gender.FEMALE && measurement.hip() == null) {
+            return null;
+        }
 
         return bodyFatCalculationService.calculate(
                 gender,

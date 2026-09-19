@@ -1,8 +1,10 @@
 package com.fittrack.coordinator.profile;
 
 import com.fittrack.config.AppConstants;
-import com.fittrack.controller.popup.PopupShellController;
+import com.fittrack.ui.popup.PopupShellController;
+import com.fittrack.controller.profile.editor.ProfileNutritionGoalEditorController;
 import com.fittrack.controller.profile.editor.ProfilePersonalInfoEditorController;
+import com.fittrack.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.ProfileData;
 import com.fittrack.ui.loader.FxmlComponentLoader;
@@ -15,10 +17,11 @@ public class ProfileCoordinator {
 
     // Active Editors
     private ProfilePersonalInfoEditorController activePersonalInfoEditor;
+    private ProfileNutritionGoalEditorController activeNutritionGoalEditor;
 
     // ── Personal Info ─────────────────────────────────────────────────
     public void openPersonalInfoEditor(ProfileData profile, Consumer<PersonalInfoUpdateRequest> onSave) {
-        LoadedComponent<ProfilePersonalInfoEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.PROFILE_PERSONAL_INFO_EDITOR);
+        LoadedComponent<ProfilePersonalInfoEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.PROFILE_PERSONAL_INFO_EDITOR);
 
         ProfilePersonalInfoEditorController controller = editor.controller();
 
@@ -37,13 +40,17 @@ public class ProfileCoordinator {
             }
         });
 
-        PopupShellController shell = OverlayManager.showInPopup(editor.root());
+        PopupShellController shell =
+                OverlayManager.showInPopup(
+                        editor.root(),
+                        () -> activePersonalInfoEditor = null
+                );
 
         controller.setOnNarrowLayoutChanged(
                 shell::setContentTopAlignmentRequested
         );
 
-        editor.controller().initializeResponsiveLayout(
+        controller.initializeResponsiveLayout(
                 shell.getRoot()
         );
     }
@@ -59,6 +66,50 @@ public class ProfileCoordinator {
         OverlayManager.close();
     }
 
-    // ── Next ─────────────────────────────────────────────────
+    // ── Nutrition  Goal ─────────────────────────────────────────────────
+    public void openNutritionGoalEditor(ProfileData profile, Consumer<NutritionGoalUpdateRequest> onSave) {
+        LoadedComponent<ProfileNutritionGoalEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.PROFILE_NUTRITION_GOAL_EDITOR);
 
+        ProfileNutritionGoalEditorController controller = editor.controller();
+
+        activeNutritionGoalEditor = controller;
+
+        controller.setData(profile);
+
+        controller.setOnCancelAction(
+                this::closeNutritionGoalEditor
+        );
+
+        controller.setOnSaveAction(request -> {
+            if (onSave != null) {
+                controller.setSaving(true);
+                onSave.accept(request);
+            }
+        });
+
+        PopupShellController shell =
+                OverlayManager.showInPopup(
+                        editor.root(),
+                        () -> activeNutritionGoalEditor = null
+                );
+
+        controller.setOnNarrowLayoutChanged(
+                shell::setContentTopAlignmentRequested
+        );
+
+        controller.initializeResponsiveLayout(
+                shell.getRoot()
+        );
+    }
+
+    public void setNutritionGoalSaving(boolean saving) {
+        if (activeNutritionGoalEditor != null) {
+            activeNutritionGoalEditor.setSaving(saving);
+        }
+    }
+
+    public void closeNutritionGoalEditor() {
+        activeNutritionGoalEditor = null;
+        OverlayManager.close();
+    }
 }

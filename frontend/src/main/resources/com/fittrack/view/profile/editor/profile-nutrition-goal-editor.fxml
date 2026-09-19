@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.profile.editor.ProfileNutritionGoalEditorController"
+           stylesheets="@../../../css/profile/editor/profile-nutrition-goal-editor.css"
+           styleClass="profile-nutrition-goal-editor-view">
+
+    <VBox fx:id="dialogContainer"
+          maxWidth="Infinity"
+          maxHeight="-Infinity"
+          StackPane.alignment="TOP_CENTER"
+          styleClass="profile-nutrition-goal-editor-root">
+
+        <VBox styleClass="profile-nutrition-goal-editor-content">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT"
+                  styleClass="profile-nutrition-goal-editor-header">
+
+                <VBox spacing="0.2">
+                    <Label text="Nutrition goal"
+                           styleClass="profile-nutrition-goal-editor-caption"/>
+
+                    <Label text="Edit goal settings"
+                           styleClass="profile-nutrition-goal-editor-title"/>
+                </VBox>
+
+            </HBox>
+
+            <!-- Fields -->
+            <GridPane fx:id="formGrid"
+                      styleClass="profile-nutrition-goal-editor-grid">
+
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+                </columnConstraints>
+
+                <!-- Goal type -->
+                <VBox fx:id="goalTypeGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="0"
+                      GridPane.rowIndex="0">
+
+                    <Label text="Goal"
+                           styleClass="field-label"/>
+
+                    <ComboBox fx:id="goalTypeComboBox"
+                              maxWidth="Infinity"
+                              promptText="Select your goal"
+                              styleClass="input-field, combo-box-field"/>
+
+                    <Label fx:id="goalTypeMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Activity level -->
+                <VBox fx:id="activityLevelGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="0">
+
+                    <Label text="Activity level"
+                           styleClass="field-label"/>
+
+                    <ComboBox fx:id="activityLevelComboBox"
+                              maxWidth="Infinity"
+                              promptText="Select activity level"
+                              styleClass="input-field, combo-box-field"/>
+
+                    <Label fx:id="activityLevelMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Goal weight -->
+                <VBox fx:id="goalWeightGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="0"
+                      GridPane.rowIndex="1">
+
+                    <Label text="Goal weight"
+                           styleClass="field-label"/>
+
+                    <StackPane>
+                        <TextField fx:id="goalWeightField"
+                                   maxWidth="Infinity"
+                                   promptText="Optional"
+                                   styleClass="input-field, text-field, profile-nutrition-goal-weight-field"/>
+
+                        <Label text="kg"
+                               mouseTransparent="true"
+                               StackPane.alignment="CENTER_RIGHT"
+                               styleClass="profile-nutrition-goal-weight-unit"/>
+                    </StackPane>
+
+                    <Label fx:id="goalWeightMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+                <!-- Weekly goal -->
+                <VBox fx:id="weeklyGoalGroup"
+                      styleClass="field-group"
+                      GridPane.columnIndex="1"
+                      GridPane.rowIndex="1">
+
+                    <Label text="Weekly goal"
+                           styleClass="field-label"/>
+
+                    <ComboBox fx:id="weeklyGoalComboBox"
+                              maxWidth="Infinity"
+                              promptText="Select weekly goal"
+                              styleClass="input-field, combo-box-field"/>
+
+                    <Label fx:id="weeklyGoalMessage"
+                           styleClass="helper-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           minHeight="-Infinity"
+                           maxHeight="Infinity"
+                           maxWidth="Infinity"/>
+                </VBox>
+
+            </GridPane>
+
+            <!-- Actions -->
+            <GridPane styleClass="profile-nutrition-goal-editor-actions">
+
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+
+                    <ColumnConstraints hgrow="ALWAYS"
+                                       minWidth="0"/>
+                </columnConstraints>
+
+                <Button text="Cancel"
+                        maxWidth="Infinity"
+                        focusTraversable="false"
+                        onAction="#handleCancel"
+                        styleClass="back-btn, profile-nutrition-goal-editor-action-button"
+                        GridPane.columnIndex="0"/>
+
+                <Button fx:id="saveButton"
+                        text="Save changes"
+                        maxWidth="Infinity"
+                        onAction="#handleSave"
+                        styleClass="action-btn, profile-nutrition-goal-editor-action-button"
+                        GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>

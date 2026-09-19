@@ -5,5 +5,4 @@ public record DailyNutritionTotals(
         double carbs,
         double fat,
         double protein
-) {
-}
+) {}

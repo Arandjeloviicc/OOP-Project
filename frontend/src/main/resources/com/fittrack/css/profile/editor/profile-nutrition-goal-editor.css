@@ -1,0 +1,115 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+
+/* ========================================================== */
+/* == NUTRITION GOAL EDITOR ================================ */
+/* ========================================================== */
+
+.profile-nutrition-goal-editor-view {
+    -fx-pref-width: 32em;
+    -fx-max-width: 32em;
+}
+
+.profile-nutrition-goal-editor-root {
+    -fx-max-width: 32em;
+}
+
+/* ========================================================== */
+/* == CONTENT =============================================== */
+/* ========================================================== */
+
+.profile-nutrition-goal-editor-content {
+    -fx-spacing: 1.15em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.profile-nutrition-goal-editor-header {
+    -fx-padding: 0 0 0.3em 0;
+}
+
+.profile-nutrition-goal-editor-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
+}
+
+.profile-nutrition-goal-editor-title {
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == FIELDS ================================================ */
+/* ========================================================== */
+
+.profile-nutrition-goal-editor-grid {
+    -fx-hgap: 0.8em;
+    -fx-vgap: 0;
+}
+
+.profile-nutrition-goal-editor-grid .field-group {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: -1;
+}
+
+.profile-nutrition-goal-editor-grid .helper-label,
+.profile-nutrition-goal-editor-grid .error-label {
+    -fx-min-width: 0;
+}
+
+/* ========================================================== */
+/* == GOAL WEIGHT =========================================== */
+/* ========================================================== */
+
+.profile-nutrition-goal-weight-field {
+    -fx-padding: 0.9em 3.2em 0.9em 1.15em;
+}
+
+.profile-nutrition-goal-weight-unit {
+    -fx-padding: 0 1.1em 0 0;
+
+    -fx-text-fill: -app-text-muted;
+    -fx-font-size: 0.9em;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.profile-nutrition-goal-editor-actions {
+    -fx-max-width: -1;
+    -fx-hgap: 0.65em;
+    -fx-padding: 0.65em 0 0 0;
+}
+
+.profile-nutrition-goal-editor-action-button {
+    -fx-font-size: 1em;
+
+    -fx-min-height: 3.3em;
+    -fx-pref-height: 3.3em;
+    -fx-max-height: 3.3em;
+}
+
+.profile-nutrition-goal-editor-root .back-btn.profile-nutrition-goal-editor-action-button,
+.profile-nutrition-goal-editor-root .action-btn.profile-nutrition-goal-editor-action-button {
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.profile-nutrition-goal-editor-view:narrow .profile-nutrition-goal-editor-content {
+    -fx-padding: 0 0.5em 0 0;
+}
+
+.profile-nutrition-goal-editor-view:narrow .profile-nutrition-goal-editor-grid {
+    -fx-hgap: 0;
+}

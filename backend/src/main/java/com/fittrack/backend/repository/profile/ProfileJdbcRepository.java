@@ -4,6 +4,7 @@ import com.fittrack.backend.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.backend.entity.profile.ActivityLevel;
 import com.fittrack.backend.entity.profile.Gender;
 import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.repository.profile.projection.PersonalInfoData;
 import com.fittrack.backend.repository.profile.projection.ProfileData;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,11 @@ public class ProfileJdbcRepository {
     }
 
     public Optional<ProfileData> findByUserId(Integer userId) {
-        //
+        // users (u) + user_profiles (up) - osnovni i licni podaci korisnika
+        // nutrition_goals (ng) - uzima se samo aktivan cilj korisnika (end_date IS NULL)
+        // current_weight (LATERAL JOIN) - najnoviji unet unos tezine korisnika iz weight_logs, sortirano po logged_at pa po id-u da se razresi slucaj kada su dva unosa logovana u istom trenutku
+        // start_weight (LATERAL JOIN) - tezina korisnika u trenutku kada je aktivan cilj kreiran (poslednji unos pre ili na ng.created_at), koristi se za racunanje napretka od pocetka cilja do danas
+        // LEFT JOIN - ako korisnik nema odgovarajuci unos tezine, current_weight/start_weight ostaju NULL umesto da ceo red bude izbacen iz rezultata
 
         String sql = """
                 SELECT
@@ -105,6 +110,36 @@ public class ProfileJdbcRepository {
         );
 
         return results.stream().findFirst();
+    }
+
+    public Optional<PersonalInfoData> findPersonalInfoByUserId(Integer userId) {
+        String sql = """
+            SELECT
+                first_name,
+                last_name,
+                date_of_birth,
+                gender,
+                height
+            FROM user_profiles
+            WHERE user_id = ?
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, _) -> new PersonalInfoData(
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getObject(
+                                "date_of_birth",
+                                java.time.LocalDate.class
+                        ),
+                        Gender.valueOf(
+                                resultSet.getString("gender")
+                        ),
+                        resultSet.getDouble("height")
+                ),
+                userId
+        ).stream().findFirst();
     }
 
     public int updatePersonalInfo(Integer userId, PersonalInfoUpdateRequest request) {

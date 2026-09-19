@@ -9,9 +9,7 @@ public class PasswordHasher {
 
     public static String hash(String password) {
         if (password == null) {
-            throw new IllegalArgumentException(
-                    "Password cannot be null."
-            );
+            throw new IllegalArgumentException("Password cannot be null.");
         }
 
         return BCrypt.hashpw(password, BCrypt.gensalt(LOG_ROUNDS));

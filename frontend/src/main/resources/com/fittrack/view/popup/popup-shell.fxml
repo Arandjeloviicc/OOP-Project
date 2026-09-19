@@ -7,7 +7,7 @@
 <StackPane fx:id="rootLayout"
            xmlns="http://javafx.com/javafx/22"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.fittrack.controller.popup.PopupShellController"
+           fx:controller="com.fittrack.ui.popup.PopupShellController"
            stylesheets="@../../css/popup/popup-shell.css"
            styleClass="popup-shell-root">
 

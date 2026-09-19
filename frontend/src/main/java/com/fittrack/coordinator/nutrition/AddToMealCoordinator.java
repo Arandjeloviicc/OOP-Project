@@ -5,9 +5,9 @@ import com.fittrack.controller.common.components.DeleteConfirmationController;
 import com.fittrack.controller.nutrition.editor.FoodEditorController;
 import com.fittrack.controller.nutrition.editor.MealItemEditorController;
 import com.fittrack.controller.nutrition.editor.SavedMealEditorController;
-import com.fittrack.controller.popup.PopupAlignment;
-import com.fittrack.controller.popup.PopupOverflow;
-import com.fittrack.controller.popup.PopupShellController;
+import com.fittrack.ui.popup.PopupAlignment;
+import com.fittrack.ui.popup.PopupOverflow;
+import com.fittrack.ui.popup.PopupShellController;
 import com.fittrack.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.dto.nutrition.meal.CreateMealRequest;
@@ -49,7 +49,7 @@ public class AddToMealCoordinator {
     }
 
     public void openFoodDetails(FoodResponse food, MealType mealType, Consumer<Double> onAddToDraft, BiConsumer<MealType, Double> onAddToMeal) {
-        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
+        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Popups.MEAL_ITEM_EDITOR);
 
         MealItemEditorController detailsController = details.controller();
         activeMealItemEditor = detailsController;
@@ -97,7 +97,7 @@ public class AddToMealCoordinator {
             throw new IllegalStateException("No active saved meal editor.");
         }
 
-        LoadedComponent<MealItemEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.MEAL_ITEM_EDITOR);
+        LoadedComponent<MealItemEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.MEAL_ITEM_EDITOR);
 
         MealItemEditorController editorController =
                 editor.controller();
@@ -134,7 +134,7 @@ public class AddToMealCoordinator {
 
     // ── Saved Meal Editor ──────────────────────────────────────────
     public void openSavedMealEditor(MealResponse meal, Runnable onCancel, Runnable onAddFood, Consumer<UpdateSavedMealRequest> onUpdate, Runnable onDelete) {
-        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
+        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.SAVED_MEAL_EDITOR);
 
         SavedMealEditorController editorController = editor.controller();
         activeSavedMealEditor = editorController;
@@ -175,7 +175,7 @@ public class AddToMealCoordinator {
     }
 
     public void openSaveAsMealEditor(MealResponse sourceMeal, Runnable onCancel, Runnable onAddFood, Consumer<CreateMealRequest> onCreate) {
-        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
+        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.SAVED_MEAL_EDITOR);
 
         SavedMealEditorController editorController = editor.controller();
         activeSavedMealEditor = editorController;
@@ -209,7 +209,7 @@ public class AddToMealCoordinator {
     }
 
     public void openCreateMeal(Runnable onCancel, Runnable onAddFood, Consumer<CreateMealRequest> onCreate) {
-        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.SAVED_MEAL_EDITOR);
+        LoadedComponent<SavedMealEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.SAVED_MEAL_EDITOR);
 
         SavedMealEditorController editorController = editor.controller();
         activeSavedMealEditor = editorController;
@@ -252,7 +252,7 @@ public class AddToMealCoordinator {
 
     // ── Food Editor ────────────────────────────────────────────────
     public void openCreateFood(Consumer<CreateFoodRequest> onCreate) {
-        LoadedComponent<FoodEditorController> editor = FxmlComponentLoader.load(AppConstants.Components.FOOD_EDITOR);
+        LoadedComponent<FoodEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.FOOD_EDITOR);
 
         FoodEditorController editorController = editor.controller();
         activeFoodEditor = editorController;
@@ -285,7 +285,7 @@ public class AddToMealCoordinator {
 
     // ── Delete Confirmation ─────────────────────────────────────────────────
     private void openDeleteConfirmation(SavedMealEditorController editor, Runnable onDelete) {
-        LoadedComponent<DeleteConfirmationController> confirmation = FxmlComponentLoader.load(AppConstants.Components.DELETE_CONFIRMATION);
+        LoadedComponent<DeleteConfirmationController> confirmation = FxmlComponentLoader.load(AppConstants.Popups.DELETE_CONFIRMATION);
 
         DeleteConfirmationController controller = confirmation.controller();
 

@@ -4,9 +4,9 @@ import com.fittrack.config.AppConstants;
 import com.fittrack.controller.nutrition.AddToMealController;
 import com.fittrack.controller.nutrition.DailyMealDetailsController;
 import com.fittrack.controller.nutrition.dialog.MealCopyDialogController;
-import com.fittrack.controller.popup.PopupAlignment;
-import com.fittrack.controller.popup.PopupOverflow;
-import com.fittrack.controller.popup.PopupShellController;
+import com.fittrack.ui.popup.PopupAlignment;
+import com.fittrack.ui.popup.PopupOverflow;
+import com.fittrack.ui.popup.PopupShellController;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.model.nutrition.MealType;
 import com.fittrack.ui.loader.FxmlComponentLoader;
@@ -36,7 +36,7 @@ public class MealsCoordinator {
     public void openAddToMeal(MealType mealType, LocalDate mealDate, Runnable onChanged) {
         beforeOverlayOpen();
 
-        LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
+        LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Popups.ADD_TO_MEAL);
 
         addToMeal.controller().setData(
                 mealType,
@@ -75,7 +75,7 @@ public class MealsCoordinator {
     public void openMealDetails(MealType mealType, LocalDate mealDate, MealResponse meal, Runnable onChanged) {
         beforeOverlayOpen();
 
-        LoadedComponent<DailyMealDetailsController> details = FxmlComponentLoader.load(AppConstants.Views.DAILY_MEAL_DETAILS);
+        LoadedComponent<DailyMealDetailsController> details = FxmlComponentLoader.load(AppConstants.Popups.DAILY_MEAL_DETAILS);
 
         details.controller().setData(
                 mealType,
@@ -105,7 +105,7 @@ public class MealsCoordinator {
     public void openSaveAsMeal(MealResponse meal) {
         beforeOverlayOpen();
 
-        LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Views.ADD_TO_MEAL);
+        LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Popups.ADD_TO_MEAL);
 
         showAddToMealPopup(addToMeal.root());
 
@@ -115,7 +115,7 @@ public class MealsCoordinator {
     public void openCopyFrom(MealType currentMealType, LocalDate currentDate, BiConsumer<MealType, LocalDate> onAvailabilityCheck, BiConsumer<MealType, LocalDate> onCopy, Runnable onClose) {
         beforeOverlayOpen();
 
-        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Components.MEAL_COPY_DIALOG);
+        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Popups.MEAL_COPY_DIALOG);
 
         MealCopyDialogController controller = copyDialog.controller();
 
@@ -168,7 +168,7 @@ public class MealsCoordinator {
     public void openCopyTo(MealType currentMealType, LocalDate currentDate, BiConsumer<MealType, LocalDate> onCopy) {
         beforeOverlayOpen();
 
-        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Components.MEAL_COPY_DIALOG);
+        LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Popups.MEAL_COPY_DIALOG);
 
         MealCopyDialogController controller = copyDialog.controller();
 

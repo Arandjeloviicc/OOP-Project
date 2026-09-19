@@ -2,6 +2,7 @@ package com.fittrack.backend.repository.profile;
 
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
 import com.fittrack.backend.dto.profile.ProfileSetupRequest;
+import com.fittrack.backend.exception.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -114,7 +115,7 @@ public class ProfileSetupJdbcRepository {
         );
 
         if (inserted == 0) {
-            throw new IllegalArgumentException("User not found.");
+            throw new ResourceNotFoundException("User not found.");
         }
     }
 }

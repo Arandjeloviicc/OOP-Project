@@ -1,7 +1,7 @@
 package com.fittrack.ui.overlay;
 
 import com.fittrack.config.AppConstants;
-import com.fittrack.controller.popup.PopupShellController;
+import com.fittrack.ui.popup.PopupShellController;
 import com.fittrack.ui.loader.FxmlComponentLoader;
 import com.fittrack.ui.loader.LoadedComponent;
 import javafx.scene.Node;
@@ -60,7 +60,7 @@ public final class OverlayManager {
     }
 
     private static PopupShellController createPopupShell(Node content) {
-        LoadedComponent<PopupShellController> shell = FxmlComponentLoader.load(AppConstants.Components.POPUP_SHELL);
+        LoadedComponent<PopupShellController> shell = FxmlComponentLoader.load(AppConstants.Popups.POPUP_SHELL);
 
         shell.controller().setContent(content);
 

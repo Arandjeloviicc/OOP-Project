@@ -5,5 +5,4 @@ import javafx.scene.Parent;
 public record ViewInstance(
         Parent root,
         Object controller
-) {
-}
+) {}

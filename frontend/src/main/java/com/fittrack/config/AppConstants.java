@@ -8,7 +8,6 @@ public final class AppConstants {
 
         private Views() {}
 
-        // Main Views
         public static final String LOGIN = "auth/login-view.fxml";
         public static final String REGISTER = "auth/register-view.fxml";
         public static final String PROFILE_SETUP = "profile/profile-setup-view.fxml";
@@ -19,21 +18,11 @@ public final class AppConstants {
         public static final String WORKOUTS = "workout/workouts-view.fxml";
         public static final String MEASUREMENTS = "measurements/measurements-view.fxml";
         public static final String PROFILE = "profile/profile-view.fxml";
-
-        // Popup Views
-        public static final String ADD_TO_MEAL = "nutrition/add-to-meal.fxml";
-        public static final String DAILY_MEAL_DETAILS = "nutrition/daily-meal-details.fxml";
     }
 
     public static final class Components {
 
         private Components() {}
-
-        // Popup Shell
-        public static final String POPUP_SHELL = "popup/popup-shell.fxml";
-
-        // Common
-        public static final String DELETE_CONFIRMATION = "common/components/delete-confirmation.fxml";
 
         // Nutrition
         public static final String DAILY_MEAL_CARD = "nutrition/components/daily-meal-card.fxml";
@@ -42,18 +31,36 @@ public final class AppConstants {
         public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
         public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
+
+        // Profile
+        public static final String PROFILE_WEIGHT_CARD = "profile/components/profile-weight-card.fxml";
+        public static final String PROFILE_NUTRITION_GOAL_CARD = "profile/components/profile-nutrition-goal-card.fxml";
+        public static final String PROFILE_TARGETS_CARD = "profile/components/profile-targets-card.fxml";
+        public static final String PROFILE_PERSONAL_INFO_CARD = "profile/components/profile-personal-info-card.fxml";
+        public static final String PROFILE_ACCOUNT_CARD = "profile/components/profile-account-card.fxml";
+    }
+
+    public static final class Popups {
+
+        private Popups() {}
+
+        // Popup Shell
+        public static final String POPUP_SHELL = "popup/popup-shell.fxml";
+
+        // Common
+        public static final String DELETE_CONFIRMATION = "common/components/delete-confirmation.fxml";
+
+        // Nutrition
+        public static final String ADD_TO_MEAL = "nutrition/add-to-meal.fxml";
+        public static final String DAILY_MEAL_DETAILS = "nutrition/daily-meal-details.fxml";
         public static final String MEAL_COPY_DIALOG = "nutrition/dialog/meal-copy-dialog.fxml";
         public static final String FOOD_EDITOR = "nutrition/editor/food-editor.fxml";
         public static final String MEAL_ITEM_EDITOR = "nutrition/editor/meal-item-editor.fxml";
         public static final String SAVED_MEAL_EDITOR = "nutrition/editor/saved-meal-editor.fxml";
 
         // Profile
-        public static final String PROFILE_WEIGHT_CARD = "profile/components/profile-weight-card.fxml";
-        public static final String PROFILE_GOALS_CARD = "profile/components/profile-goals-card.fxml";
-        public static final String PROFILE_TARGETS_CARD = "profile/components/profile-targets-card.fxml";
-        public static final String PROFILE_PERSONAL_INFO_CARD = "profile/components/profile-personal-info-card.fxml";
-        public static final String PROFILE_ACCOUNT_CARD = "profile/components/profile-account-card.fxml";
         public static final String PROFILE_PERSONAL_INFO_EDITOR = "profile/editor/profile-personal-info-editor.fxml";
+        public static final String PROFILE_NUTRITION_GOAL_EDITOR = "profile/editor/profile-nutrition-goal-editor.fxml";
     }
 
     public static final class Validation {
@@ -105,20 +112,17 @@ public final class AppConstants {
         public static final String HELPER_PASSWORD_MESSAGE = "At least %d characters".formatted(AppConstants.Validation.MIN_PASSWORD_LENGTH);
 
         // Profile setup view
-        // Invalid
         public static final String INVALID_FIRST_NAME_MESSAGE = "First name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
         public static final String INVALID_LAST_NAME_MESSAGE = "Last name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
         public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE = "Date must be in dd.MM.yyyy format.";
         public static final String INVALID_DATE_OF_BIRTH_AGE_MESSAGE = "Date of birth must indicate an age between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
         public static final String INVALID_GENDER_MESSAGE = "Please select your gender.";
 
-        // Helper
         public static final String HELPER_FIRST_NAME_MESSAGE = "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
         public static final String HELPER_LAST_NAME_MESSAGE = "%d–%d characters; letters, spaces, hyphens, and apostrophes allowed.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
         public static final String HELPER_DATE_OF_BIRTH_MESSAGE = "Use dd.MM.yyyy format. Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
 
         // Fitness goals
-        // Invalid
         public static final String INVALID_HEIGHT_MESSAGE = "Enter a height between %d and %d cm.".formatted(AppConstants.Validation.MIN_HEIGHT, AppConstants.Validation.MAX_HEIGHT);
         public static final String INVALID_WEIGHT_MESSAGE = "Enter a weight between %d and %d kg.".formatted(AppConstants.Validation.MIN_WEIGHT, AppConstants.Validation.MAX_WEIGHT);
         public static final String ACTIVITY_NOT_SELECTED_MESSAGE = "Select your activity level.";
@@ -127,7 +131,6 @@ public final class AppConstants {
         public static final String INVALID_GOAL_WEIGHT_LOSE_MESSAGE = "Goal weight should be lower than your current weight.";
         public static final String INVALID_GOAL_WEIGHT_GAIN_MESSAGE = "Goal weight should be higher than your current weight.";
 
-        // Helpers
         public static final String HELPER_HEIGHT_MESSAGE = "Height in centimeters.";
         public static final String HELPER_WEIGHT_MESSAGE = "Current weight in kilograms.";
         public static final String HELPER_ACTIVITY_MESSAGE = "Your typical activity level.";
@@ -136,7 +139,6 @@ public final class AppConstants {
         public static final String HELPER_WEEKLY_GOAL_MESSAGE = "Rate at which you want to reach your goal.";
 
         // Calculators
-        // Invalid
         public static final String INVALID_AGE_MESSAGE = "Age must be between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
         public static final String INVALID_BODY_FAT_MESSAGE = "Body fat must be between %d%% and %d%%.".formatted(AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE, AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE);
         public static final String INVALID_NECK_MESSAGE = "Neck circumference must be between %d and %d cm.".formatted(Validation.MIN_NECK_CIRCUMFERENCE, Validation.MAX_NECK_CIRCUMFERENCE);
@@ -144,7 +146,6 @@ public final class AppConstants {
         public static final String INVALID_WAIST_MESSAGE = "Waist circumference must be between %d and %d cm.".formatted(Validation.MIN_WAIST_CIRCUMFERENCE, Validation.MAX_WAIST_CIRCUMFERENCE);
         public static final String INVALID_HIP_MESSAGE = "Hip circumference must be between %d and %d cm.".formatted(Validation.MIN_HIP_CIRCUMFERENCE, Validation.MAX_HIP_CIRCUMFERENCE);
 
-        // Helpers
         public static final String HELPER_AGE_MESSAGE = "Between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
         public static final String HELPER_BODY_FAT_MESSAGE = "Optional. Between %d%% and %d%%.".formatted(AppConstants.Validation.MIN_BODY_FAT_PERCENTAGE, AppConstants.Validation.MAX_BODY_FAT_PERCENTAGE);
         public static final String HELPER_NECK_MESSAGE = "Enter a neck circumference between %d and %d cm.".formatted(Validation.MIN_NECK_CIRCUMFERENCE, Validation.MAX_NECK_CIRCUMFERENCE);
@@ -164,7 +165,6 @@ public final class AppConstants {
         public static final String INVALID_MACROS_EXCEED_SERVING_MESSAGE = "Carbs, fat, and protein combined cannot exceed the serving size.";
         public static final String INVALID_CALORIES_MISMATCH_MESSAGE = "Entered calories don't match the entered macronutrients.";
 
-        // Helpers
         public static final String HELPER_FOOD_NAME_MESSAGE = "The name of the food or product.";
         public static final String HELPER_BRAND_MESSAGE = "The brand of the food or product.";
         public static final String HELPER_FOOD_SERVING_SIZE_MESSAGE = "Serving size in grams.";
@@ -173,10 +173,8 @@ public final class AppConstants {
         public static final String HELPER_FOOD_FAT_MESSAGE = "Fat per serving, in grams.";
         public static final String HELPER_FOOD_PROTEIN_MESSAGE = "Protein per serving, in grams.";
 
-        // Create Food
+        // Create Meal
         public static final String INVALID_MEAL_NAME_MESSAGE = "Enter a meal name.";
-
-        // Helpers
         public static final String HELPER_MEAL_NAME_MESSAGE = "The name of the meal.";
     }
 }

@@ -1,4 +1,4 @@
-package com.fittrack.controller.popup;
+package com.fittrack.ui.popup;
 
 import com.fittrack.controller.common.ResponsiveLayout;
 import javafx.application.Platform;

@@ -3,6 +3,7 @@ package com.fittrack.backend.repository.nutrition.meal.item;
 import com.fittrack.backend.dto.nutrition.meal.item.CreateMealItemRequest;
 import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.backend.entity.nutrition.MealItem;
+import com.fittrack.backend.exception.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -268,7 +269,7 @@ public class MealItemJdbcRepository {
         );
 
         if (inserted == 0) {
-            throw new IllegalArgumentException("User or food not found.");
+            throw new ResourceNotFoundException("User or food not found.");
         }
     }
 
@@ -628,11 +629,11 @@ public class MealItemJdbcRepository {
         );
 
         if (result == null || !result.userExists()) {
-            throw new IllegalArgumentException("User not found.");
+            throw new ResourceNotFoundException("User not found.");
         }
 
         if (result.validCount() != result.requestedCount()) {
-            throw new IllegalArgumentException("Food not found.");
+            throw new ResourceNotFoundException("Food not found.");
         }
 
         if (result.insertedCount() != result.requestedCount()) {

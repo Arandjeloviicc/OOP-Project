@@ -2,7 +2,7 @@ package com.fittrack.controller.main;
 
 import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.ResponsiveLayout;
-import com.fittrack.controller.popup.PopupShellController;
+import com.fittrack.ui.popup.PopupShellController;
 import com.fittrack.model.view.ViewInstance;
 import com.fittrack.service.auth.AuthService;
 import com.fittrack.config.AppConstants;

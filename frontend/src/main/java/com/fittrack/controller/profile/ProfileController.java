@@ -7,6 +7,7 @@ import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.profile.components.*;
 import com.fittrack.coordinator.profile.ProfileCoordinator;
+import com.fittrack.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.ProfileData;
 import com.fittrack.service.auth.AuthService;
@@ -50,7 +51,7 @@ public class ProfileController extends NavigableController implements Initializa
 
     // Component Containers
     @FXML private VBox weightCardContainer;
-    @FXML private VBox goalsCardContainer;
+    @FXML private VBox nutritionGoalCardContainer;
     @FXML private VBox targetsCardContainer;
     @FXML private VBox personalInfoCardContainer;
     @FXML private VBox accountCardContainer;
@@ -60,7 +61,7 @@ public class ProfileController extends NavigableController implements Initializa
 
     // Cards
     private ProfileWeightCardController weightCardController;
-    private ProfileGoalsCardController goalsCardController;
+    private ProfileNutritionGoalCardController nutritionGoalCardController;
     private ProfileTargetsCardController targetsCardController;
     private ProfilePersonalInfoCardController personalInfoCardController;
     private ProfileAccountCardController accountCardController;
@@ -92,7 +93,7 @@ public class ProfileController extends NavigableController implements Initializa
     private void initializeComponents() {
         // Initialize cards
         initializeWeightCardController();
-        initializeGoalsCardController();
+        initializeNutritionGoalCardController();
         initializeTargetsCardController();
         initializePersonalInfoCardController();
         initializeAccountCardController();
@@ -109,12 +110,16 @@ public class ProfileController extends NavigableController implements Initializa
         weightCardContainer.getChildren().setAll(weightCard.root());
     }
 
-    private void initializeGoalsCardController() {
-        LoadedComponent<ProfileGoalsCardController> goalsCard = FxmlComponentLoader.load(AppConstants.Components.PROFILE_GOALS_CARD);
+    private void initializeNutritionGoalCardController() {
+        LoadedComponent<ProfileNutritionGoalCardController> nutritionGoalCard = FxmlComponentLoader.load(AppConstants.Components.PROFILE_NUTRITION_GOAL_CARD);
 
-        goalsCardController = goalsCard.controller();
+        nutritionGoalCardController = nutritionGoalCard.controller();
 
-        goalsCardContainer.getChildren().setAll(goalsCard.root());
+        nutritionGoalCardController.setOnEditAction(
+                this::openNutritionGoalEditor
+        );
+
+        nutritionGoalCardContainer.getChildren().setAll(nutritionGoalCard.root());
     }
 
     private void initializeTargetsCardController() {
@@ -169,7 +174,7 @@ public class ProfileController extends NavigableController implements Initializa
                 profile.goalWeight()
         );
 
-        goalsCardController.setData(
+        nutritionGoalCardController.setData(
                 profile.goalType().toString(),
                 formatWeeklyGoal(profile.weeklyGoal()),
                 profile.activityLevel().toString()
@@ -209,7 +214,7 @@ public class ProfileController extends NavigableController implements Initializa
         );
     }
 
-    // ── Editor Popup Actions ─────────────────────────────────────────────────
+    // ── Personal Info ─────────────────────────────────────────────────
     private void openPersonalInfoEditor() {
         if (profileData == null) {
             return;
@@ -240,6 +245,41 @@ public class ProfileController extends NavigableController implements Initializa
                     );
 
                     coordinator.setPersonalInfoSaving(false);
+                }
+        );
+    }
+
+    // ── Nutrition Goal ─────────────────────────────────────────────────
+    private void openNutritionGoalEditor() {
+        if (profileData == null) {
+            return;
+        }
+
+        coordinator.openNutritionGoalEditor(
+                profileData,
+                this::updateNutritionGoal
+        );
+    }
+
+    private void updateNutritionGoal(NutritionGoalUpdateRequest request) {
+        AsyncTaskRunner.run(
+                () -> {
+                    profileService.updateNutritionalGoal(request);
+                    return null;
+                },
+
+                ignored -> {
+                    coordinator.closeNutritionGoalEditor();
+                    loadProfile();
+                },
+
+                exception -> {
+                    log.error(
+                            "Failed to update nutritional goal.",
+                            exception
+                    );
+
+                    coordinator.setNutritionGoalSaving(false);
                 }
         );
     }

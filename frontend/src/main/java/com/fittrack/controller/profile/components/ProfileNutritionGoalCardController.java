@@ -3,11 +3,14 @@ package com.fittrack.controller.profile.components;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class ProfileGoalsCardController {
+public class ProfileNutritionGoalCardController {
 
     @FXML private Label goalTypeLabel;
     @FXML private Label weeklyPaceLabel;
     @FXML private Label activityLevelLabel;
+
+    // Action
+    private Runnable onEditAction;
 
     public void setData(String goalType, String weeklyPace, String activityLevel) {
         goalTypeLabel.setText(goalType);
@@ -15,8 +18,14 @@ public class ProfileGoalsCardController {
         activityLevelLabel.setText(activityLevel);
     }
 
+    public void setOnEditAction(Runnable onEditAction) {
+        this.onEditAction = onEditAction;
+    }
+
     @FXML
     private void handleEdit() {
-        // TODO document why this method is empty
+        if (onEditAction != null) {
+            onEditAction.run();
+        }
     }
 }

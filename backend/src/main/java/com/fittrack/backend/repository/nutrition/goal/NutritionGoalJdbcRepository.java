@@ -1,6 +1,10 @@
 package com.fittrack.backend.repository.nutrition.goal;
 
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
+import com.fittrack.backend.dto.profile.editor.NutritionGoalUpdateRequest;
+import com.fittrack.backend.entity.profile.ActivityLevel;
+import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.entity.profile.WeightGoal;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -96,6 +100,239 @@ public class NutritionGoalJdbcRepository {
                 date,
                 date,
                 date
+        );
+    }
+
+    public Optional<NutritionGoalRecalculationData> findRecalculationData(Integer userId) {
+        // user_profiles - osnovni podaci korisnika potrebni za obracun (datum rodjenja, pol, visina)
+        // nutrition_goals - uzima se samo aktivan cilj korisnika (end_date IS NULL)
+        // current_weight (LATERAL JOIN) - uzima najnoviji unet unos tezine korisnika iz weight_logs, sortirano po logged_at pa po id-u da se razresi slucaj kada su dva unosa logovana u istom trenutku
+        // LEFT JOIN - ako korisnik nema nijedan unos tezine, current_weight ostaje NULL umesto da se ceo red izbaci iz rezultata
+
+        String sql = """
+            SELECT
+                ng.id AS goal_id,
+
+                up.date_of_birth,
+                up.gender,
+                up.height,
+
+                current_weight.weight AS current_weight,
+
+                ng.activity_level,
+                ng.goal_type,
+                ng.goal_weight,
+                ng.weekly_goal,
+                ng.start_date
+
+            FROM user_profiles up
+
+            JOIN nutrition_goals ng
+                ON ng.user_id = up.user_id
+               AND ng.end_date IS NULL
+
+            LEFT JOIN LATERAL (
+                SELECT wl.weight
+                FROM weight_logs wl
+                WHERE wl.user_id = up.user_id
+                ORDER BY wl.logged_at DESC, wl.id DESC
+                LIMIT 1
+            ) current_weight ON TRUE
+
+            WHERE up.user_id = ?
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, _) -> new NutritionGoalRecalculationData(
+                        resultSet.getInt("goal_id"),
+
+                        resultSet.getObject(
+                                "date_of_birth",
+                                LocalDate.class
+                        ),
+                        Gender.valueOf(
+                                resultSet.getString("gender")
+                        ),
+                        resultSet.getDouble("height"),
+
+                        resultSet.getObject(
+                                "current_weight",
+                                Double.class
+                        ),
+
+                        ActivityLevel.valueOf(
+                                resultSet.getString("activity_level")
+                        ),
+                        WeightGoal.valueOf(
+                                resultSet.getString("goal_type")
+                        ),
+                        resultSet.getObject(
+                                "goal_weight",
+                                Double.class
+                        ),
+                        resultSet.getObject(
+                                "weekly_goal",
+                                Double.class
+                        ),
+
+                        resultSet.getObject(
+                                "start_date",
+                                LocalDate.class
+                        )
+                ),
+                userId
+        ).stream().findFirst();
+    }
+
+    public int insertGoalVersion(Integer userId, NutritionGoalRecalculationData data, NutritionTargets targets, LocalDate startDate) {
+        String sql = """
+            INSERT INTO nutrition_goals (
+                user_id,
+                activity_level,
+                goal_type,
+                goal_weight,
+                weekly_goal,
+
+                target_calories,
+                target_protein,
+                target_carbs,
+                target_fat,
+
+                start_date,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                userId,
+
+                data.activityLevel().name(),
+                data.goalType().name(),
+                data.goalWeight(),
+                data.weeklyGoal(),
+
+                targets.calories(),
+                targets.protein(),
+                targets.carbs(),
+                targets.fat(),
+
+                startDate
+        );
+    }
+
+    public int insertGoalVersion(Integer userId, NutritionGoalUpdateRequest request, NutritionTargets targets, LocalDate startDate) {
+        String sql = """
+            INSERT INTO nutrition_goals (
+                user_id,
+                activity_level,
+                goal_type,
+                goal_weight,
+                weekly_goal,
+
+                target_calories,
+                target_protein,
+                target_carbs,
+                target_fat,
+
+                start_date,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                userId,
+
+                request.activityLevel().name(),
+                request.goalType().name(),
+                request.goalWeight(),
+                request.weeklyGoal(),
+
+                targets.calories(),
+                targets.protein(),
+                targets.carbs(),
+                targets.fat(),
+
+                startDate
+        );
+    }
+
+    public int updateGoal(Integer goalId, NutritionGoalUpdateRequest request, NutritionTargets targets) {
+        String sql = """
+            UPDATE nutrition_goals
+            SET
+                activity_level = ?,
+                goal_type = ?,
+                goal_weight = ?,
+                weekly_goal = ?,
+
+                target_calories = ?,
+                target_protein = ?,
+                target_carbs = ?,
+                target_fat = ?,
+
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+              AND end_date IS NULL
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                request.activityLevel().name(),
+                request.goalType().name(),
+                request.goalWeight(),
+                request.weeklyGoal(),
+
+                targets.calories(),
+                targets.protein(),
+                targets.carbs(),
+                targets.fat(),
+
+                goalId
+        );
+    }
+
+    public int updateTargets(Integer goalId, NutritionTargets targets) {
+        String sql = """
+            UPDATE nutrition_goals
+            SET
+                target_calories = ?,
+                target_protein = ?,
+                target_carbs = ?,
+                target_fat = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+              AND end_date IS NULL
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                targets.calories(),
+                targets.protein(),
+                targets.carbs(),
+                targets.fat(),
+                goalId
+        );
+    }
+
+    public int closeGoal(Integer goalId, LocalDate endDate) {
+        String sql = """
+            UPDATE nutrition_goals
+            SET
+                end_date = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+              AND end_date IS NULL
+            """;
+
+        return jdbcTemplate.update(
+                sql,
+                endDate,
+                goalId
         );
     }
 }

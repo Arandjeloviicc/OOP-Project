@@ -6,6 +6,7 @@ import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.entity.nutrition.Meal;
 import com.fittrack.backend.entity.nutrition.MealItem;
 import com.fittrack.backend.entity.nutrition.MealKind;
+import com.fittrack.backend.exception.ResourceNotFoundException;
 import com.fittrack.backend.repository.nutrition.food.FoodRepository;
 import com.fittrack.backend.repository.nutrition.meal.item.MealItemJdbcRepository;
 import com.fittrack.backend.repository.nutrition.meal.item.MealItemRepository;
@@ -215,7 +216,7 @@ public class MealService {
                 );
 
                 if (food == null) {
-                    throw new IllegalArgumentException("Food not found.");
+                    throw new ResourceNotFoundException("Food not found.");
                 }
             }
 

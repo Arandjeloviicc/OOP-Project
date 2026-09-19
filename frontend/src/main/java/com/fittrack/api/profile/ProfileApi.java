@@ -2,6 +2,7 @@ package com.fittrack.api.profile;
 
 import com.fittrack.api.common.BaseApi;
 import com.fittrack.dto.profile.ProfileResponse;
+import com.fittrack.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 
 public class ProfileApi extends BaseApi {
@@ -20,6 +21,16 @@ public class ProfileApi extends BaseApi {
 
     public void updatePersonalInfo(Integer userId, PersonalInfoUpdateRequest request) {
         String url = API_URL + "/user/" + userId + "/personal-info";
+
+        apiClient.put(
+                url,
+                request,
+                204
+        );
+    }
+
+    public void updateNutritionalGoal(Integer userId, NutritionGoalUpdateRequest request) {
+        String url = API_URL + "/user/" + userId + "/nutrition-goal";
 
         apiClient.put(
                 url,

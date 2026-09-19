@@ -1,6 +1,6 @@
 package com.fittrack.controller.profile;
 
-import com.fittrack.model.profile.ProfileSetupRequest;
+import com.fittrack.model.profile.ProfileSetupData;
 import com.fittrack.service.profile.ProfileSetupService;
 import com.fittrack.ui.form.DateOfBirthPickerConfigurer;
 import com.fittrack.ui.form.GenderToggleConfigurer;
@@ -238,7 +238,7 @@ public class ProfileSetupController extends FormController implements Initializa
             goalWeightValue = goalWeight.isBlank() ? null : NumberUtils.parseDecimal(goalWeight);
         }
 
-        ProfileSetupRequest profileSetupRequest = new ProfileSetupRequest(
+        ProfileSetupData profileSetupRequest = new ProfileSetupData(
                 firstName,
                 lastName,
                 dateOfBirth,

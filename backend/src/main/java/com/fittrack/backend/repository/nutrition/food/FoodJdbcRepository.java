@@ -2,6 +2,7 @@ package com.fittrack.backend.repository.nutrition.food;
 
 import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
+import com.fittrack.backend.exception.ResourceNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -91,7 +92,7 @@ public class FoodJdbcRepository {
         return results.stream()
                 .findFirst()
                 .orElseThrow(() ->
-                        new IllegalArgumentException("User not found.")
+                        new ResourceNotFoundException("User not found.")
                 );
     }
 }

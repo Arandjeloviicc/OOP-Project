@@ -1,6 +1,7 @@
 package com.fittrack.service.profile;
 
 import com.fittrack.api.profile.ProfileApi;
+import com.fittrack.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.ProfileData;
 import com.fittrack.dto.profile.ProfileResponse;
@@ -49,6 +50,10 @@ public class ProfileService {
 
     public void updatePersonalInfo(PersonalInfoUpdateRequest request) {
         profileApi.updatePersonalInfo(currentUserId(), request);
+    }
+
+    public void updateNutritionalGoal(NutritionGoalUpdateRequest request) {
+        profileApi.updateNutritionalGoal(currentUserId(), request);
     }
 
     // ── Helpers ─────────────────────────────────────────────────

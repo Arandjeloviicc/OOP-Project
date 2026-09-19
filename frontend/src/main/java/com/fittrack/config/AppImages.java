@@ -6,6 +6,8 @@ import java.net.URL;
 
 public final class AppImages {
 
+    private AppImages() {}
+
     // Logos
     public static final Image APP_LOGO = load("/com/fittrack/images/logo/app-logo.png");
     public static final Image APP_LOGO_16 = load("/com/fittrack/images/logo/app-logo-16.png");
@@ -15,7 +17,6 @@ public final class AppImages {
     // Background
     public static final Image LOGIN_REGISTER_BG = load("/com/fittrack/images/login-register-bg-darker.png");
 
-    // TODO: Find copyright free icons
     // Sidebar Icons
     public static final Image DASHBOARD_ICON = load("/com/fittrack/images/icons/dashboard.png");
     public static final Image CALCULATORS_ICON = load("/com/fittrack/images/icons/calculators.png");
@@ -30,12 +31,12 @@ public final class AppImages {
     public static final Image DINNER_ICON = load("/com/fittrack/images/icons/meals/dinner.png");
     public static final Image SNACKS_ICON = load("/com/fittrack/images/icons/meals/snacks.png");
 
+    // Daily Meal Options
     public static final Image BOOKMARK_ICON = load("/com/fittrack/images/icons/bookmark.png");
     public static final Image COPY_FROM_ICON = load("/com/fittrack/images/icons/copyFrom.png");
     public static final Image COPY_TO_ICON = load("/com/fittrack/images/icons/copyTo.png");
 
-    private AppImages() {}
-
+    // ── Load Image ─────────────────────────────────────────────────
     private static Image load(String path) {
         URL resource = AppImages.class.getResource(path);
 
