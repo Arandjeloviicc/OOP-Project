@@ -72,6 +72,14 @@
                maxWidth="Infinity"
                styleClass="error-label, meal-copy-message"/>
 
+        <!-- Action Error -->
+        <Label fx:id="actionMessage"
+               visible="false"
+               managed="false"
+               wrapText="true"
+               maxWidth="Infinity"
+               styleClass="error-label, meal-copy-message"/>
+
         <!-- Action -->
         <Button fx:id="copyButton"
                 text="Copy"

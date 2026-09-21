@@ -48,7 +48,7 @@ public class AddToMealCoordinator {
         return activeSavedMealEditor != null;
     }
 
-    public void openFoodDetails(FoodResponse food, MealType mealType, Consumer<Double> onAddToDraft, BiConsumer<MealType, Double> onAddToMeal) {
+    public void openMealItemEditor(FoodResponse food, MealType mealType, Consumer<Double> onAddToDraft, BiConsumer<MealType, Double> onAddToMeal) {
         LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Popups.MEAL_ITEM_EDITOR);
 
         MealItemEditorController detailsController = details.controller();
@@ -389,9 +389,21 @@ public class AddToMealCoordinator {
         }
     }
 
+    public void showSavedMealEditorError(String message) {
+        if (activeSavedMealEditor != null) {
+            activeSavedMealEditor.showActionError(message);
+        }
+    }
+
     public void setFoodEditorSubmitting(boolean submitting) {
         if (activeFoodEditor != null) {
             activeFoodEditor.setSubmitting(submitting);
+        }
+    }
+
+    public void showFoodEditorError(String message) {
+        if (activeFoodEditor != null) {
+            activeFoodEditor.showActionError(message);
         }
     }
 

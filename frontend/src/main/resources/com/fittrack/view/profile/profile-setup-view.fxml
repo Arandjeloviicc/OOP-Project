@@ -141,7 +141,8 @@
                             <ColumnConstraints percentWidth="50"/>
                         </columnConstraints>
 
-                        <Button GridPane.columnIndex="0"
+                        <Button fx:id="nextButton"
+                                GridPane.columnIndex="0"
                                 maxWidth="Infinity"
                                 onAction="#handleNext"
                                 styleClass="action-btn"
@@ -293,6 +294,14 @@
                                maxWidth="Infinity"/>
 
                     </VBox>
+
+                    <Label fx:id="saveMessage"
+                           styleClass="error-label"
+                           visible="false"
+                           managed="false"
+                           wrapText="true"
+                           maxWidth="Infinity"/>
+
 
                     <GridPane maxWidth="Infinity"
                               styleClass="next-step-row">

@@ -44,6 +44,8 @@ public class FoodEditorController extends FormController implements Initializabl
     @FXML private TextField proteinField;
     @FXML private Label proteinMessage;
 
+    @FXML private Label actionMessage;
+
     @FXML private Button saveButton;
     @FXML private Button deleteFoodButton;
 
@@ -61,6 +63,8 @@ public class FoodEditorController extends FormController implements Initializabl
     }
 
     public void setCreateMode() {
+        clearActionError();
+
         titleLabel.setText("Create Food");
         saveButton.setText("Create food");
 
@@ -112,6 +116,8 @@ public class FoodEditorController extends FormController implements Initializabl
         if (isLoading(saveButton)) {
             return;
         }
+
+        clearActionError();
 
         if (!validateInputs()) {
             return;
@@ -321,6 +327,15 @@ public class FoodEditorController extends FormController implements Initializabl
 
     private void restoreProteinHelper() {
         setFieldMessage(proteinMessage, AppConstants.Messages.HELPER_FOOD_PROTEIN_MESSAGE, false, proteinField);
+    }
+
+    // ── Action Message Helpers ─────────────────────────────────────
+    public void showActionError(String message) {
+        setFormMessage(actionMessage, message, true);
+    }
+
+    public void clearActionError() {
+        clearFormMessage(actionMessage);
     }
 
     // ── Specific Error Helpers ─────────────────────────────────────────────────

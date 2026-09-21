@@ -40,6 +40,7 @@ public class MealItemEditorController extends FormController implements Initiali
     @FXML private ComboBox<String> servingSizeComboBox;
     @FXML private TextField servingsField;
     @FXML private Label servingsMessage;
+    @FXML private Label actionMessage;
     @FXML private VBox nutrientPreview;
     @FXML private Button confirmButton;
     @FXML private Button removeButton;
@@ -70,6 +71,8 @@ public class MealItemEditorController extends FormController implements Initiali
 
     // ── Set Data ─────────────────────────────────────────────────
     public void setData(FoodResponse food, MealType mealType) {
+        clearActionError();
+
         selectedFood = food;
         selectedMealItem = null;
         selectedDraftItem = null;
@@ -95,6 +98,8 @@ public class MealItemEditorController extends FormController implements Initiali
     }
 
     public void setData(MealItemResponse mealItem, MealType mealType) {
+        clearActionError();
+
         selectedMealItem = mealItem;
         selectedFood = null;
         selectedDraftItem = null;
@@ -122,6 +127,8 @@ public class MealItemEditorController extends FormController implements Initiali
     }
 
     public void setData(MealItemDraft item) {
+        clearActionError();
+
         selectedDraftItem = item;
         selectedFood = null;
         selectedMealItem = null;
@@ -146,6 +153,8 @@ public class MealItemEditorController extends FormController implements Initiali
     }
 
     public void setDraftData(FoodResponse food) {
+        clearActionError();
+
         selectedFood = food;
         selectedMealItem = null;
         selectedDraftItem = null;
@@ -206,6 +215,8 @@ public class MealItemEditorController extends FormController implements Initiali
             return;
         }
 
+        clearActionError();
+
         String servingsText = servingsField.getText();
 
         if (servingsText.isEmpty()) {
@@ -243,6 +254,8 @@ public class MealItemEditorController extends FormController implements Initiali
         if (isSubmitting()) {
             return;
         }
+
+        clearActionError();
 
         if (onRemoveAction != null) {
             onRemoveAction.run();
@@ -408,5 +421,14 @@ public class MealItemEditorController extends FormController implements Initiali
 
     private void restoreServingsHelper() {
         setFieldMessage(servingsMessage, "", false, servingsField);
+    }
+
+    // ── Action Message Helpers ─────────────────────────────────────────────────
+    public void showActionError(String message) {
+        setFormMessage(actionMessage, message, true);
+    }
+
+    public void clearActionError() {
+        clearFormMessage(actionMessage);
     }
 }

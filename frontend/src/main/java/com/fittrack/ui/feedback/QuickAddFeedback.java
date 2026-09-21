@@ -11,8 +11,7 @@ public class QuickAddFeedback {
     private static final PseudoClass SUCCESS = PseudoClass.getPseudoClass("success");
 
     private final Button button;
-    private final PauseTransition successDelay =
-            new PauseTransition(Duration.seconds(1));
+    private final PauseTransition successDelay = new PauseTransition(Duration.seconds(1));
 
     public QuickAddFeedback(Button button) {
         this.button = button;

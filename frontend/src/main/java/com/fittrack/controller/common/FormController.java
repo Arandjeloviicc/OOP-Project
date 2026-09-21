@@ -40,6 +40,25 @@ public abstract class FormController extends NavigableController {
         }
     }
 
+    protected void setFormMessage(Label messageLabel, String message, boolean error) {
+        messageLabel.setText(message);
+        setVisible(messageLabel, true);
+
+        messageLabel.getStyleClass().removeAll(
+                "helper-label",
+                "error-label"
+        );
+
+        messageLabel.getStyleClass().add(
+                error ? "error-label" : "helper-label"
+        );
+    }
+
+    protected void clearFormMessage(Label messageLabel) {
+        messageLabel.setText("");
+        setVisible(messageLabel, false);
+    }
+
     // Shake text fields when there is an error
     protected void shake(Control node) {
         TranslateTransition t = new TranslateTransition(Duration.millis(55), node);

@@ -4,6 +4,7 @@ import com.fittrack.model.profile.ProfileSetupData;
 import com.fittrack.service.profile.ProfileSetupService;
 import com.fittrack.ui.form.DateOfBirthPickerConfigurer;
 import com.fittrack.ui.form.GenderToggleConfigurer;
+import com.fittrack.ui.scene.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import com.fittrack.controller.common.FormController;
@@ -18,6 +19,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
@@ -54,6 +56,7 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private ToggleGroup genderGroup;
     @FXML private ToggleButton maleButton;
     @FXML private ToggleButton femaleButton;
+    @FXML private Button nextButton;
 
     // Fitness goals step
     @FXML private VBox goalWeightBox;
@@ -71,6 +74,7 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private Label goalWeightMessage;
     @FXML private ComboBox<Double> weeklyGoalComboBox;
     @FXML private Label weeklyGoalMessage;
+    @FXML private Label saveMessage;
     @FXML private Button finishButton;
 
     // Adding PseudoClass to ComboBox (Change text color when nothing is selected)
@@ -111,10 +115,46 @@ public class ProfileSetupController extends FormController implements Initializa
 
         // Listeners
         addListeners();
+
+        // Keyboard shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEscape(this::handleEscapeShortcut)
+                .onEnter(this::handleEnterShortcut);
     }
 
+    // ── Keyboard Shortcuts ─────────────────────────────────────────────────
+    private void handleEscapeShortcut() {
+        if (fitnessGoalsStep.isVisible()) {
+            handleBack();
+        }
+    }
+
+    private void handleEnterShortcut() {
+        if (personalInfoStep.isVisible()) {
+            handleNext();
+            return;
+        }
+
+        if (fitnessGoalsStep.isVisible()) {
+            handleFinish();
+        }
+    }
+
+    // ── Button Actions ─────────────────────────────────────────────────
     @FXML
-    public void handleNext() {
+    private void handleNext() {
+        if (!validatePersonalInfoStep()) {
+            return;
+        }
+
+        // Hide Step 1 page
+        setVisible(personalInfoStep, false);
+
+        // Show Step 2 page
+        setVisible(fitnessGoalsStep, true);
+    }
+
+    private boolean validatePersonalInfoStep() {
         String firstName = firstNameField.getText().trim();
         String lastName = lastNameField.getText().trim();
 
@@ -137,20 +177,17 @@ public class ProfileSetupController extends FormController implements Initializa
             valid = false;
         }
 
-        if (!valid) return;
-
-        // Hide Step 1 page
-        setVisible(personalInfoStep, false);
-
-        // Show Step 2 page
-        setVisible(fitnessGoalsStep, true);
+        return valid;
     }
 
     @FXML
-    public void handleBack() {
+    private void handleBack() {
         if (isLoading(finishButton)) {
             return;
         }
+
+        // Error clearance
+        clearFormMessage(saveMessage);
 
         // Hide Step 2 page
         setVisible(fitnessGoalsStep, false);
@@ -160,11 +197,74 @@ public class ProfileSetupController extends FormController implements Initializa
     }
 
     @FXML
-    public void handleFinish() {
+    private void handleFinish() {
         if (isLoading(finishButton)) {
             return;
         }
 
+        clearSaveError();
+
+        if (!validateFitnessGoalsStep()) {
+            return;
+        }
+
+        setLoading(finishButton, "Saving...");
+
+        String firstName = firstNameField.getText().trim();
+        String lastName = lastNameField.getText().trim();
+        LocalDate dateOfBirth = dateOfBirthPicker.getValue();
+        Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
+
+        double heightValue = NumberUtils.parseDecimal(heightField.getText().trim());
+        double weightValue = NumberUtils.parseDecimal(weightField.getText().trim());
+        ActivityLevel activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
+        WeightGoal goalType = goalTypeComboBox.getSelectionModel().getSelectedItem();
+        String goalWeight = goalWeightField.getText().trim();
+        Double goalWeightValue;
+        Double weeklyGoal = weeklyGoalComboBox.getSelectionModel().getSelectedItem();
+
+        if (goalType == MAINTAIN_WEIGHT) {
+            goalWeightValue = null;
+            weeklyGoal = null;
+        } else {
+            goalWeightValue = goalWeight.isBlank() ? null : NumberUtils.parseDecimal(goalWeight);
+        }
+
+        ProfileSetupData profileSetupData = new ProfileSetupData(
+                firstName,
+                lastName,
+                dateOfBirth,
+                gender,
+                heightValue,
+                activityLevel,
+                goalType,
+                goalWeightValue,
+                weeklyGoal,
+                weightValue
+        );
+
+        AsyncTaskRunner.run(
+            () -> {
+                profileSetupService.completeSetup(profileSetupData);
+                return null;
+            },
+
+            ignored -> {
+                log.info("Profile setup completed.");
+                navigateTo(AppConstants.Views.MAIN_LAYOUT);
+            },
+
+                exception -> {
+                    log.error("Failed to complete profile setup.", exception);
+
+                    resetLoading(finishButton);
+
+                    showSaveError("Failed to save profile. Please try again.");
+             }
+        );
+    }
+
+    private boolean validateFitnessGoalsStep() {
         String height = heightField.getText().trim();
         String weight = weightField.getText().trim();
         ActivityLevel activityLevel = activityLevelComboBox.getSelectionModel().getSelectedItem();
@@ -199,8 +299,8 @@ public class ProfileSetupController extends FormController implements Initializa
         }
 
         if ((goalType == LOSE_WEIGHT || goalType == GAIN_WEIGHT)
-        && FitnessInputValidator.isWeightValid(weight)
-        && !isGoalWeightValid(goalWeight, weight, goalType)) {
+                && FitnessInputValidator.isWeightValid(weight)
+                && !isGoalWeightValid(goalWeight, weight, goalType)) {
 
             String message = goalType == LOSE_WEIGHT
                     ? AppConstants.Messages.INVALID_GOAL_WEIGHT_LOSE_MESSAGE
@@ -212,62 +312,13 @@ public class ProfileSetupController extends FormController implements Initializa
         }
 
         if ((goalType == LOSE_WEIGHT || goalType == GAIN_WEIGHT)
-            && weeklyGoal == null) {
+                && weeklyGoal == null) {
             showWeeklyGoalMessage();
             shake(weeklyGoalComboBox);
             valid = false;
         }
 
-        if (!valid) return;
-
-        setLoading(finishButton, "Saving...");
-
-        String firstName = firstNameField.getText().trim();
-        String lastName = lastNameField.getText().trim();
-        LocalDate dateOfBirth = dateOfBirthPicker.getValue();
-        Gender gender = (Gender) genderGroup.getSelectedToggle().getUserData();
-        double heightValue = NumberUtils.parseDecimal(height);
-        double weightValue = NumberUtils.parseDecimal(weight);
-        Double goalWeightValue;
-        Double weeklyGoalValue = weeklyGoal;
-
-        if (goalType == MAINTAIN_WEIGHT) {
-            goalWeightValue = null;
-            weeklyGoalValue = null;
-        } else {
-            goalWeightValue = goalWeight.isBlank() ? null : NumberUtils.parseDecimal(goalWeight);
-        }
-
-        ProfileSetupData profileSetupRequest = new ProfileSetupData(
-                firstName,
-                lastName,
-                dateOfBirth,
-                gender,
-                heightValue,
-                activityLevel,
-                goalType,
-                goalWeightValue,
-                weeklyGoalValue,
-                weightValue
-        );
-
-        AsyncTaskRunner.run(
-            () -> {
-                profileSetupService.completeSetup(profileSetupRequest);
-                return null;
-            },
-
-            ignored -> {
-                log.info("Profile setup completed.");
-                navigateTo(AppConstants.Views.MAIN_LAYOUT);
-            },
-
-            exception -> {
-                log.error("Failed to complete profile setup.", exception);
-
-                resetLoading(finishButton);
-            }
-        );
+        return valid;
     }
 
     // ── Initialize Helpers ─────────────────────────────────────────────────
@@ -322,6 +373,16 @@ public class ProfileSetupController extends FormController implements Initializa
         rootLayout.pseudoClassStateChanged(NARROW, narrow);
 
         backButton.setText(narrow ? "←" : "← Back");
+
+        GridPane.setColumnSpan(
+                nextButton,
+                narrow ? 2 : 1
+        );
+
+        GridPane.setColumnSpan(
+                finishButton,
+                narrow ? 2 : 1
+        );
     }
 
     // ── First name Helpers ─────────────────────────────────────────────────
@@ -469,5 +530,14 @@ public class ProfileSetupController extends FormController implements Initializa
             case GAIN_WEIGHT -> goalWeight > currentWeight;
             default -> true;
         };
+    }
+
+    // ── Save message Helpers ─────────────────────────────────────────────────
+    public void showSaveError(String message) {
+        setFormMessage(saveMessage, message, true);
+    }
+
+    private void clearSaveError() {
+        clearFormMessage(saveMessage);
     }
 }

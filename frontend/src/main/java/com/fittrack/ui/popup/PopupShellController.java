@@ -2,6 +2,7 @@ package com.fittrack.ui.popup;
 
 import com.fittrack.controller.common.ResponsiveLayout;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.DoubleProperty;
@@ -51,6 +52,9 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
     // ── Natural Content Size ────────────────────────────────────────
     private final DoubleProperty naturalContentHeight = new SimpleDoubleProperty(0);
 
+    private Node content;
+    private final InvalidationListener contentSizeListener = observable -> updateNaturalContentHeight();
+
     private BooleanBinding shortBinding;
 
     // ── FXML ────────────────────────────────────────────────────────
@@ -77,11 +81,9 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
     private void initializeShortBinding() {
         shortBinding = Bindings.createBooleanBinding(
                 () -> {
-                    double naturalHeight =
-                            naturalContentHeight.get();
+                    double naturalHeight = naturalContentHeight.get();
 
-                    double rootHeight =
-                            rootLayout.getHeight();
+                    double rootHeight = rootLayout.getHeight();
 
                     return naturalHeight > 0
                             && rootHeight > 0
@@ -96,10 +98,7 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
                 (observable, oldValue, newValue) -> {
                     shortLayout = newValue;
 
-                    rootLayout.pseudoClassStateChanged(
-                            SHORT,
-                            newValue
-                    );
+                    rootLayout.pseudoClassStateChanged(SHORT, newValue);
 
                     updateAlignment();
                 }
@@ -119,7 +118,7 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
         );
     }
 
-    // ── Responsive Width ────────────────────────────────────────────    @Override
+    // ── Responsive Width ────────────────────────────────────────────
     @Override
     public void updateWidthLayout(boolean narrow) {
         responsiveNarrow = narrow;
@@ -129,10 +128,7 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
     private void updateNarrowState() {
         narrow = forceNarrow || responsiveNarrow;
 
-        rootLayout.pseudoClassStateChanged(
-                NARROW,
-                narrow
-        );
+        rootLayout.pseudoClassStateChanged(NARROW, narrow);
 
         dialogContainer.setMaxWidth(
                 narrow
@@ -257,10 +253,7 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
 
         this.scrolling = scrolling;
 
-        rootLayout.pseudoClassStateChanged(
-                SCROLLING,
-                scrolling
-        );
+        rootLayout.pseudoClassStateChanged(SCROLLING, scrolling);
     }
 
     // ── Force Narrow ────────────────────────────────────────────────────
@@ -270,16 +263,33 @@ public class PopupShellController implements Initializable, ResponsiveLayout {
     }
 
     // ── Content ────────────────────────────────────────────────────
+    private void updateNaturalContentHeight() {
+        if (content == null) {
+            naturalContentHeight.set(0);
+            return;
+        }
+
+        content.applyCss();
+
+        naturalContentHeight.set(
+                content.prefHeight(-1)
+        );
+    }
+
     public void setContent(Node content) {
+        if (this.content != null) {
+            this.content.layoutBoundsProperty().removeListener(contentSizeListener);
+        }
+
+        this.content = content;
+
         contentHost.getChildren().setAll(content);
 
-        Platform.runLater(() -> {
-            content.applyCss();
+        content.layoutBoundsProperty().addListener(contentSizeListener);
 
-            naturalContentHeight.set(
-                    content.prefHeight(-1)
-            );
-        });
+        Platform.runLater(
+                this::updateNaturalContentHeight
+        );
     }
 
     // ── Getters ──────────────────────────────────────────────────

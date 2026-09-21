@@ -32,6 +32,7 @@ public class MealCopyDialogController extends BaseController implements Initiali
     @FXML private VBox dayFieldBox;
     @FXML private DatePicker datePicker;
     @FXML private Label availabilityMessage;
+    @FXML private Label actionMessage;
     @FXML private Button copyButton;
 
     // Mode
@@ -152,6 +153,8 @@ public class MealCopyDialogController extends BaseController implements Initiali
 
     // ── Selection ───────────────────────────────────────────────
     private void handleSelectionChanged() {
+        clearActionError();
+
         if (mode == null) {
             return;
         }
@@ -266,6 +269,8 @@ public class MealCopyDialogController extends BaseController implements Initiali
             return;
         }
 
+        clearActionError();
+
         MealType selectedMealType = mealComboBox.getValue();
         LocalDate selectedDate = datePicker.getValue();
 
@@ -323,5 +328,22 @@ public class MealCopyDialogController extends BaseController implements Initiali
             mealComboBox.setDisable(false);
             datePicker.setDisable(false);
         }
+    }
+
+    public void showActionError(String message) {
+        availabilityMessage.setVisible(false);
+        availabilityMessage.setManaged(false);
+
+        actionMessage.setText(message);
+        actionMessage.setManaged(true);
+        actionMessage.setVisible(true);
+    }
+
+    private void clearActionError() {
+        actionMessage.setText("");
+        actionMessage.setVisible(false);
+        actionMessage.setManaged(false);
+
+        availabilityMessage.setManaged(true);
     }
 }

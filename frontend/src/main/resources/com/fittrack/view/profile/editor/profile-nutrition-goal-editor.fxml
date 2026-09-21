@@ -149,6 +149,13 @@
 
             </GridPane>
 
+            <Label fx:id="saveMessage"
+                   styleClass="error-label"
+                   visible="false"
+                   managed="false"
+                   wrapText="true"
+                   maxWidth="Infinity"/>
+
             <!-- Actions -->
             <GridPane styleClass="profile-nutrition-goal-editor-actions">
 

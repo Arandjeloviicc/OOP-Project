@@ -66,6 +66,13 @@ public class ProfileCoordinator {
         OverlayManager.close();
     }
 
+    public void showPersonalInfoSaveError(String message) {
+        if (activePersonalInfoEditor != null) {
+            activePersonalInfoEditor.showSaveError(message);
+        }
+    }
+
+
     // ── Nutrition  Goal ─────────────────────────────────────────────────
     public void openNutritionGoalEditor(ProfileData profile, Consumer<NutritionGoalUpdateRequest> onSave) {
         LoadedComponent<ProfileNutritionGoalEditorController> editor = FxmlComponentLoader.load(AppConstants.Popups.PROFILE_NUTRITION_GOAL_EDITOR);
@@ -111,5 +118,11 @@ public class ProfileCoordinator {
     public void closeNutritionGoalEditor() {
         activeNutritionGoalEditor = null;
         OverlayManager.close();
+    }
+
+    public void showNutritionGoalSaveError(String message) {
+        if (activeNutritionGoalEditor != null) {
+            activeNutritionGoalEditor.showSaveError(message);
+        }
     }
 }

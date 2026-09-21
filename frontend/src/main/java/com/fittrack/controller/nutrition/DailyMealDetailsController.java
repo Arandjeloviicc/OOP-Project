@@ -4,11 +4,8 @@ import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.nutrition.components.MealItemCardController;
-import com.fittrack.controller.nutrition.editor.MealItemEditorController;
 import com.fittrack.controller.nutrition.components.NutritionMacroPreviewController;
-import com.fittrack.ui.popup.PopupAlignment;
-import com.fittrack.ui.popup.PopupOverflow;
-import com.fittrack.ui.popup.PopupShellController;
+import com.fittrack.coordinator.nutrition.DailyMealDetailsCoordinator;
 import com.fittrack.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.dto.nutrition.meal.MealResponse;
 import com.fittrack.dto.nutrition.meal.item.UpdateMealItemRequest;
@@ -21,7 +18,6 @@ import com.fittrack.ui.loader.LoadedComponent;
 import com.fittrack.ui.overlay.OverlayManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -56,6 +52,9 @@ public class DailyMealDetailsController extends FormController implements Initia
     // Macro Preview
     private NutritionMacroPreviewController macroPreview;
 
+    // Coordinator
+    private DailyMealDetailsCoordinator coordinator;
+
     // Actions
     private Runnable onCloseAction;
 
@@ -65,6 +64,8 @@ public class DailyMealDetailsController extends FormController implements Initia
     // ── Initialization ──────────────────────────────────────────────
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        coordinator = new DailyMealDetailsCoordinator(rootLayout);
+
         // Initialize Macro Preview
         initializeMacroPreview();
     }
@@ -139,7 +140,7 @@ public class DailyMealDetailsController extends FormController implements Initia
             );
 
             card.controller().setOnOpenAction(() ->
-                    openFoodDetails(mealItem)
+                    openMealItemEditor(mealItem)
             );
 
             itemsContainer.getChildren().add(card.root());
@@ -163,66 +164,43 @@ public class DailyMealDetailsController extends FormController implements Initia
             dataChanged = false;
         }
 
-        LoadedComponent<AddToMealController> addFood = FxmlComponentLoader.load(AppConstants.Popups.ADD_TO_MEAL);
+        coordinator.openAddToMeal(
+                mealType,
+                mealDate,
 
-        AddToMealController controller = addFood.controller();
+                () -> {
+                    if (onCloseAction != null) {
+                        onCloseAction.run();
+                    }
+                },
 
-        controller.setData(mealType, mealDate);
-
-        controller.setOnCloseAction(() -> {
-            if (onCloseAction != null) {
-                onCloseAction.run();
-            }
-        });
-
-        controller.setOnBackAction(changed -> {
-            showMealDetailsPopup();
-
-            if (changed) {
-                refreshMealDetails();
-            }
-        });
-
-        showAddToMealPopup(addFood.root());
+                changed -> {
+                    if (changed) {
+                        refreshMealDetails();
+                    }
+                }
+        );
     }
 
     // ── Meal Item Editor ────────────────────────────────────────────
-    private void openFoodDetails(MealItemResponse mealItem) {
-        LoadedComponent<MealItemEditorController> details = FxmlComponentLoader.load(AppConstants.Popups.MEAL_ITEM_EDITOR);
+    private void openMealItemEditor(MealItemResponse mealItem) {
+        coordinator.openMealItemEditor(
+                mealItem,
+                mealType,
 
-        details.controller().setData(mealItem, mealType);
-        details.controller().setCaption("Edit food");
-        details.controller().setConfirmButtonText("Save changes");
+                (selectedMeal, quantityGrams) ->
+                        updateMealItem(
+                                mealItem,
+                                selectedMeal,
+                                quantityGrams
+                        ),
 
-        details.controller().setOnCancelAction(
-                this::closeFoodDetails
+                () -> deleteMealItem(mealItem)
         );
-
-        details.controller().setOnConfirmAction(
-                quantityGrams -> updateMealItem(
-                        mealItem,
-                        details.controller().getSelectedMealType(),
-                        quantityGrams,
-                        details.controller()
-                )
-        );
-
-        details.controller().setOnRemoveAction(
-                () -> deleteMealItem(
-                        mealItem,
-                        details.controller()
-                )
-        );
-
-        showMealItemEditorPopup(details.root());
-    }
-
-    private void closeFoodDetails() {
-        showMealDetailsPopup();
     }
 
     // ── Meal Item Actions ───────────────────────────────────────────
-    private void updateMealItem(MealItemResponse mealItem, MealType selectedMeal, double quantityGrams,  MealItemEditorController editor) {
+    private void updateMealItem(MealItemResponse mealItem, MealType selectedMeal, double quantityGrams) {
         boolean quantityChanged =
                 Double.compare(
                         mealItem.quantityGrams(),
@@ -232,7 +210,7 @@ public class DailyMealDetailsController extends FormController implements Initia
         boolean mealChanged = !mealType.equals(selectedMeal);
 
         if (!quantityChanged && !mealChanged) {
-            closeFoodDetails();
+            coordinator.returnToMealDetails();
             return;
         }
 
@@ -240,8 +218,6 @@ public class DailyMealDetailsController extends FormController implements Initia
                 quantityGrams,
                 selectedMeal.getName()
         );
-
-        editor.startConfirmLoading("Saving...");
 
         AsyncTaskRunner.run(
                 () -> mealService.updateMealItem(mealItem.id(), request),
@@ -255,11 +231,13 @@ public class DailyMealDetailsController extends FormController implements Initia
                         replaceMealItem(mealItem.id(), response);
                     }
 
-                    closeFoodDetails();
+                    coordinator.returnToMealDetails();
                 },
 
                 exception -> {
-                    editor.stopConfirmLoading();
+                    coordinator.setMealItemSaving(false);
+
+                    coordinator.showMealItemError("Failed to save changes. Please try again.");
 
                     log.error(
                             "Failed to update meal item.",
@@ -269,10 +247,8 @@ public class DailyMealDetailsController extends FormController implements Initia
         );
     }
 
-    private void deleteMealItem(MealItemResponse mealItem, MealItemEditorController editor) {
-        editor.setRemoveLoading(true);
-
-        AsyncTaskRunner.run(
+    private void deleteMealItem(MealItemResponse mealItem) {
+          AsyncTaskRunner.run(
                 () -> {
                     mealService.deleteMealItem(mealItem.id());
                     return null;
@@ -281,11 +257,13 @@ public class DailyMealDetailsController extends FormController implements Initia
                 ignored -> {
                     dataChanged = true;
                     removeMealItem(mealItem.id());
-                    closeFoodDetails();
+                    coordinator.returnToMealDetails();
                 },
 
                 exception -> {
-                    editor.setRemoveLoading(false);
+                    coordinator.setMealItemDeleting(false);
+
+                    coordinator.showMealItemError("Failed to remove food. Please try again.");
 
                     log.error(
                             "Failed to delete meal item.",
@@ -364,30 +342,5 @@ public class DailyMealDetailsController extends FormController implements Initia
                         exception
                 )
         );
-    }
-
-    // ── Popup Navigation ────────────────────────────────────────────
-    private void showMealDetailsPopup() {
-        PopupShellController shell = OverlayManager.replaceInPopup(rootLayout);
-
-        shell.setOverflow(PopupOverflow.CONTENT_MANAGED);
-        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
-        shell.setFillHeightOnNarrow(true);
-    }
-
-    private void showAddToMealPopup(Node root) {
-        PopupShellController shell = OverlayManager.replaceInPopup(root);
-
-        shell.setOverflow(PopupOverflow.CONTENT_MANAGED);
-        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
-        shell.setFillHeightOnNarrow(true);
-    }
-
-    private void showMealItemEditorPopup(Node root) {
-        PopupShellController shell =
-                OverlayManager.replaceInPopup(root);
-
-        shell.setOverflow(PopupOverflow.SHELL_SCROLL);
-        shell.setNarrowAlignment(PopupAlignment.TOP_CENTER);
     }
 }

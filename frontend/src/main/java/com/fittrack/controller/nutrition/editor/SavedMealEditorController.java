@@ -32,6 +32,7 @@ public class SavedMealEditorController extends FormController implements Initial
     @FXML private Label titleLabel;
     @FXML private TextField nameField;
     @FXML private Label nameMessage;
+    @FXML private Label actionMessage;
 
     @FXML private VBox macroPreviewContainer;
 
@@ -121,6 +122,8 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     public void setCreateMode() {
+        clearActionError();
+
         mealId = null;
 
         mode = SavedMealEditorMode.CREATE;
@@ -140,6 +143,8 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     public void setCreateMode(MealResponse sourceMeal) {
+        clearActionError();
+
         mealId = null;
 
         mode = SavedMealEditorMode.CREATE;
@@ -176,6 +181,8 @@ public class SavedMealEditorController extends FormController implements Initial
     }
 
     public void setEditMode(MealResponse meal) {
+        clearActionError();
+
         mealId = meal.id();
 
         mode = SavedMealEditorMode.EDIT;
@@ -366,6 +373,8 @@ public class SavedMealEditorController extends FormController implements Initial
             return;
         }
 
+        clearActionError();
+
         String name = nameField.getText().trim();
 
         if (name.isEmpty()) {
@@ -443,6 +452,8 @@ public class SavedMealEditorController extends FormController implements Initial
             return;
         }
 
+        clearActionError();
+
         if (onDeleteAction != null) {
             onDeleteAction.run();
         }
@@ -484,6 +495,15 @@ public class SavedMealEditorController extends FormController implements Initial
 
     private void restoreNameHelper() {
         setFieldMessage(nameMessage, AppConstants.Messages.HELPER_MEAL_NAME_MESSAGE, false, nameField);
+    }
+
+    // ── Action Message Helpers ─────────────────────────────────────
+    public void showActionError(String message) {
+        setFormMessage(actionMessage, message, true);
+    }
+
+    public void clearActionError() {
+        clearFormMessage(actionMessage);
     }
 
     // ── Getters ────────────────────────────────────────────────

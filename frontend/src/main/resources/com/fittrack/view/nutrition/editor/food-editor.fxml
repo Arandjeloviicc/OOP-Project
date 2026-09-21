@@ -177,6 +177,14 @@
 
             </HBox>
 
+            <!-- Action Error -->
+            <Label fx:id="actionMessage"
+                   visible="false"
+                   managed="false"
+                   wrapText="true"
+                   maxWidth="Infinity"
+                   styleClass="error-label"/>
+
             <!-- Cancel / Create or Save -->
             <GridPane styleClass="food-editor-actions">
 

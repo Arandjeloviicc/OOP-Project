@@ -17,14 +17,13 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public abstract class AuthFormController extends FormController implements ResponsiveLayout {
 
     // Custom console messages
     private static final Logger log = LoggerFactory.getLogger(AuthFormController.class);
 
     // Responsive breakpoint
-    private static final int NARROW_BREAKPOINT = 450;
+    private static final int NARROW_BREAKPOINT = 550;
 
     // Is Narrow
     private Boolean narrowLayout;

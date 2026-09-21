@@ -245,6 +245,7 @@ public class ProfileController extends NavigableController implements Initializa
                     );
 
                     coordinator.setPersonalInfoSaving(false);
+                    coordinator.showPersonalInfoSaveError("Failed to save changes. Please try again.");
                 }
         );
     }
@@ -280,6 +281,7 @@ public class ProfileController extends NavigableController implements Initializa
                     );
 
                     coordinator.setNutritionGoalSaving(false);
+                    coordinator.showNutritionGoalSaveError("Failed to save changes. Please try again.");
                 }
         );
     }

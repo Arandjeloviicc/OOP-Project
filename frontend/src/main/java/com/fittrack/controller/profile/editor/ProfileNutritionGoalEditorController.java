@@ -44,6 +44,7 @@ public class ProfileNutritionGoalEditorController extends FormController impleme
     @FXML private Label activityLevelMessage;
     @FXML private Label goalWeightMessage;
     @FXML private Label weeklyGoalMessage;
+    @FXML private Label saveMessage;
 
     // Buttons
     @FXML private Button saveButton;
@@ -163,6 +164,8 @@ public class ProfileNutritionGoalEditorController extends FormController impleme
 
         updateGoalFieldsVisibility();
         clearValidationErrors();
+
+        clearSaveError();
     }
 
     public void setOnCancelAction(Runnable onCancelAction) {
@@ -287,6 +290,8 @@ public class ProfileNutritionGoalEditorController extends FormController impleme
         if (isLoading(saveButton)) {
             return;
         }
+
+        clearSaveError();
 
         if (!isFormValid()) {
             return;
@@ -434,6 +439,15 @@ public class ProfileNutritionGoalEditorController extends FormController impleme
 
     private void clearWeeklyGoalError() {
         clearFieldMessage(weeklyGoalMessage, weeklyGoalComboBox);
+    }
+
+    // ── Save message Helpers ─────────────────────────────────────────────────
+    public void showSaveError(String message) {
+        setFormMessage(saveMessage, message, true);
+    }
+
+    private void clearSaveError() {
+        clearFormMessage(saveMessage);
     }
 
     // ── Goal Fields Helpers ─────────────────────────────────

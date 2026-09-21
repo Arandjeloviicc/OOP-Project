@@ -145,13 +145,19 @@
 
 .root:narrow .glass-card {
     -fx-min-width: 0;
-    -fx-pref-width: 100%;
-    -fx-max-width: -1;
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+
     -fx-padding: 0;
 }
 
 .root:narrow .card-inner {
-    -fx-padding: 1.8em 1.4em 2em 1.4em;
+    -fx-padding: 1.5em 1em 1.8em 1em;
 }
 
 .root:narrow .title-label {

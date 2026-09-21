@@ -1,6 +1,7 @@
 package com.fittrack.controller.main;
 
 import com.fittrack.controller.common.NavigableController;
+import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.ui.popup.PopupShellController;
 import com.fittrack.model.view.ViewInstance;
@@ -145,8 +146,9 @@ public class MainLayoutController extends NavigableController implements Initial
     private void loadContent(String fxml) {
         try {
             ViewInstance viewInstance = contentCache.get(fxml);
+            boolean cached = viewInstance != null;
 
-            if (viewInstance == null) {
+            if (!cached) {
                 URL resource = getClass().getResource(
                         "/com/fittrack/view/" + fxml
                 );
@@ -166,6 +168,10 @@ public class MainLayoutController extends NavigableController implements Initial
             }
 
             contentArea.getChildren().setAll(viewInstance.root());
+
+            if (cached && viewInstance.controller() instanceof Refreshable refreshable) {
+                refreshable.refresh();
+            }
 
         } catch (IOException exception) {
             throw new IllegalStateException(

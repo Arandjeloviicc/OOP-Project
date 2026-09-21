@@ -52,6 +52,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     @FXML private Label lastNameMessage;
     @FXML private Label dateOfBirthMessage;
     @FXML private Label heightMessage;
+    @FXML private Label saveMessage;
 
     // Buttons
     @FXML private Button saveButton;
@@ -112,6 +113,8 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         } else if (profile.gender() == Gender.FEMALE) {
             femaleButton.setSelected(true);
         }
+
+        clearSaveError();
     }
 
     public void setOnCancelAction(Runnable onCancelAction) {
@@ -154,11 +157,6 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         if (onNarrowLayoutChanged != null) {
             onNarrowLayoutChanged.accept(narrow);
         }
-    }
-
-    @Override
-    public void updateHeightLayout(boolean shortLayout) {
-        // TODO document why this method is empty
     }
 
     private void setWideLayout() {
@@ -214,6 +212,8 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         if (isLoading(saveButton)) {
             return;
         }
+
+        clearSaveError();
 
         if (!isFormValid()) {
             return;
@@ -357,5 +357,14 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
 
     private void clearHeightError() {
         clearFieldMessage(heightMessage, heightField);
+    }
+
+    // ── Save message Helpers ─────────────────────────────────────────────────
+    public void showSaveError(String message) {
+        setFormMessage(saveMessage, message, true);
+    }
+
+    private void clearSaveError() {
+        clearFormMessage(saveMessage);
     }
 }

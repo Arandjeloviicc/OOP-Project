@@ -96,6 +96,14 @@
 
         </VBox>
 
+        <!-- Action Error -->
+        <Label fx:id="actionMessage"
+               styleClass="error-label"
+               visible="false"
+               managed="false"
+               wrapText="true"
+               maxWidth="Infinity"/>
+
         <!-- Add/Update Button -->
         <GridPane styleClass="meal-item-editor-actions">
 

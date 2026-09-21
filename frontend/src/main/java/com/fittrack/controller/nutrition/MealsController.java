@@ -156,12 +156,12 @@ public class MealsController extends NavigableController implements Initializabl
         }
 
         invalidateMealsCache(currentDate);
-        reloadMealsForDate(currentDate);
+        loadNutritionTargets(currentDate);
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
     @FXML
-    public void handlePreviousDay() {
+    private void handlePreviousDay() {
         LocalDate currentValue = datePicker.getValue();
         if (currentValue != null) {
             datePicker.setValue(currentValue.minusDays(1));
@@ -171,7 +171,7 @@ public class MealsController extends NavigableController implements Initializabl
     }
 
     @FXML
-    public void handleNextDay() {
+    private void handleNextDay() {
         LocalDate currentValue = datePicker.getValue();
         if (currentValue != null) {
             datePicker.setValue(currentValue.plusDays(1));
@@ -700,6 +700,8 @@ public class MealsController extends NavigableController implements Initializabl
 
                 exception -> {
                     coordinator.setCopying(false);
+
+                    coordinator.showCopyError("Failed to copy meal. Please try again.");
 
                     log.error(
                             "Failed to copy meal.",

@@ -92,6 +92,14 @@
                 onAction="#handleAddFood"
                 styleClass="action-btn, saved-meal-editor-add-button"/>
 
+        <!-- Action Error -->
+        <Label fx:id="actionMessage"
+               styleClass="error-label"
+               visible="false"
+               managed="false"
+               wrapText="true"
+               maxWidth="Infinity"/>
+
         <!-- Cancel / Create or Save -->
         <GridPane styleClass="saved-meal-editor-actions">
 

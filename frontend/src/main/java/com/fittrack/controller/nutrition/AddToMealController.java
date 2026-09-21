@@ -375,7 +375,7 @@ public class AddToMealController extends FormController implements Initializable
             );
 
             item.controller().setOnOpenAction(
-                    () -> openFoodDetails(food)
+                    () -> openMealItemEditor(food)
             );
 
             item.controller().setOnAddAction(
@@ -510,6 +510,8 @@ public class AddToMealController extends FormController implements Initializable
                 exception -> {
                     coordinator.setSavedMealEditorSaving(false);
 
+                    coordinator.showSavedMealEditorError("Failed to save changes. Please try again.");
+
                     log.error(
                             "Failed to update meal.",
                             exception
@@ -532,6 +534,8 @@ public class AddToMealController extends FormController implements Initializable
 
                 exception -> {
                     coordinator.setSavedMealEditorDeleting(false);
+
+                    coordinator.showSavedMealEditorError("Failed to delete meal. Please try again.");
 
                     log.error(
                             "Failed to delete meal.",
@@ -571,9 +575,9 @@ public class AddToMealController extends FormController implements Initializable
         );
     }
 
-    // ── Food Details ───────────────────────────────────────────────────
-    private void openFoodDetails(FoodResponse food) {
-        coordinator.openFoodDetails(
+    // ── Meal Item Editor ───────────────────────────────────────────────────
+    private void openMealItemEditor(FoodResponse food) {
+        coordinator.openMealItemEditor(
                 food,
                 mealType,
 
@@ -667,6 +671,8 @@ public class AddToMealController extends FormController implements Initializable
                 exception -> {
                     coordinator.setFoodEditorSubmitting(false);
 
+                    coordinator.showFoodEditorError("Failed to create food. Please try again.");
+
                     log.error(
                             "Failed to create a food.",
                             exception
@@ -710,6 +716,8 @@ public class AddToMealController extends FormController implements Initializable
 
                 exception -> {
                     coordinator.setSavedMealEditorSaving(false);
+
+                    coordinator.showSavedMealEditorError("Failed to create meal. Please try again.");
 
                     log.error(
                             "Failed to create meal.",

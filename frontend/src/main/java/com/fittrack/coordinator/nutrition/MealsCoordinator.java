@@ -244,10 +244,16 @@ public class MealsCoordinator {
         OverlayManager.close();
     }
 
-    // ── Loading Helpers ─────────────────────────────────────────────────
+    // ── Copy Dialog State ─────────────────────────────────────────
     public void setCopying(boolean copying) {
         if (activeCopyDialog != null) {
             activeCopyDialog.setCopying(copying);
+        }
+    }
+
+    public void showCopyError(String message) {
+        if (activeCopyDialog != null) {
+            activeCopyDialog.showActionError(message);
         }
     }
 }
