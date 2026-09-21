@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "weight_logs")
@@ -23,21 +23,21 @@ public class WeightLog {
     private User user;
 
     @Column(name = "logged_at", nullable = false)
-    private LocalDateTime loggedAt;
+    private Instant loggedAt;
 
     @Column(nullable = false)
     private double weight;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     // Constructor
     protected WeightLog() {}
 
-    public WeightLog(User user, LocalDateTime loggedAt, double weight) {
+    public WeightLog(User user, Instant loggedAt, double weight) {
         this.user = user;
         this.loggedAt = loggedAt;
         this.weight = weight;
@@ -46,12 +46,12 @@ public class WeightLog {
     // Default
     @PrePersist
     private void prePersist() {
-        createdAt = LocalDateTime.now();
+        createdAt = Instant.now();
     }
 
     @PreUpdate
     private void preUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = Instant.now();
     }
 
     // Getters
@@ -63,7 +63,7 @@ public class WeightLog {
         return user;
     }
 
-    public LocalDateTime getLoggedAt() {
+    public Instant getLoggedAt() {
         return loggedAt;
     }
 
@@ -71,11 +71,11 @@ public class WeightLog {
         return weight;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 }

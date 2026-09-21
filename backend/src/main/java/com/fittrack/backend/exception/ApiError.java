@@ -1,9 +1,9 @@
 package com.fittrack.backend.exception;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record ApiError(
         int status,
         String message,
-        LocalDateTime timestamp
+        Instant timestamp
 ) {}

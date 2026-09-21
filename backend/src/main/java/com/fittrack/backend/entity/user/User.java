@@ -2,7 +2,7 @@ package com.fittrack.backend.entity.user;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(
@@ -29,7 +29,7 @@ public class User {
     private String passwordHash;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     // Constructor
     protected User() {}
@@ -43,7 +43,7 @@ public class User {
     // Default
     @PrePersist
     private void prePersist() {
-        createdAt = LocalDateTime.now();
+        createdAt = Instant.now();
     }
 
     // Getters
@@ -63,7 +63,7 @@ public class User {
         return passwordHash;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 }

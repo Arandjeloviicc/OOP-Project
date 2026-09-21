@@ -9,6 +9,7 @@ import com.fittrack.backend.repository.profile.projection.ProfileData;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,29 +25,29 @@ public class ProfileJdbcRepository {
     public Optional<ProfileData> findByUserId(Integer userId) {
         // users (u) + user_profiles (up) - osnovni i licni podaci korisnika
         // nutrition_goals (ng) - uzima se samo aktivan cilj korisnika (end_date IS NULL)
-        // current_weight (LATERAL JOIN) - najnoviji unet unos tezine korisnika iz weight_logs, sortirano po logged_at pa po id-u da se razresi slucaj kada su dva unosa logovana u istom trenutku
-        // start_weight (LATERAL JOIN) - tezina korisnika u trenutku kada je aktivan cilj kreiran (poslednji unos pre ili na ng.created_at), koristi se za racunanje napretka od pocetka cilja do danas
-        // LEFT JOIN - ako korisnik nema odgovarajuci unos tezine, current_weight/start_weight ostaju NULL umesto da ceo red bude izbacen iz rezultata
+        // current_weight (LATERAL JOIN) - najnoviji unet unos tezine korisnika
+        // start_weight - pocetna tezina progress ciklusa, cuva se na aktivnom nutrition goal-u
+        // LEFT JOIN za current_weight omogucava da profil ostane dostupan i ako nema weight loga
 
-        String sql = """
+            String sql = """
                 SELECT
                     u.username,
                     u.email,
-
+    
                     up.first_name,
                     up.last_name,
                     up.date_of_birth,
                     up.gender,
                     up.height,
-
+    
                     current_weight.weight AS current_weight,
-                    start_weight.weight AS start_weight,
-
+                    ng.progress_start_weight AS start_weight,
+    
                     ng.goal_type,
                     ng.goal_weight,
                     ng.weekly_goal,
                     ng.activity_level,
-
+    
                     ng.target_calories,
                     ng.target_carbs,
                     ng.target_fat,
@@ -56,11 +57,11 @@ public class ProfileJdbcRepository {
 
                 JOIN user_profiles up
                     ON up.user_id = u.id
-
+    
                 JOIN nutrition_goals ng
                     ON ng.user_id = u.id
                    AND ng.end_date IS NULL
-
+    
                 LEFT JOIN LATERAL (
                     SELECT wl.weight
                     FROM weight_logs wl
@@ -68,16 +69,7 @@ public class ProfileJdbcRepository {
                     ORDER BY wl.logged_at DESC, wl.id DESC
                     LIMIT 1
                 ) current_weight ON TRUE
-
-                LEFT JOIN LATERAL (
-                    SELECT wl.weight
-                    FROM weight_logs wl
-                    WHERE wl.user_id = u.id
-                      AND wl.logged_at <= ng.created_at
-                    ORDER BY wl.logged_at DESC, wl.id DESC
-                    LIMIT 1
-                ) start_weight ON TRUE
-
+    
                 WHERE u.id = ?
                 """;
 
@@ -89,17 +81,24 @@ public class ProfileJdbcRepository {
 
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
-                        resultSet.getObject("date_of_birth", java.time.LocalDate.class),
+                        resultSet.getObject(
+                                "date_of_birth",
+                                LocalDate.class
+                        ),
                         Gender.valueOf(resultSet.getString("gender")),
                         resultSet.getDouble("height"),
 
                         resultSet.getObject("current_weight", Double.class),
                         resultSet.getObject("start_weight", Double.class),
 
-                        WeightGoal.valueOf(resultSet.getString("goal_type")),
+                        WeightGoal.valueOf(
+                                resultSet.getString("goal_type")
+                        ),
                         resultSet.getObject("goal_weight", Double.class),
                         resultSet.getObject("weekly_goal", Double.class),
-                        ActivityLevel.valueOf(resultSet.getString("activity_level")),
+                        ActivityLevel.valueOf(
+                                resultSet.getString("activity_level")
+                        ),
 
                         resultSet.getInt("target_calories"),
                         resultSet.getDouble("target_carbs"),
@@ -124,14 +123,14 @@ public class ProfileJdbcRepository {
             WHERE user_id = ?
             """;
 
-        return jdbcTemplate.query(
+        List<PersonalInfoData> results = jdbcTemplate.query(
                 sql,
                 (resultSet, _) -> new PersonalInfoData(
                         resultSet.getString("first_name"),
                         resultSet.getString("last_name"),
                         resultSet.getObject(
                                 "date_of_birth",
-                                java.time.LocalDate.class
+                                LocalDate.class
                         ),
                         Gender.valueOf(
                                 resultSet.getString("gender")
@@ -139,7 +138,9 @@ public class ProfileJdbcRepository {
                         resultSet.getDouble("height")
                 ),
                 userId
-        ).stream().findFirst();
+        );
+
+        return results.stream().findFirst();
     }
 
     public int updatePersonalInfo(Integer userId, PersonalInfoUpdateRequest request) {

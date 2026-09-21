@@ -10,26 +10,38 @@ import com.fittrack.backend.service.nutrition.NutritionGoalService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.LocalDate;
+
 @Service
 public class ProfileService {
 
+    private final Clock clock;
+
     private final ProfileJdbcRepository profileJdbcRepository;
     private final NutritionGoalService nutritionGoalService;
+    private final ProfileValidationService profileValidationService;
 
-    public ProfileService(ProfileJdbcRepository profileJdbcRepository, NutritionGoalService nutritionGoalService) {
+    public ProfileService(Clock clock, ProfileJdbcRepository profileJdbcRepository, NutritionGoalService nutritionGoalService, ProfileValidationService profileValidationService) {
+        this.clock = clock;
         this.profileJdbcRepository = profileJdbcRepository;
         this.nutritionGoalService = nutritionGoalService;
+        this.profileValidationService = profileValidationService;
     }
 
     public ProfileResponse getProfile(Integer userId) {
         ProfileData profile = profileJdbcRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Profile not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Profile not found."));
 
         return toResponse(profile);
     }
 
     @Transactional
     public void updatePersonalInfo(Integer userId, PersonalInfoUpdateRequest request) {
+        LocalDate today = LocalDate.now(clock);
+
+        profileValidationService.validateAge(request.dateOfBirth(), today);
+
         PersonalInfoData current =
                 profileJdbcRepository
                         .findPersonalInfoByUserId(userId)

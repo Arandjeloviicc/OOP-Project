@@ -8,27 +8,31 @@ import com.fittrack.backend.service.nutrition.NutritionGoalValidationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDate;
-import java.time.Period;
 
 @Service
 public class ProfileSetupService {
 
-    private static final int MIN_AGE = 13;
-    private static final int MAX_AGE = 120;
+    private final Clock clock;
 
     private final ProfileSetupJdbcRepository profileSetupJdbcRepository;
     private final NutritionGoalCalculationService nutritionGoalCalculationService;
     private final NutritionGoalValidationService nutritionGoalValidationService;
+    private final ProfileValidationService profileValidationService;
 
-    public ProfileSetupService(ProfileSetupJdbcRepository profileSetupJdbcRepository, NutritionGoalCalculationService nutritionGoalCalculationService, NutritionGoalValidationService nutritionGoalValidationService) {
+    public ProfileSetupService(Clock clock, ProfileSetupJdbcRepository profileSetupJdbcRepository, NutritionGoalCalculationService nutritionGoalCalculationService, NutritionGoalValidationService nutritionGoalValidationService, ProfileValidationService profileValidationService) {
+        this.clock = clock;
         this.profileSetupJdbcRepository = profileSetupJdbcRepository;
         this.nutritionGoalCalculationService = nutritionGoalCalculationService;
         this.nutritionGoalValidationService = nutritionGoalValidationService;
+        this.profileValidationService = profileValidationService;
     }
 
     @Transactional
     public void completeProfile(ProfileSetupRequest request) {
+        LocalDate today = LocalDate.now(clock);
+
         int age = validateProfileSetup(request);
 
         NutritionTargets targets =
@@ -43,15 +47,13 @@ public class ProfileSetupService {
                         request.weeklyGoal()
                 );
 
-        profileSetupJdbcRepository.completeProfile(request, targets);
+        profileSetupJdbcRepository.completeProfile(request, targets, today);
     }
 
     private int validateProfileSetup(ProfileSetupRequest request) {
-        int age = Period.between(request.dateOfBirth(), LocalDate.now()).getYears();
+        LocalDate today = LocalDate.now(clock);
 
-        if (age < MIN_AGE || age > MAX_AGE) {
-            throw new IllegalArgumentException("Age must be between 13 and 120.");
-        }
+        int age = profileValidationService.validateAge(request.dateOfBirth(), today);
 
         nutritionGoalValidationService.validate(
                 request.goalType(),

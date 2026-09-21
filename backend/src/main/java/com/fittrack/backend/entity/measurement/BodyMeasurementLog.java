@@ -3,7 +3,7 @@ package com.fittrack.backend.entity.measurement;
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "body_measurement_logs")
@@ -29,14 +29,14 @@ public class BodyMeasurementLog {
     private Double hip;
 
     @Column(name = "logged_at", nullable = false)
-    private LocalDateTime loggedAt;
+    private Instant loggedAt;
 
     // Created / Updated
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Instant updatedAt;
 
     // Constructor
     protected BodyMeasurementLog() {}
@@ -51,7 +51,7 @@ public class BodyMeasurementLog {
     // Default
     @PrePersist
     private void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
+        Instant now = Instant.now();
 
         if (loggedAt == null) {
             loggedAt = now;
@@ -62,7 +62,7 @@ public class BodyMeasurementLog {
 
     @PreUpdate
     private void preUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = Instant.now();
     }
 
     // Getters
@@ -86,15 +86,15 @@ public class BodyMeasurementLog {
         return hip;
     }
 
-    public LocalDateTime getLoggedAt() {
+    public Instant getLoggedAt() {
         return loggedAt;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 }

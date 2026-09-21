@@ -72,7 +72,7 @@ public class MealService {
                 targetMealName,
                 request.quantityGrams()
         ).orElseThrow(() ->
-                new IllegalArgumentException("Meal item not found or does not belong to user.")
+                new ResourceNotFoundException("Meal item not found or does not belong to user.")
         );
     }
 
@@ -81,7 +81,7 @@ public class MealService {
         int deleted = mealItemRepository.deleteByIdAndUserIdAndMealKind(mealItemId, userId, MealKind.DAILY);
 
         if (deleted == 0) {
-            throw new IllegalArgumentException("Meal item not found or does not belong to user.");
+            throw new ResourceNotFoundException("Meal item not found or does not belong to user.");
         }
     }
 
@@ -116,7 +116,7 @@ public class MealService {
     public void updateSavedMeal(Integer userId, Integer mealId, UpdateSavedMealRequest request) {
         Meal meal = mealRepository.findByIdWithItems(mealId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Meal not found")
+                        new ResourceNotFoundException("Meal not found")
                 );
 
         if (meal.getKind() != MealKind.SAVED) {
@@ -257,7 +257,7 @@ public class MealService {
         );
 
         if (deleted == 0) {
-            throw new IllegalArgumentException("Meal not found or does not belong to user.");
+            throw new ResourceNotFoundException("Meal not found or does not belong to user.");
         }
     }
 

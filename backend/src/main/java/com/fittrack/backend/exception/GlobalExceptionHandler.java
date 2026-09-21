@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,7 +25,7 @@ public class GlobalExceptionHandler {
                 new ApiError(
                         HttpStatus.BAD_REQUEST.value(),
                         exception.getMessage(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -41,7 +43,29 @@ public class GlobalExceptionHandler {
                 new ApiError(
                         HttpStatus.BAD_REQUEST.value(),
                         message,
-                        LocalDateTime.now()
+                        Instant.now()
+                )
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<@NonNull ApiError> handleMessageNotReadable() {
+        return ResponseEntity.badRequest().body(
+                new ApiError(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Malformed or invalid request body.",
+                        Instant.now()
+                )
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<@NonNull ApiError> handleTypeMismatch(MethodArgumentTypeMismatchException exception) {
+        return ResponseEntity.badRequest().body(
+                new ApiError(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Invalid value for parameter '" + exception.getName() + "'.",
+                        Instant.now()
                 )
         );
     }
@@ -52,18 +76,18 @@ public class GlobalExceptionHandler {
                 new ApiError(
                         HttpStatus.CONFLICT.value(),
                         "Database constraint violation.",
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
 
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<@NonNull ApiError> handleIllegalState(IllegalStateException exception) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<@NonNull ApiError> handleConflict(ConflictException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 new ApiError(
                         HttpStatus.CONFLICT.value(),
                         exception.getMessage(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -74,7 +98,7 @@ public class GlobalExceptionHandler {
                 new ApiError(
                         HttpStatus.NOT_FOUND.value(),
                         exception.getMessage(),
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }
@@ -87,7 +111,7 @@ public class GlobalExceptionHandler {
                 new ApiError(
                         HttpStatus.INTERNAL_SERVER_ERROR.value(),
                         "An unexpected error occurred.",
-                        LocalDateTime.now()
+                        Instant.now()
                 )
         );
     }

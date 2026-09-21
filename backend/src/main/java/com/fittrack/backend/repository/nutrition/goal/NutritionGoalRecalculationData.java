@@ -4,6 +4,7 @@ import com.fittrack.backend.entity.profile.ActivityLevel;
 import com.fittrack.backend.entity.profile.Gender;
 import com.fittrack.backend.entity.profile.WeightGoal;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 public record NutritionGoalRecalculationData(
@@ -12,12 +13,16 @@ public record NutritionGoalRecalculationData(
         LocalDate dateOfBirth,
         Gender gender,
         double height,
+
         Double currentWeight,
 
         ActivityLevel activityLevel,
         WeightGoal goalType,
         Double goalWeight,
         Double weeklyGoal,
+
+        Double progressStartWeight,
+        Instant progressStartedAt,
 
         LocalDate startDate
 ) {}

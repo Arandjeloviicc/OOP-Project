@@ -505,7 +505,7 @@ public class MealItemJdbcRepository {
 
         // input_items - pretvara sve iteme iz requesta u privremenu tabelu
         // valid_user - proverava da korisnik postoji
-        // valid_items - proverava svaki food_id; null food_id je dozvoljen za custom item
+        // valid_items - proverava svaki food_id (null food_id je dozvoljen za custom item) i, kada food_id postoji, zamenjuje sve nutritivne vrednosti iz requesta autoritativnim vrednostima iz foods tabele, da klijent ne bi mogao da posalje proizvoljne kalorije/makronutrijente za postojecu hranu
         // inserted_meal - kreira SAVED meal samo ako su svi itemi validni
         // inserted_items - ubacuje sve iteme odjednom u novokreirani meal
         // SELECT - vraca rezultat validacije bez dodatnog odlaska do baze
@@ -529,13 +529,54 @@ public class MealItemJdbcRepository {
                 WHERE id = ?
             ),
             valid_items AS (
-                SELECT i.*
-                FROM input_items i
-                CROSS JOIN valid_user vu
-                LEFT JOIN foods f
-                    ON f.id = i.food_id
-                WHERE i.food_id IS NULL
-                   OR f.id IS NOT NULL
+                  SELECT
+                      i.food_id,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.food_name
+                          ELSE f.name
+                      END AS food_name,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.brand
+                          ELSE f.brand
+                      END AS brand,
+            
+                      i.quantity_grams,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.serving_size_grams
+                          ELSE f.serving_size_grams
+                      END AS serving_size_grams,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.calories_per_serving
+                          ELSE f.calories_per_serving
+                      END AS calories_per_serving,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.protein_per_serving
+                          ELSE f.protein_per_serving
+                      END AS protein_per_serving,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.carbs_per_serving
+                          ELSE f.carbs_per_serving
+                      END AS carbs_per_serving,
+            
+                      CASE
+                          WHEN i.food_id IS NULL THEN i.fat_per_serving
+                          ELSE f.fat_per_serving
+                      END AS fat_per_serving
+            
+                  FROM input_items i
+                  CROSS JOIN valid_user vu
+            
+                  LEFT JOIN foods f
+                      ON f.id = i.food_id
+            
+                  WHERE i.food_id IS NULL
+                     OR f.id IS NOT NULL
             ),
             inserted_meal AS (
                 INSERT INTO meals (
@@ -743,7 +784,7 @@ public class MealItemJdbcRepository {
         );
 
         if (inserted == 0) {
-            throw new IllegalArgumentException("Saved meal not found or has no items.");
+            throw new ResourceNotFoundException("Saved meal not found.");
         }
     }
 

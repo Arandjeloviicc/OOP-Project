@@ -9,6 +9,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.Instant;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -112,25 +115,29 @@ public class NutritionGoalJdbcRepository {
         String sql = """
             SELECT
                 ng.id AS goal_id,
-
+    
                 up.date_of_birth,
                 up.gender,
                 up.height,
-
+    
                 current_weight.weight AS current_weight,
-
+    
                 ng.activity_level,
                 ng.goal_type,
                 ng.goal_weight,
                 ng.weekly_goal,
+    
+                ng.progress_start_weight,
+                ng.progress_started_at,
+    
                 ng.start_date
-
+    
             FROM user_profiles up
-
+    
             JOIN nutrition_goals ng
                 ON ng.user_id = up.user_id
                AND ng.end_date IS NULL
-
+    
             LEFT JOIN LATERAL (
                 SELECT wl.weight
                 FROM weight_logs wl
@@ -138,11 +145,11 @@ public class NutritionGoalJdbcRepository {
                 ORDER BY wl.logged_at DESC, wl.id DESC
                 LIMIT 1
             ) current_weight ON TRUE
-
+    
             WHERE up.user_id = ?
             """;
 
-        return jdbcTemplate.query(
+        List<NutritionGoalRecalculationData> results = jdbcTemplate.query(
                 sql,
                 (resultSet, _) -> new NutritionGoalRecalculationData(
                         resultSet.getInt("goal_id"),
@@ -177,12 +184,22 @@ public class NutritionGoalJdbcRepository {
                         ),
 
                         resultSet.getObject(
+                                "progress_start_weight",
+                                Double.class
+                        ),
+                        resultSet.getTimestamp(
+                                "progress_started_at"
+                        ).toInstant(),
+
+                        resultSet.getObject(
                                 "start_date",
                                 LocalDate.class
                         )
                 ),
                 userId
-        ).stream().findFirst();
+        );
+
+        return results.stream().findFirst();
     }
 
     public int insertGoalVersion(Integer userId, NutritionGoalRecalculationData data, NutritionTargets targets, LocalDate startDate) {
@@ -193,16 +210,19 @@ public class NutritionGoalJdbcRepository {
                 goal_type,
                 goal_weight,
                 weekly_goal,
-
+    
                 target_calories,
                 target_protein,
                 target_carbs,
                 target_fat,
-
+    
+                progress_start_weight,
+                progress_started_at,
+    
                 start_date,
                 created_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             """;
 
         return jdbcTemplate.update(
@@ -219,11 +239,14 @@ public class NutritionGoalJdbcRepository {
                 targets.carbs(),
                 targets.fat(),
 
+                data.progressStartWeight(),
+                Timestamp.from(data.progressStartedAt()),
+
                 startDate
         );
     }
 
-    public int insertGoalVersion(Integer userId, NutritionGoalUpdateRequest request, NutritionTargets targets, LocalDate startDate) {
+    public int insertGoalVersion(Integer userId, NutritionGoalUpdateRequest request, NutritionTargets targets, LocalDate startDate, Double progressStartWeight, Instant progressStartedAt) {
         String sql = """
             INSERT INTO nutrition_goals (
                 user_id,
@@ -231,16 +254,19 @@ public class NutritionGoalJdbcRepository {
                 goal_type,
                 goal_weight,
                 weekly_goal,
-
+    
                 target_calories,
                 target_protein,
                 target_carbs,
                 target_fat,
-
+    
+                progress_start_weight,
+                progress_started_at,
+    
                 start_date,
                 created_at
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
             """;
 
         return jdbcTemplate.update(
@@ -257,11 +283,14 @@ public class NutritionGoalJdbcRepository {
                 targets.carbs(),
                 targets.fat(),
 
+                progressStartWeight,
+                Timestamp.from(progressStartedAt),
+
                 startDate
         );
     }
 
-    public int updateGoal(Integer goalId, NutritionGoalUpdateRequest request, NutritionTargets targets) {
+    public int updateGoal(Integer goalId, NutritionGoalUpdateRequest request, NutritionTargets targets, Double progressStartWeight, Instant progressStartedAt) {
         String sql = """
             UPDATE nutrition_goals
             SET
@@ -269,12 +298,15 @@ public class NutritionGoalJdbcRepository {
                 goal_type = ?,
                 goal_weight = ?,
                 weekly_goal = ?,
-
+    
                 target_calories = ?,
                 target_protein = ?,
                 target_carbs = ?,
                 target_fat = ?,
-
+    
+                progress_start_weight = ?,
+                progress_started_at = ?,
+    
                 updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
               AND end_date IS NULL
@@ -291,6 +323,9 @@ public class NutritionGoalJdbcRepository {
                 targets.protein(),
                 targets.carbs(),
                 targets.fat(),
+
+                progressStartWeight,
+                Timestamp.from(progressStartedAt),
 
                 goalId
         );
