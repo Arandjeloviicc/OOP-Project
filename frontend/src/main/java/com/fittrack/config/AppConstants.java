@@ -13,10 +13,10 @@ public final class AppConstants {
         public static final String PROFILE_SETUP = "profile/profile-setup-view.fxml";
         public static final String MAIN_LAYOUT = "main/main-layout-view.fxml";
         public static final String DASHBOARD = "dashboard/dashboard-view.fxml";
-        public static final String CALCULATORS = "calculator/calculators-view.fxml";
         public static final String MEALS = "nutrition/meals-view.fxml";
         public static final String WORKOUTS = "workout/workouts-view.fxml";
         public static final String MEASUREMENTS = "measurements/measurements-view.fxml";
+        public static final String CALCULATORS = "calculator/calculators-view.fxml";
         public static final String PROFILE = "profile/profile-view.fxml";
     }
 
@@ -31,6 +31,10 @@ public final class AppConstants {
         public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
         public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
         public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
+
+        // Measurements
+        public static final String WEIGHT_LOG_ITEM = "measurements/components/weight-log-item.fxml";
+        public static final String BODY_MEASUREMENT_ITEM = "measurements/components/body-measurement-item.fxml";
 
         // Profile
         public static final String PROFILE_WEIGHT_CARD = "profile/components/profile-weight-card.fxml";

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.image.ImageView?>
+<?import com.fittrack.config.AppImages?>
+<HBox fx:id="rootLayout"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.measurements.components.WeightLogItemController"
+      stylesheets="@../../../css/measurements/components/weight-log-item.css"
+      maxWidth="Infinity"
+      alignment="CENTER_LEFT"
+      onMouseClicked="#handleEdit"
+      styleClass="weight-log-card">
+
+    <!-- Date + change -->
+    <VBox alignment="CENTER_LEFT"
+          styleClass="weight-log-info">
+
+        <Label fx:id="dateLabel"
+               styleClass="weight-log-date"/>
+
+        <Label fx:id="changeLabel"
+               styleClass="weight-log-change"/>
+
+    </VBox>
+
+    <Region HBox.hgrow="ALWAYS"/>
+
+    <!-- Weight -->
+    <Label fx:id="weightLabel"
+           styleClass="weight-log-value"/>
+
+    <!-- Delete -->
+    <Button fx:id="deleteButton"
+            focusTraversable="false"
+            onAction="#handleDelete"
+            styleClass="weight-log-delete-button">
+        <graphic>
+            <ImageView fitWidth="16"
+                       fitHeight="16"
+                       preserveRatio="true">
+                <AppImages fx:constant="TRASH_ICON"/>
+            </ImageView>
+        </graphic>
+    </Button>
+
+</HBox>

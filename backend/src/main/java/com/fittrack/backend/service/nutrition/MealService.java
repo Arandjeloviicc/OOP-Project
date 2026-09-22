@@ -11,6 +11,7 @@ import com.fittrack.backend.repository.nutrition.food.FoodRepository;
 import com.fittrack.backend.repository.nutrition.meal.item.MealItemJdbcRepository;
 import com.fittrack.backend.repository.nutrition.meal.item.MealItemRepository;
 import com.fittrack.backend.repository.nutrition.meal.MealRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,19 +21,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MealService {
 
     private final MealRepository mealRepository;
     private final MealItemRepository mealItemRepository;
     private final MealItemJdbcRepository mealItemJdbcRepository;
     private final FoodRepository foodRepository;
-
-    public MealService(MealRepository mealRepository, MealItemRepository mealItemRepository, MealItemJdbcRepository mealItemJdbcRepository, FoodRepository foodRepository) {
-        this.mealRepository = mealRepository;
-        this.mealItemRepository = mealItemRepository;
-        this.mealItemJdbcRepository = mealItemJdbcRepository;
-        this.foodRepository = foodRepository;
-    }
 
     public List<MealResponse> getMealsForDate(Integer userId, LocalDate mealDate) {
 

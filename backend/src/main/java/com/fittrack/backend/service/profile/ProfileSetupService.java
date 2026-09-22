@@ -5,6 +5,7 @@ import com.fittrack.backend.dto.profile.ProfileSetupRequest;
 import com.fittrack.backend.repository.profile.ProfileSetupJdbcRepository;
 import com.fittrack.backend.service.calculation.NutritionGoalCalculationService;
 import com.fittrack.backend.service.nutrition.NutritionGoalValidationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 
 @Service
+@RequiredArgsConstructor
 public class ProfileSetupService {
 
     private final Clock clock;
@@ -20,14 +22,6 @@ public class ProfileSetupService {
     private final NutritionGoalCalculationService nutritionGoalCalculationService;
     private final NutritionGoalValidationService nutritionGoalValidationService;
     private final ProfileValidationService profileValidationService;
-
-    public ProfileSetupService(Clock clock, ProfileSetupJdbcRepository profileSetupJdbcRepository, NutritionGoalCalculationService nutritionGoalCalculationService, NutritionGoalValidationService nutritionGoalValidationService, ProfileValidationService profileValidationService) {
-        this.clock = clock;
-        this.profileSetupJdbcRepository = profileSetupJdbcRepository;
-        this.nutritionGoalCalculationService = nutritionGoalCalculationService;
-        this.nutritionGoalValidationService = nutritionGoalValidationService;
-        this.profileValidationService = profileValidationService;
-    }
 
     @Transactional
     public void completeProfile(ProfileSetupRequest request) {

@@ -45,4 +45,14 @@ public final class NumberUtils {
                 .stripTrailingZeros()
                 .toPlainString();
     }
+
+    public static String formatInputDecimalWithSign(double value) {
+        String formatted = formatInputDecimal(value);
+
+        if (value > 0) {
+            return "+" + formatted;
+        }
+
+        return formatted;
+    }
 }

@@ -18,12 +18,12 @@ public final class AppImages {
     public static final Image LOGIN_REGISTER_BG = load("/com/fittrack/images/login-register-bg-darker.png");
 
     // Sidebar Icons
-    public static final Image DASHBOARD_ICON = load("/com/fittrack/images/icons/dashboard.png");
-    public static final Image CALCULATORS_ICON = load("/com/fittrack/images/icons/calculators.png");
-    public static final Image MEALS_ICON = load("/com/fittrack/images/icons/meals.png");
-    public static final Image WORKOUTS_ICON = load("/com/fittrack/images/icons/workouts.png");
-    public static final Image MEASUREMENTS_ICON = load("/com/fittrack/images/icons/measurements.png");
-    public static final Image USER_PROFILE_ICON = load("/com/fittrack/images/icons/profile.png");
+    public static final Image DASHBOARD_ICON = load("/com/fittrack/images/icons/sidebar/dashboard.png");
+    public static final Image CALCULATORS_ICON = load("/com/fittrack/images/icons/sidebar/calculators.png");
+    public static final Image MEALS_ICON = load("/com/fittrack/images/icons/sidebar/meals.png");
+    public static final Image WORKOUTS_ICON = load("/com/fittrack/images/icons/sidebar/workouts.png");
+    public static final Image MEASUREMENTS_ICON = load("/com/fittrack/images/icons/sidebar/measurements.png");
+    public static final Image USER_PROFILE_ICON = load("/com/fittrack/images/icons/sidebar/profile.png");
 
     // Meal Types
     public static final Image BREAKFAST_ICON = load("/com/fittrack/images/icons/meals/breakfast.png");
@@ -32,9 +32,12 @@ public final class AppImages {
     public static final Image SNACKS_ICON = load("/com/fittrack/images/icons/meals/snacks.png");
 
     // Daily Meal Options
-    public static final Image BOOKMARK_ICON = load("/com/fittrack/images/icons/bookmark.png");
-    public static final Image COPY_FROM_ICON = load("/com/fittrack/images/icons/copyFrom.png");
-    public static final Image COPY_TO_ICON = load("/com/fittrack/images/icons/copyTo.png");
+    public static final Image BOOKMARK_ICON = load("/com/fittrack/images/icons/daily-meal-card-options/bookmark.png");
+    public static final Image COPY_FROM_ICON = load("/com/fittrack/images/icons/daily-meal-card-options/copyFrom.png");
+    public static final Image COPY_TO_ICON = load("/com/fittrack/images/icons/daily-meal-card-options/copyTo.png");
+
+    // Delete
+    public static final Image TRASH_ICON = load("/com/fittrack/images/icons/other/trash.png");
 
     // ── Load Image ─────────────────────────────────────────────────
     private static Image load(String path) {

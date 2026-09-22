@@ -181,7 +181,7 @@ public class CalculatorsController extends FormController implements Initializab
     }
 
     private void handleBMI() {
-        if(!validateInputs()) {
+        if (!validateInputs()) {
             hideResults();
             return;
         }
@@ -222,7 +222,7 @@ public class CalculatorsController extends FormController implements Initializab
     }
 
     private void handleBodyFat() {
-        if(!validateInputs()) {
+        if (!validateInputs()) {
             hideResults();
             return;
         }

@@ -33,7 +33,7 @@ public class SceneManager {
                 );
 
                 // Wrong FXML file name
-                if(resource == null) {
+                if (resource == null) {
                     throw new IllegalArgumentException(
                             "FXML resource not found: " + fxml
                     );

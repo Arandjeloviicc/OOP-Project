@@ -6,20 +6,17 @@ import com.fittrack.backend.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.backend.service.nutrition.NutritionGoalService;
 import com.fittrack.backend.service.profile.ProfileService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/profile")
+@RequiredArgsConstructor
 public class ProfileController {
 
     private final ProfileService profileService;
     private final NutritionGoalService nutritionGoalService;
-
-    public ProfileController(ProfileService profileService, NutritionGoalService nutritionGoalService) {
-        this.profileService = profileService;
-        this.nutritionGoalService = nutritionGoalService;
-    }
 
     @GetMapping("/user/{userId}")
     public ProfileResponse getProfile(@PathVariable Integer userId) {

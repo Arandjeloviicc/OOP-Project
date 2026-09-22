@@ -240,7 +240,7 @@
 }
 
 /* ========================================================== */
-/* == GENDER CHOICE ============================================ */
+/* == GENDER CHOICE ========================================= */
 /* ========================================================== */
 
 .gender-options {
@@ -274,4 +274,48 @@
 
 .gender-option.error {
     -fx-border-color: -app-danger-border;
+}
+
+/* ========================================================== */
+/* == TAB TOGGLE BUTTON ===================================== */
+/* ========================================================== */
+
+.tab-toggle-button {
+    -fx-min-height: 3.2em;
+    -fx-pref-height: 3.2em;
+    -fx-max-height: 3.2em;
+
+    -fx-background-color: -app-control-background-soft;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+
+    -fx-border-color: -app-control-border;
+    -fx-border-radius: 0;
+    -fx-border-width: 1px;
+
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 1em;
+    -fx-font-weight: bold;
+
+    -fx-padding: 0.7em 1.4em;
+    -fx-cursor: hand;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab-toggle-button:hover {
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-border-strong;
+    -fx-text-fill: -app-text-primary;
+}
+
+.tab-toggle-button:selected {
+    -fx-background-color: -app-selected;
+    -fx-border-color: -app-primary-light;
+    -fx-text-fill: -app-text-primary;
+
+    -fx-opacity: 1;
+    -fx-cursor: default;
 }

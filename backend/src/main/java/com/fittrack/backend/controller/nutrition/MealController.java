@@ -7,6 +7,7 @@ import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.backend.dto.nutrition.meal.item.UpdateMealItemRequest;
 import com.fittrack.backend.service.nutrition.MealService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/nutrition/meals")
+@RequiredArgsConstructor
 public class MealController {
 
     private final MealService mealService;
-
-    public MealController(MealService mealService) {
-        this.mealService = mealService;
-    }
 
     @GetMapping("/user/{userId}")
     public List<MealResponse> getMealsForDate(@PathVariable Integer userId, @RequestParam LocalDate date) {

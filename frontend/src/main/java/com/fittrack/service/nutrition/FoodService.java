@@ -35,6 +35,6 @@ public class FoodService {
 
     // ── Helpers ─────────────────────────────────────────────
     private Integer currentUserId() {
-        return UserSession.getInstance().getCurrentUser().id();
+        return UserSession.getInstance().requireCurrentUser().id();
     }
 }

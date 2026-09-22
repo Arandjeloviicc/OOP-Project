@@ -1,6 +1,11 @@
 package com.fittrack.service.auth;
 
-import com.fittrack.api.auth.*;
+import com.fittrack.api.auth.login.LoginApi;
+import com.fittrack.api.auth.login.LoginResult;
+import com.fittrack.api.auth.login.LoginStatus;
+import com.fittrack.api.auth.register.RegistrationApi;
+import com.fittrack.api.auth.register.RegistrationResult;
+import com.fittrack.api.auth.register.RegistrationStatus;
 import com.fittrack.model.user.User;
 import com.fittrack.session.UserSession;
 

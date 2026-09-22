@@ -79,7 +79,7 @@ public class RegisterController extends AuthFormController implements Initializa
 
         boolean valid = true;
 
-        if(!isValidUsername(username)) {
+        if (!isValidUsername(username)) {
             showUsernameMessage(AppConstants.Messages.INVALID_USERNAME_MESSAGE);
             shake(usernameField);
             valid = false;
@@ -192,7 +192,7 @@ public class RegisterController extends AuthFormController implements Initializa
     }
 
     public void prefillEmail(String email) {
-        if(email != null && !email.isBlank()) {
+        if (email != null && !email.isBlank()) {
             emailField.setText(email);
         }
     }

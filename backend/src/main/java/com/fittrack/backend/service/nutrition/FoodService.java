@@ -5,20 +5,17 @@ import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.repository.nutrition.food.FoodJdbcRepository;
 import com.fittrack.backend.repository.nutrition.food.FoodRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FoodService {
 
     private final FoodRepository foodRepository;
     private final FoodJdbcRepository foodJdbcRepository;
-
-    public FoodService(FoodRepository foodRepository, FoodJdbcRepository foodJdbcRepository) {
-        this.foodRepository = foodRepository;
-        this.foodJdbcRepository = foodJdbcRepository;
-    }
 
     public List<Food> searchFoods(String search) {
         if (search == null || search.isBlank()) {

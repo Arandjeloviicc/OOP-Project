@@ -1,0 +1,113 @@
+@import "../../theme.css";
+
+/* ========================================================== */
+/* == WEIGHT LOG CARD ======================================= */
+/* ========================================================== */
+
+.weight-log-card {
+    -fx-max-width: -1;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.8em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.8em;
+
+    -fx-padding: 0.9em 1em;
+    -fx-spacing: 0.9em;
+
+    -fx-min-height: 4.5em;
+
+    -fx-cursor: hand;
+}
+
+.weight-log-card:hover {
+    -fx-background-color: -app-control-background-soft;
+    -fx-border-color: -app-border-strong;
+}
+
+.weight-log-card:pressed {
+    -fx-background-color: -app-hover;
+}
+
+/* ========================================================== */
+/* == INFO ================================================== */
+/* ========================================================== */
+
+.weight-log-info {
+    -fx-spacing: 0.15em;
+}
+
+.weight-log-date {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: 700;
+}
+
+/* ========================================================== */
+/* == CHANGE ================================================== */
+/* ========================================================== */
+
+.weight-log-change {
+    -fx-font-size: 0.9em;
+}
+
+.weight-change-favorable {
+    -fx-text-fill: -app-success;
+}
+
+.weight-change-unfavorable {
+    -fx-text-fill: -app-danger;
+}
+
+.weight-change-neutral {
+    -fx-text-fill: -app-text-muted;
+}
+
+/* ========================================================== */
+/* == VALUE ================================================= */
+/* ========================================================== */
+
+.weight-log-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.2em;
+    -fx-font-weight: 700;
+}
+
+/* ========================================================== */
+/* == DELETE ================================================ */
+/* ========================================================== */
+
+.weight-log-delete-button {
+    -fx-background-color: -app-danger-background;
+    -fx-background-radius: 0.65em;
+
+    -fx-border-color: -app-danger-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.65em;
+
+    -fx-text-fill: -app-danger-text;
+    -fx-font-size: 1.15em;
+    -fx-font-weight: 700;
+
+    -fx-min-width: 2.25em;
+    -fx-pref-width: 2.25em;
+    -fx-max-width: 2.25em;
+
+    -fx-min-height: 2.25em;
+    -fx-pref-height: 2.25em;
+    -fx-max-height: 2.25em;
+
+    -fx-padding: 0;
+
+    -fx-cursor: hand;
+}
+
+.weight-log-delete-button:hover {
+    -fx-background-color: -app-danger-background-pressed;
+}
+
+.weight-log-delete-button:pressed {
+    -fx-opacity: 0.8;
+}

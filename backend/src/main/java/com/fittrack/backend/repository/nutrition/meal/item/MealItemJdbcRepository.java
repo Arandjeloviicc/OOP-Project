@@ -4,6 +4,7 @@ import com.fittrack.backend.dto.nutrition.meal.item.CreateMealItemRequest;
 import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.backend.entity.nutrition.MealItem;
 import com.fittrack.backend.exception.ResourceNotFoundException;
+import com.fittrack.backend.repository.nutrition.meal.item.projection.CreateSavedMealResult;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -882,13 +883,4 @@ public class MealItemJdbcRepository {
 
         return parameters;
     }
-
-    // ── Record ───────────────────────────────────────────────────────
-    private record CreateSavedMealResult(
-            boolean userExists,
-            int requestedCount,
-            int validCount,
-            int insertedCount
-    ) {}
 }
-

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.measurements.MeasurementsController"
+           stylesheets="@../../css/measurements/measurements-view.css"
+           styleClass="measurements-root">
+
+    <fx:define>
+        <ToggleGroup fx:id="measurementTypeGroup"/>
+    </fx:define>
+
+    <ScrollPane fx:id="measurementsScroll"
+                fitToWidth="true"
+                hbarPolicy="NEVER"
+                styleClass="app-scroll">
+
+        <VBox maxWidth="Infinity"
+              alignment="TOP_CENTER"
+              styleClass="app-scroll-content">
+
+            <VBox maxWidth="Infinity"
+                  styleClass="measurements-content">
+
+                <!-- Measurement Type -->
+                <HBox maxWidth="Infinity"
+                      styleClass="measurement-type-tabs">
+
+                    <ToggleButton fx:id="weightTab"
+                                  text="Weight"
+                                  toggleGroup="$measurementTypeGroup"
+                                  maxWidth="Infinity"
+                                  selected="true"
+                                  styleClass="tab-toggle-button"/>
+
+                    <ToggleButton fx:id="bodyMeasurementsTab"
+                                  text="Body measurements"
+                                  toggleGroup="$measurementTypeGroup"
+                                  maxWidth="Infinity"
+                                  styleClass="tab-toggle-button"/>
+
+                </HBox>
+
+                <!-- Chart component will be loaded here later -->
+                <VBox fx:id="chartContainer"
+                      maxWidth="Infinity"
+                      visible="false"
+                      managed="false"
+                      styleClass="measurement-chart-container"/>
+
+                <!-- Add Entry -->
+                <Button fx:id="addEntryButton"
+                        text="+  Add weight"
+                        maxWidth="Infinity"
+                        onAction="#handleAdd"
+                        styleClass="action-btn"/>
+
+                <!-- History -->
+                <VBox maxWidth="Infinity"
+                      styleClass="measurement-history-section">
+
+                    <Label text="History"
+                           maxWidth="Infinity"
+                           styleClass="section-title"/>
+
+                    <!-- Weight/body history components will be loaded here -->
+                    <VBox fx:id="historyContainer"
+                          maxWidth="Infinity"
+                          styleClass="measurement-history-list"/>
+
+                </VBox>
+
+            </VBox>
+
+        </VBox>
+
+    </ScrollPane>
+
+</StackPane>

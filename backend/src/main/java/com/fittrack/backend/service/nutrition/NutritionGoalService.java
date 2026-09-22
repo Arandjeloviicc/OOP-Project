@@ -7,7 +7,8 @@ import com.fittrack.backend.exception.ResourceNotFoundException;
 import com.fittrack.backend.repository.nutrition.goal.NutritionGoalJdbcRepository;
 import com.fittrack.backend.repository.nutrition.goal.NutritionGoalRecalculationData;
 import com.fittrack.backend.service.calculation.NutritionGoalCalculationService;
-import com.fittrack.backend.service.measurement.BodyFatService;
+import com.fittrack.backend.service.measurements.BodyFatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.time.Period;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class NutritionGoalService {
 
     private final Clock clock;
@@ -26,14 +28,6 @@ public class NutritionGoalService {
     private final NutritionGoalCalculationService nutritionGoalCalculationService;
     private final NutritionGoalValidationService nutritionGoalValidationService;
     private final BodyFatService bodyFatService;
-
-    public NutritionGoalService(Clock clock, NutritionGoalJdbcRepository nutritionGoalJdbcRepository, NutritionGoalCalculationService nutritionGoalCalculationService, NutritionGoalValidationService nutritionGoalValidationService, BodyFatService bodyFatService) {
-        this.clock = clock;
-        this.nutritionGoalJdbcRepository = nutritionGoalJdbcRepository;
-        this.nutritionGoalCalculationService = nutritionGoalCalculationService;
-        this.nutritionGoalValidationService = nutritionGoalValidationService;
-        this.bodyFatService = bodyFatService;
-    }
 
     public NutritionTargets getTargetsForDate(Integer userId, LocalDate date) {
         return nutritionGoalJdbcRepository

@@ -168,7 +168,7 @@ public class LoginController extends AuthFormController implements Initializable
     }
 
     public void prefillEmail(String email) {
-        if(email != null && !email.isBlank()) {
+        if (email != null && !email.isBlank()) {
             emailField.setText(email);
         }
     }

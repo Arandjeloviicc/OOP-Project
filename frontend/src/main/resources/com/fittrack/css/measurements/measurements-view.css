@@ -1,0 +1,73 @@
+@import "../theme.css";
+@import "../common/base-view.css";
+@import "../common/form-controls.css";
+@import "../common/scroll.css";
+
+/* ========================================================== */
+/* == ROOT ================================================== */
+/* ========================================================== */
+
+.measurements-root {
+    -fx-background-color: -app-background;
+}
+
+.measurements-content {
+    -fx-max-width: 75em;
+
+    -fx-spacing: 1.5em;
+    -fx-padding: 0 2em 2em 2em;
+}
+
+/* ========================================================== */
+/* == MEASUREMENT TYPE ====================================== */
+/* ========================================================== */
+
+.measurement-type-tabs {
+    -fx-spacing: 0;
+    -fx-padding: 0 0 1.3em 0;
+    -fx-alignment: CENTER;
+}
+
+/* ========================================================== */
+/* == CHART ================================================= */
+/* ========================================================== */
+
+.measurement-chart-container {
+    -fx-max-width: -1;
+}
+
+/* ========================================================== */
+/* == HISTORY =============================================== */
+/* ========================================================== */
+
+.measurement-history-section {
+    -fx-max-width: -1;
+
+    -fx-spacing: 0.8em;
+    -fx-alignment: TOP_CENTER;
+}
+
+.measurement-history-list {
+    -fx-max-width: -1;
+
+    -fx-spacing: 0.75em;
+    -fx-alignment: TOP_CENTER;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.measurements-root:narrow .measurements-content {
+    -fx-max-width: -1;
+    -fx-padding: 0 1em 2em 1em;
+    -fx-spacing: 1.25em;
+}
+
+.measurements-root:narrow .measurements-title {
+    -fx-font-size: 1.6em;
+}
+
+.measurements-root:narrow .measurement-type-tabs {
+    -fx-spacing: 0.4em;
+}

@@ -93,21 +93,6 @@
                         </graphic>
                     </ToggleButton>
 
-                    <ToggleButton fx:id="calculatorsButton"
-                                  text="Calculators"
-                                  maxWidth="Infinity"
-                                  toggleGroup="$navigationGroup"
-                                  onAction="#handleCalculators"
-                                  styleClass="navigation-button">
-                        <graphic>
-                            <ImageView fitWidth="20"
-                                       fitHeight="20"
-                                       preserveRatio="true">
-                                <AppImages fx:constant="CALCULATORS_ICON"/>
-                            </ImageView>
-                        </graphic>
-                    </ToggleButton>
-
                     <ToggleButton fx:id="mealsButton"
                                   text="Meals"
                                   maxWidth="Infinity"
@@ -143,8 +128,6 @@
                     <ToggleButton fx:id="measurementsButton"
                                   text="Measurements"
                                   maxWidth="Infinity"
-                                  visible="false"
-                                  managed="false"
                                   toggleGroup="$navigationGroup"
                                   onAction="#handleMeasurements"
                                   styleClass="navigation-button">
@@ -153,6 +136,21 @@
                                        fitHeight="20"
                                        preserveRatio="true">
                                 <AppImages fx:constant="MEASUREMENTS_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="calculatorsButton"
+                                  text="Calculators"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleCalculators"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="CALCULATORS_ICON"/>
                             </ImageView>
                         </graphic>
                     </ToggleButton>

@@ -30,7 +30,6 @@
 /* == TABS ================================================== */
 /* ========================================================== */
 
-/* ── Calculator Tabs ──────────────────────────────────────── */
 .calculator-tabs {
     -fx-spacing: 0;
     -fx-padding: 0 0 1.3em 0;
@@ -48,51 +47,6 @@
     -fx-alignment: TOP_CENTER;
     -fx-fill-width: true;
     -fx-padding: 0 1.5em 2em 1.5em;
-}
-
-/* ========================================================== */
-/* == TAB BUTTON ============================================ */
-/* ========================================================== */
-
-/* ── Calculators Tab Button ─────────────────────────────────────── */
-.calculator-tab-button {
-    -fx-min-height: 3.2em;
-    -fx-pref-height: 3.2em;
-    -fx-max-height: 3.2em;
-
-    -fx-background-color: -app-control-background-soft;
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
-
-    -fx-border-color: -app-control-border;
-    -fx-border-radius: 0;
-    -fx-border-width: 1px;
-
-    -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 1em;
-    -fx-font-weight: bold;
-
-    -fx-padding: 0.7em 1.4em;
-    -fx-cursor: hand;
-
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.calculator-tab-button:hover {
-    -fx-background-color: -app-hover;
-    -fx-border-color: -app-border-strong;
-    -fx-text-fill: -app-text-primary;
-}
-
-.calculator-tab-button:selected {
-    -fx-background-color: -app-selected;
-    -fx-border-color: -app-primary-light;
-    -fx-text-fill: -app-text-primary;
-
-    -fx-opacity: 1;
-    -fx-cursor: default;
 }
 
 /* ========================================================== */

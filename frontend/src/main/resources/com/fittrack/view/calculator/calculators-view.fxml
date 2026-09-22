@@ -837,20 +837,20 @@
                           text="BMI"
                           toggleGroup="$calculatorGroup"
                           maxWidth="Infinity"
-                          styleClass="calculator-tab-button"
+                          styleClass="tab-toggle-button"
                           selected="true"/>
 
             <ToggleButton fx:id="tdeeTab"
                           text="TDEE"
                           toggleGroup="$calculatorGroup"
                           maxWidth="Infinity"
-                          styleClass="calculator-tab-button"/>
+                          styleClass="tab-toggle-button"/>
 
             <ToggleButton fx:id="bodyFatTab"
                           text="Body Fat"
                           toggleGroup="$calculatorGroup"
                           maxWidth="Infinity"
-                          styleClass="calculator-tab-button"/>
+                          styleClass="tab-toggle-button"/>
         </HBox>
     </top>
 
