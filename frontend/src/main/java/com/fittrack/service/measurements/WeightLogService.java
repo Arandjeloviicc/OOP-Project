@@ -1,11 +1,12 @@
 package com.fittrack.service.measurements;
 
 import com.fittrack.api.measurements.WeightLogApi;
+import com.fittrack.dto.measurements.weight.WeightHistoryResponse;
 import com.fittrack.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.dto.measurements.weight.WeightLogResponse;
+import com.fittrack.model.measurement.WeightHistoryData;
+import com.fittrack.model.profile.WeightGoal;
 import com.fittrack.session.UserSession;
-
-import java.util.List;
 
 public class WeightLogService {
 
@@ -15,8 +16,13 @@ public class WeightLogService {
         this.weightLogApi = new WeightLogApi();
     }
 
-    public List<WeightLogResponse> getWeightHistory() {
-        return weightLogApi.getWeightHistory(currentUserId());
+    public WeightHistoryData getWeightHistory() {
+        WeightHistoryResponse response = weightLogApi.getWeightHistory(currentUserId());
+
+        return new WeightHistoryData(
+                response.logs(),
+                WeightGoal.valueOf(response.goalType())
+        );
     }
 
     public WeightLogResponse createWeightLog(WeightLogRequest request) {

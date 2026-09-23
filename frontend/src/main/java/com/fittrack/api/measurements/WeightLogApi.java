@@ -1,17 +1,16 @@
 package com.fittrack.api.measurements;
 
 import com.fittrack.api.common.BaseApi;
+import com.fittrack.dto.measurements.weight.WeightHistoryResponse;
 import com.fittrack.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.dto.measurements.weight.WeightLogResponse;
 import tools.jackson.core.type.TypeReference;
-
-import java.util.List;
 
 public class WeightLogApi extends BaseApi {
 
     private static final String API_URL = MEASUREMENTS_URL + "/weights";
 
-    public List<WeightLogResponse> getWeightHistory(Integer userId) {
+    public WeightHistoryResponse getWeightHistory(Integer userId) {
         String url = API_URL + "/user/" + userId;
 
         return apiClient.get(

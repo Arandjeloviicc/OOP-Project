@@ -1,5 +1,6 @@
 package com.fittrack.controller.measurements.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.dto.measurements.weight.WeightLogResponse;
 import com.fittrack.model.profile.WeightGoal;
 import com.fittrack.util.NumberUtils;
@@ -13,7 +14,7 @@ import javafx.scene.layout.HBox;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class WeightLogItemController {
+public class WeightLogItemController extends BaseController {
 
     @FXML private HBox rootLayout;
     @FXML private Label dateLabel;
@@ -25,6 +26,7 @@ public class WeightLogItemController {
     private Runnable onEditAction;
     private Runnable onDeleteAction;
 
+    // Date
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d.M.uuuu");
 
     // ── Configuration ────────────────────────────────────────────────
