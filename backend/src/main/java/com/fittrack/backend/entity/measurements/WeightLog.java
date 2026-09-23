@@ -2,11 +2,13 @@ package com.fittrack.backend.entity.measurements;
 
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(name = "weight_logs")
 public class WeightLog {
@@ -52,30 +54,5 @@ public class WeightLog {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Instant getLoggedAt() {
-        return loggedAt;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

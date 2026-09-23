@@ -5,6 +5,7 @@ import com.fittrack.backend.dto.nutrition.meal.item.MealItemResponse;
 import com.fittrack.backend.entity.nutrition.MealItem;
 import com.fittrack.backend.exception.ResourceNotFoundException;
 import com.fittrack.backend.repository.nutrition.meal.item.projection.CreateSavedMealResult;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -12,13 +13,10 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Repository
+@RequiredArgsConstructor
 public class MealItemJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public MealItemJdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     // ── Bulk Meal Item Operations ─────────────────────────────────────
     public void insertAll(Integer mealId, List<MealItem> items) {

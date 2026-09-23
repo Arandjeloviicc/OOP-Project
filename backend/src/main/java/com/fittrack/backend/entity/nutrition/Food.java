@@ -2,11 +2,13 @@ package com.fittrack.backend.entity.nutrition;
 
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(
         name = "foods",
@@ -84,50 +86,5 @@ public class Food {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public double getServingSizeGrams() {
-        return servingSizeGrams;
-    }
-
-    public double getCaloriesPerServing() {
-        return caloriesPerServing;
-    }
-
-    public double getProteinPerServing() {
-        return proteinPerServing;
-    }
-
-    public double getCarbsPerServing() {
-        return carbsPerServing;
-    }
-
-    public double getFatPerServing() {
-        return fatPerServing;
-    }
-
-    public User getCreatedByUser() {
-        return createdByUser;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

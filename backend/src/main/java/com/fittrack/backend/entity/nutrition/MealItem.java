@@ -1,11 +1,14 @@
 package com.fittrack.backend.entity.nutrition;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(
         name = "meal_items",
@@ -24,6 +27,7 @@ public class MealItem {
     private Integer id;
 
     // Foreign key
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -35,6 +39,8 @@ public class MealItem {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Food food;
 
+    // Setters
+    @Setter
     @Column(name = "quantity_grams", nullable = false)
     private double quantityGrams;
 
@@ -102,65 +108,4 @@ public class MealItem {
         updatedAt = Instant.now();
     }
 
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public Meal getMeal() {
-        return meal;
-    }
-
-    public Food getFood() {
-        return food;
-    }
-
-    public double getQuantityGrams() {
-        return quantityGrams;
-    }
-
-    public String getFoodName() {
-        return foodName;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public double getServingSizeGrams() {
-        return servingSizeGrams;
-    }
-
-    public double getCaloriesPerServing() {
-        return caloriesPerServing;
-    }
-
-    public double getProteinPerServing() {
-        return proteinPerServing;
-    }
-
-    public double getCarbsPerServing() {
-        return carbsPerServing;
-    }
-
-    public double getFatPerServing() {
-        return fatPerServing;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    // Setters
-    public void setQuantityGrams(double quantityGrams) {
-        this.quantityGrams = quantityGrams;
-    }
-
-    public void setMeal(Meal meal) {
-        this.meal = meal;
-    }
 }

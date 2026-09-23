@@ -3,19 +3,17 @@ package com.fittrack.backend.repository.nutrition.food;
 import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class FoodJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public FoodJdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public FoodResponse createFood(Integer userId, CreateFoodRequest request) {
         String brand = request.brand();

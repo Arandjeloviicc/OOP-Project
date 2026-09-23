@@ -6,6 +6,7 @@ import com.fittrack.backend.entity.profile.Gender;
 import com.fittrack.backend.entity.profile.WeightGoal;
 import com.fittrack.backend.repository.profile.projection.PersonalInfoData;
 import com.fittrack.backend.repository.profile.projection.ProfileData;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,13 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class ProfileJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public ProfileJdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public Optional<ProfileData> findByUserId(Integer userId) {
         // users (u) + user_profiles (up) - osnovni i licni podaci korisnika

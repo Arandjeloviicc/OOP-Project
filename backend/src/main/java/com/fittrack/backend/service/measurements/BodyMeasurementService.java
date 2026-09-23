@@ -4,6 +4,7 @@ import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
 import com.fittrack.backend.exception.ResourceNotFoundException;
 import com.fittrack.backend.repository.measurements.body.BodyMeasurementJdbcRepository;
+import com.fittrack.backend.repository.measurements.body.projection.CreateBodyMeasurementResult;
 import com.fittrack.backend.repository.measurements.body.projection.DeleteBodyMeasurementResult;
 import com.fittrack.backend.repository.measurements.body.projection.UpdateBodyMeasurementResult;
 import com.fittrack.backend.repository.profile.ProfileJdbcRepository;
@@ -14,15 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
-import java.time.Instant;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BodyMeasurementService {
-
-    private final Clock clock;
 
     private final BodyMeasurementJdbcRepository bodyMeasurementJdbcRepository;
     private final ProfileJdbcRepository profileJdbcRepository;
@@ -51,18 +48,17 @@ public class BodyMeasurementService {
                 request.hip()
         );
 
-        Instant loggedAt = Instant.now(clock);
-
-        BodyMeasurementResponse created =
-                bodyMeasurementJdbcRepository
-                        .create(userId, request, loggedAt)
+        CreateBodyMeasurementResult result =
+                bodyMeasurementJdbcRepository.create(userId, request)
                         .orElseThrow(() ->
                                 new ResourceNotFoundException("User not found.")
                         );
 
-        nutritionGoalService.recalculateTargets(userId);
+        if (result.isLatest()) {
+            nutritionGoalService.recalculateTargets(userId);
+        }
 
-        return created;
+        return result.bodyMeasurement();
     }
 
     @Transactional
@@ -89,7 +85,7 @@ public class BodyMeasurementService {
                                 new ResourceNotFoundException("Body measurement not found.")
                         );
 
-        if (result.wasLatest()) {
+        if (result.wasLatest() || result.isLatest()) {
             nutritionGoalService.recalculateTargets(userId);
         }
 

@@ -2,12 +2,14 @@ package com.fittrack.backend.entity.profile;
 
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(name = "user_profiles")
 public class UserProfile {
@@ -75,42 +77,5 @@ public class UserProfile {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

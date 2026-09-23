@@ -2,9 +2,11 @@ package com.fittrack.backend.entity.measurements;
 
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(name = "body_measurement_logs")
 public class BodyMeasurementLog {
@@ -63,38 +65,5 @@ public class BodyMeasurementLog {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Double getWaist() {
-        return waist;
-    }
-
-    public Double getNeck() {
-        return neck;
-    }
-
-    public Double getHip() {
-        return hip;
-    }
-
-    public Instant getLoggedAt() {
-        return loggedAt;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

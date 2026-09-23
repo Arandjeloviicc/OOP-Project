@@ -2,6 +2,8 @@ package com.fittrack.backend.entity.nutrition;
 
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -10,6 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(
         name = "meals",
@@ -37,6 +40,8 @@ public class Meal {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    // Setters
+    @Setter
     @Column(nullable = false)
     private String name;
 
@@ -77,43 +82,5 @@ public class Meal {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public LocalDate getMealDate() {
-        return mealDate;
-    }
-
-    public MealKind getKind() {
-        return kind;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public List<MealItem> getItems() {
-        return items;
-    }
-
-    // Setters
-    public void setName(String name) {
-        this.name = name;
     }
 }

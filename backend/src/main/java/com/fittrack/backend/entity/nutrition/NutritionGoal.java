@@ -4,12 +4,15 @@ import com.fittrack.backend.entity.profile.ActivityLevel;
 import com.fittrack.backend.entity.profile.WeightGoal;
 import com.fittrack.backend.entity.user.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(
         name = "nutrition_goals",
@@ -64,6 +67,8 @@ public class NutritionGoal {
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
+    // Setters
+    @Setter
     @Column(name = "end_date")
     private LocalDate endDate;
 
@@ -109,67 +114,5 @@ public class NutritionGoal {
     @PreUpdate
     private void preUpdate() {
         updatedAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public ActivityLevel getActivityLevel() {
-        return activityLevel;
-    }
-
-    public WeightGoal getGoalType() {
-        return goalType;
-    }
-
-    public Double getGoalWeight() {
-        return goalWeight;
-    }
-
-    public Double getWeeklyGoal() {
-        return weeklyGoal;
-    }
-
-    public int getTargetCalories() {
-        return targetCalories;
-    }
-
-    public double getTargetProtein() {
-        return targetProtein;
-    }
-
-    public double getTargetCarbs() {
-        return targetCarbs;
-    }
-
-    public double getTargetFat() {
-        return targetFat;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    // Setters
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
     }
 }

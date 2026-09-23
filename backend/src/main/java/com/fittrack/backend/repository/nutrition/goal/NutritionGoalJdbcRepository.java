@@ -5,6 +5,7 @@ import com.fittrack.backend.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.backend.entity.profile.ActivityLevel;
 import com.fittrack.backend.entity.profile.Gender;
 import com.fittrack.backend.entity.profile.WeightGoal;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class NutritionGoalJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public NutritionGoalJdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public Optional<NutritionTargets> findTargetsForDate(Integer userId, LocalDate date) {
         // user_goals - uzima sve nutrition goals korisnika

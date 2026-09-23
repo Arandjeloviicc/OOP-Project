@@ -3,19 +3,17 @@ package com.fittrack.backend.repository.profile;
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
 import com.fittrack.backend.dto.profile.ProfileSetupRequest;
 import com.fittrack.backend.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 
 @Repository
+@RequiredArgsConstructor
 public class ProfileSetupJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public ProfileSetupJdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public void completeProfile(ProfileSetupRequest request, NutritionTargets targets, LocalDate startDate) {
         // valid_user - proverava da korisnik postoji

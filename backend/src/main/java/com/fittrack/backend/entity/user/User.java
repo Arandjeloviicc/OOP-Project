@@ -1,9 +1,11 @@
 package com.fittrack.backend.entity.user;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(
         name = "users",
@@ -44,26 +46,5 @@ public class User {
     @PrePersist
     private void prePersist() {
         createdAt = Instant.now();
-    }
-
-    // Getters
-    public Integer getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
     }
 }

@@ -1,5 +1,6 @@
 package com.fittrack.backend.controller.measurements;
 
+import com.fittrack.backend.dto.measurements.weight.WeightHistoryResponse;
 import com.fittrack.backend.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.backend.dto.measurements.weight.WeightLogResponse;
 import com.fittrack.backend.service.measurements.WeightLogService;
@@ -7,8 +8,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/measurements/weights")
@@ -18,7 +17,7 @@ public class WeightLogController {
     private final WeightLogService weightLogService;
 
     @GetMapping("/user/{userId}")
-    public List<WeightLogResponse> getWeightHistory(@PathVariable Integer userId) {
+    public WeightHistoryResponse getWeightHistory(@PathVariable Integer userId) {
         return weightLogService.getWeightHistory(userId);
     }
 
