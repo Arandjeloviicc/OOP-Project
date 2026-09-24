@@ -1,12 +1,13 @@
 package com.fittrack.controller.profile.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
 
-public class ProfileWeightCardController {
+public class ProfileWeightCardController extends BaseController {
 
     @FXML private Label currentWeightLabel;
     @FXML private VBox progressContent;

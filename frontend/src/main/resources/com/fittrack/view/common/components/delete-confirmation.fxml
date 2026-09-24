@@ -32,6 +32,13 @@
                    styleClass="delete-confirmation-message"/>
         </VBox>
 
+        <Label fx:id="actionMessage"
+               visible="false"
+               managed="false"
+               wrapText="true"
+               maxWidth="Infinity"
+               styleClass="error-label"/>
+
         <!-- Actions -->
         <GridPane styleClass="delete-confirmation-actions">
 

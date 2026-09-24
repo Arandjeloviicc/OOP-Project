@@ -13,6 +13,8 @@ public final class OverlayManager {
 
     private static Node activeModal;
 
+    private static boolean standaloneModal;
+
     private static Runnable onCloseAction = () -> {};
 
     private OverlayManager() {}
@@ -100,6 +102,15 @@ public final class OverlayManager {
 
         closeModal();
 
+        standaloneModal =
+                !overlayContainer.isVisible()
+                        || !overlayContainer.isManaged();
+
+        if (standaloneModal) {
+            overlayContainer.setManaged(true);
+            overlayContainer.setVisible(true);
+        }
+
         activeModal = content;
         overlayContainer.getChildren().add(content);
     }
@@ -113,14 +124,18 @@ public final class OverlayManager {
 
         overlayContainer.getChildren().remove(activeModal);
         activeModal = null;
+
+        if (standaloneModal) {
+            overlayContainer.setVisible(false);
+            overlayContainer.setManaged(false);
+            standaloneModal = false;
+        }
     }
 
     // ── Helpers ────────────────────────────────────────────────────
     private static void ensureInitialized() {
         if (overlayContainer == null) {
-            throw new IllegalStateException(
-                    "OverlayManager is not initialized."
-            );
+            throw new IllegalStateException("OverlayManager is not initialized.");
         }
     }
 }

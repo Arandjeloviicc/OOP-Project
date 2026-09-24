@@ -1,5 +1,6 @@
 package com.fittrack.backend.controller.measurements;
 
+import com.fittrack.backend.dto.measurements.body.BodyMeasurementHistoryResponse;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
 import com.fittrack.backend.service.measurements.BodyMeasurementService;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/measurements/body")
@@ -18,7 +18,7 @@ public class BodyMeasurementController {
     private final BodyMeasurementService bodyMeasurementService;
 
     @GetMapping("/user/{userId}")
-    public List<BodyMeasurementResponse> getBodyMeasurementHistory(@PathVariable Integer userId) {
+    public BodyMeasurementHistoryResponse getBodyMeasurementHistory(@PathVariable Integer userId) {
         return bodyMeasurementService.getBodyMeasurementHistory(userId);
     }
 

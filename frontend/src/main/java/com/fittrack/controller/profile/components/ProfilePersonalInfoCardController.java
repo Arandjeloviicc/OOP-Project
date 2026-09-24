@@ -1,9 +1,10 @@
 package com.fittrack.controller.profile.components;
 
+import com.fittrack.controller.common.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class ProfilePersonalInfoCardController {
+public class ProfilePersonalInfoCardController extends BaseController {
 
     @FXML private Label dateOfBirthLabel;
     @FXML private Label genderLabel;

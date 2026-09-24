@@ -1,5 +1,6 @@
 package com.fittrack.backend.service.measurements;
 
+import com.fittrack.backend.dto.measurements.body.BodyMeasurementHistoryResponse;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
 import com.fittrack.backend.exception.ResourceNotFoundException;
@@ -15,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class BodyMeasurementService {
@@ -27,8 +26,8 @@ public class BodyMeasurementService {
     private final BodyFatCalculationService bodyFatCalculationService;
     private final NutritionGoalService nutritionGoalService;
 
-    public List<BodyMeasurementResponse> getBodyMeasurementHistory(Integer userId) {
-        return bodyMeasurementJdbcRepository.findAllByUserId(userId);
+    public BodyMeasurementHistoryResponse getBodyMeasurementHistory(Integer userId) {
+        return bodyMeasurementJdbcRepository.findHistoryByUserId(userId);
     }
 
     @Transactional

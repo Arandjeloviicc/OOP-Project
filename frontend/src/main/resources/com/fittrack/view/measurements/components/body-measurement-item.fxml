@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<?import com.fittrack.config.AppImages?>
+
+<VBox fx:id="rootLayout"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.measurements.components.BodyMeasurementItemController"
+      stylesheets="@../../../css/measurements/components/body-measurement-item.css"
+      maxWidth="Infinity"
+      onMouseClicked="#handleEdit"
+      styleClass="body-measurement-card">
+
+    <!-- Header -->
+    <HBox maxWidth="Infinity"
+          alignment="CENTER_LEFT"
+          styleClass="body-measurement-header">
+
+        <VBox alignment="CENTER_LEFT"
+              styleClass="body-measurement-info">
+
+            <Label fx:id="dateLabel"
+                   styleClass="body-measurement-date"/>
+
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button fx:id="deleteButton"
+                focusTraversable="false"
+                onAction="#handleDelete"
+                styleClass="body-measurement-delete-button">
+
+            <graphic>
+                <ImageView fitWidth="16"
+                           fitHeight="16"
+                           preserveRatio="true">
+                    <AppImages fx:constant="TRASH_ICON"/>
+                </ImageView>
+            </graphic>
+
+        </Button>
+
+    </HBox>
+
+    <!-- Measurements -->
+    <HBox maxWidth="Infinity"
+          alignment="CENTER"
+          styleClass="body-measurement-values">
+
+        <!-- Waist -->
+        <VBox maxWidth="Infinity"
+              HBox.hgrow="ALWAYS"
+              styleClass="body-measurement-value-card">
+
+            <Label text="Waist"
+                   styleClass="body-measurement-value-caption"/>
+
+            <Label fx:id="waistLabel"
+                   styleClass="body-measurement-value"/>
+
+        </VBox>
+
+        <!-- Neck -->
+        <VBox maxWidth="Infinity"
+              HBox.hgrow="ALWAYS"
+              styleClass="body-measurement-value-card">
+
+            <Label text="Neck"
+                   styleClass="body-measurement-value-caption"/>
+
+            <Label fx:id="neckLabel"
+                   styleClass="body-measurement-value"/>
+
+        </VBox>
+
+        <!-- Hip -->
+        <VBox fx:id="hipBox"
+              maxWidth="Infinity"
+              HBox.hgrow="ALWAYS"
+              styleClass="body-measurement-value-card">
+
+            <Label text="Hip"
+                   styleClass="body-measurement-value-caption"/>
+
+            <Label fx:id="hipLabel"
+                   styleClass="body-measurement-value"/>
+
+        </VBox>
+
+    </HBox>
+
+</VBox>

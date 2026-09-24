@@ -67,7 +67,3 @@
 .measurements-root:narrow .measurements-title {
     -fx-font-size: 1.6em;
 }
-
-.measurements-root:narrow .measurement-type-tabs {
-    -fx-spacing: 0.4em;
-}

@@ -6,6 +6,7 @@ import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.model.profile.ProfileData;
+import com.fittrack.ui.form.AppDatePickerConfigurer;
 import com.fittrack.ui.form.DateOfBirthPickerConfigurer;
 import com.fittrack.ui.form.GenderToggleConfigurer;
 import com.fittrack.ui.scene.SceneShortcuts;
@@ -52,7 +53,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     @FXML private Label lastNameMessage;
     @FXML private Label dateOfBirthMessage;
     @FXML private Label heightMessage;
-    @FXML private Label saveMessage;
+    @FXML private Label actionMessage;
 
     // Buttons
     @FXML private Button saveButton;
@@ -114,7 +115,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
             femaleButton.setSelected(true);
         }
 
-        clearSaveError();
+        clearActionError();
     }
 
     public void setOnCancelAction(Runnable onCancelAction) {
@@ -213,7 +214,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
             return;
         }
 
-        clearSaveError();
+        clearActionError();
 
         if (!isFormValid()) {
             return;
@@ -300,7 +301,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         String enteredDate = dateOfBirthPicker.getEditor().getText().trim();
 
         if (enteredDate.isEmpty()) {
-            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_FORMAT_MESSAGE);
             return false;
         }
 
@@ -309,10 +310,10 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
         try {
             dateOfBirth = LocalDate.parse(
                     enteredDate,
-                    DateOfBirthPickerConfigurer.inputFormatter()
+                    AppDatePickerConfigurer.inputFormatter()
             );
         } catch (DateTimeParseException _) {
-            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_FORMAT_MESSAGE);
             return false;
         }
 
@@ -335,7 +336,7 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
 
         dateOfBirthPicker.setValue(dateOfBirth);
         dateOfBirthPicker.getEditor().setText(
-                dateOfBirth.format(DateOfBirthPickerConfigurer.displayFormatter())
+                dateOfBirth.format(AppDatePickerConfigurer.displayFormatter())
         );
 
         clearDateOfBirthError();
@@ -360,11 +361,11 @@ public class ProfilePersonalInfoEditorController extends FormController implemen
     }
 
     // ── Save message Helpers ─────────────────────────────────────────────────
-    public void showSaveError(String message) {
-        setFormMessage(saveMessage, message, true);
+    public void showActionError(String message) {
+        setFormMessage(actionMessage, message, true);
     }
 
-    private void clearSaveError() {
-        clearFormMessage(saveMessage);
+    private void clearActionError() {
+        clearFormMessage(actionMessage);
     }
 }

@@ -1,0 +1,72 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+
+/* ========================================================== */
+/* == WEIGHT LOG EDITOR ===================================== */
+/* ========================================================== */
+
+.weight-log-editor-view {
+    -fx-pref-width: 28em;
+    -fx-max-width: 28em;
+}
+
+.weight-log-editor-root {
+    -fx-max-width: 28em;
+}
+
+.weight-log-editor-content {
+    -fx-spacing: 1em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.weight-log-editor-header {
+    -fx-padding: 0 0 0.3em 0;
+}
+
+.weight-log-editor-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
+}
+
+.weight-log-editor-title {
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.weight-log-editor-actions {
+    -fx-max-width: -1;
+    -fx-hgap: 0.65em;
+    -fx-padding: 0.65em 0 0 0;
+}
+
+.weight-log-editor-action-button {
+    -fx-font-size: 1em;
+
+    -fx-min-height: 3.3em;
+    -fx-pref-height: 3.3em;
+    -fx-max-height: 3.3em;
+}
+
+.weight-log-editor-root .back-btn.weight-log-editor-action-button,
+.weight-log-editor-root .action-btn.weight-log-editor-action-button {
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.weight-log-editor-view:narrow .weight-log-editor-content {
+    -fx-padding: 0 0.5em 0 0;
+}

@@ -1,7 +1,9 @@
 package com.fittrack.backend.repository.measurements.body;
 
+import com.fittrack.backend.dto.measurements.body.BodyMeasurementHistoryResponse;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
+import com.fittrack.backend.entity.profile.Gender;
 import com.fittrack.backend.repository.measurements.body.projection.CreateBodyMeasurementResult;
 import com.fittrack.backend.repository.measurements.body.projection.DeleteBodyMeasurementResult;
 import com.fittrack.backend.repository.measurements.body.projection.LatestBodyMeasurement;
@@ -11,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,28 +43,57 @@ public class BodyMeasurementJdbcRepository {
         ).stream().findFirst();
     }
 
-    public List<BodyMeasurementResponse> findAllByUserId(Integer userId) {
+    public BodyMeasurementHistoryResponse findHistoryByUserId(Integer userId) {
+        // FROM user_profiles - kreće se od profila, ne od merenja, jer gender mora da se dobije
+        //                      cak i kad korisnik nema nijedan body_measurement_logs red
+        // LEFT JOIN - merenja se kace na profil; ako ih nema, dobija se tacno jedan red
+        //             sa svim bml.* kolonama NULL i up.gender popunjenim (umesto 0 redova)
+
         String sql = """
-            SELECT
-                id,
-                neck,
-                waist,
-                hip,
-                logged_at
-            FROM body_measurement_logs
-            WHERE user_id = ?
-            ORDER BY logged_at DESC, id DESC
-            """;
+        SELECT
+            bml.id,
+            bml.neck,
+            bml.waist,
+            bml.hip,
+            bml.logged_at,
+            up.gender
+        FROM user_profiles up
+        LEFT JOIN body_measurement_logs bml
+            ON bml.user_id = up.user_id
+        WHERE up.user_id = ?
+        ORDER BY bml.logged_at DESC, bml.id DESC
+        """;
 
         return jdbcTemplate.query(
                 sql,
-                (resultSet, _) -> new BodyMeasurementResponse(
-                        resultSet.getInt("id"),
-                        resultSet.getDouble("neck"),
-                        resultSet.getDouble("waist"),
-                        resultSet.getObject("hip", Double.class),
-                        resultSet.getTimestamp("logged_at").toInstant()
-                ),
+                resultSet -> {
+                    List<BodyMeasurementResponse> measurements = new ArrayList<>();
+                    Gender gender = null;
+
+                    while (resultSet.next()) {
+                        if (gender == null) {
+                            String genderValue = resultSet.getString("gender");
+
+                            if (genderValue != null) {
+                                gender = Gender.valueOf(genderValue);
+                            }
+                        }
+
+                        Integer id = resultSet.getObject("id", Integer.class);
+
+                        if (id != null) {
+                            measurements.add(new BodyMeasurementResponse(
+                                    id,
+                                    resultSet.getDouble("neck"),
+                                    resultSet.getDouble("waist"),
+                                    resultSet.getObject("hip", Double.class),
+                                    resultSet.getTimestamp("logged_at").toInstant()
+                            ));
+                        }
+                    }
+
+                    return new BodyMeasurementHistoryResponse(measurements, gender);
+                },
                 userId
         );
     }

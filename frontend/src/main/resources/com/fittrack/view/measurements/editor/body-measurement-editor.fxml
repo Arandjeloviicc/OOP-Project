@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.measurements.editor.BodyMeasurementEditorController"
+           stylesheets="@../../../css/measurements/editor/body-measurement-editor.css"
+           styleClass="body-measurement-editor-view">
+
+    <VBox maxWidth="Infinity"
+          maxHeight="-Infinity"
+          StackPane.alignment="TOP_CENTER"
+          styleClass="body-measurement-editor-root">
+
+        <VBox maxWidth="Infinity"
+              styleClass="body-measurement-editor-content">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT"
+                  styleClass="body-measurement-editor-header">
+
+                <VBox spacing="0.2">
+
+                    <Label text="Body measurements"
+                           styleClass="body-measurement-editor-caption"/>
+
+                    <Label fx:id="titleLabel"
+                           text="Add body measurement"
+                           styleClass="body-measurement-editor-title"/>
+
+                </VBox>
+
+            </HBox>
+
+            <!-- Neck -->
+            <VBox maxWidth="Infinity"
+                  styleClass="field-group">
+
+                <Label text="Neck (cm)"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="neckField"
+                           maxWidth="Infinity"
+                           promptText="e.g. 38.0"
+                           styleClass="input-field, text-field"/>
+
+                <Label fx:id="neckMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+
+            </VBox>
+
+            <!-- Waist -->
+            <VBox maxWidth="Infinity"
+                  styleClass="field-group">
+
+                <Label text="Waist (cm)"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="waistField"
+                           maxWidth="Infinity"
+                           promptText="e.g. 82.0"
+                           styleClass="input-field, text-field"/>
+
+                <Label fx:id="waistMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+
+            </VBox>
+
+            <!-- Hip -->
+            <VBox fx:id="hipGroup"
+                  maxWidth="Infinity"
+                  styleClass="field-group">
+
+                <Label text="Hip (cm)"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="hipField"
+                           maxWidth="Infinity"
+                           promptText="e.g. 96.0"
+                           styleClass="input-field, text-field"/>
+
+                <Label fx:id="hipMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+
+            </VBox>
+
+            <!-- Date -->
+            <VBox maxWidth="Infinity"
+                  styleClass="field-group">
+
+                <Label text="Date"
+                       styleClass="field-label"/>
+
+                <DatePicker fx:id="datePicker"
+                            maxWidth="Infinity"
+                            styleClass="input-field, date-picker-field"/>
+
+                <Label fx:id="dateMessage"
+                       styleClass="helper-label"
+                       wrapText="true"
+                       minHeight="-Infinity"
+                       maxHeight="Infinity"
+                       maxWidth="Infinity"/>
+
+            </VBox>
+
+            <!-- Action Error -->
+            <Label fx:id="actionMessage"
+                   visible="false"
+                   managed="false"
+                   wrapText="true"
+                   maxWidth="Infinity"
+                   styleClass="error-label"/>
+
+            <!-- Actions -->
+            <GridPane styleClass="body-measurement-editor-actions">
+
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <Button text="Cancel"
+                        maxWidth="Infinity"
+                        onAction="#handleCancel"
+                        styleClass="back-btn, body-measurement-editor-action-button"
+                        GridPane.columnIndex="0"/>
+
+                <Button fx:id="saveButton"
+                        text="Add"
+                        maxWidth="Infinity"
+                        onAction="#handleSave"
+                        styleClass="action-btn, body-measurement-editor-action-button"
+                        GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+        </VBox>
+
+    </VBox>
+
+</StackPane>

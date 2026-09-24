@@ -2,6 +2,7 @@ package com.fittrack.controller.profile;
 
 import com.fittrack.model.profile.ProfileSetupData;
 import com.fittrack.service.profile.ProfileSetupService;
+import com.fittrack.ui.form.AppDatePickerConfigurer;
 import com.fittrack.ui.form.DateOfBirthPickerConfigurer;
 import com.fittrack.ui.form.GenderToggleConfigurer;
 import com.fittrack.ui.scene.SceneShortcuts;
@@ -74,7 +75,7 @@ public class ProfileSetupController extends FormController implements Initializa
     @FXML private Label goalWeightMessage;
     @FXML private ComboBox<Double> weeklyGoalComboBox;
     @FXML private Label weeklyGoalMessage;
-    @FXML private Label saveMessage;
+    @FXML private Label actionMessage;
     @FXML private Button finishButton;
 
     // Adding PseudoClass to ComboBox (Change text color when nothing is selected)
@@ -187,7 +188,7 @@ public class ProfileSetupController extends FormController implements Initializa
         }
 
         // Error clearance
-        clearFormMessage(saveMessage);
+        clearFormMessage(actionMessage);
 
         // Hide Step 2 page
         setVisible(fitnessGoalsStep, false);
@@ -202,7 +203,7 @@ public class ProfileSetupController extends FormController implements Initializa
             return;
         }
 
-        clearSaveError();
+        clearActionError();
 
         if (!validateFitnessGoalsStep()) {
             return;
@@ -259,7 +260,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
                     resetLoading(finishButton);
 
-                    showSaveError("Failed to save profile. Please try again.");
+                    showActionError("Failed to save profile. Please try again.");
              }
         );
     }
@@ -408,7 +409,7 @@ public class ProfileSetupController extends FormController implements Initializa
         String enteredDate = dateOfBirthPicker.getEditor().getText().trim();
 
         if (enteredDate.isEmpty()) {
-            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_FORMAT_MESSAGE);
             return false;
         }
 
@@ -417,10 +418,10 @@ public class ProfileSetupController extends FormController implements Initializa
         try {
             dateOfBirth = LocalDate.parse(
                     enteredDate,
-                    DateOfBirthPickerConfigurer.inputFormatter()
+                    AppDatePickerConfigurer.inputFormatter()
             );
         } catch (DateTimeParseException _) {
-            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE);
+            showDateOfBirthMessage(AppConstants.Messages.INVALID_DATE_FORMAT_MESSAGE);
             return false;
         }
 
@@ -443,7 +444,7 @@ public class ProfileSetupController extends FormController implements Initializa
 
         dateOfBirthPicker.setValue(dateOfBirth);
         dateOfBirthPicker.getEditor().setText(
-                dateOfBirth.format(DateOfBirthPickerConfigurer.displayFormatter())
+                dateOfBirth.format(AppDatePickerConfigurer.displayFormatter())
         );
 
         restoreDateOfBirthHelper();
@@ -533,11 +534,11 @@ public class ProfileSetupController extends FormController implements Initializa
     }
 
     // ── Save message Helpers ─────────────────────────────────────────────────
-    public void showSaveError(String message) {
-        setFormMessage(saveMessage, message, true);
+    public void showActionError(String message) {
+        setFormMessage(actionMessage, message, true);
     }
 
-    private void clearSaveError() {
-        clearFormMessage(saveMessage);
+    private void clearActionError() {
+        clearFormMessage(actionMessage);
     }
 }

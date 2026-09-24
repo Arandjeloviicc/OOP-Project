@@ -1,9 +1,10 @@
 package com.fittrack.controller.profile.components;
 
+import com.fittrack.controller.common.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class ProfileNutritionGoalCardController {
+public class ProfileNutritionGoalCardController extends BaseController {
 
     @FXML private Label goalTypeLabel;
     @FXML private Label weeklyPaceLabel;

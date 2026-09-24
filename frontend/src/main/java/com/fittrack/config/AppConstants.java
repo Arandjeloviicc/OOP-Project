@@ -14,10 +14,12 @@ public final class AppConstants {
         public static final String MAIN_LAYOUT = "main/main-layout-view.fxml";
         public static final String DASHBOARD = "dashboard/dashboard-view.fxml";
         public static final String MEALS = "nutrition/meals-view.fxml";
-        public static final String WORKOUTS = "workout/workouts-view.fxml";
         public static final String MEASUREMENTS = "measurements/measurements-view.fxml";
         public static final String CALCULATORS = "calculator/calculators-view.fxml";
         public static final String PROFILE = "profile/profile-view.fxml";
+
+        // In planning
+        public static final String WORKOUTS = "workout/workouts-view.fxml";
     }
 
     public static final class Components {
@@ -62,6 +64,10 @@ public final class AppConstants {
         public static final String MEAL_ITEM_EDITOR = "nutrition/editor/meal-item-editor.fxml";
         public static final String SAVED_MEAL_EDITOR = "nutrition/editor/saved-meal-editor.fxml";
 
+        // Measurements
+        public static final String WEIGHT_LOG_EDITOR = "measurements/editor/weight-log-editor.fxml";
+        public static final String BODY_MEASUREMENT_EDITOR = "measurements/editor/body-measurement-editor.fxml";
+
         // Profile
         public static final String PROFILE_PERSONAL_INFO_EDITOR = "profile/editor/profile-personal-info-editor.fxml";
         public static final String PROFILE_NUTRITION_GOAL_EDITOR = "profile/editor/profile-nutrition-goal-editor.fxml";
@@ -78,13 +84,11 @@ public final class AppConstants {
         public static final int MAX_USERNAME_LENGTH = 20;
 
         // Profile setup view
-        // Personal info
         public static final int MIN_AGE = 13;
         public static final int MAX_AGE = 120;
         public static final int MIN_NAME_LENGTH = 2;
         public static final int MAX_NAME_LENGTH = 50;
 
-        // Fitness goals
         public static final int MIN_HEIGHT = 50;
         public static final int MAX_HEIGHT = 250;
         public static final int MIN_WEIGHT = 30;
@@ -118,7 +122,7 @@ public final class AppConstants {
         // Profile setup view
         public static final String INVALID_FIRST_NAME_MESSAGE = "First name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
         public static final String INVALID_LAST_NAME_MESSAGE = "Last name must contain %d–%d characters and use only letters, spaces, hyphens, or apostrophes.".formatted(AppConstants.Validation.MIN_NAME_LENGTH, AppConstants.Validation.MAX_NAME_LENGTH);
-        public static final String INVALID_DATE_OF_BIRTH_FORMAT_MESSAGE = "Date must be in dd.MM.yyyy format.";
+        public static final String INVALID_DATE_FORMAT_MESSAGE = "Date must be in dd.MM.yyyy format.";
         public static final String INVALID_DATE_OF_BIRTH_AGE_MESSAGE = "Date of birth must indicate an age between %d and %d years.".formatted(AppConstants.Validation.MIN_AGE, AppConstants.Validation.MAX_AGE);
         public static final String INVALID_GENDER_MESSAGE = "Please select your gender.";
 
@@ -180,5 +184,16 @@ public final class AppConstants {
         // Create Meal
         public static final String INVALID_MEAL_NAME_MESSAGE = "Enter a meal name.";
         public static final String HELPER_MEAL_NAME_MESSAGE = "The name of the meal.";
+
+        // Measurements
+        public static final String INVALID_MEASUREMENT_DATE_MESSAGE = "Measurement date cannot be in the future.";
+
+        public static final String WEIGHT_LOG_CREATE_ERROR_MESSAGE = "Could not add weight. Please try again.";
+        public static final String WEIGHT_LOG_UPDATE_ERROR_MESSAGE = "Could not save weight log changes. Please try again.";
+        public static final String WEIGHT_LOG_DELETE_ERROR_MESSAGE = "Could not delete weight entry. Please try again.";
+        public static final String LAST_WEIGHT_LOG_DELETE_ERROR_MESSAGE = "At least one weight entry must be kept.";
+        public static final String BODY_MEASUREMENT_CREATE_ERROR_MESSAGE = "Could not add body measurement. Please try again.";
+        public static final String BODY_MEASUREMENT_UPDATE_ERROR_MESSAGE = "Could not save body measurement changes. Please try again.";
+        public static final String BODY_MEASUREMENT_DELETE_ERROR_MESSAGE = "Could not delete body measurement. Please try again.";
     }
 }

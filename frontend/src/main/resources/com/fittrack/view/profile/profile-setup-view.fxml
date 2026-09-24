@@ -295,7 +295,7 @@
 
                     </VBox>
 
-                    <Label fx:id="saveMessage"
+                    <Label fx:id="actionMessage"
                            styleClass="error-label"
                            visible="false"
                            managed="false"

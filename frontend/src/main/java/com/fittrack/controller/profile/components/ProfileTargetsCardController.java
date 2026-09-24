@@ -1,10 +1,11 @@
 package com.fittrack.controller.profile.components;
 
+import com.fittrack.controller.common.BaseController;
 import com.fittrack.util.NumberUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class ProfileTargetsCardController {
+public class ProfileTargetsCardController extends BaseController {
 
     @FXML private Label caloriesLabel;
     @FXML private Label carbsLabel;

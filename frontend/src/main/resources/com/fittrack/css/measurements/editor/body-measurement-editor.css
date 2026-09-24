@@ -1,0 +1,72 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+
+/* ========================================================== */
+/* == BODY MEASUREMENT EDITOR =============================== */
+/* ========================================================== */
+
+.body-measurement-editor-view {
+    -fx-pref-width: 28em;
+    -fx-max-width: 28em;
+}
+
+.body-measurement-editor-root {
+    -fx-max-width: 28em;
+}
+
+.body-measurement-editor-content {
+    -fx-spacing: 1em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.body-measurement-editor-header {
+    -fx-padding: 0 0 0.3em 0;
+}
+
+.body-measurement-editor-caption {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
+}
+
+.body-measurement-editor-title {
+    -fx-font-size: 1.8em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.body-measurement-editor-actions {
+    -fx-max-width: -1;
+    -fx-hgap: 0.65em;
+    -fx-padding: 0.65em 0 0 0;
+}
+
+.body-measurement-editor-action-button {
+    -fx-font-size: 1em;
+
+    -fx-min-height: 3.3em;
+    -fx-pref-height: 3.3em;
+    -fx-max-height: 3.3em;
+}
+
+.body-measurement-editor-root .back-btn.body-measurement-editor-action-button,
+.body-measurement-editor-root .action-btn.body-measurement-editor-action-button {
+    -fx-background-radius: 1.65em;
+    -fx-border-radius: 1.65em;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.body-measurement-editor-view:narrow .body-measurement-editor-content {
+    -fx-padding: 0 0.5em 0 0;
+}

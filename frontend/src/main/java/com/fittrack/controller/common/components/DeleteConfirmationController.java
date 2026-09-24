@@ -1,14 +1,15 @@
 package com.fittrack.controller.common.components;
 
-import com.fittrack.controller.common.BaseController;
+import com.fittrack.controller.common.FormController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class DeleteConfirmationController extends BaseController {
+public class DeleteConfirmationController extends FormController {
 
     @FXML private Label titleLabel;
     @FXML private Label messageLabel;
+    @FXML private Label actionMessage;
     @FXML private Button confirmButton;
 
     // Actions
@@ -33,6 +34,10 @@ public class DeleteConfirmationController extends BaseController {
     // ── Button Actions ───────────────────────────────────────
     @FXML
     private void handleCancel() {
+        if (isLoading(confirmButton)) {
+            return;
+        }
+
         if (onCancelAction != null) {
             onCancelAction.run();
         }
@@ -40,8 +45,31 @@ public class DeleteConfirmationController extends BaseController {
 
     @FXML
     private void handleConfirm() {
+        if (isLoading(confirmButton)) {
+            return;
+        }
+
+        clearDeleteError();
+
         if (onConfirmAction != null) {
             onConfirmAction.run();
         }
+    }
+
+    // ── Action Helpers ───────────────────────────────────────
+    public void setDeleting(boolean deleting) {
+        if (deleting) {
+            setLoading(confirmButton, "Deleting...");
+        } else {
+            resetLoading(confirmButton);
+        }
+    }
+
+    public void showDeleteError(String message) {
+        setFormMessage(actionMessage, message, true);
+    }
+
+    private void clearDeleteError() {
+        clearFormMessage(actionMessage);
     }
 }
