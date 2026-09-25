@@ -4,7 +4,7 @@ import com.fittrack.api.measurements.WeightLogApi;
 import com.fittrack.dto.measurements.weight.WeightHistoryResponse;
 import com.fittrack.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.dto.measurements.weight.WeightLogResponse;
-import com.fittrack.model.measurement.WeightHistoryData;
+import com.fittrack.model.measurements.WeightHistoryData;
 import com.fittrack.model.profile.WeightGoal;
 import com.fittrack.session.UserSession;
 

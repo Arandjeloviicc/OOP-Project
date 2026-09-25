@@ -1,0 +1,301 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+
+/* ========================================================== */
+/* == MEASUREMENT CHART ===================================== */
+/* ========================================================== */
+
+.measurement-chart-root {
+    -fx-spacing: 1em;
+    -fx-padding: 1.3em 1.45em 1.1em 1.45em;
+
+    -fx-background-color: -app-control-background-soft;
+    -fx-background-radius: 1em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1em;
+}
+
+/* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.measurement-chart-header {
+    -fx-spacing: 1.5em;
+}
+
+.measurement-chart-heading {
+    -fx-spacing: 0.45em;
+}
+
+.measurement-chart-title {
+    -fx-font-size: 0.95em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-muted;
+}
+
+.measurement-chart-value {
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -app-text-primary;
+}
+
+.measurement-chart-change-row {
+    -fx-spacing: 0.35em;
+}
+
+.measurement-chart-change {
+    -fx-font-size: 0.9em;
+    -fx-font-weight: 700;
+    -fx-text-fill: -app-text-muted;
+}
+
+.measurement-chart-change.favorable {
+    -fx-text-fill: -app-success;
+}
+
+.measurement-chart-change.unfavorable {
+    -fx-text-fill: -app-danger-text;
+}
+
+.measurement-chart-change.neutral {
+    -fx-text-fill: -app-text-muted;
+}
+
+.measurement-chart-summary {
+    -fx-font-size: 0.8em;
+    -fx-text-fill: -app-text-muted;
+}
+
+/* ========================================================== */
+/* == HEADER CONTROLS ======================================= */
+/* ========================================================== */
+
+.measurement-chart-controls {
+    -fx-min-width: -1;
+    -fx-spacing: 0.55em;
+}
+
+.measurement-chart-measurement-selector {
+    -fx-min-width: 9em;
+    -fx-pref-width: 10em;
+    -fx-max-width: 11em;
+}
+
+.measurement-chart-period-combo {
+    -fx-min-width: 8.5em;
+    -fx-pref-width: 9.5em;
+    -fx-max-width: 10em;
+}
+
+/* ========================================================== */
+/* == PERIOD SELECTOR ======================================= */
+/* ========================================================== */
+
+.measurement-chart-period-selector {
+    -fx-spacing: 0.15em;
+}
+
+.measurement-chart-period-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -app-text-muted;
+
+    -fx-border-width: 0;
+
+    -fx-padding: 0.42em 0.72em;
+
+    -fx-font-size: 1.1em;
+    -fx-font-weight: 600;
+
+    -fx-background-radius: 0.6em;
+
+    -fx-cursor: hand;
+}
+
+.measurement-chart-period-button:hover {
+    -fx-background-color: -app-control-background;
+    -fx-text-fill: -app-text-primary;
+}
+
+.measurement-chart-period-button:selected {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == CHART CONTENT ========================================= */
+/* ========================================================== */
+
+.measurement-chart-content {
+    -fx-min-height: 15em;
+    -fx-pref-height: 17em;
+    -fx-max-height: 19em;
+}
+
+/* ========================================================== */
+/* == AREA CHART ============================================ */
+/* ========================================================== */
+
+.measurement-area-chart {
+    -fx-background-color: transparent;
+    -fx-padding: 0.1em 0.35em 0.15em 0.2em;
+}
+
+.measurement-area-chart .chart-content {
+    -fx-padding: 0.25em 0 0 0;
+}
+
+.measurement-area-chart .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+/* ========================================================== */
+/* == AREA SERIES =========================================== */
+/* ========================================================== */
+
+.measurement-area-chart .chart-series-area-line {
+    -fx-stroke: -app-primary;
+    -fx-stroke-width: 3px;
+
+    -fx-effect: dropshadow(
+            gaussian,
+            -app-primary-glow-soft,
+            7,
+            0.2,
+            0,
+            1
+    );
+}
+
+.measurement-area-chart .chart-series-area-fill {
+    -fx-fill: linear-gradient(
+            to bottom,
+            -app-primary-fill,
+            -app-primary-fill-faded
+    );
+}
+
+/* ========================================================== */
+/* == DATA POINTS =========================================== */
+/* ========================================================== */
+
+.measurement-area-chart .chart-area-symbol {
+    -fx-background-color: -app-primary;
+
+    -fx-border-color: -app-control-background-soft;
+    -fx-border-width: 2px;
+
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+
+    -fx-padding: 0.3em;
+
+    -fx-cursor: hand;
+}
+
+.measurement-area-chart .chart-area-symbol:hover {
+    -fx-background-color: -app-text-primary;
+
+    -fx-effect: dropshadow(
+            gaussian,
+            -app-primary-glow-strong,
+            8,
+            0.25,
+            0,
+            1
+    );
+}
+
+/* ========================================================== */
+/* == GRID ================================================== */
+/* ========================================================== */
+
+.measurement-area-chart .chart-horizontal-grid-lines {
+    -fx-stroke: -app-grid-line;
+    -fx-stroke-width: 1px;
+}
+
+.measurement-area-chart .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+/* ========================================================== */
+/* == AXES ================================================== */
+/* ========================================================== */
+
+.measurement-area-chart .axis {
+    -fx-tick-label-fill: -app-text-muted;
+    -fx-font-size: 0.76em;
+    -fx-tick-label-gap: 12px;
+    -fx-border-color: transparent;
+}
+
+.measurement-area-chart .axis-tick-mark,
+.measurement-area-chart .axis-minor-tick-mark {
+    -fx-stroke: transparent;
+}
+
+/* ========================================================== */
+/* == EMPTY STATE =========================================== */
+/* ========================================================== */
+
+.measurement-chart-empty-state {
+    -fx-spacing: 0.35em;
+}
+
+.measurement-chart-empty-title {
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+    -fx-text-fill: -app-text-primary;
+}
+
+.measurement-chart-empty-label {
+    -fx-font-size: 0.85em;
+    -fx-text-fill: -app-text-muted;
+    -fx-text-alignment: CENTER;
+}
+
+/* ========================================================== */
+/* == TOOLTIP =============================================== */
+/* ========================================================== */
+
+.chart-point-tooltip {
+    -fx-background-color: -app-control-background;
+    -fx-text-fill: -app-text-primary;
+
+    -fx-background-radius: 0.6em;
+
+    -fx-padding: 0.45em 0.7em;
+
+    -fx-font-size: 0.85em;
+    -fx-font-weight: 600;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.6em;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.measurement-chart-root:narrow {
+    -fx-padding: 1em;
+    -fx-spacing: 0.8em;
+}
+
+.measurement-chart-root:narrow .measurement-chart-header {
+    -fx-spacing: 0.75em;
+}
+
+.measurement-chart-root:narrow .measurement-chart-value {
+    -fx-font-size: 1.7em;
+}
+
+.measurement-chart-root:narrow .measurement-chart-content {
+    -fx-min-height: 13em;
+    -fx-pref-height: 14em;
+    -fx-max-height: 16em;
+}

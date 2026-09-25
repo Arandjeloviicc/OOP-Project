@@ -37,6 +37,7 @@ public final class AppConstants {
         // Measurements
         public static final String WEIGHT_LOG_ITEM = "measurements/components/weight-log-item.fxml";
         public static final String BODY_MEASUREMENT_ITEM = "measurements/components/body-measurement-item.fxml";
+        public static final String MEASUREMENT_CHART = "measurements/components/measurement-chart.fxml";
 
         // Profile
         public static final String PROFILE_WEIGHT_CARD = "profile/components/profile-weight-card.fxml";

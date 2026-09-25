@@ -92,7 +92,6 @@
     -fx-border-radius: 0.6em;
 
     -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 0.9em;
 
     -fx-padding: 0.8em 1em;
@@ -171,7 +170,6 @@
     -fx-border-radius: 1.2em;
     -fx-border-width: 1px;
 
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 
@@ -184,7 +182,6 @@
 
 .result-title {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.6em;
     -fx-font-weight: bold;
     -fx-alignment: TOP_LEFT;
@@ -201,14 +198,12 @@
 
 .result-main-value {
     -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 4.2em;
     -fx-font-weight: bold;
 }
 
 .result-main-unit {
     -fx-text-fill: -app-text-muted;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.4em;
     -fx-padding: 1.6em 0 0 0;
 }
@@ -261,13 +256,11 @@
 
 .result-detail-label {
     -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
 }
 
 .result-detail-value {
     -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.2em;
     -fx-font-weight: bold;
 }
@@ -281,7 +274,6 @@
 
 .bmi-categories-title {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.3em;
     -fx-font-weight: bold;
 }
@@ -316,14 +308,12 @@
 
 .bmi-category-name {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 0.95em;
     -fx-font-weight: bold;
 }
 
 .bmi-category-range {
     -fx-text-fill: -app-text-muted;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 0.92em;
 }
 
@@ -393,7 +383,6 @@
     -fx-border-width: 1px;
 
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
 
     -fx-padding: 1em 1.1em;
@@ -413,7 +402,6 @@
 /* ── BMR / TDEE Body fat toggle ──────────────────────────────────────── */
 .optional-field-toggle {
     -fx-text-fill: -app-primary-light;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 0.95em;
     -fx-font-weight: bold;
     -fx-cursor: hand;

@@ -30,6 +30,41 @@
 }
 
 /* ========================================================== */
+/* == HEADER ================================================ */
+/* ========================================================== */
+
+.profile-weight-header {
+    -fx-alignment: center-left;
+}
+
+.profile-weight-add-button {
+    -fx-background-color: -app-control-background;
+    -fx-text-fill: -app-text-primary;
+
+    -fx-border-color: -app-border-strong;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.55em;
+
+    -fx-background-radius: 0.55em;
+
+    -fx-padding: 0.4em 0.8em;
+
+    -fx-font-size: 0.85em;
+    -fx-font-weight: 600;
+
+    -fx-cursor: hand;
+}
+
+.profile-weight-add-button:hover {
+    -fx-background-color: -app-hover;
+    -fx-border-color: -app-primary-light;
+}
+
+.profile-weight-add-button:pressed {
+    -fx-background-color: -app-hover-strong;
+}
+
+/* ========================================================== */
 /* == PROGRESS CONTENT ====================================== */
 /* ========================================================== */
 

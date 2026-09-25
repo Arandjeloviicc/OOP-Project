@@ -7,13 +7,14 @@ import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.measurements.components.BodyMeasurementItemController;
+import com.fittrack.controller.measurements.components.MeasurementChartController;
 import com.fittrack.controller.measurements.components.WeightLogItemController;
 import com.fittrack.coordinator.measurements.MeasurementsCoordinator;
 import com.fittrack.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.dto.measurements.body.BodyMeasurementResponse;
 import com.fittrack.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.dto.measurements.weight.WeightLogResponse;
-import com.fittrack.model.measurement.MeasurementType;
+import com.fittrack.model.measurements.MeasurementType;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.model.profile.WeightGoal;
 import com.fittrack.service.measurements.BodyMeasurementService;
@@ -72,6 +73,9 @@ public class MeasurementsController extends NavigableController implements Initi
     private List<WeightLogResponse> weightLogs;
     private List<BodyMeasurementResponse> bodyMeasurements;
 
+    // Chart
+    private MeasurementChartController measurementChartController;
+
     // Helpers for WeightLogs and BodyMeasurements
     private WeightGoal weightGoal;
     private Gender gender;
@@ -95,6 +99,7 @@ public class MeasurementsController extends NavigableController implements Initi
 
         // Initialize Controls
         initializeMeasurementsControls();
+        initializeChart();
 
         // Weight Logs are loaded first
         loadWeightHistory();
@@ -150,6 +155,20 @@ public class MeasurementsController extends NavigableController implements Initi
             HBox.setHgrow(tab, Priority.ALWAYS);
             tab.setMaxWidth(Double.MAX_VALUE);
         }
+    }
+
+    // ── Chart ───────────────────────────────────────────────
+    private void initializeChart() {
+        LoadedComponent<MeasurementChartController> chart = FxmlComponentLoader.load(AppConstants.Components.MEASUREMENT_CHART);
+
+        measurementChartController = chart.controller();
+
+        chartContainer.getChildren().setAll(
+                chart.root()
+        );
+
+        chartContainer.setVisible(true);
+        chartContainer.setManaged(true);
     }
 
     // ── Weight Logs ───────────────────────────────────────────────
@@ -225,6 +244,8 @@ public class MeasurementsController extends NavigableController implements Initi
 
             historyContainer.getChildren().add(component.root());
         }
+
+        updateChart();
     }
 
     private void openCreateWeightLogEditor() {
@@ -432,6 +453,8 @@ public class MeasurementsController extends NavigableController implements Initi
 
             historyContainer.getChildren().add(component.root());
         }
+
+        updateChart();
     }
 
     private void openCreateBodyMeasurementEditor() {
@@ -614,5 +637,33 @@ public class MeasurementsController extends NavigableController implements Initi
         }
 
         return measurementTypeGroup.getSelectedToggle().getUserData() == type;
+    }
+
+    private void updateChart() {
+        if (measurementChartController == null) {
+            return;
+        }
+
+        MeasurementType selectedType = (MeasurementType) measurementTypeGroup.getSelectedToggle().getUserData();
+
+        switch (selectedType) {
+            case WEIGHT -> {
+                if (weightLogs != null) {
+                    measurementChartController.setWeightData(
+                            weightLogs,
+                            weightGoal
+                    );
+                }
+            }
+
+            case BODY_MEASUREMENT -> {
+                if (bodyMeasurements != null) {
+                    measurementChartController.setBodyData(
+                            bodyMeasurements,
+                            gender
+                    );
+                }
+            }
+        }
     }
 }

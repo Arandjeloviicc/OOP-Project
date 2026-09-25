@@ -4,7 +4,7 @@ import com.fittrack.api.measurements.BodyMeasurementApi;
 import com.fittrack.dto.measurements.body.BodyMeasurementHistoryResponse;
 import com.fittrack.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.dto.measurements.body.BodyMeasurementResponse;
-import com.fittrack.model.measurement.BodyMeasurementHistoryData;
+import com.fittrack.model.measurements.BodyMeasurementHistoryData;
 import com.fittrack.model.profile.Gender;
 import com.fittrack.session.UserSession;
 

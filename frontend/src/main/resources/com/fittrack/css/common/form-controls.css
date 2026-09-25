@@ -16,7 +16,6 @@
     -fx-border-width: 1px;
 
     -fx-font-size: 1em;
-    -fx-font-family: "Segoe UI";
 }
 
 .input-field:focused {
@@ -183,7 +182,6 @@
     -fx-background-color: transparent;
     -fx-text-fill: -app-control-text;
 
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
 
     -fx-padding: 0 1.1em;
@@ -223,7 +221,6 @@
     -fx-background-color: transparent;
     -fx-text-fill: -app-popup-text;
 
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
 
     -fx-background-radius: 0.45em;
@@ -294,7 +291,6 @@
     -fx-border-width: 1px;
 
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 

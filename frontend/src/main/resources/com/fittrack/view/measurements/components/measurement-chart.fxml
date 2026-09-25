@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.chart.AreaChart?>
+
+<VBox fx:id="rootLayout"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.measurements.components.MeasurementChartController"
+      maxWidth="Infinity"
+      stylesheets="@../../../css/measurements/components/measurement-chart.css"
+      styleClass="measurement-chart-root">
+
+    <fx:define>
+        <ToggleGroup fx:id="periodGroup"/>
+    </fx:define>
+
+    <!-- Header -->
+    <HBox maxWidth="Infinity"
+          styleClass="measurement-chart-header">
+
+        <!-- Left -->
+        <VBox HBox.hgrow="ALWAYS"
+              styleClass="measurement-chart-heading">
+
+            <Label fx:id="titleLabel"
+                   text="Weight trend"
+                   styleClass="measurement-chart-title"/>
+
+            <Label fx:id="valueLabel"
+                   text="78.5 kg"
+                   styleClass="measurement-chart-value"/>
+
+            <HBox alignment="BASELINE_LEFT"
+                  styleClass="measurement-chart-change-row">
+
+                <Label fx:id="changeLabel"
+                       text="-2.7 kg"
+                       styleClass="measurement-chart-change"/>
+
+                <Label fx:id="periodSummaryLabel"
+                       text="in selected period"
+                       styleClass="measurement-chart-summary"/>
+
+            </HBox>
+
+        </VBox>
+
+        <!-- Right -->
+        <VBox alignment="TOP_RIGHT"
+              styleClass="measurement-chart-controls">
+
+            <!-- Body measurement only -->
+            <ComboBox fx:id="measurementSelector"
+                      visible="false"
+                      managed="false"
+                      styleClass="input-field, combo-box-field, measurement-chart-measurement-selector"/>
+
+            <!-- Wide -->
+            <HBox fx:id="periodSelector"
+                  alignment="CENTER_RIGHT"
+                  styleClass="measurement-chart-period-selector">
+
+                <ToggleButton text="7D"
+                              userData="SEVEN_DAYS"
+                              toggleGroup="$periodGroup"
+                              styleClass="measurement-chart-period-button"/>
+
+                <ToggleButton text="1M"
+                              userData="ONE_MONTH"
+                              selected="true"
+                              toggleGroup="$periodGroup"
+                              styleClass="measurement-chart-period-button"/>
+
+                <ToggleButton text="3M"
+                              userData="THREE_MONTHS"
+                              toggleGroup="$periodGroup"
+                              styleClass="measurement-chart-period-button"/>
+
+                <ToggleButton text="6M"
+                              userData="SIX_MONTHS"
+                              toggleGroup="$periodGroup"
+                              styleClass="measurement-chart-period-button"/>
+
+                <ToggleButton text="1Y"
+                              userData="ONE_YEAR"
+                              toggleGroup="$periodGroup"
+                              styleClass="measurement-chart-period-button"/>
+
+                <ToggleButton text="All"
+                              userData="ALL"
+                              toggleGroup="$periodGroup"
+                              styleClass="measurement-chart-period-button"/>
+
+            </HBox>
+
+            <!-- Narrow -->
+            <ComboBox fx:id="periodComboBox"
+                      visible="false"
+                      managed="false"
+                      styleClass="input-field, combo-box-field, measurement-chart-period-combo"/>
+
+        </VBox>
+
+    </HBox>
+
+    <!-- Chart -->
+    <StackPane maxWidth="Infinity"
+               styleClass="measurement-chart-content">
+
+        <AreaChart fx:id="chart"
+                   animated="false"
+                   legendVisible="false"
+                   maxWidth="Infinity"
+                   maxHeight="Infinity"
+                   verticalGridLinesVisible="false"
+                   horizontalZeroLineVisible="false"
+                   verticalZeroLineVisible="false"
+                   alternativeRowFillVisible="false"
+                   styleClass="measurement-area-chart">
+
+            <xAxis>
+                <NumberAxis fx:id="xAxis"
+                            forceZeroInRange="false"
+                            minorTickVisible="false"
+                            tickMarkVisible="false"
+                            tickLabelGap="12"/>
+            </xAxis>
+
+            <yAxis>
+                <NumberAxis fx:id="yAxis"
+                            forceZeroInRange="false"
+                            minorTickVisible="false"
+                            tickMarkVisible="false"
+                            tickLabelGap="12"/>
+            </yAxis>
+
+        </AreaChart>
+
+        <!-- Empty state -->
+        <VBox fx:id="emptyState"
+              visible="false"
+              managed="false"
+              alignment="CENTER"
+              StackPane.alignment="CENTER"
+              styleClass="measurement-chart-empty-state">
+
+            <Label text="Not enough data"
+                   styleClass="measurement-chart-empty-title"/>
+
+            <Label fx:id="emptyStateLabel"
+                   text="Add more measurements to see your trend."
+                   wrapText="true"
+                   styleClass="measurement-chart-empty-label"/>
+
+        </VBox>
+
+    </StackPane>
+
+</VBox>

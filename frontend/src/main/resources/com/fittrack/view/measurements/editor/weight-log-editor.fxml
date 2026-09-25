@@ -46,13 +46,20 @@
             <VBox maxWidth="Infinity"
                   styleClass="field-group">
 
-                <Label text="Weight (kg)"
+                <Label text="Weight"
                        styleClass="field-label"/>
 
-                <TextField fx:id="weightField"
-                           maxWidth="Infinity"
-                           promptText="e.g. 78.5"
-                           styleClass="input-field, text-field"/>
+                <StackPane>
+                    <TextField fx:id="weightField"
+                               maxWidth="Infinity"
+                               promptText="e.g. 78.5"
+                               styleClass="input-field, text-field"/>
+
+                    <Label text="kg"
+                           mouseTransparent="true"
+                           StackPane.alignment="CENTER_RIGHT"
+                           styleClass="weight-goal-weight-unit"/>
+                </StackPane>
 
                 <Label fx:id="weightMessage"
                        styleClass="helper-label"

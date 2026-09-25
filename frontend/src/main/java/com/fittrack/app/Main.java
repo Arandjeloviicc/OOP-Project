@@ -1,6 +1,7 @@
 package com.fittrack.app;
 
 import com.fittrack.config.AppConstants;
+import com.fittrack.config.AppFonts;
 import com.fittrack.ui.scene.SceneManager;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,6 +21,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+
+        AppFonts.load();
 
         Platform.setImplicitExit(true);
 

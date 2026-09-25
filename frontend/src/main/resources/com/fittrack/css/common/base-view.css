@@ -17,7 +17,6 @@
 .field-label {
     -fx-text-fill: -app-field-label-text;
     -fx-font-size: 0.93em;
-    -fx-font-family: "Segoe UI";
 }
 
 /* ========================================================== */
@@ -26,7 +25,6 @@
 
 .section-title {
     -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.4em;
     -fx-font-weight: bold;
 
@@ -40,7 +38,6 @@
 .helper-label,
 .error-label {
     -fx-font-size: 0.8em;
-    -fx-font-family: "Segoe UI";
 
     -fx-min-height: 1.45em;
 
@@ -71,7 +68,6 @@
 
     -fx-font-size: 1.14em;
     -fx-font-weight: bold;
-    -fx-font-family: "Segoe UI";
     -fx-cursor: hand;
 
     -fx-min-height: 2.75em;
@@ -115,7 +111,6 @@
     -fx-border-width: 1px;
 
     -fx-text-fill: -app-secondary-button-text;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 

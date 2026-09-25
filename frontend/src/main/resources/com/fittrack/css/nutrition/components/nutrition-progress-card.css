@@ -26,7 +26,6 @@
 
 .nutrition-progress-title {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1em;
     -fx-font-weight: bold;
 }
@@ -38,12 +37,10 @@
 .nutrition-progress-current-value,
 .nutrition-progress-goal-value {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
 }
 
 .nutrition-progress-current-value {
     -fx-text-fill: -app-text-primary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.5em;
     -fx-font-weight: bold;
 }
@@ -51,7 +48,6 @@
 .nutrition-progress-unit,
 .nutrition-progress-goal-value {
     -fx-text-fill: -app-text-muted;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 0.95em;
 }
 
@@ -62,14 +58,12 @@
 
 .nutrition-progress-remaining-value {
     -fx-text-fill: -app-text-secondary;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.15em;
     -fx-font-weight: bold;
 }
 
 .nutrition-progress-secondary-value {
     -fx-text-fill: -app-text-muted;
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 0.88em;
 }
 
@@ -121,8 +115,8 @@
 
     -fx-background-color: linear-gradient(
             from 0px 0px to 8px 8px, repeat,
-            rgba(0, 0, 0, 0.32) 0%,
-            rgba(0, 0, 0, 0.32) 50%,
+            -app-shadow-soft 0%,
+            -app-shadow-soft 50%,
             transparent 50%,
             transparent 100%
     );

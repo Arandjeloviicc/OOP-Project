@@ -6,11 +6,14 @@ import com.fittrack.controller.common.NavigableController;
 import com.fittrack.controller.common.Refreshable;
 import com.fittrack.controller.common.ResponsiveLayout;
 import com.fittrack.controller.profile.components.*;
+import com.fittrack.coordinator.measurements.MeasurementsCoordinator;
 import com.fittrack.coordinator.profile.ProfileCoordinator;
+import com.fittrack.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.dto.profile.editor.NutritionGoalUpdateRequest;
 import com.fittrack.dto.profile.editor.PersonalInfoUpdateRequest;
 import com.fittrack.model.profile.ProfileData;
 import com.fittrack.service.auth.AuthService;
+import com.fittrack.service.measurements.WeightLogService;
 import com.fittrack.service.profile.ProfileService;
 import com.fittrack.ui.loader.FxmlComponentLoader;
 import com.fittrack.ui.loader.LoadedComponent;
@@ -76,10 +79,12 @@ public class ProfileController extends NavigableController implements Initializa
     // Coordinator
     private final ProfileCoordinator coordinator = new ProfileCoordinator();
     private ProfileData profileData;
+    private final MeasurementsCoordinator measurementsCoordinator = new MeasurementsCoordinator();
 
     // Service
     private final AuthService authService = new AuthService();
     private final ProfileService profileService = new ProfileService();
+    private final WeightLogService weightLogService = new WeightLogService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -106,6 +111,10 @@ public class ProfileController extends NavigableController implements Initializa
         LoadedComponent<ProfileWeightCardController> weightCard = FxmlComponentLoader.load(AppConstants.Components.PROFILE_WEIGHT_CARD);
 
         weightCardController = weightCard.controller();
+
+        weightCardController.setOnAddAction(
+                this::openCreateWeightLogEditor
+        );
 
         weightCardContainer.getChildren().setAll(weightCard.root());
     }
@@ -211,6 +220,36 @@ public class ProfileController extends NavigableController implements Initializa
                         profile.firstName(),
                         profile.lastName()
                 )
+        );
+    }
+
+    // ── Add Weight Log ─────────────────────────────────────────────────
+    private void openCreateWeightLogEditor() {
+        measurementsCoordinator.openCreateWeightLogEditor(
+                this::createWeightLog
+        );
+    }
+
+    private void createWeightLog(WeightLogRequest request) {
+        AsyncTaskRunner.run(
+                () -> weightLogService.createWeightLog(request),
+
+                createdWeightLog -> {
+                    measurementsCoordinator.closeWeightLogEditor();
+
+                    refresh();
+                },
+
+                exception -> {
+                    measurementsCoordinator.setWeightLogSaving(false);
+
+                    measurementsCoordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_CREATE_ERROR_MESSAGE);
+
+                    log.error(
+                            "Failed to create weight log.",
+                            exception
+                    );
+                }
         );
     }
 

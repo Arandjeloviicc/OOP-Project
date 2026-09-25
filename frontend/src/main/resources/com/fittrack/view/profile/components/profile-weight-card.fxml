@@ -9,8 +9,20 @@
       stylesheets="@../../../css/profile/components/profile-weight-card.css"
       styleClass="profile-card, profile-weight-card">
 
-    <Label text="Current weight"
-           styleClass="profile-weight-title"/>
+    <HBox alignment="CENTER_LEFT"
+          styleClass="profile-weight-header">
+
+        <Label text="Current weight"
+               styleClass="profile-weight-title"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button fx:id="addWeightButton"
+                text="+  Add weight"
+                onAction="#handleAdd"
+                styleClass="profile-weight-add-button"/>
+
+    </HBox>
 
     <HBox styleClass="profile-weight-current">
         <Label fx:id="currentWeightLabel"

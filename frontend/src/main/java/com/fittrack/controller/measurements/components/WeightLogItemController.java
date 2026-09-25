@@ -96,7 +96,17 @@ public class WeightLogItemController extends BaseController {
             return;
         }
 
-        changeLabel.setText(NumberUtils.formatInputDecimalWithSign(difference) + " kg since last");
+        String change = NumberUtils.formatInputDecimalWithSign(difference);
+
+        if (difference < 0) {
+            changeLabel.setText("↘ " + change + " kg since last");
+        }
+        else if (difference > 0) {
+            changeLabel.setText("↗ " + change + " kg since last");
+        }
+        else {
+            changeLabel.setText(change + " kg since last");
+        }
 
         switch (goalType) {
             case LOSE_WEIGHT -> {

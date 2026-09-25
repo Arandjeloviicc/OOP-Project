@@ -56,7 +56,6 @@
     -fx-text-fill: -app-text-primary;
     -fx-font-size: 2em;
     -fx-font-weight: bold;
-    -fx-font-family: "Segoe UI";
     -fx-padding: 0.65em 0 0.2em 0;
     -fx-alignment: CENTER;
 }
@@ -64,7 +63,6 @@
 .subtitle-label {
     -fx-text-fill: -app-subtitle-text;
     -fx-font-size: 1em;
-    -fx-font-family: "Segoe UI";
     -fx-padding: 0 0 2em 0;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
@@ -97,7 +95,6 @@
 .pw-toggle-text {
     -fx-text-fill: -app-accent-text;
     -fx-font-size: 0.93em;
-    -fx-font-family: "Segoe UI";
 }
 
 .pw-toggle-wrap:hover .pw-toggle-text,
@@ -118,13 +115,11 @@
 .bottom-text {
     -fx-text-fill: -app-bottom-text;
     -fx-font-size: 0.93em;
-    -fx-font-family: "Segoe UI";
 }
 
 .bottom-link {
     -fx-text-fill: -app-link-text;
     -fx-font-size: 0.93em;
-    -fx-font-family: "Segoe UI";
     -fx-border-color: transparent;
     -fx-padding: 0;
     -fx-underline: true;

@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-import java.util.Objects;
 
 public class AppDatePickerConfigurer {
 
@@ -62,35 +61,7 @@ public class AppDatePickerConfigurer {
             }
         });
 
-        datePicker.getEditor()
-                .textProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    LocalDate parsedDate = parseDate(newValue);
-
-                    if (!Objects.equals(
-                            datePicker.getValue(),
-                            parsedDate
-                    )) {
-                        datePicker.setValue(parsedDate);
-                    }
-                });
-
         datePicker.setShowWeekNumbers(false);
-    }
-
-    private static LocalDate parseDate(String text) {
-        if (text == null || text.isBlank()) {
-            return null;
-        }
-
-        try {
-            return LocalDate.parse(
-                    text.trim(),
-                    INPUT_FORMATTER
-            );
-        } catch (DateTimeParseException _) {
-            return null;
-        }
     }
 
     public static DateTimeFormatter inputFormatter() {

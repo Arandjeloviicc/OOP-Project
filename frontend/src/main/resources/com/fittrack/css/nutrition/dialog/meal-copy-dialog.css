@@ -36,7 +36,6 @@
 }
 
 .meal-copy-title {
-    -fx-font-family: "Segoe UI";
     -fx-font-size: 1.5em;
     -fx-font-weight: bold;
     -fx-text-fill: -app-text-primary;

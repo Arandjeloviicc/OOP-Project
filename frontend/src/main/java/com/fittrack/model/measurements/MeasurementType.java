@@ -1,4 +1,4 @@
-package com.fittrack.model.measurement;
+package com.fittrack.model.measurements;
 
 public enum MeasurementType {
     WEIGHT,

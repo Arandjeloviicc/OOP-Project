@@ -1,4 +1,4 @@
-package com.fittrack.model.measurement;
+package com.fittrack.model.measurements;
 
 import com.fittrack.dto.measurements.weight.WeightLogResponse;
 import com.fittrack.model.profile.WeightGoal;

@@ -46,13 +46,20 @@
             <VBox maxWidth="Infinity"
                   styleClass="field-group">
 
-                <Label text="Neck (cm)"
+                <Label text="Neck"
                        styleClass="field-label"/>
 
-                <TextField fx:id="neckField"
-                           maxWidth="Infinity"
-                           promptText="e.g. 38.0"
-                           styleClass="input-field, text-field"/>
+                <StackPane>
+                    <TextField fx:id="neckField"
+                               maxWidth="Infinity"
+                               promptText="e.g. 38.0"
+                               styleClass="input-field, text-field"/>
+
+                    <Label text="cm"
+                           mouseTransparent="true"
+                           StackPane.alignment="CENTER_RIGHT"
+                           styleClass="body-measurement-unit"/>
+                </StackPane>
 
                 <Label fx:id="neckMessage"
                        styleClass="helper-label"
@@ -67,13 +74,20 @@
             <VBox maxWidth="Infinity"
                   styleClass="field-group">
 
-                <Label text="Waist (cm)"
+                <Label text="Waist"
                        styleClass="field-label"/>
 
-                <TextField fx:id="waistField"
-                           maxWidth="Infinity"
-                           promptText="e.g. 82.0"
-                           styleClass="input-field, text-field"/>
+                <StackPane>
+                    <TextField fx:id="waistField"
+                               maxWidth="Infinity"
+                               promptText="e.g. 82.0"
+                               styleClass="input-field, text-field"/>
+
+                    <Label text="cm"
+                           mouseTransparent="true"
+                           StackPane.alignment="CENTER_RIGHT"
+                           styleClass="body-measurement-unit"/>
+                </StackPane>
 
                 <Label fx:id="waistMessage"
                        styleClass="helper-label"
@@ -89,13 +103,20 @@
                   maxWidth="Infinity"
                   styleClass="field-group">
 
-                <Label text="Hip (cm)"
+                <Label text="Hip"
                        styleClass="field-label"/>
 
-                <TextField fx:id="hipField"
-                           maxWidth="Infinity"
-                           promptText="e.g. 96.0"
-                           styleClass="input-field, text-field"/>
+                <StackPane>
+                    <TextField fx:id="hipField"
+                               maxWidth="Infinity"
+                               promptText="e.g. 96.0"
+                               styleClass="input-field, text-field"/>
+
+                    <Label text="cm"
+                           mouseTransparent="true"
+                           StackPane.alignment="CENTER_RIGHT"
+                           styleClass="body-measurement-unit"/>
+                </StackPane>
 
                 <Label fx:id="hipMessage"
                        styleClass="helper-label"
