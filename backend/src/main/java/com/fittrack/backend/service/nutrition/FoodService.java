@@ -1,6 +1,6 @@
 package com.fittrack.backend.service.nutrition;
 
-import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.backend.dto.nutrition.food.FoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.repository.nutrition.food.FoodJdbcRepository;
@@ -33,11 +33,16 @@ public class FoodService {
         return foodRepository.findByCreatedByUserIdAndNameContainingIgnoreCaseOrderByNameAsc(userId, search.trim());
     }
 
-    public FoodResponse createFood(Integer userId, CreateFoodRequest request) {
-        return foodJdbcRepository.createFood(
-                userId,
-                request
-        );
+    public FoodResponse createFood(Integer userId, FoodRequest request) {
+        return foodJdbcRepository.createFood(userId, request);
+    }
+
+    public FoodResponse updateFood(Integer userId, Integer foodId, FoodRequest request) {
+        return foodJdbcRepository.updateFood(userId, foodId, request);
+    }
+
+    public void deleteFood(Integer userId, Integer foodId) {
+        foodJdbcRepository.deleteFood(userId, foodId);
     }
 
     public FoodResponse toResponse(Food food) {

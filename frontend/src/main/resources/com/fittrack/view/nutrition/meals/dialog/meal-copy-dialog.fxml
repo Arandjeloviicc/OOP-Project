@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx/22"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.fittrack.controller.nutrition.meals.dialog.MealCopyDialogController"
+           stylesheets="@../../../../css/nutrition/meals/dialog/meal-copy-dialog.css"
+           styleClass="meal-copy-root">
+
+    <VBox styleClass="meal-copy-dialog"
+          maxHeight="-Infinity">
+
+        <!-- Header -->
+        <HBox styleClass="meal-copy-header">
+            <Label fx:id="titleLabel"
+                   text="Copy from"
+                   styleClass="meal-copy-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="✕"
+                    onAction="#handleClose"
+                    styleClass="meal-copy-close-button"/>
+        </HBox>
+
+        <!-- Fields -->
+        <GridPane styleClass="meal-copy-fields">
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
+            </columnConstraints>
+
+            <!-- Meal -->
+            <VBox fx:id="mealFieldBox"
+                  GridPane.columnIndex="0"
+                  styleClass="field-group">
+
+                <Label text="Meal"
+                       styleClass="field-label"/>
+
+                <ComboBox fx:id="mealComboBox"
+                          maxWidth="Infinity"
+                          styleClass="input-field, combo-box-field"/>
+
+            </VBox>
+
+            <!-- Day -->
+            <VBox fx:id="dayFieldBox"
+                  GridPane.columnIndex="1"
+                  styleClass="field-group">
+
+                <Label text="Day"
+                       styleClass="field-label"/>
+
+                <DatePicker fx:id="datePicker"
+                            maxWidth="Infinity"
+                            styleClass="input-field, date-picker-field"/>
+
+            </VBox>
+
+        </GridPane>
+
+        <!-- Availability -->
+        <Label fx:id="availabilityMessage"
+               text="No food logged for that meal."
+               visible="false"
+               wrapText="true"
+               maxWidth="Infinity"
+               styleClass="error-label, meal-copy-message"/>
+
+        <!-- Action Error -->
+        <Label fx:id="actionMessage"
+               visible="false"
+               managed="false"
+               wrapText="true"
+               maxWidth="Infinity"
+               styleClass="error-label, meal-copy-message"/>
+
+        <!-- Action -->
+        <Button fx:id="copyButton"
+                text="Copy"
+                maxWidth="Infinity"
+                onAction="#handleCopy"
+                styleClass="action-btn"/>
+
+    </VBox>
+
+</StackPane>

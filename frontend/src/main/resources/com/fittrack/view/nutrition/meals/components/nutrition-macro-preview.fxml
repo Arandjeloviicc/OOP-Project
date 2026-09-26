@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Pane?>
+
+<HBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.nutrition.meals.components.NutritionMacroPreviewController"
+      stylesheets="@../../../../css/nutrition/meals/components/nutrition-macro-preview.css"
+      fx:id="rootLayout"
+      styleClass="macro-preview-card">
+
+    <!-- Circle -->
+    <StackPane styleClass="macro-preview-chart-wrap">
+
+        <Pane fx:id="chartPane"
+              prefWidth="110"
+              prefHeight="110"/>
+
+        <VBox alignment="CENTER"
+              mouseTransparent="true">
+
+            <Label fx:id="caloriesValueLabel"
+                   styleClass="macro-preview-calories-value"/>
+
+            <Label text="cal"
+                   styleClass="macro-preview-calories-unit"/>
+        </VBox>
+
+    </StackPane>
+
+    <!-- Legend -->
+    <HBox styleClass="macro-preview-legend"
+          HBox.hgrow="ALWAYS">
+
+        <VBox alignment="CENTER"
+              HBox.hgrow="ALWAYS"
+              styleClass="macro-preview-column">
+
+            <HBox alignment="CENTER"
+                  styleClass="macro-preview-value-row">
+
+                <Circle radius="5"
+                        styleClass="macro-dot-carbs"/>
+
+                <Label fx:id="carbsLabel"
+                       styleClass="macro-preview-value"/>
+
+            </HBox>
+
+            <Label text="Carbs"
+                   styleClass="macro-preview-name"/>
+
+        </VBox>
+
+        <VBox alignment="CENTER"
+              HBox.hgrow="ALWAYS"
+              styleClass="macro-preview-column">
+
+            <HBox alignment="CENTER"
+                  styleClass="macro-preview-value-row">
+
+                <Circle radius="5"
+                        styleClass="macro-dot-fat"/>
+
+                <Label fx:id="fatLabel"
+                       styleClass="macro-preview-value"/>
+
+            </HBox>
+
+            <Label text="Fat"
+                   styleClass="macro-preview-name"/>
+
+        </VBox>
+
+        <VBox alignment="CENTER"
+              HBox.hgrow="ALWAYS"
+              styleClass="macro-preview-column">
+
+            <HBox alignment="CENTER"
+                  styleClass="macro-preview-value-row">
+
+                <Circle radius="5"
+                        styleClass="macro-dot-protein"/>
+
+                <Label fx:id="proteinLabel"
+                       styleClass="macro-preview-value"/>
+
+            </HBox>
+
+            <Label text="Protein"
+                   styleClass="macro-preview-name"/>
+
+        </VBox>
+
+    </HBox>
+
+</HBox>

@@ -1,0 +1,365 @@
+package com.fittrack.controller.nutrition.common.editors;
+
+import com.fittrack.config.AppConstants;
+import com.fittrack.controller.common.FormController;
+import com.fittrack.dto.nutrition.food.FoodRequest;
+import com.fittrack.dto.nutrition.food.FoodResponse;
+import com.fittrack.ui.scene.SceneShortcuts;
+import com.fittrack.util.NumberUtils;
+import com.fittrack.validation.FitnessInputValidator;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.Consumer;
+
+public class FoodEditorController extends FormController implements Initializable {
+
+    @FXML private StackPane rootLayout;
+
+    @FXML private Label titleLabel;
+
+    @FXML private TextField nameField;
+    @FXML private Label nameMessage;
+
+    @FXML private TextField brandField;
+    @FXML private Label brandMessage;
+
+    @FXML private TextField servingSizeField;
+    @FXML private Label servingSizeMessage;
+
+    @FXML private TextField caloriesField;
+    @FXML private Label caloriesMessage;
+
+    @FXML private TextField carbsField;
+    @FXML private Label carbsMessage;
+
+    @FXML private TextField fatField;
+    @FXML private Label fatMessage;
+
+    @FXML private TextField proteinField;
+    @FXML private Label proteinMessage;
+
+    @FXML private Label actionMessage;
+
+    @FXML private Button saveButton;
+
+    // Actions
+    private Runnable onCancelAction;
+    private Consumer<FoodRequest> onSaveAction;
+
+    // ── Configuration ──────────────────────────────────────────
+    public void setOnCancelAction(Runnable onCancelAction) {
+        this.onCancelAction = onCancelAction;
+    }
+
+    public void setOnSaveAction(Consumer<FoodRequest> onSaveAction) {
+        this.onSaveAction = onSaveAction;
+    }
+
+    public void setCreateMode() {
+        titleLabel.setText("Create Food");
+        saveButton.setText("Create food");
+
+        clearFields();
+        restoreHelpers();
+
+        clearActionError();
+    }
+
+    public void setEditMode(FoodResponse food) {
+        titleLabel.setText("Edit Food");
+        saveButton.setText("Save changes");
+
+        nameField.setText(food.name());
+        brandField.setText(
+                food.brand() == null
+                        ? ""
+                        : food.brand()
+        );
+
+        servingSizeField.setText(NumberUtils.formatInputDecimal(food.servingSizeGrams()));
+        caloriesField.setText(NumberUtils.formatInputDecimal(food.caloriesPerServing()));
+        carbsField.setText(NumberUtils.formatInputDecimal(food.carbsPerServing()));
+        fatField.setText(NumberUtils.formatInputDecimal(food.fatPerServing()));
+        proteinField.setText(NumberUtils.formatInputDecimal(food.proteinPerServing()));
+
+        restoreHelpers();
+
+        clearActionError();
+    }
+
+    // ── Initialization ─────────────────────────────────────────
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Keyboard shortcuts
+        SceneShortcuts.forNode(rootLayout)
+                .onEscape(this::handleCancel)
+                .onEnter(this::handleSave);
+
+        // Add Listeners
+        addListeners();
+        restoreHelpers();
+
+        // Default Mode is CREATE
+        setCreateMode();
+    }
+
+    private void addListeners() {
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> restoreNameHelper());
+        servingSizeField.textProperty().addListener((observable, oldValue, newValue) -> restoreServingSizeHelper());
+        caloriesField.textProperty().addListener((observable, oldValue, newValue) -> restoreCaloriesHelper());
+        carbsField.textProperty().addListener((observable, oldValue, newValue) -> restoreCarbsHelper());
+        fatField.textProperty().addListener((observable, oldValue, newValue) -> restoreFatHelper());
+        proteinField.textProperty().addListener((observable, oldValue, newValue) -> restoreProteinHelper());
+    }
+
+    // ── Button Actions ─────────────────────────────────────────────────
+    @FXML
+    private void handleCancel() {
+        if (isLoading(saveButton)) {
+            return;
+        }
+
+        if (onCancelAction != null) {
+            onCancelAction.run();
+        }
+    }
+
+    @FXML
+    private void handleSave() {
+        if (isLoading(saveButton)) {
+            return;
+        }
+
+        clearActionError();
+
+        if (!validateInputs()) {
+            return;
+        }
+
+        if (!validateNutritionRelations()) {
+            return;
+        }
+
+        restoreHelpers();
+
+        FoodRequest request = createFoodRequest();
+
+        if (onSaveAction != null) {
+            onSaveAction.accept(request);
+        }
+    }
+
+    // ── Request ────────────────────────────────────────────────
+    private FoodRequest createFoodRequest() {
+        String name = nameField.getText().trim();
+        String brand = brandField.getText().trim().isEmpty() ? null : brandField.getText().trim();
+        double servingSize = NumberUtils.parseDecimal(servingSizeField.getText().trim());
+        double calories = NumberUtils.parseDecimal(caloriesField.getText().trim());
+        double carbs = NumberUtils.parseDecimal(carbsField.getText().trim());
+        double fat = NumberUtils.parseDecimal(fatField.getText().trim());
+        double protein = NumberUtils.parseDecimal(proteinField.getText().trim());
+
+        return new FoodRequest(
+            name,
+            brand,
+            servingSize,
+            calories,
+            protein,
+            carbs,
+            fat
+        );
+    }
+
+    // ── Field State ────────────────────────────────────────────
+    private void clearFields() {
+        nameField.clear();
+        brandField.clear();
+        servingSizeField.clear();
+        caloriesField.clear();
+        carbsField.clear();
+        fatField.clear();
+        proteinField.clear();
+    }
+
+    // ── Validation ─────────────────────────────────────────────────
+    private boolean validateInputs() {
+        String name = nameField.getText().trim();
+        String servingSize = servingSizeField.getText().trim();
+        String calories = caloriesField.getText().trim();
+        String carbs = carbsField.getText().trim();
+        String fat = fatField.getText().trim();
+        String protein = proteinField.getText().trim();
+
+        boolean valid = true;
+
+        if (name.isBlank()) {
+            showNameMessage();
+            shake(nameField);
+            valid = false;
+        }
+
+        if (!FitnessInputValidator.isPositiveFoodDecimal(servingSize)) {
+            showServingSizeMessage();
+            shake(servingSizeField);
+            valid = false;
+        }
+
+        if (!FitnessInputValidator.isNonNegativeFoodDecimal(calories)) {
+            showCaloriesMessage();
+            shake(caloriesField);
+            valid = false;
+        }
+
+        if (!FitnessInputValidator.isNonNegativeFoodDecimal(carbs)) {
+            showCarbsMessage();
+            shake(carbsField);
+            valid = false;
+        }
+
+        if (!FitnessInputValidator.isNonNegativeFoodDecimal(fat)) {
+            showFatMessage();
+            shake(fatField);
+            valid = false;
+        }
+
+        if (!FitnessInputValidator.isNonNegativeFoodDecimal(protein)) {
+            showProteinMessage();
+            shake(proteinField);
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private boolean validateNutritionRelations() {
+        double servingSize = NumberUtils.parseDecimal(servingSizeField.getText().trim());
+        double calories = NumberUtils.parseDecimal(caloriesField.getText().trim());
+        double carbs = NumberUtils.parseDecimal(carbsField.getText().trim());
+        double fat = NumberUtils.parseDecimal(fatField.getText().trim());
+        double protein = NumberUtils.parseDecimal(proteinField.getText().trim());
+
+        if (!FitnessInputValidator.areMacrosWithinServingSize(servingSize, carbs, fat, protein)) {
+            showMacrosExceedingServingSizeMessage();
+            shake(servingSizeField);
+            shake(carbsField);
+            shake(fatField);
+            shake(proteinField);
+            return false;
+        }
+
+        if (!FitnessInputValidator.areCaloriesReasonable(calories, carbs, fat, protein)) {
+            showCaloriesMismatchMessage();
+            shake(caloriesField);
+            shake(carbsField);
+            shake(fatField);
+            shake(proteinField);
+            return false;
+        }
+
+        return true;
+    }
+
+    // ── Helper State ───────────────────────────────────────────
+    private void restoreHelpers() {
+        restoreNameHelper();
+        setBrandMessage();
+        restoreServingSizeHelper();
+        restoreCaloriesHelper();
+        restoreCarbsHelper();
+        restoreFatHelper();
+        restoreProteinHelper();
+    }
+
+    // ── Submit State ─────────────────────────────────────────────
+    public void setSaving(boolean saving) {
+        if (saving) {
+            setLoading(saveButton, "Saving...");
+        } else {
+            resetLoading(saveButton);
+        }
+    }
+
+    // ── Name Helpers ─────────────────────────────────────────────────
+    private void showNameMessage() {
+        setFieldMessage(nameMessage, AppConstants.Messages.INVALID_FOOD_NAME_MESSAGE, true, nameField);
+    }
+
+    private void restoreNameHelper() {
+        setFieldMessage(nameMessage, AppConstants.Messages.HELPER_FOOD_NAME_MESSAGE, false, nameField);
+    }
+
+    // ── Brand Helpers ─────────────────────────────────────────────────
+    private void setBrandMessage() {
+        setFieldMessage(brandMessage, AppConstants.Messages.HELPER_BRAND_MESSAGE, false, brandField);
+    }
+
+    // ── Serving Size Helpers ─────────────────────────────────────────────────
+    private void showServingSizeMessage() {
+        setFieldMessage(servingSizeMessage, AppConstants.Messages.INVALID_FOOD_SERVING_SIZE_MESSAGE, true, servingSizeField);
+    }
+
+    private void restoreServingSizeHelper() {
+        setFieldMessage(servingSizeMessage, AppConstants.Messages.HELPER_FOOD_SERVING_SIZE_MESSAGE, false, servingSizeField);
+    }
+
+    // ── Calories Helpers ─────────────────────────────────────────────────
+    private void showCaloriesMessage() {
+        setFieldMessage(caloriesMessage, AppConstants.Messages.INVALID_FOOD_CALORIES_MESSAGE, true, caloriesField);
+    }
+
+    private void restoreCaloriesHelper() {
+        setFieldMessage(caloriesMessage, AppConstants.Messages.HELPER_FOOD_CALORIES_MESSAGE, false, caloriesField);
+    }
+
+    // ── Carbs Helpers ─────────────────────────────────────────────────
+    private void showCarbsMessage() {
+        setFieldMessage(carbsMessage, AppConstants.Messages.INVALID_FOOD_CARBS_MESSAGE, true, carbsField);
+    }
+
+    private void restoreCarbsHelper() {
+        setFieldMessage(carbsMessage, AppConstants.Messages.HELPER_FOOD_CARBS_MESSAGE, false, carbsField);
+    }
+
+    // ── Fat Helpers ─────────────────────────────────────────────────
+    private void showFatMessage() {
+        setFieldMessage(fatMessage, AppConstants.Messages.INVALID_FOOD_FAT_MESSAGE, true, fatField);
+    }
+
+    private void restoreFatHelper() {
+        setFieldMessage(fatMessage, AppConstants.Messages.HELPER_FOOD_FAT_MESSAGE, false, fatField);
+    }
+
+    // ── Protein Helpers ─────────────────────────────────────────────────
+    private void showProteinMessage() {
+        setFieldMessage(proteinMessage, AppConstants.Messages.INVALID_FOOD_PROTEIN_MESSAGE, true, proteinField);
+    }
+
+    private void restoreProteinHelper() {
+        setFieldMessage(proteinMessage, AppConstants.Messages.HELPER_FOOD_PROTEIN_MESSAGE, false, proteinField);
+    }
+
+    // ── Action Message Helpers ─────────────────────────────────────
+    public void showActionError(String message) {
+        setFormMessage(actionMessage, message, true);
+    }
+
+    public void clearActionError() {
+        clearFormMessage(actionMessage);
+    }
+
+    // ── Specific Error Helpers ─────────────────────────────────────────────────
+    private void showMacrosExceedingServingSizeMessage() {
+        setFieldMessage(servingSizeMessage, AppConstants.Messages.INVALID_MACROS_EXCEED_SERVING_MESSAGE, true, servingSizeField, carbsField, fatField, proteinField);
+    }
+
+    private void showCaloriesMismatchMessage() {
+        setFieldMessage(caloriesMessage, AppConstants.Messages.INVALID_CALORIES_MISMATCH_MESSAGE, true, caloriesField, carbsField, fatField, proteinField);
+    }
+}

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import com.fittrack.config.AppImages?>
+<?import javafx.scene.image.ImageView?>
+
+<StackPane fx:id="rootLayout"
+           xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.fittrack.controller.nutrition.foods.MyFoodsController"
+           stylesheets="@../../../css/nutrition/foods/my-foods-view.css"
+           styleClass="my-foods-root">
+
+    <!-- Content -->
+    <VBox fx:id="contentContainer"
+          visible="false"
+          managed="false"
+          styleClass="my-foods-content">
+
+        <!-- Actions -->
+        <HBox alignment="CENTER_RIGHT"
+              styleClass="my-foods-actions">
+
+            <Button fx:id="addFoodButton"
+                    text="+ Add food"
+                    onAction="#handleAddFood"
+                    styleClass="action-btn, my-foods-add-button"/>
+        </HBox>
+
+        <!-- Seacrh -->
+        <TextField fx:id="searchField"
+                   promptText="Search my foods..."
+                   styleClass="input-field, text-field, my-foods-search"/>
+
+        <!-- No result fot Search -->
+        <Label fx:id="noResultsLabel"
+               text="No foods found"
+               alignment="CENTER"
+               maxWidth="Infinity"
+               visible="false"
+               managed="false"
+               styleClass="my-foods-no-results"/>
+
+        <!-- Food list -->
+        <ScrollPane fx:id="foodsScroll"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    VBox.vgrow="ALWAYS"
+                    styleClass="app-scroll">
+
+            <VBox fx:id="foodsContainer"
+                  styleClass="my-foods-list"/>
+
+        </ScrollPane>
+
+    </VBox>
+
+    <!-- Empty state -->
+    <VBox fx:id="emptyState"
+          alignment="CENTER"
+          maxHeight="-Infinity"
+          visible="false"
+          managed="false"
+          styleClass="my-foods-empty-state">
+
+        <ImageView fitWidth="250"
+                   fitHeight="250"
+                   preserveRatio="true">
+            <AppImages fx:constant="NO_FOODS_ICON"/>
+        </ImageView>
+
+        <Label text="No foods yet"
+               styleClass="my-foods-empty-title"/>
+
+        <Label text="Foods you create will show up here for quick reuse in your meals."
+               wrapText="true"
+               textAlignment="CENTER"
+               styleClass="my-foods-empty-text"/>
+
+        <Button text="+ Add food"
+                onAction="#handleAddFood"
+                styleClass="action-btn, my-foods-add-button"/>
+
+    </VBox>
+
+</StackPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fittrack.controller.nutrition.meals.components.FoodListItemController"
+      stylesheets="@../../../../css/nutrition/meals/components/food-list-item.css"
+      alignment="CENTER_LEFT"
+      styleClass="food-list-item">
+
+    <!-- Click to customize -->
+    <VBox alignment="CENTER_LEFT"
+          maxWidth="Infinity"
+          HBox.hgrow="ALWAYS"
+          onMouseClicked="#handleOpen"
+          styleClass="food-list-item-content">
+
+        <Label fx:id="titleLabel"
+               styleClass="food-list-item-title"/>
+
+        <Label fx:id="detailsLabel"
+               styleClass="food-list-item-details"/>
+
+    </VBox>
+
+    <!-- Quick Add -->
+    <Button fx:id="addButton"
+            text="+"
+            onAction="#handleAdd"
+            styleClass="quick-add-button, food-list-item-add"/>
+
+</HBox>

@@ -1,7 +1,7 @@
 package com.fittrack.api.nutrition;
 
 import com.fittrack.api.common.BaseApi;
-import com.fittrack.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.dto.nutrition.food.FoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import tools.jackson.core.type.TypeReference;
 
@@ -43,7 +43,7 @@ public class FoodApi extends BaseApi {
         );
     }
 
-    public FoodResponse createFood(Integer userId, CreateFoodRequest request) {
+    public FoodResponse createFood(Integer userId, FoodRequest request) {
         String url = API_URL + "/user/" + userId;
 
         return apiClient.post(
@@ -51,6 +51,26 @@ public class FoodApi extends BaseApi {
                 request,
                 201,
                 FoodResponse.class
+        );
+    }
+
+    public FoodResponse updateFood(Integer userId, Integer foodId, FoodRequest request) {
+        String url = API_URL + "/user/" + userId + "/" + foodId;
+
+        return apiClient.put(
+                url,
+                request,
+                200,
+                FoodResponse.class
+        );
+    }
+
+    public void deleteFood(Integer userId, Integer foodId) {
+        String url = API_URL + "/user/" + userId + "/" + foodId;
+
+        apiClient.delete(
+                url,
+                204
         );
     }
 }

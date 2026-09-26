@@ -31,4 +31,14 @@ public enum ActivityLevel {
             case ATHLETE -> "Athlete (2x per day)";
         };
     }
+
+    public String getShortName() {
+        return switch (this) {
+            case SEDENTARY -> "Sedentary";
+            case LIGHT -> "Light exercise";
+            case MODERATE -> "Moderate exercise";
+            case HEAVY -> "Heavy exercise";
+            case ATHLETE -> "Athlete";
+        };
+    }
 }

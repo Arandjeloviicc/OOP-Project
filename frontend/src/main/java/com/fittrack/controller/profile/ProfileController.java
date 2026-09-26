@@ -187,7 +187,7 @@ public class ProfileController extends NavigableController implements Initializa
         nutritionGoalCardController.setData(
                 profile.goalType().toString(),
                 formatWeeklyGoal(profile.weeklyGoal()),
-                profile.activityLevel().toString()
+                profile.activityLevel().getShortName()
         );
 
         targetsCardController.setData(

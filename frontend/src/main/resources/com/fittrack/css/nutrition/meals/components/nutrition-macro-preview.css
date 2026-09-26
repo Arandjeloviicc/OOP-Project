@@ -1,0 +1,142 @@
+@import "../../../theme.css";
+
+/* ========================================================== */
+/* == NUTRITION MACRO PREVIEW =============================== */
+/* ========================================================== */
+
+.macro-preview-card {
+    -fx-alignment: center-left;
+    -fx-spacing: 1.125em;
+    -fx-padding: 1em 1.125em;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.875em;
+
+    -fx-border-color: -app-input-border;
+    -fx-border-radius: 0.875em;
+    -fx-border-width: 0.0625em;
+}
+
+.macro-preview-chart-wrap {
+    -fx-min-width: 6.875em;
+    -fx-min-height: 6.875em;
+    -fx-pref-width: 6.875em;
+    -fx-pref-height: 6.875em;
+
+    -fx-alignment: center;
+}
+
+.macro-preview-calories-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.625em;
+    -fx-font-weight: bold;
+}
+
+.macro-preview-calories-unit {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 1em;
+    -fx-font-weight: 600;
+}
+
+/* ========================================================== */
+/* == DONUT CHART =========================================== */
+/* ========================================================== */
+
+.macro-arc-carbs {
+    -fx-stroke: -app-nutrition-carbs;
+}
+
+.macro-arc-fat {
+    -fx-stroke: -app-nutrition-fat;
+}
+
+.macro-arc-protein {
+    -fx-stroke: -app-nutrition-protein;
+}
+
+.macro-arc-empty {
+    -fx-stroke: -app-nutrition-track;
+}
+
+/* ========================================================== */
+/* == LEGEND ================================================ */
+/* ========================================================== */
+
+.macro-preview-legend {
+    -fx-alignment: center;
+    -fx-spacing: 1em;
+
+    -fx-min-height: 6.875em;
+    -fx-pref-height: 6.875em;
+
+    -fx-padding: 0.25em 0 0 0;
+}
+
+.macro-preview-column {
+    -fx-alignment: center;
+    -fx-spacing: 0.2em;
+
+    -fx-min-width: 0;
+    -fx-max-width: -1;
+}
+
+.macro-preview-value-row {
+    -fx-alignment: center;
+    -fx-spacing: 0.4em;
+}
+
+.macro-preview-name {
+    -fx-text-fill: -app-text-secondary;
+    -fx-font-size: 1.05em;
+    -fx-font-weight: 600;
+}
+
+.macro-preview-value {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.35em;
+    -fx-font-weight: bold;
+}
+
+.macro-dot-carbs {
+    -fx-fill: -app-nutrition-carbs;
+}
+
+.macro-dot-fat {
+    -fx-fill: -app-nutrition-fat;
+}
+
+.macro-dot-protein {
+    -fx-fill: -app-nutrition-protein;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.macro-preview-card:narrow .macro-preview-chart-wrap {
+    -fx-min-width: 5.5em;
+    -fx-min-height: 5.5em;
+    -fx-pref-width: 5.5em;
+    -fx-pref-height: 5.5em;
+}
+
+.macro-preview-card:narrow .macro-preview-legend {
+    -fx-min-height: 5.5em;
+    -fx-pref-height: 5.5em;
+}
+
+.macro-preview-card:narrow .macro-preview-calories-value {
+    -fx-font-size: 1.4em;
+}
+
+.macro-preview-card:narrow .macro-preview-calories-unit {
+    -fx-font-size: 0.9em;
+}
+
+.macro-preview-card:narrow .macro-preview-value {
+    -fx-font-size: 1em;
+}
+
+.macro-preview-card:narrow .macro-preview-name {
+    -fx-font-size: 0.9em;
+}

@@ -53,6 +53,7 @@ public class MainLayoutController extends NavigableController implements Initial
     @FXML private ToggleButton dashboardButton;
     @FXML private ToggleButton calculatorsButton;
     @FXML private ToggleButton mealsButton;
+    @FXML private ToggleButton myFoodsButton;
     @FXML private ToggleButton workoutsButton;
     @FXML private ToggleButton measurementsButton;
     @FXML private ToggleButton profileButton;
@@ -107,8 +108,8 @@ public class MainLayoutController extends NavigableController implements Initial
     }
 
     @FXML
-    private void handleWorkouts() {
-        showContent(workoutsButton, AppConstants.Views.WORKOUTS);
+    private void handleMyFoods() {
+        showContent(myFoodsButton, AppConstants.Views.MY_FOODS);
     }
 
     @FXML
@@ -126,13 +127,18 @@ public class MainLayoutController extends NavigableController implements Initial
         showContent(profileButton, AppConstants.Views.PROFILE);
     }
 
+    @FXML
+    private void handleWorkouts() {
+        showContent(workoutsButton, AppConstants.Views.WORKOUTS);
+    }
+
     /* ── Initialize Helpers ────────────────────────────────────────────── */
     private void initializeMainLayoutControls() {
         String username = authService.getCurrentUser().username();
         greetingLabel.setText("Hello, " + username);
 
         // List of all Sidebar buttons
-        navButtons = List.of(dashboardButton, mealsButton, measurementsButton, calculatorsButton, profileButton);
+        navButtons = List.of(dashboardButton, mealsButton, measurementsButton, calculatorsButton, myFoodsButton, profileButton);
 
         // Default view - Dashboard
         navigationGroup.selectToggle(dashboardButton);

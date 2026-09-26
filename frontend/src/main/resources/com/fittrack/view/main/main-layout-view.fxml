@@ -108,23 +108,6 @@
                         </graphic>
                     </ToggleButton>
 
-                    <ToggleButton fx:id="workoutsButton"
-                                  text="Workouts"
-                                  visible="false"
-                                  managed="false"
-                                  maxWidth="Infinity"
-                                  toggleGroup="$navigationGroup"
-                                  onAction="#handleWorkouts"
-                                  styleClass="navigation-button">
-                        <graphic>
-                            <ImageView fitWidth="20"
-                                       fitHeight="20"
-                                       preserveRatio="true">
-                                <AppImages fx:constant="WORKOUTS_ICON"/>
-                            </ImageView>
-                        </graphic>
-                    </ToggleButton>
-
                     <ToggleButton fx:id="measurementsButton"
                                   text="Measurements"
                                   maxWidth="Infinity"
@@ -136,6 +119,21 @@
                                        fitHeight="20"
                                        preserveRatio="true">
                                 <AppImages fx:constant="MEASUREMENTS_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="myFoodsButton"
+                                  text="My Foods"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleMyFoods"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="MY_FOODS_ICON"/>
                             </ImageView>
                         </graphic>
                     </ToggleButton>
@@ -166,6 +164,23 @@
                                        fitHeight="20"
                                        preserveRatio="true">
                                 <AppImages fx:constant="USER_PROFILE_ICON"/>
+                            </ImageView>
+                        </graphic>
+                    </ToggleButton>
+
+                    <ToggleButton fx:id="workoutsButton"
+                                  text="Workouts"
+                                  visible="false"
+                                  managed="false"
+                                  maxWidth="Infinity"
+                                  toggleGroup="$navigationGroup"
+                                  onAction="#handleWorkouts"
+                                  styleClass="navigation-button">
+                        <graphic>
+                            <ImageView fitWidth="20"
+                                       fitHeight="20"
+                                       preserveRatio="true">
+                                <AppImages fx:constant="WORKOUTS_ICON"/>
                             </ImageView>
                         </graphic>
                     </ToggleButton>

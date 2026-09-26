@@ -1,0 +1,115 @@
+@import "../../theme.css";
+@import "../../common/base-view.css";
+@import "../../common/form-controls.css";
+@import "../../common/scroll.css";
+
+/* ========================================================== */
+/* == MY FOODS ============================================== */
+/* ========================================================== */
+
+.my-foods-root {
+    -fx-padding: 0 2em;
+}
+
+/* ========================================================== */
+/* == CONTENT =============================================== */
+/* ========================================================== */
+
+.my-foods-content {
+    -fx-max-width: 50em;
+    -fx-spacing: 1em;
+}
+
+/* ========================================================== */
+/* == ACTIONS =============================================== */
+/* ========================================================== */
+
+.my-foods-actions {
+    -fx-spacing: 1em;
+}
+
+.my-foods-add-button {
+    -fx-padding: 0.65em 1.4em;
+}
+
+/* ========================================================== */
+/* == SEARCH ================================================ */
+/* ========================================================== */
+
+.my-foods-search {
+    -fx-pref-height: 3.6em;
+}
+
+/* ========================================================== */
+/* == NO RESULTS ============================================ */
+/* ========================================================== */
+
+.my-foods-no-results {
+    -fx-padding: 1.75em 0;
+    -fx-font-size: 0.95em;
+    -fx-text-fill: -app-text-muted;
+}
+
+/* ========================================================== */
+/* == FOOD LIST ============================================= */
+/* ========================================================== */
+
+.my-foods-list {
+    -fx-spacing: 0.65em;
+}
+
+/* ========================================================== */
+/* == EMPTY STATE =========================================== */
+/* ========================================================== */
+
+.my-foods-empty-state {
+    -fx-max-width: 26em;
+    -fx-spacing: 1.15em;
+    -fx-padding: 2.25em 2em;
+}
+
+.my-foods-empty-title {
+    -fx-font-size: 1.6em;
+    -fx-font-weight: 900;
+    -fx-text-fill: -app-text-primary;
+}
+
+.my-foods-empty-text {
+    -fx-max-width: 21em;
+    -fx-font-size: 1.2em;
+    -fx-text-fill: -app-text-muted;
+}
+
+.my-foods-empty-state .my-foods-add-button {
+    -fx-font-size: 1.05em;
+    -fx-padding: 0.8em 1.8em;
+}
+
+/* ========================================================== */
+/* == NARROW ================================================ */
+/* ========================================================== */
+
+.my-foods-root:narrow {
+    -fx-padding: 0 1.25em;
+}
+
+.my-foods-root:narrow .my-foods-empty-state {
+    -fx-max-width: -1;
+    -fx-spacing: 1.15em;
+    -fx-padding: 0;
+
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+}
+
+
+.my-foods-root:narrow .my-foods-empty-text {
+    -fx-max-width: 21em;
+}
+
+.my-foods-root:narrow .my-foods-add-button {
+    -fx-padding: 0.8em 1.8em;
+}

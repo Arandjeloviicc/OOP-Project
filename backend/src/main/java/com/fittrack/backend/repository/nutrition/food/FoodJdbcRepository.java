@@ -1,6 +1,6 @@
 package com.fittrack.backend.repository.nutrition.food;
 
-import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.backend.dto.nutrition.food.FoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,8 @@ public class FoodJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public FoodResponse createFood(Integer userId, CreateFoodRequest request) {
+    // ── Create ─────────────────────────────────────────────────
+    public FoodResponse createFood(Integer userId, FoodRequest request) {
         String brand = request.brand();
 
         if (brand != null && brand.isBlank()) {
@@ -92,5 +93,100 @@ public class FoodJdbcRepository {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found.")
                 );
+    }
+
+    // ── Update ─────────────────────────────────────────────────
+    public FoodResponse updateFood(Integer userId, Integer foodId, FoodRequest request) {
+        String brand = normalizeBrand(request.brand());
+
+        // Azurira food i vraca ga odmah, pa ne mora da se trazi sa findById
+        String sql = """
+                UPDATE foods
+                SET
+                    name = ?,
+                    brand = ?,
+                    serving_size_grams = ?,
+                    calories_per_serving = ?,
+                    protein_per_serving = ?,
+                    carbs_per_serving = ?,
+                    fat_per_serving = ?,
+                    updated_at = CURRENT_TIMESTAMP
+                WHERE id = ?
+                  AND created_by_user_id = ?
+                RETURNING
+                    id,
+                    name,
+                    brand,
+                    serving_size_grams,
+                    calories_per_serving,
+                    protein_per_serving,
+                    carbs_per_serving,
+                    fat_per_serving,
+                    created_by_user_id
+                """;
+
+        List<FoodResponse> results = jdbcTemplate.query(
+                sql,
+                (resultSet, _) -> new FoodResponse(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("brand"),
+                        resultSet.getDouble("serving_size_grams"),
+                        resultSet.getDouble("calories_per_serving"),
+                        resultSet.getDouble("protein_per_serving"),
+                        resultSet.getDouble("carbs_per_serving"),
+                        resultSet.getDouble("fat_per_serving"),
+                        resultSet.getObject(
+                                "created_by_user_id",
+                                Integer.class
+                        )
+                ),
+                request.name().trim(),
+                brand,
+                request.servingSizeGrams(),
+                request.caloriesPerServing(),
+                request.proteinPerServing(),
+                request.carbsPerServing(),
+                request.fatPerServing(),
+                foodId,
+                userId
+        );
+
+        return results.stream()
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Food not found.")
+                );
+    }
+
+    // ── Delete ─────────────────────────────────────────────────
+    public void deleteFood(Integer userId, Integer foodId) {
+        String sql = """
+                DELETE FROM foods
+                WHERE id = ?
+                  AND created_by_user_id = ?
+                RETURNING id
+                """;
+
+        List<Integer> deletedIds = jdbcTemplate.query(
+                sql,
+                (resultSet, _) ->
+                        resultSet.getInt("id"),
+                foodId,
+                userId
+        );
+
+        if (deletedIds.isEmpty()) {
+            throw new ResourceNotFoundException("Food not found.");
+        }
+    }
+
+    // ── Helpers ─────────────────────────────────────────────────
+    private String normalizeBrand(String brand) {
+        if (brand == null || brand.isBlank()) {
+            return null;
+        }
+
+        return brand.trim();
     }
 }

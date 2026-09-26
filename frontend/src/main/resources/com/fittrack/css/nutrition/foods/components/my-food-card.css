@@ -1,0 +1,103 @@
+@import "../../../theme.css";
+
+/* ========================================================== */
+/* == MY FOOD CARD ========================================== */
+/* ========================================================== */
+
+.my-food-card {
+    -fx-max-width: -1;
+
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.8em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.8em;
+
+    -fx-padding: 0.9em 1em;
+    -fx-spacing: 0.9em;
+
+    -fx-min-height: 4.5em;
+
+    -fx-cursor: hand;
+}
+
+.my-food-card:hover {
+    -fx-background-color: -app-control-background-soft;
+    -fx-border-color: -app-border-strong;
+}
+
+.my-food-card:pressed {
+    -fx-background-color: -app-hover;
+}
+
+/* ========================================================== */
+/* == CONTENT =============================================== */
+/* ========================================================== */
+
+.my-food-card-content {
+    -fx-cursor: hand;
+}
+
+/* ========================================================== */
+/* == INFO ================================================== */
+/* ========================================================== */
+
+.my-food-card-info {
+    -fx-spacing: 0.15em;
+}
+
+.my-food-card-name {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: 700;
+}
+
+.my-food-card-details {
+    -fx-text-fill: -app-text-muted;
+    -fx-font-size: 0.9em;
+}
+
+/* ========================================================== */
+/* == CALORIES ============================================== */
+/* ========================================================== */
+
+.my-food-card-calories {
+    -fx-text-fill: -app-text-primary;
+    -fx-font-size: 1.05em;
+    -fx-font-weight: 700;
+}
+
+/* ========================================================== */
+/* == DELETE ================================================ */
+/* ========================================================== */
+
+.my-food-card-delete {
+    -fx-background-color: -app-danger-background;
+    -fx-background-radius: 0.65em;
+
+    -fx-border-color: -app-danger-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.65em;
+
+    -fx-font-size: 1.15em;
+
+    -fx-min-width: 2.25em;
+    -fx-pref-width: 2.25em;
+    -fx-max-width: 2.25em;
+
+    -fx-min-height: 2.25em;
+    -fx-pref-height: 2.25em;
+    -fx-max-height: 2.25em;
+
+    -fx-padding: 0;
+    -fx-cursor: hand;
+}
+
+.my-food-card-delete:hover {
+    -fx-background-color: -app-danger-background-pressed;
+}
+
+.my-food-card-delete:pressed {
+    -fx-opacity: 0.8;
+}

@@ -13,7 +13,8 @@ public final class AppConstants {
         public static final String PROFILE_SETUP = "profile/profile-setup-view.fxml";
         public static final String MAIN_LAYOUT = "main/main-layout-view.fxml";
         public static final String DASHBOARD = "dashboard/dashboard-view.fxml";
-        public static final String MEALS = "nutrition/meals-view.fxml";
+        public static final String MEALS = "nutrition/meals/meals-view.fxml";
+        public static final String MY_FOODS = "nutrition/foods/my-foods-view.fxml";
         public static final String MEASUREMENTS = "measurements/measurements-view.fxml";
         public static final String CALCULATORS = "calculator/calculators-view.fxml";
         public static final String PROFILE = "profile/profile-view.fxml";
@@ -27,12 +28,13 @@ public final class AppConstants {
         private Components() {}
 
         // Nutrition
-        public static final String DAILY_MEAL_CARD = "nutrition/components/daily-meal-card.fxml";
-        public static final String FOOD_LIST_ITEM = "nutrition/components/food-list-item.fxml";
-        public static final String MEAL_ITEM_CARD = "nutrition/components/meal-item-card.fxml";
-        public static final String NUTRITION_MACRO_PREVIEW = "nutrition/components/nutrition-macro-preview.fxml";
-        public static final String NUTRITION_PROGRESS_CARD = "nutrition/components/nutrition-progress-card.fxml";
-        public static final String SAVED_MEAL_LIST_ITEM = "nutrition/components/saved-meal-list-item.fxml";
+        public static final String DAILY_MEAL_CARD = "nutrition/meals/components/daily-meal-card.fxml";
+        public static final String FOOD_LIST_ITEM = "nutrition/meals/components/food-list-item.fxml";
+        public static final String MEAL_ITEM_CARD = "nutrition/meals/components/meal-item-card.fxml";
+        public static final String NUTRITION_MACRO_PREVIEW = "nutrition/meals/components/nutrition-macro-preview.fxml";
+        public static final String NUTRITION_PROGRESS_CARD = "nutrition/meals/components/nutrition-progress-card.fxml";
+        public static final String SAVED_MEAL_LIST_ITEM = "nutrition/meals/components/saved-meal-list-item.fxml";
+        public static final String MY_FOOD_CARD = "nutrition/foods/components/my-food-card.fxml";
 
         // Measurements
         public static final String WEIGHT_LOG_ITEM = "measurements/components/weight-log-item.fxml";
@@ -58,12 +60,12 @@ public final class AppConstants {
         public static final String DELETE_CONFIRMATION = "common/components/delete-confirmation.fxml";
 
         // Nutrition
-        public static final String ADD_TO_MEAL = "nutrition/add-to-meal.fxml";
-        public static final String DAILY_MEAL_DETAILS = "nutrition/daily-meal-details.fxml";
-        public static final String MEAL_COPY_DIALOG = "nutrition/dialog/meal-copy-dialog.fxml";
-        public static final String FOOD_EDITOR = "nutrition/editor/food-editor.fxml";
-        public static final String MEAL_ITEM_EDITOR = "nutrition/editor/meal-item-editor.fxml";
-        public static final String SAVED_MEAL_EDITOR = "nutrition/editor/saved-meal-editor.fxml";
+        public static final String ADD_TO_MEAL = "nutrition/meals/add-to-meal.fxml";
+        public static final String DAILY_MEAL_DETAILS = "nutrition/meals/daily-meal-details.fxml";
+        public static final String MEAL_COPY_DIALOG = "nutrition/meals/dialog/meal-copy-dialog.fxml";
+        public static final String MEAL_ITEM_EDITOR = "nutrition/meals/editor/meal-item-editor.fxml";
+        public static final String SAVED_MEAL_EDITOR = "nutrition/meals/editor/saved-meal-editor.fxml";
+        public static final String FOOD_EDITOR = "nutrition/common/editors/food-editor.fxml";
 
         // Measurements
         public static final String WEIGHT_LOG_EDITOR = "measurements/editor/weight-log-editor.fxml";
@@ -164,7 +166,7 @@ public final class AppConstants {
         // Meals
         public static final String INVALID_SERVINGS_MESSAGE = "Enter a number of servings greater than 0.";
 
-        // Create Food
+        // Foods
         public static final String INVALID_FOOD_NAME_MESSAGE = "Enter a food name.";
         public static final String INVALID_FOOD_SERVING_SIZE_MESSAGE = "Enter a serving size greater than 0.";
         public static final String INVALID_FOOD_CALORIES_MESSAGE = "Enter a valid number of calories.";
@@ -173,6 +175,9 @@ public final class AppConstants {
         public static final String INVALID_FOOD_PROTEIN_MESSAGE = "Enter a valid amount of protein.";
         public static final String INVALID_MACROS_EXCEED_SERVING_MESSAGE = "Carbs, fat, and protein combined cannot exceed the serving size.";
         public static final String INVALID_CALORIES_MISMATCH_MESSAGE = "Entered calories don't match the entered macronutrients.";
+        public static final String CREATE_FOOD_ERROR = "Could not create food. Please try again.";
+        public static final String UPDATE_FOOD_ERROR = "Could not save food changes. Please try again.";
+        public static final String DELETE_FOOD_ERROR = "Could not delete food. Please try again.";
 
         public static final String HELPER_FOOD_NAME_MESSAGE = "The name of the food or product.";
         public static final String HELPER_BRAND_MESSAGE = "The brand of the food or product.";

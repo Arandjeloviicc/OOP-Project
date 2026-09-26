@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.fittrack.controller.nutrition.meals.DailyMealDetailsController"
+           stylesheets="@../../../css/nutrition/meals/daily-meal-details.css"
+           fx:id="rootLayout"
+           maxWidth="Infinity"
+           maxHeight="Infinity"
+           styleClass="daily-meal-details-view">
+
+    <VBox maxWidth="Infinity"
+          maxHeight="Infinity"
+          styleClass="daily-meal-details-dialog">
+
+        <!-- Header -->
+        <HBox styleClass="daily-meal-details-header">
+
+            <VBox spacing="0.2">
+                <Label text="Meal"
+                       styleClass="daily-meal-details-caption"/>
+
+                <Label fx:id="titleLabel"
+                       text="Breakfast"
+                       styleClass="daily-meal-details-title"/>
+            </VBox>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Button text="✕"
+                    onAction="#handleClose"
+                    styleClass="daily-meal-details-close-button"/>
+
+        </HBox>
+
+        <!-- Macro Preview -->
+        <VBox fx:id="macroPreviewContainer"
+              styleClass="daily-meal-details-macro-container"/>
+
+        <!-- Items Header -->
+        <HBox styleClass="daily-meal-details-section-header">
+            <Label text="Foods"
+                   styleClass="daily-meal-details-section-title"/>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="itemCountLabel"
+                   text="0 items"
+                   styleClass="daily-meal-details-item-count"/>
+        </HBox>
+
+        <!-- Items -->
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    VBox.vgrow="ALWAYS"
+                    styleClass="app-scroll, daily-meal-details-scroll">
+
+            <VBox fx:id="itemsContainer"
+                  styleClass="daily-meal-details-items"/>
+
+        </ScrollPane>
+
+        <!-- Footer -->
+        <Button text="+  Log more"
+                maxWidth="Infinity"
+                onAction="#handleLogMore"
+                styleClass="action-btn, daily-meal-details-log-button"/>
+
+    </VBox>
+
+</StackPane>

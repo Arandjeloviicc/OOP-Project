@@ -1,6 +1,6 @@
 package com.fittrack.backend.controller.nutrition;
 
-import com.fittrack.backend.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.backend.dto.nutrition.food.FoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
 import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.service.nutrition.FoodService;
@@ -47,7 +47,18 @@ public class FoodController {
 
     @PostMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public FoodResponse createFood(@PathVariable Integer userId, @Valid @RequestBody CreateFoodRequest request) {
+    public FoodResponse createFood(@PathVariable Integer userId, @Valid @RequestBody FoodRequest request) {
         return foodService.createFood(userId, request);
+    }
+
+    @PutMapping("/user/{userId}/{foodId}")
+    public FoodResponse updateFood(@PathVariable Integer userId, @PathVariable Integer foodId, @Valid @RequestBody FoodRequest request) {
+        return foodService.updateFood(userId, foodId, request);
+    }
+
+    @DeleteMapping("/user/{userId}/{foodId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteFood(@PathVariable Integer userId, @PathVariable Integer foodId) {
+        foodService.deleteFood(userId, foodId);
     }
 }

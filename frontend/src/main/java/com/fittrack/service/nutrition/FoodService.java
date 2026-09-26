@@ -1,7 +1,7 @@
 package com.fittrack.service.nutrition;
 
 import com.fittrack.api.nutrition.FoodApi;
-import com.fittrack.dto.nutrition.food.CreateFoodRequest;
+import com.fittrack.dto.nutrition.food.FoodRequest;
 import com.fittrack.dto.nutrition.food.FoodResponse;
 import com.fittrack.session.UserSession;
 
@@ -26,10 +26,25 @@ public class FoodService {
         );
     }
 
-    public FoodResponse createFood(CreateFoodRequest request) {
+    public FoodResponse createFood(FoodRequest request) {
         return foodApi.createFood(
                 currentUserId(),
                 request
+        );
+    }
+
+    public FoodResponse updateFood(Integer foodId, FoodRequest request) {
+        return foodApi.updateFood(
+                currentUserId(),
+                foodId,
+                request
+        );
+    }
+
+    public void deleteFood(Integer foodId) {
+        foodApi.deleteFood(
+                currentUserId(),
+                foodId
         );
     }
 

@@ -1,0 +1,98 @@
+@import "../../../theme.css";
+@import "../../../common/quick-actions.css";
+
+/* ========================================================== */
+/* == MEAL LIST ITEM ======================================== */
+/* ========================================================== */
+
+.saved-meal-list-item {
+    -fx-background-color: -app-surface-light;
+    -fx-background-radius: 0.75em;
+
+    -fx-border-color: -app-border-soft;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0.75em;
+
+    -fx-padding: 0.75em 0.875em;
+    -fx-spacing: 0.75em;
+
+    -fx-min-height: 4em;
+}
+
+.saved-meal-list-item:hover {
+    -fx-background-color: -app-control-background-soft;
+    -fx-border-color: -app-border;
+}
+
+/* ========================================================== */
+/* == CONTENT =============================================== */
+/* ========================================================== */
+
+.saved-meal-list-item-content {
+    -fx-spacing: 0.25em;
+
+    -fx-min-width: 0;
+    -fx-max-width: -1;
+
+    -fx-cursor: hand;
+}
+
+.saved-meal-list-item-title {
+    -fx-font-size: 1em;
+    -fx-font-weight: 700;
+    -fx-text-fill: -app-text-primary;
+}
+
+/* ========================================================== */
+/* == NUTRITION ============================================= */
+/* ========================================================== */
+
+.saved-meal-list-item-nutrition {
+    -fx-alignment: center-left;
+    -fx-hgap: 0.8em;
+    -fx-vgap: 0.2em;
+}
+
+.saved-meal-list-item-macros {
+    -fx-alignment: center-left;
+    -fx-spacing: 0.8em;
+}
+
+.saved-meal-list-item-detail {
+    -fx-font-size: 0.875em;
+    -fx-text-fill: -app-text-secondary;
+}
+
+/* ========================================================== */
+/* == ADD BUTTON =========================================== */
+/* ========================================================== */
+
+.saved-meal-list-item-add {
+    -fx-background-color: -app-hover;
+    -fx-background-radius: 0.5625em;
+
+    -fx-text-fill: -app-primary-light;
+    -fx-font-size: 1.25em;
+    -fx-font-weight: bold;
+
+    -fx-min-width: 2.25em;
+    -fx-pref-width: 2.25em;
+    -fx-max-width: 2.25em;
+
+    -fx-min-height: 2.25em;
+    -fx-pref-height: 2.25em;
+    -fx-max-height: 2.25em;
+
+    -fx-padding: 0;
+
+    -fx-cursor: hand;
+}
+
+.saved-meal-list-item-add:hover {
+    -fx-background-color: -app-primary;
+    -fx-text-fill: -app-text-primary;
+}
+
+.saved-meal-list-item-add:pressed {
+    -fx-opacity: 0.85;
+}

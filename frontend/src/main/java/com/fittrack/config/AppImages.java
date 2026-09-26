@@ -21,6 +21,7 @@ public final class AppImages {
     public static final Image DASHBOARD_ICON = load("/com/fittrack/images/icons/sidebar/dashboard.png");
     public static final Image CALCULATORS_ICON = load("/com/fittrack/images/icons/sidebar/calculators.png");
     public static final Image MEALS_ICON = load("/com/fittrack/images/icons/sidebar/meals.png");
+    public static final Image MY_FOODS_ICON = load("/com/fittrack/images/icons/sidebar/myFoods.png");
     public static final Image WORKOUTS_ICON = load("/com/fittrack/images/icons/sidebar/workouts.png");
     public static final Image MEASUREMENTS_ICON = load("/com/fittrack/images/icons/sidebar/measurements.png");
     public static final Image USER_PROFILE_ICON = load("/com/fittrack/images/icons/sidebar/profile.png");
@@ -38,6 +39,9 @@ public final class AppImages {
 
     // Delete
     public static final Image TRASH_ICON = load("/com/fittrack/images/icons/other/trash.png");
+
+    // No Foods Icon
+    public static final Image NO_FOODS_ICON = load("/com/fittrack/images/icons/other/no_foods.png");
 
     // ── Load Image ─────────────────────────────────────────────────
     private static Image load(String path) {
