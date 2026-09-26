@@ -112,6 +112,7 @@ public final class OverlayManager {
         }
 
         activeModal = content;
+
         overlayContainer.getChildren().add(content);
     }
 

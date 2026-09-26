@@ -24,6 +24,12 @@ public abstract class BaseController {
             );
         }
 
+        if (button.isFocused() && button.getScene() != null) {
+            button.getScene()
+                    .getRoot()
+                    .requestFocus();
+        }
+
         button.setDisable(true);
         button.setText(loadingText);
     }

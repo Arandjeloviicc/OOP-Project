@@ -22,20 +22,8 @@ public class MealsCoordinator {
     // Copy Menu
     private MealCopyDialogController activeCopyDialog;
 
-    // ScrollPane Position Helpers
-    private Runnable onOverlayOpening = () -> {};
-    private Runnable onOverlayClosed = () -> {};
-
-    // ── Overlay Lifecycle ────────────────────────────────────────────
-    public void setOverlayLifecycle(Runnable onOverlayOpening, Runnable onOverlayClosed) {
-        this.onOverlayOpening = onOverlayOpening;
-        this.onOverlayClosed = onOverlayClosed;
-    }
-
     // ── Add To Meal Actions ─────────────────────────────────────────────────
     public void openAddToMeal(MealType mealType, LocalDate mealDate, Runnable onChanged) {
-        beforeOverlayOpen();
-
         LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Popups.ADD_TO_MEAL);
 
         addToMeal.controller().setData(
@@ -73,8 +61,6 @@ public class MealsCoordinator {
 
     // ── Meal Details Actions ─────────────────────────────────────────────────
     public void openMealDetails(MealType mealType, LocalDate mealDate, MealResponse meal, Runnable onChanged) {
-        beforeOverlayOpen();
-
         LoadedComponent<DailyMealDetailsController> details = FxmlComponentLoader.load(AppConstants.Popups.DAILY_MEAL_DETAILS);
 
         details.controller().setData(
@@ -103,8 +89,6 @@ public class MealsCoordinator {
 
     // ── ContextMenu Items Actions ─────────────────────────────────────────────────
     public void openSaveAsMeal(MealResponse meal) {
-        beforeOverlayOpen();
-
         LoadedComponent<AddToMealController> addToMeal = FxmlComponentLoader.load(AppConstants.Popups.ADD_TO_MEAL);
 
         showAddToMealPopup(addToMeal.root());
@@ -113,8 +97,6 @@ public class MealsCoordinator {
     }
 
     public void openCopyFrom(MealType currentMealType, LocalDate currentDate, BiConsumer<MealType, LocalDate> onAvailabilityCheck, BiConsumer<MealType, LocalDate> onCopy, Runnable onClose) {
-        beforeOverlayOpen();
-
         LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Popups.MEAL_COPY_DIALOG);
 
         MealCopyDialogController controller = copyDialog.controller();
@@ -166,8 +148,6 @@ public class MealsCoordinator {
     }
 
     public void openCopyTo(MealType currentMealType, LocalDate currentDate, BiConsumer<MealType, LocalDate> onCopy) {
-        beforeOverlayOpen();
-
         LoadedComponent<MealCopyDialogController> copyDialog = FxmlComponentLoader.load(AppConstants.Popups.MEAL_COPY_DIALOG);
 
         MealCopyDialogController controller = copyDialog.controller();
@@ -224,16 +204,12 @@ public class MealsCoordinator {
     }
 
     // ── Overlay Helpers ──────────────────────────────────────────────
-    private void beforeOverlayOpen() {
-        onOverlayOpening.run();
-    }
-
     private void showOverlay(Node root) {
-        OverlayManager.show(root, onOverlayClosed);
+        OverlayManager.show(root);
     }
 
     private PopupShellController showPopup(Node root) {
-        PopupShellController shell = OverlayManager.showInPopup(root, onOverlayClosed);
+        PopupShellController shell = OverlayManager.showInPopup(root);
 
         shell.setOverflow(PopupOverflow.CONTENT_MANAGED);
 

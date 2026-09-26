@@ -150,6 +150,8 @@ public class WeightLogEditorController extends FormController implements Initial
             return;
         }
 
+        AppDatePickerConfigurer.commitEditorValue(datePicker);
+
         clearActionError();
 
         if (!isFormValid()) {
@@ -157,6 +159,7 @@ public class WeightLogEditorController extends FormController implements Initial
         }
 
         double weight = NumberUtils.parseDecimal(weightField.getText().trim());
+
         Instant loggedAt = datePicker.getValue()
                 .atStartOfDay(ZoneId.systemDefault())
                 .toInstant();
