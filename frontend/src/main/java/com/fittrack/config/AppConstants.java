@@ -189,10 +189,13 @@ public final class AppConstants {
         // Measurements
         public static final String INVALID_MEASUREMENT_DATE_MESSAGE = "Measurement date cannot be in the future.";
 
+        public static final String WEIGHT_LOG_DATE_CONFLICT_ERROR_MESSAGE = "A weight log already exists for this date.";
         public static final String WEIGHT_LOG_CREATE_ERROR_MESSAGE = "Could not add weight. Please try again.";
         public static final String WEIGHT_LOG_UPDATE_ERROR_MESSAGE = "Could not save weight log changes. Please try again.";
         public static final String WEIGHT_LOG_DELETE_ERROR_MESSAGE = "Could not delete weight entry. Please try again.";
         public static final String LAST_WEIGHT_LOG_DELETE_ERROR_MESSAGE = "At least one weight entry must be kept.";
+
+        public static final String BODY_MEASUREMENT_DATE_CONFLICT_ERROR_MESSAGE = "A body measurement already exists for this date.";
         public static final String BODY_MEASUREMENT_CREATE_ERROR_MESSAGE = "Could not add body measurement. Please try again.";
         public static final String BODY_MEASUREMENT_UPDATE_ERROR_MESSAGE = "Could not save body measurement changes. Please try again.";
         public static final String BODY_MEASUREMENT_DELETE_ERROR_MESSAGE = "Could not delete body measurement. Please try again.";

@@ -19,7 +19,6 @@ import com.fittrack.service.nutrition.NutritionCalculationService;
 import com.fittrack.service.nutrition.NutritionGoalService;
 import com.fittrack.ui.loader.FxmlComponentLoader;
 import com.fittrack.ui.loader.LoadedComponent;
-import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
@@ -83,9 +82,6 @@ public class MealsController extends NavigableController implements Initializabl
     private LoadedComponent<DailyMealCardController> dinnerCard;
     private LoadedComponent<DailyMealCardController> snacksCard;
 
-    // ScrollPane position (prevents resetting to top)
-    private double overlayScrollPosition;
-
     // Load Helpers
     private long mealsLoadVersion;
 
@@ -119,17 +115,6 @@ public class MealsController extends NavigableController implements Initializabl
         // Setup ScrollPane
         mealsContent.minHeightProperty().bind(
                 mealsScroll.viewportBoundsProperty().map(Bounds::getHeight)
-        );
-
-        // ScrollPane Position Listener
-        coordinator.setOverlayLifecycle(
-                () -> overlayScrollPosition = mealsScroll.getVvalue(),
-
-                () -> Platform.runLater(() -> {
-                            mealsScroll.setVvalue(overlayScrollPosition);
-                            mealsScroll.requestFocus();
-                        }
-                )
         );
 
         // Initialize Summary and Diary Cards

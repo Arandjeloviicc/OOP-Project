@@ -2,6 +2,8 @@ package com.fittrack.ui.form;
 
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -62,6 +64,51 @@ public class AppDatePickerConfigurer {
         });
 
         datePicker.setShowWeekNumbers(false);
+
+        datePicker.addEventFilter(
+                KeyEvent.KEY_PRESSED,
+                event -> {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        System.out.println("DATE PICKER ENTER");
+
+                        commitEditorValue(datePicker);
+
+                        System.out.println("AFTER COMMIT: " + datePicker.getValue());
+
+                        event.consume();
+                    }
+                }
+        );
+
+        datePicker.addEventFilter(
+                KeyEvent.KEY_RELEASED,
+                event -> {
+                    if (event.getCode() == KeyCode.ENTER) {
+                        event.consume();
+                    }
+                }
+        );
+    }
+
+    public static void commitEditorValue(DatePicker datePicker) {
+        String text = datePicker.getEditor().getText();
+
+        if (text == null || text.isBlank()) {
+            datePicker.setValue(null);
+            return;
+        }
+
+        try {
+            LocalDate date = LocalDate.parse(
+                    text.trim(),
+                    INPUT_FORMATTER
+            );
+
+            datePicker.setValue(date);
+
+        } catch (DateTimeParseException _) {
+            datePicker.setValue(null);
+        }
     }
 
     public static DateTimeFormatter inputFormatter() {

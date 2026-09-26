@@ -4,15 +4,14 @@ import com.fittrack.backend.dto.measurements.body.BodyMeasurementHistoryResponse
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
 import com.fittrack.backend.entity.profile.Gender;
-import com.fittrack.backend.repository.measurements.body.projection.CreateBodyMeasurementResult;
-import com.fittrack.backend.repository.measurements.body.projection.DeleteBodyMeasurementResult;
-import com.fittrack.backend.repository.measurements.body.projection.LatestBodyMeasurement;
-import com.fittrack.backend.repository.measurements.body.projection.UpdateBodyMeasurementResult;
+import com.fittrack.backend.repository.measurements.body.projection.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -98,15 +97,55 @@ public class BodyMeasurementJdbcRepository {
         );
     }
 
-    public Optional<CreateBodyMeasurementResult> create(Integer userId, BodyMeasurementRequest request) {
-        // inserted  proverava da korisnik postoji pre unosa
-        //           ako ne postoji, SELECT vraca 0 redova i INSERT ne unosi nista
-        // is_latest - NOT EXISTS trazi bilo koji drugi red istog korisnika koji je "noviji" od upravo
-        //             unetog (veci logged_at, ili isti logged_at sa vecim id kao tie-breaker); ako takav
-        //             red ne postoji, upravo uneti unos je najnoviji
+    public CreateBodyMeasurementResult create(Integer userId, BodyMeasurementRequest request) {
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        LocalDate loggedDate = request.loggedAt()
+                .atZone(zoneId)
+                .toLocalDate();
+
+        Timestamp dayStart = Timestamp.from(
+                loggedDate
+                        .atStartOfDay(zoneId)
+                        .toInstant()
+        );
+
+        Timestamp nextDayStart = Timestamp.from(
+                loggedDate
+                        .plusDays(1)
+                        .atStartOfDay(zoneId)
+                        .toInstant()
+        );
+
+        // target_user - proverava da korisnik postoji; prazan ako ne postoji
+        // date_conflict - EXISTS provera da li korisnik vec ima unos merenja u (dayStart, nextDayStart)
+        //                 rasponu, jedan unos merenja po danu
+        // inserted - INSERT se izvrsava samo ako korisnik postoji (CROSS JOIN target_user) i nema
+        //            konflikta za taj dan (WHERE NOT dc.exists), u suprotnom ostaje prazan
+        // status - prvo USER_NOT_FOUND (target_user prazan), tek onda DATE_CONFLICT, inace CREATED
+        // is_latest - NOT EXISTS trazi bilo koji drugi red korisnika noviji od upravo unetog
+        //             (veci logged_at, ili isti logged_at sa vecim id); "WHEN i.id IS NULL THEN FALSE"
+        //             pokriva slucaj kad inserted nema red (USER_NOT_FOUND ili DATE_CONFLICT)
+        // FROM (SELECT 1) base LEFT JOIN inserted i ON TRUE
+        //           - garantuje tacno jedan red u rezultatu cak i kad je inserted prazan
+
 
         String sql = """
-            WITH inserted AS (
+            WITH target_user AS (
+                SELECT id
+                FROM users
+                WHERE id = ?
+            ),
+            date_conflict AS (
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM body_measurement_logs
+                    WHERE user_id = ?
+                      AND logged_at >= ?
+                      AND logged_at < ?
+                ) AS exists
+            ),
+            inserted AS (
                 INSERT INTO body_measurement_logs (
                     user_id,
                     neck,
@@ -122,8 +161,9 @@ public class BodyMeasurementJdbcRepository {
                     ?,
                     ?,
                     CURRENT_TIMESTAMP
-                FROM users u
-                WHERE u.id = ?
+                FROM target_user u
+                CROSS JOIN date_conflict dc
+                WHERE NOT dc.exists
                 RETURNING
                     id,
                     user_id,
@@ -133,74 +173,143 @@ public class BodyMeasurementJdbcRepository {
                     logged_at
             )
             SELECT
+                CASE
+                    WHEN NOT EXISTS (
+                        SELECT 1
+                        FROM target_user
+                    ) THEN 'USER_NOT_FOUND'
+    
+                    WHEN (
+                        SELECT exists
+                        FROM date_conflict
+                    ) THEN 'DATE_CONFLICT'
+    
+                    ELSE 'CREATED'
+                END AS status,
+    
                 i.id,
                 i.neck,
                 i.waist,
                 i.hip,
                 i.logged_at,
-                NOT EXISTS (
-                    SELECT 1
-                    FROM body_measurement_logs b
-                    WHERE b.user_id = i.user_id
-                      AND b.id <> i.id
-                      AND (
-                          b.logged_at > i.logged_at
-                          OR (
-                              b.logged_at = i.logged_at
-                              AND b.id > i.id
+    
+                CASE
+                    WHEN i.id IS NULL THEN FALSE
+    
+                    ELSE NOT EXISTS (
+                        SELECT 1
+                        FROM body_measurement_logs b
+                        WHERE b.user_id = i.user_id
+                          AND b.id <> i.id
+                          AND (
+                              b.logged_at > i.logged_at
+                              OR (
+                                  b.logged_at = i.logged_at
+                                  AND b.id > i.id
+                              )
                           )
-                      )
-                ) AS is_latest
-            FROM inserted i
+                    )
+                END AS is_latest
+    
+            FROM (SELECT 1) base
+            LEFT JOIN inserted i ON TRUE
             """;
 
-        List<CreateBodyMeasurementResult> results = jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 sql,
-                (resultSet, _) -> new CreateBodyMeasurementResult(
-                        new BodyMeasurementResponse(
+                (resultSet, _) -> {
+                    CreateBodyMeasurementStatus status =
+                            CreateBodyMeasurementStatus.valueOf(
+                                    resultSet.getString("status")
+                            );
+
+                    BodyMeasurementResponse bodyMeasurement = null;
+
+                    if (status == CreateBodyMeasurementStatus.CREATED) {
+                        bodyMeasurement = new BodyMeasurementResponse(
                                 resultSet.getInt("id"),
                                 resultSet.getDouble("neck"),
                                 resultSet.getDouble("waist"),
                                 resultSet.getObject("hip", Double.class),
                                 resultSet.getTimestamp("logged_at").toInstant()
-                        ),
-                        resultSet.getBoolean("is_latest")
-                ),
+                        );
+                    }
+
+                    return new CreateBodyMeasurementResult(
+                            status,
+                            bodyMeasurement,
+                            resultSet.getBoolean("is_latest")
+                    );
+                },
+                userId,
+                userId,
+                dayStart,
+                nextDayStart,
                 request.neck(),
                 request.waist(),
                 request.hip(),
-                Timestamp.from(request.loggedAt()),
-                userId
+                Timestamp.from(request.loggedAt())
         );
-
-        return results.stream().findFirst();
     }
 
-    public Optional<UpdateBodyMeasurementResult> update(Integer measurementId, Integer userId, BodyMeasurementRequest request) {
-        // target - proverava da traženi unos postoji i da pripada korisniku (id + user_id zajedno), a was_latest podupitom utvrđuje da li je
-        //          baš taj unos trenutno najnoviji (poredi se sa unosom koji ima najveći logged_at, id kao tie-breaker za isti timestamp)
-        // updated - ako target ima red, UPDATE menja neck/waist/hip i logged_at tog reda,
-        //           ažurira updated_at i RETURNING-om vraća novo stanje plus was_latest;
-        //           ako target nema red (measurement ne postoji ili ne pripada korisniku),
-        //           UPDATE ne pogađa nijedan red i updated ostaje prazan
-        // SELECT - vraća ažurirani measurement, was_latest iz stanja pre UPDATE-a
-        //          i računa is_latest nakon promene logged_at po pravilu
-        //          ORDER BY logged_at DESC, id DESC; prazan updated znači Optional.empty()
+    public UpdateBodyMeasurementResult update(Integer measurementId, Integer userId, BodyMeasurementRequest request) {
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        LocalDate loggedDate = request.loggedAt()
+                .atZone(zoneId)
+                .toLocalDate();
+
+        Timestamp dayStart = Timestamp.from(
+                loggedDate
+                        .atStartOfDay(zoneId)
+                        .toInstant()
+        );
+
+        Timestamp nextDayStart = Timestamp.from(
+                loggedDate
+                        .plusDays(1)
+                        .atStartOfDay(zoneId)
+                        .toInstant()
+        );
+
+        // target - proverava da unos postoji i pripada korisniku (id + user_id), i racuna was_latest
+        //          poredjenjem sa trenutno najnovijim unosom korisnika pre izmene
+        // date_conflict  - proverava da li korisnik vec ima DRUGI unos (b.id <> ?) u (dayStart, nextDayStart)
+        //                  rasponu novog datuma, ne gleda se datum koji je vec bio da ako se ne menja datum da ne pravi conflict
+        // updated - UPDATE se izvrsava samo ako target ima red I nema konflikta (WHERE ... AND NOT dc.exists);
+        //           u suprotnom ostaje prazan bez greske
+        // status - NOT_FOUND ima prioritet nad DATE_CONFLICT
+        // was_latest - COALESCE(..., FALSE) jer target moze imati red dok updated ostaje prazan
+        //              (DATE_CONFLICT slucaj), pa bi u.was_latest inace bio NULL umesto FALSE
+        // is_latest - racuna se nakon izmene (novi neck/waist/hip/logged_at), zajedno sa was_latest
+        //             hvata i promenu ranga usled izmene datuma u oba smera
+        // FROM (SELECT 1) base LEFT JOIN updated u ON TRUE
+        //            - garantuje tacno jedan red u rezultatu cak i kad je updated prazan
 
         String sql = """
             WITH target AS (
-               SELECT
-                   id,
-                   id = (
-                       SELECT id
-                       FROM body_measurement_logs
-                       WHERE user_id = ?
-                       ORDER BY logged_at DESC, id DESC
-                       LIMIT 1
-                   ) AS was_latest
-               FROM body_measurement_logs
-               WHERE id = ?
-                 AND user_id = ?
+                SELECT
+                    id,
+                    id = (
+                        SELECT id
+                        FROM body_measurement_logs
+                        WHERE user_id = ?
+                        ORDER BY logged_at DESC, id DESC
+                        LIMIT 1
+                    ) AS was_latest
+                FROM body_measurement_logs
+                WHERE id = ?
+                  AND user_id = ?
+            ),
+            date_conflict AS (
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM body_measurement_logs b
+                    WHERE b.user_id = ?
+                      AND b.id <> ?
+                      AND b.logged_at >= ?
+                      AND b.logged_at < ?
+                ) AS exists
             ),
             updated AS (
                 UPDATE body_measurement_logs b
@@ -211,7 +320,9 @@ public class BodyMeasurementJdbcRepository {
                     logged_at = ?,
                     updated_at = CURRENT_TIMESTAMP
                 FROM target t
+                CROSS JOIN date_conflict dc
                 WHERE b.id = t.id
+                  AND NOT dc.exists
                 RETURNING
                     b.id,
                     b.user_id,
@@ -222,57 +333,106 @@ public class BodyMeasurementJdbcRepository {
                     t.was_latest
             )
             SELECT
+                CASE
+                    WHEN NOT EXISTS (
+                        SELECT 1
+                        FROM target
+                    ) THEN 'NOT_FOUND'
+    
+                    WHEN (
+                        SELECT exists
+                        FROM date_conflict
+                    ) THEN 'DATE_CONFLICT'
+    
+                    ELSE 'UPDATED'
+                END AS status,
+    
                 u.id,
                 u.neck,
                 u.waist,
                 u.hip,
                 u.logged_at,
-                u.was_latest,
-                NOT EXISTS (
-                    SELECT 1
-                    FROM body_measurement_logs b
-                    WHERE b.user_id = u.user_id
-                      AND b.id <> u.id
-                      AND (
-                          b.logged_at > u.logged_at
-                          OR (
-                              b.logged_at = u.logged_at
-                              AND b.id > u.id
+    
+                COALESCE(
+                    u.was_latest,
+                    FALSE
+                ) AS was_latest,
+    
+                CASE
+                    WHEN u.id IS NULL THEN FALSE
+    
+                    ELSE NOT EXISTS (
+                        SELECT 1
+                        FROM body_measurement_logs b
+                        WHERE b.user_id = u.user_id
+                          AND b.id <> u.id
+                          AND (
+                              b.logged_at > u.logged_at
+                              OR (
+                                  b.logged_at = u.logged_at
+                                  AND b.id > u.id
+                              )
                           )
-                      )
-                ) AS is_latest
-            FROM updated u
+                    )
+                END AS is_latest
+    
+            FROM (SELECT 1) base
+            LEFT JOIN updated u ON TRUE
             """;
 
-        List<UpdateBodyMeasurementResult> results = jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 sql,
-                (resultSet, _) -> new UpdateBodyMeasurementResult(
-                        new BodyMeasurementResponse(
+                (resultSet, _) -> {
+                    UpdateBodyMeasurementStatus status =
+                            UpdateBodyMeasurementStatus.valueOf(
+                                    resultSet.getString("status")
+                            );
+
+                    BodyMeasurementResponse bodyMeasurement = null;
+
+                    if (status == UpdateBodyMeasurementStatus.UPDATED) {
+                        bodyMeasurement = new BodyMeasurementResponse(
                                 resultSet.getInt("id"),
                                 resultSet.getDouble("neck"),
                                 resultSet.getDouble("waist"),
                                 resultSet.getObject("hip", Double.class),
                                 resultSet.getTimestamp("logged_at").toInstant()
-                        ),
-                        resultSet.getBoolean("was_latest"),
-                        resultSet.getBoolean("is_latest")
-                ),
+                        );
+                    }
+
+                    return new UpdateBodyMeasurementResult(
+                            status,
+                            bodyMeasurement,
+                            resultSet.getBoolean("was_latest"),
+                            resultSet.getBoolean("is_latest")
+                    );
+                },
                 userId,
                 measurementId,
                 userId,
+
+                userId,
+                measurementId,
+                dayStart,
+                nextDayStart,
+
                 request.neck(),
                 request.waist(),
                 request.hip(),
                 Timestamp.from(request.loggedAt())
         );
-
-        return results.stream().findFirst();
     }
 
     public DeleteBodyMeasurementResult delete(Integer measurementId, Integer userId) {
-        // target - ista provera kao u update() - postojanje + vlasništvo (id + user_id), plus was_latest flag da se zna da li se briše baš trenutno najnoviji unos korisnika
-        // deleted - ako target ima red, DELETE ... USING target t briše taj tačno jedan red i RETURNING vraća njegov id i was_latest; ako target nema red, DELETE ne pogađa ništa i deleted ostaje prazan (0 redova), bez ijedne greške
-        // SELECT - EXISTS(...) pretvara "ima li reda u deleted" u pravi boolean (true/false), umesto da se oslanja na broj vraćenih redova; COALESCE(..., FALSE) hvata slučaj kad deleted nema nijedan red (ništa obrisano) tako da se was_latest ne izvlači iz praznog podupita kao null, nego dobija bezbedan default FALSE - ovo je i razlog zašto ova metoda uvek vraća tačno jedan red (queryForObject umesto stream().findFirst()), za razliku od update() koji legitimno može da vrati "nema rezultata"
+        // target - ista provera kao u update() - postojanje + vlasništvo (id + user_id),
+        //          plus was_latest flag da se zna da li se briše baš trenutno najnoviji unos korisnika
+        // deleted - ako target ima red, DELETE ... USING target t briše taj tačno jedan red
+        //           i RETURNING vraća njegov id i was_latest; ako target nema red, DELETE ne pogađa ništa i deleted ostaje prazan (0 redova), bez ijedne greške
+        // SELECT - EXISTS(...) pretvara "ima li reda u deleted" u pravi boolean (true/false),
+        //          umesto da se oslanja na broj vraćenih redova; COALESCE(..., FALSE) hvata slučaj
+        //          kad deleted nema nijedan red (ništa obrisano) tako da se was_latest ne izvlači iz praznog podupita kao null,
+        //          nego dobija bezbedan default FALSE - ovo je i razlog zašto ova metoda uvek vraća tačno jedan red
+        //          (queryForObject umesto stream().findFirst()), za razliku od update() koji legitimno može da vrati "nema rezultata"
 
         String sql = """
             WITH target AS (

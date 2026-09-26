@@ -4,18 +4,16 @@ import com.fittrack.backend.dto.measurements.weight.WeightHistoryResponse;
 import com.fittrack.backend.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.backend.dto.measurements.weight.WeightLogResponse;
 import com.fittrack.backend.entity.profile.WeightGoal;
-import com.fittrack.backend.repository.measurements.weight.projection.CreateWeightLogResult;
-import com.fittrack.backend.repository.measurements.weight.projection.DeleteWeightLogResult;
-import com.fittrack.backend.repository.measurements.weight.projection.DeleteWeightLogStatus;
-import com.fittrack.backend.repository.measurements.weight.projection.UpdateWeightLogResult;
+import com.fittrack.backend.repository.measurements.weight.projection.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -75,15 +73,53 @@ public class WeightLogJdbcRepository {
         );
     }
 
-    public Optional<CreateWeightLogResult> create(Integer userId, WeightLogRequest request) {
-        // inserted - proverava da korisnik postoji pre unosa;
-        //            ako ne postoji, SELECT vraca 0 redova i INSERT ne unosi nista
-        // is_latest - NOT EXISTS trazi bilo koji drugi red istog korisnika koji je "noviji" od upravo
-        //             unetog (veci logged_at, ili isti logged_at sa vecim id kao tie-breaker); ako takav
-        //             red ne postoji, upravo uneti unos je najnoviji
+    public CreateWeightLogResult create(Integer userId, WeightLogRequest request) {
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        LocalDate loggedDate = request.loggedAt()
+                .atZone(zoneId)
+                .toLocalDate();
+
+        Timestamp dayStart = Timestamp.from(
+                loggedDate.atStartOfDay(zoneId).toInstant()
+        );
+
+        Timestamp nextDayStart = Timestamp.from(
+                loggedDate.plusDays(1)
+                        .atStartOfDay(zoneId)
+                        .toInstant()
+        );
+
+        // target_user - proverava da korisnik postoji; prazan ako ne postoji, sto se dalje koristi i za status
+        //               i posredno za CROSS JOIN u insert-u (nema reda -> INSERT nista ne unosi)
+        // date_conflict - EXISTS provera da li korisnik VEC ima unos u (dayStart, nextDayStart) rasponu
+        // inserted - INSERT se izvrsava SAMO ako korisnik postoji (CROSS JOIN target_user - prazan target_user
+        //            znaci 0 redova iz CROSS JOIN-a) i ako nema konflikta za taj dan (WHERE NOT dc.exists);
+        //            ako bilo koji uslov ne prodje, inserted ostaje prazan bez ijedne bacene greske
+        // status - redosled provere je bitan: prvo USER_NOT_FOUND (target_user prazan), tek onda
+        //          DATE_CONFLICT (date_conflict.exists), inace CREATED - ako je user nevalidan ne
+        //          zeli se da se prijavi DATE_CONFLICT kao razlog neuspeha
+        // is_latest - racunanje da lije merenje najskorije
+        // FROM (SELECT 1) base LEFT JOIN inserted i ON TRUE
+        //       - garantuje tacno jedan red u finalnom rezultatu cak i kad je inserted prazan (queryForObject
+        //       bi inace bacio EmptyResultDataAccessException)
 
         String sql = """
-            WITH inserted AS (
+            WITH target_user AS (
+                SELECT id
+                FROM users
+                WHERE id = ?
+            ),
+            date_conflict AS (
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM weight_logs
+                    WHERE user_id = ?
+                      AND logged_at >= ?
+                      AND logged_at < ?
+                ) AS exists
+            ),
+            inserted AS (
                 INSERT INTO weight_logs (
                     user_id,
                     weight,
@@ -95,8 +131,9 @@ public class WeightLogJdbcRepository {
                     ?,
                     ?,
                     CURRENT_TIMESTAMP
-                FROM users u
-                WHERE u.id = ?
+                FROM target_user u
+                CROSS JOIN date_conflict dc
+                WHERE NOT dc.exists
                 RETURNING
                     id,
                     user_id,
@@ -104,52 +141,107 @@ public class WeightLogJdbcRepository {
                     logged_at
             )
             SELECT
+                CASE
+                    WHEN NOT EXISTS (
+                        SELECT 1
+                        FROM target_user
+                    ) THEN 'USER_NOT_FOUND'
+                    WHEN (
+                        SELECT exists
+                        FROM date_conflict
+                    ) THEN 'DATE_CONFLICT'
+                    ELSE 'CREATED'
+                END AS status,
                 i.id,
                 i.weight,
                 i.logged_at,
-                NOT EXISTS (
-                    SELECT 1
-                    FROM weight_logs w
-                    WHERE w.user_id = i.user_id
-                      AND w.id <> i.id
-                      AND (
-                          w.logged_at > i.logged_at
-                          OR (
-                              w.logged_at = i.logged_at
-                              AND w.id > i.id
+                CASE
+                    WHEN i.id IS NULL THEN FALSE
+                    ELSE NOT EXISTS (
+                        SELECT 1
+                        FROM weight_logs w
+                        WHERE w.user_id = i.user_id
+                          AND w.id <> i.id
+                          AND (
+                              w.logged_at > i.logged_at
+                              OR (
+                                  w.logged_at = i.logged_at
+                                  AND w.id > i.id
+                              )
                           )
-                      )
-                ) AS is_latest
-            FROM inserted i
+                    )
+                END AS is_latest
+            FROM (SELECT 1) base
+            LEFT JOIN inserted i ON TRUE
             """;
 
-        List<CreateWeightLogResult> results = jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 sql,
-                (resultSet, _) -> new CreateWeightLogResult(
-                        new WeightLogResponse(
+                (resultSet, _) -> {
+                    CreateWeightLogStatus status =
+                            CreateWeightLogStatus.valueOf(
+                                    resultSet.getString("status")
+                            );
+
+                    WeightLogResponse weightLog = null;
+
+                    if (status == CreateWeightLogStatus.CREATED) {
+                        weightLog = new WeightLogResponse(
                                 resultSet.getInt("id"),
                                 resultSet.getDouble("weight"),
                                 resultSet.getTimestamp("logged_at").toInstant()
-                        ),
-                        resultSet.getBoolean("is_latest")
-                ),
-                request.weight(),
-                Timestamp.from(request.loggedAt()),
-                userId
-        );
+                        );
+                    }
 
-        return results.stream().findFirst();
+                    return new CreateWeightLogResult(
+                            status,
+                            weightLog,
+                            resultSet.getBoolean("is_latest")
+                    );
+                },
+                userId,
+                userId,
+                dayStart,
+                nextDayStart,
+                request.weight(),
+                Timestamp.from(request.loggedAt())
+        );
     }
 
-    public Optional<UpdateWeightLogResult> update(Integer weightLogId, Integer userId, WeightLogRequest request) {
-        // target - proverava da traženi unos postoji i da pripada korisniku (id + user_id zajedno),
-        //          a was_latest podupitom utvrđuje da li je baš taj unos trenutno najnoviji unos
-        //          korisnika (poredi se sa MAX logged_at, id kao tie-breaker za isti timestamp) -
-        //          identičan obrazac kao BodyMeasurementJdbcRepository.update()
-        // updated - ako target ima red, UPDATE menja weight i logged_at tog reda,
-        //           ažurira updated_at i RETURNING-om vraća novo stanje plus was_latest
-        // SELECT - prosleđuje kolone iz updated; prazan updated -> 0 redova -> Java strana kroz
-        //          results.stream().findFirst() dobija Optional.empty()
+    public UpdateWeightLogResult update(Integer weightLogId, Integer userId, WeightLogRequest request) {
+        ZoneId zoneId = ZoneId.systemDefault();
+
+        LocalDate loggedDate = request.loggedAt()
+                .atZone(zoneId)
+                .toLocalDate();
+
+        Timestamp dayStart = Timestamp.from(
+                loggedDate.atStartOfDay(zoneId).toInstant()
+        );
+
+        Timestamp nextDayStart = Timestamp.from(
+                loggedDate.plusDays(1)
+                        .atStartOfDay(zoneId)
+                        .toInstant()
+        );
+
+        // target - proverava da unos postoji i pripada korisniku (id + user_id), i istovremeno racuna
+        //          was_latest poredjenjem sa trenutno najnovijim unosom pre izmene
+        // date_conflict - proverava da li korisnik vec ima drugi unos (w.id <> ?) u (dayStart, nextDayStart)
+        //                 rasponu novog datuma; mora da se iskljuci id tog merenja da ne bi pravio problem sam sebi
+        // updated - UPDATE se izvrsava samo ako target ima red i nema konflikta (WHERE ... AND NOT dc.exists);
+        //           ako bilo koji uslov ne prodje, updated ostaje prazan bez greske
+        // status - NOT_FOUND ima prioritet nad DATE_CONFLICT, prvo se proverava
+        //          da li unos uopste postoji/pripada korisniku, tek onda da li novi datum konfliktuje
+        // was_latest - COALESCE(..., FALSE) jer target moze imati red (NOT_FOUND se ne desava) ali updated
+        //              ostati prazan (DATE_CONFLICT slucaj) - tada u.was_latest ne postoji pa bi bez COALESCE
+        //              ostao NULL umesto FALSE
+        // is_latest - racuna se NAKON izmene (novi weight/logged_at), za razliku od was_latest koji je
+        //             racunat pre, ova dva zajedno hvataju i slucaj kad se datum promeni tako da unos
+        //             vise nije najnoviji, i slucaj kad postane najnoviji iako to pre nije bio
+        // FROM (SELECT 1) base LEFT JOIN updated u ON TRUE
+        //           - garantuje tacno jedan red u rezultatu cak i kad je updated prazan (NOT_FOUND ili
+        //             DATE_CONFLICT), da queryForObject ne baci gresku na 0 redova
 
         String sql = """
             WITH target AS (
@@ -166,6 +258,16 @@ public class WeightLogJdbcRepository {
                 WHERE id = ?
                   AND user_id = ?
             ),
+            date_conflict AS (
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM weight_logs w
+                    WHERE w.user_id = ?
+                      AND w.id <> ?
+                      AND w.logged_at >= ?
+                      AND w.logged_at < ?
+                ) AS exists
+            ),
             updated AS (
                 UPDATE weight_logs w
                 SET
@@ -173,7 +275,9 @@ public class WeightLogJdbcRepository {
                     logged_at = ?,
                     updated_at = CURRENT_TIMESTAMP
                 FROM target t
+                CROSS JOIN date_conflict dc
                 WHERE w.id = t.id
+                  AND NOT dc.exists
                 RETURNING
                     w.id,
                     w.user_id,
@@ -182,45 +286,78 @@ public class WeightLogJdbcRepository {
                     t.was_latest
             )
             SELECT
+                CASE
+                    WHEN NOT EXISTS (
+                        SELECT 1
+                        FROM target
+                    ) THEN 'NOT_FOUND'
+                    WHEN (
+                        SELECT exists
+                        FROM date_conflict
+                    ) THEN 'DATE_CONFLICT'
+                    ELSE 'UPDATED'
+                END AS status,
                 u.id,
                 u.weight,
                 u.logged_at,
-                u.was_latest,
-                NOT EXISTS (
-                    SELECT 1
-                    FROM weight_logs w
-                    WHERE w.user_id = u.user_id
-                      AND w.id <> u.id
-                      AND (
-                          w.logged_at > u.logged_at
-                          OR (
-                              w.logged_at = u.logged_at
-                              AND w.id > u.id
+                COALESCE(u.was_latest, FALSE) AS was_latest,
+                CASE
+                    WHEN u.id IS NULL THEN FALSE
+                    ELSE NOT EXISTS (
+                        SELECT 1
+                        FROM weight_logs w
+                        WHERE w.user_id = u.user_id
+                          AND w.id <> u.id
+                          AND (
+                              w.logged_at > u.logged_at
+                              OR (
+                                  w.logged_at = u.logged_at
+                                  AND w.id > u.id
+                              )
                           )
-                      )
-                ) AS is_latest
-            FROM updated u
+                    )
+                END AS is_latest
+            FROM (SELECT 1) base
+            LEFT JOIN updated u ON TRUE
             """;
 
-        List<UpdateWeightLogResult> results = jdbcTemplate.query(
+        return jdbcTemplate.queryForObject(
                 sql,
-                (resultSet, _) -> new UpdateWeightLogResult(
-                        new WeightLogResponse(
+                (resultSet, _) -> {
+                    UpdateWeightLogStatus status =
+                            UpdateWeightLogStatus.valueOf(
+                                    resultSet.getString("status")
+                            );
+
+                    WeightLogResponse weightLog = null;
+
+                    if (status == UpdateWeightLogStatus.UPDATED) {
+                        weightLog = new WeightLogResponse(
                                 resultSet.getInt("id"),
                                 resultSet.getDouble("weight"),
                                 resultSet.getTimestamp("logged_at").toInstant()
-                        ),
-                        resultSet.getBoolean("was_latest"),
-                        resultSet.getBoolean("is_latest")
-                ),
+                        );
+                    }
+
+                    return new UpdateWeightLogResult(
+                            status,
+                            weightLog,
+                            resultSet.getBoolean("was_latest"),
+                            resultSet.getBoolean("is_latest")
+                    );
+                },
                 userId,
                 weightLogId,
                 userId,
+
+                userId,
+                weightLogId,
+                dayStart,
+                nextDayStart,
+
                 request.weight(),
                 Timestamp.from(request.loggedAt())
         );
-
-        return results.stream().findFirst();
     }
 
     public DeleteWeightLogResult delete(Integer weightLogId, Integer userId) {

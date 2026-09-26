@@ -19,6 +19,7 @@ import com.fittrack.ui.loader.FxmlComponentLoader;
 import com.fittrack.ui.loader.LoadedComponent;
 import com.fittrack.ui.overlay.OverlayManager;
 import com.fittrack.ui.scene.SceneManager;
+import com.fittrack.util.ApiExceptionUtils;
 import com.fittrack.util.NumberUtils;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
@@ -242,6 +243,11 @@ public class ProfileController extends NavigableController implements Initializa
 
                 exception -> {
                     measurementsCoordinator.setWeightLogSaving(false);
+
+                    if (ApiExceptionUtils.isConflict(exception)) {
+                        measurementsCoordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_DATE_CONFLICT_ERROR_MESSAGE);
+                        return;
+                    }
 
                     measurementsCoordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_CREATE_ERROR_MESSAGE);
 

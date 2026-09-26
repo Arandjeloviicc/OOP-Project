@@ -27,33 +27,44 @@ public class WeightLogService {
 
     @Transactional
     public WeightLogResponse createWeightLog(Integer userId, WeightLogRequest request) {
-        CreateWeightLogResult result =
-                weightLogJdbcRepository.create(userId, request)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("User not found.")
-                        );
+        CreateWeightLogResult result = weightLogJdbcRepository.create(userId, request);
 
-        if (result.isLatest()) {
-            nutritionGoalService.recalculateTargets(userId);
+        switch (result.status()) {
+            case USER_NOT_FOUND -> throw new ResourceNotFoundException("User not found.");
+
+            case DATE_CONFLICT -> throw new ConflictException("A weight log already exists for this date.");
+
+            case CREATED -> {
+                if (result.isLatest()) {
+                    nutritionGoalService.recalculateTargets(userId);
+                }
+
+                return result.weightLog();
+            }
         }
 
-        return result.weightLog();
+        throw new IllegalStateException("Unexpected weight log creation status.");
     }
 
     @Transactional
     public WeightLogResponse updateWeightLog(Integer userId, Integer weightLogId, WeightLogRequest request) {
-        UpdateWeightLogResult result =
-                weightLogJdbcRepository
-                        .update(weightLogId, userId, request)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("Weight log not found.")
-                        );
+        UpdateWeightLogResult result = weightLogJdbcRepository.update(weightLogId, userId, request);
 
-        if (result.wasLatest() || result.isLatest()) {
-            nutritionGoalService.recalculateTargets(userId);
+        switch (result.status()) {
+            case NOT_FOUND -> throw new ResourceNotFoundException("Weight log not found.");
+
+            case DATE_CONFLICT -> throw new ConflictException("A weight log already exists for this date.");
+
+            case UPDATED -> {
+                if (result.wasLatest() || result.isLatest()) {
+                    nutritionGoalService.recalculateTargets(userId);
+                }
+
+                return result.weightLog();
+            }
         }
 
-        return result.weightLog();
+        throw new IllegalStateException("Unexpected weight log update status.");
     }
 
     @Transactional

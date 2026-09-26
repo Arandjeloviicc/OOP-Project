@@ -1,6 +1,5 @@
 package com.fittrack.controller.measurements;
 
-import com.fittrack.api.common.ApiException;
 import com.fittrack.async.AsyncTaskRunner;
 import com.fittrack.config.AppConstants;
 import com.fittrack.controller.common.NavigableController;
@@ -21,6 +20,7 @@ import com.fittrack.service.measurements.BodyMeasurementService;
 import com.fittrack.service.measurements.WeightLogService;
 import com.fittrack.ui.loader.FxmlComponentLoader;
 import com.fittrack.ui.loader.LoadedComponent;
+import com.fittrack.util.ApiExceptionUtils;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -270,6 +270,11 @@ public class MeasurementsController extends NavigableController implements Initi
                 exception -> {
                     coordinator.setWeightLogSaving(false);
 
+                    if (ApiExceptionUtils.isConflict(exception)) {
+                        coordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_DATE_CONFLICT_ERROR_MESSAGE);
+                        return;
+                    }
+
                     coordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_CREATE_ERROR_MESSAGE);
 
                     log.error(
@@ -308,6 +313,11 @@ public class MeasurementsController extends NavigableController implements Initi
 
                 exception -> {
                     coordinator.setWeightLogSaving(false);
+
+                    if (ApiExceptionUtils.isConflict(exception)) {
+                        coordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_DATE_CONFLICT_ERROR_MESSAGE);
+                        return;
+                    }
 
                     coordinator.showWeightLogSaveError(AppConstants.Messages.WEIGHT_LOG_UPDATE_ERROR_MESSAGE);
 
@@ -369,7 +379,7 @@ public class MeasurementsController extends NavigableController implements Initi
 
                     String message = AppConstants.Messages.WEIGHT_LOG_DELETE_ERROR_MESSAGE;
 
-                    if (exception instanceof ApiException apiException && Integer.valueOf(409).equals(apiException.getStatusCode())) {
+                    if (ApiExceptionUtils.isConflict(exception)) {
                         coordinator.showDeleteConfirmationError(AppConstants.Messages.LAST_WEIGHT_LOG_DELETE_ERROR_MESSAGE);
                         return;
                     }
@@ -482,6 +492,11 @@ public class MeasurementsController extends NavigableController implements Initi
                 exception -> {
                     coordinator.setBodyMeasurementSaving(false);
 
+                    if (ApiExceptionUtils.isConflict(exception)) {
+                        coordinator.showBodyMeasurementSaveError(AppConstants.Messages.BODY_MEASUREMENT_DATE_CONFLICT_ERROR_MESSAGE);
+                        return;
+                    }
+
                     coordinator.showBodyMeasurementSaveError(AppConstants.Messages.BODY_MEASUREMENT_CREATE_ERROR_MESSAGE);
 
                     log.error(
@@ -521,6 +536,11 @@ public class MeasurementsController extends NavigableController implements Initi
 
                 exception -> {
                     coordinator.setBodyMeasurementSaving(false);
+
+                    if (ApiExceptionUtils.isConflict(exception)) {
+                        coordinator.showBodyMeasurementSaveError(AppConstants.Messages.BODY_MEASUREMENT_DATE_CONFLICT_ERROR_MESSAGE);
+                        return;
+                    }
 
                     coordinator.showBodyMeasurementSaveError(AppConstants.Messages.BODY_MEASUREMENT_UPDATE_ERROR_MESSAGE);
 

@@ -192,6 +192,8 @@ public class BodyMeasurementEditorController extends FormController implements I
             return;
         }
 
+        AppDatePickerConfigurer.commitEditorValue(datePicker);
+
         clearActionError();
 
         if (!isFormValid()) {

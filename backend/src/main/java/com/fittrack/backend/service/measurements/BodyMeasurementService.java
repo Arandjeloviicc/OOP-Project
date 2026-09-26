@@ -3,6 +3,7 @@ package com.fittrack.backend.service.measurements;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementHistoryResponse;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
+import com.fittrack.backend.exception.ConflictException;
 import com.fittrack.backend.exception.ResourceNotFoundException;
 import com.fittrack.backend.repository.measurements.body.BodyMeasurementJdbcRepository;
 import com.fittrack.backend.repository.measurements.body.projection.CreateBodyMeasurementResult;
@@ -47,17 +48,23 @@ public class BodyMeasurementService {
                 request.hip()
         );
 
-        CreateBodyMeasurementResult result =
-                bodyMeasurementJdbcRepository.create(userId, request)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("User not found.")
-                        );
+        CreateBodyMeasurementResult result = bodyMeasurementJdbcRepository.create(userId, request);
 
-        if (result.isLatest()) {
-            nutritionGoalService.recalculateTargets(userId);
+        switch (result.status()) {
+            case USER_NOT_FOUND -> throw new ResourceNotFoundException("User not found.");
+
+            case DATE_CONFLICT -> throw new ConflictException("A body measurement already exists for this date.");
+
+            case CREATED -> {
+                if (result.isLatest()) {
+                    nutritionGoalService.recalculateTargets(userId);
+                }
+
+                return result.bodyMeasurement();
+            }
         }
 
-        return result.bodyMeasurement();
+        throw new IllegalStateException("Unexpected body measurement creation status.");
     }
 
     @Transactional
@@ -77,18 +84,23 @@ public class BodyMeasurementService {
                 request.hip()
         );
 
-        UpdateBodyMeasurementResult result =
-                bodyMeasurementJdbcRepository
-                        .update(measurementId, userId, request)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException("Body measurement not found.")
-                        );
+        UpdateBodyMeasurementResult result = bodyMeasurementJdbcRepository.update(measurementId, userId, request);
 
-        if (result.wasLatest() || result.isLatest()) {
-            nutritionGoalService.recalculateTargets(userId);
+        switch (result.status()) {
+            case NOT_FOUND -> throw new ResourceNotFoundException("Body measurement not found.");
+
+            case DATE_CONFLICT -> throw new ConflictException("A body measurement already exists for this date.");
+
+            case UPDATED -> {
+                if (result.wasLatest() || result.isLatest()) {
+                    nutritionGoalService.recalculateTargets(userId);
+                }
+
+                return result.measurement();
+            }
         }
 
-        return result.measurement();
+        throw new IllegalStateException("Unexpected body measurement update status.");
     }
 
     @Transactional
