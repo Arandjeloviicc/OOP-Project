@@ -20,7 +20,7 @@
 <BorderPane fx:id="rootLayout"
             xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.fittrack.controller.calculator.CalculatorsController"
+            fx:controller="com.fittrack.controller.calculators.CalculatorsController"
             stylesheets="@../../css/calculator/calculators-view.css"
             styleClass="calculators-container">
 

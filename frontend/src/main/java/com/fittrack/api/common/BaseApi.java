@@ -13,6 +13,7 @@ public abstract class BaseApi {
     protected static final String PROFILE_URL = BASE_URL + "/profile";
     protected static final String NUTRITION_URL = BASE_URL + "/nutrition";
     protected static final String MEASUREMENTS_URL = BASE_URL + "/measurements";
+    protected static final String CALCULATORS_URL = BASE_URL + "/calculators";
 
     protected BaseApi() {
         apiClient = ApiClient.getInstance();

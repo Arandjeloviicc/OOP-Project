@@ -1,15 +1,18 @@
-package com.fittrack.controller.calculator;
+package com.fittrack.controller.calculators;
 
+import com.fittrack.async.AsyncTaskRunner;
+import com.fittrack.model.calculators.CalculatorsData;
+import com.fittrack.service.calculators.CalculatorsService;
 import com.fittrack.ui.scene.SceneShortcuts;
 import com.fittrack.util.NumberUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import com.fittrack.controller.common.FormController;
 import com.fittrack.controller.common.ResponsiveLayout;
-import com.fittrack.model.calculator.CalculatorType;
-import com.fittrack.model.calculator.EnergyMode;
+import com.fittrack.model.calculators.CalculatorType;
+import com.fittrack.model.calculators.EnergyMode;
 import com.fittrack.model.profile.Gender;
-import com.fittrack.service.calculator.CalculationService;
+import com.fittrack.service.calculators.CalculationService;
 import com.fittrack.config.AppConstants;
 import com.fittrack.validation.FitnessInputValidator;
 import javafx.beans.binding.DoubleBinding;
@@ -18,6 +21,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.util.Duration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.List;
@@ -26,6 +31,9 @@ import java.util.ResourceBundle;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class CalculatorsController extends FormController implements Initializable, ResponsiveLayout {
+
+    // Custom console messages
+    private static final Logger log = LoggerFactory.getLogger(CalculatorsController.class);
 
     // Layouts
     @FXML private BorderPane rootLayout;
@@ -132,6 +140,9 @@ public class CalculatorsController extends FormController implements Initializab
     // Adding PseudoClass to ComboBox (Change text color when nothing is selected)
     private static final PseudoClass NO_SELECTION = PseudoClass.getPseudoClass("no-selection");
 
+    // Service
+    private final CalculatorsService calculatorsService = new CalculatorsService();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -166,6 +177,9 @@ public class CalculatorsController extends FormController implements Initializab
 
         // Listeners
         addListeners();
+
+        // Load data
+        loadCalculatorsData();
     }
 
     // ── Button Actions ─────────────────────────────────────────────────
@@ -394,14 +408,12 @@ public class CalculatorsController extends FormController implements Initializab
             narrowContainer.getChildren().setAll(formPanel, resultPanel);
 
             setVisible(wideContainer, false);
-
             setVisible(narrowContainer, true);
         } else {
             narrowContainer.getChildren().clear();
             wideContainer.getChildren().setAll(formPanel, resultPanel);
 
             setVisible(narrowContainer, false);
-
             setVisible(wideContainer, true);
         }
 
@@ -506,6 +518,60 @@ public class CalculatorsController extends FormController implements Initializab
         activityLevelComboBox.pseudoClassStateChanged(NO_SELECTION, activityLevelComboBox.getValue() == null);
 
         updateCalculatorForm(CalculatorType.BMI);
+    }
+
+    // ── Data Loading ────────────────────────────────────────────
+    private void loadCalculatorsData() {
+        AsyncTaskRunner.run(
+                calculatorsService::getCalculatorsData,
+
+                data -> {
+                    applyCalculatorsData(data);
+
+                    if (areRequiredFieldsFilled(CalculatorType.BMI)) {
+                        handleCalculate();
+                    }
+                },
+
+                exception -> log.error(
+                        "Failed to load calculator data.",
+                        exception
+                )
+        );
+    }
+
+    private void applyCalculatorsData(CalculatorsData data) {
+        // BMI
+        heightField.setText(NumberUtils.formatInputDecimal(data.height()));
+        weightField.setText(NumberUtils.formatInputDecimal(data.weight()));
+
+        // TDEE
+        ageField.setText(String.valueOf(data.age()));
+
+        genderGroup.selectToggle(
+                data.gender() == Gender.MALE
+                        ? maleButton
+                        : femaleButton
+        );
+
+        activityLevelComboBox.setValue(
+                EnergyMode.valueOf(
+                        data.activityLevel().name()
+                )
+        );
+
+        // Body fat
+        if (data.neck() != null) {
+            neckField.setText(NumberUtils.formatInputDecimal(data.neck()));
+        }
+
+        if (data.waist() != null) {
+            waistField.setText(NumberUtils.formatInputDecimal(data.waist()));
+        }
+
+        if (data.hip() != null) {
+            hipField.setText(NumberUtils.formatInputDecimal(data.hip()));
+        }
     }
 
     // ── Calculator Helpers ─────────────────────────────────────────────────

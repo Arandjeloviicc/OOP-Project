@@ -1,4 +1,4 @@
-package com.fittrack.model.calculator;
+package com.fittrack.model.calculators;
 
 import com.fittrack.model.profile.ActivityLevel;
 

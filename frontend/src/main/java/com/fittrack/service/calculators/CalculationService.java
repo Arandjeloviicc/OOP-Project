@@ -1,4 +1,4 @@
-package com.fittrack.service.calculator;
+package com.fittrack.service.calculators;
 
 import com.fittrack.model.profile.ActivityLevel;
 import com.fittrack.model.profile.Gender;
