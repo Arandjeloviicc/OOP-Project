@@ -1,8 +1,8 @@
 package com.fittrack.backend.dto.profile;
 
-import com.fittrack.backend.entity.profile.ActivityLevel;
-import com.fittrack.backend.entity.profile.WeightGoal;
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.ActivityLevel;
+import com.fittrack.backend.domain.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.Gender;
 
 import java.time.LocalDate;
 

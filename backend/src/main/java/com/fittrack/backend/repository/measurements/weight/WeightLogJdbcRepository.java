@@ -3,7 +3,7 @@ package com.fittrack.backend.repository.measurements.weight;
 import com.fittrack.backend.dto.measurements.weight.WeightHistoryResponse;
 import com.fittrack.backend.dto.measurements.weight.WeightLogRequest;
 import com.fittrack.backend.dto.measurements.weight.WeightLogResponse;
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.WeightGoal;
 import com.fittrack.backend.repository.measurements.weight.projection.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,5 +1,8 @@
-package com.fittrack.backend.entity.profile;
+package com.fittrack.backend.domain.profile;
 
+import lombok.Getter;
+
+@Getter
 public enum ActivityLevel {
     SEDENTARY(1.2),
     LIGHT(1.375),
@@ -11,9 +14,5 @@ public enum ActivityLevel {
 
     ActivityLevel(double multiplier) {
         this.multiplier = multiplier;
-    }
-
-    public double getMultiplier() {
-        return multiplier;
     }
 }

@@ -2,14 +2,12 @@ package com.fittrack.backend.controller.nutrition;
 
 import com.fittrack.backend.dto.nutrition.food.FoodRequest;
 import com.fittrack.backend.dto.nutrition.food.FoodResponse;
-import com.fittrack.backend.entity.nutrition.Food;
 import com.fittrack.backend.service.nutrition.FoodService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,28 +19,12 @@ public class FoodController {
 
     @GetMapping
     public List<FoodResponse> searchFoods(@RequestParam String search) {
-        List<Food> foods = foodService.searchFoods(search);
-
-        List<FoodResponse> responses = new ArrayList<>();
-
-        for (Food food : foods) {
-            responses.add(foodService.toResponse(food));
-        }
-
-        return responses;
+        return foodService.searchFoods(search);
     }
 
     @GetMapping("/mine/{userId}")
     public List<FoodResponse> getMyFoods(@PathVariable Integer userId, @RequestParam(defaultValue = "") String search) {
-        List<Food> foods = foodService.getFoodsCreatedByUser(userId, search);
-
-        List<FoodResponse> responses = new ArrayList<>();
-
-        for (Food food : foods) {
-            responses.add(foodService.toResponse(food));
-        }
-
-        return responses;
+        return foodService.getFoodsCreatedByUser(userId, search);
     }
 
     @PostMapping("/user/{userId}")

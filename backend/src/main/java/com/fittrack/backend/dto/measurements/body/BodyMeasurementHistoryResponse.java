@@ -1,6 +1,6 @@
 package com.fittrack.backend.dto.measurements.body;
 
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.Gender;
 
 import java.util.List;
 

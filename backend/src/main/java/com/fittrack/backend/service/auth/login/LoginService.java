@@ -1,6 +1,6 @@
 package com.fittrack.backend.service.auth.login;
 
-import com.fittrack.backend.repository.user.UserRepository;
+import com.fittrack.backend.repository.user.UserJdbcRepository;
 import com.fittrack.backend.repository.user.projection.LoginData;
 import com.fittrack.backend.security.PasswordHasher;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final UserRepository userRepository;
+    private final UserJdbcRepository userJdbcRepository;
 
     public LoginResult login(String email, String password) {
         String normalizedEmail = email.trim().toLowerCase(Locale.ROOT);
-        Optional<LoginData> loginDataOptional = userRepository.findLoginDataByEmail(normalizedEmail);
+
+        Optional<LoginData> loginDataOptional = userJdbcRepository.findLoginDataByEmail(normalizedEmail);
 
         if (loginDataOptional.isEmpty()) {
             return LoginResult.userNotFound();
@@ -25,17 +26,15 @@ public class LoginService {
 
         LoginData loginData = loginDataOptional.get();
 
-        if (!PasswordHasher.matches(password, loginData.getPasswordHash())) {
+        if (!PasswordHasher.matches(password, loginData.passwordHash())) {
             return LoginResult.wrongPassword();
         }
 
         return LoginResult.success(
-                loginData.getId(),
-                loginData.getUsername(),
-                loginData.getEmail(),
-                Boolean.TRUE.equals(
-                        loginData.getProfileSetupComplete()
-                )
+                loginData.id(),
+                loginData.username(),
+                loginData.email(),
+                loginData.profileSetupComplete()
         );
     }
 }

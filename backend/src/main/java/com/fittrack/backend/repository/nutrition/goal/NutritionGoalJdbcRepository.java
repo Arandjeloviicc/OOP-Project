@@ -2,9 +2,9 @@ package com.fittrack.backend.repository.nutrition.goal;
 
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
 import com.fittrack.backend.dto.profile.editor.NutritionGoalUpdateRequest;
-import com.fittrack.backend.entity.profile.ActivityLevel;
-import com.fittrack.backend.entity.profile.Gender;
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.ActivityLevel;
+import com.fittrack.backend.domain.profile.Gender;
+import com.fittrack.backend.domain.profile.WeightGoal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

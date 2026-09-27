@@ -1,13 +1,13 @@
 package com.fittrack.backend.service.auth.register;
 
-import com.fittrack.backend.entity.user.User;
+import com.fittrack.backend.repository.user.projection.CreatedUser;
 
 public record RegistrationResult(
         RegisterStatus status,
-        User user
+        CreatedUser user
 ) {
 
-    public static RegistrationResult success(User user) {
+    public static RegistrationResult success(CreatedUser user) {
         return new RegistrationResult(RegisterStatus.SUCCESS, user);
     }
 

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -15,15 +17,108 @@ public class FoodJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    // ── Read ───────────────────────────────────────────────────
+    public List<FoodResponse> findTop20OrderByName() {
+        String sql = """
+            SELECT
+                id,
+                name,
+                brand,
+                serving_size_grams,
+                calories_per_serving,
+                protein_per_serving,
+                carbs_per_serving,
+                fat_per_serving,
+                created_by_user_id
+            FROM foods
+            ORDER BY name
+            LIMIT 20
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                this::mapFoodResponse
+        );
+    }
+
+    public List<FoodResponse> findByUserIdOrderByName(Integer userId) {
+        String sql = """
+            SELECT
+                id,
+                name,
+                brand,
+                serving_size_grams,
+                calories_per_serving,
+                protein_per_serving,
+                carbs_per_serving,
+                fat_per_serving,
+                created_by_user_id
+            FROM foods
+            WHERE created_by_user_id = ?
+            ORDER BY name
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                this::mapFoodResponse,
+                userId
+        );
+    }
+
+    public List<FoodResponse> findTop20ByNameContaining(String name) {
+        String sql = """
+            SELECT
+                id,
+                name,
+                brand,
+                serving_size_grams,
+                calories_per_serving,
+                protein_per_serving,
+                carbs_per_serving,
+                fat_per_serving,
+                created_by_user_id
+            FROM foods
+            WHERE LOWER(name) LIKE LOWER(CONCAT('%', ?, '%'))
+            ORDER BY name
+            LIMIT 20
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                this::mapFoodResponse,
+                name
+        );
+    }
+
+    public List<FoodResponse> findByUserIdAndNameContaining(Integer userId, String name) {
+        String sql = """
+            SELECT
+                id,
+                name,
+                brand,
+                serving_size_grams,
+                calories_per_serving,
+                protein_per_serving,
+                carbs_per_serving,
+                fat_per_serving,
+                created_by_user_id
+            FROM foods
+            WHERE created_by_user_id = ?
+              AND LOWER(name) LIKE LOWER(CONCAT('%', ?, '%'))
+            ORDER BY name
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                this::mapFoodResponse,
+                userId,
+                name
+        );
+    }
+
     // ── Create ─────────────────────────────────────────────────
     public FoodResponse createFood(Integer userId, FoodRequest request) {
-        String brand = request.brand();
-
-        if (brand != null && brand.isBlank()) {
-            brand = null;
-        } else if (brand != null) {
-            brand = brand.trim();
-        }
+        String brand = normalizeBrand(request.brand());
 
         // Kreira food i vraca ga odmah, pa ne mora da se trazi sa findById
         String sql = """
@@ -64,20 +159,7 @@ public class FoodJdbcRepository {
 
         List<FoodResponse> results = jdbcTemplate.query(
                 sql,
-                (resultSet, _) -> new FoodResponse(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("brand"),
-                        resultSet.getDouble("serving_size_grams"),
-                        resultSet.getDouble("calories_per_serving"),
-                        resultSet.getDouble("protein_per_serving"),
-                        resultSet.getDouble("carbs_per_serving"),
-                        resultSet.getDouble("fat_per_serving"),
-                        resultSet.getObject(
-                                "created_by_user_id",
-                                Integer.class
-                        )
-                ),
+                this::mapFoodResponse,
                 request.name().trim(),
                 brand,
                 request.servingSizeGrams(),
@@ -127,20 +209,7 @@ public class FoodJdbcRepository {
 
         List<FoodResponse> results = jdbcTemplate.query(
                 sql,
-                (resultSet, _) -> new FoodResponse(
-                        resultSet.getInt("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("brand"),
-                        resultSet.getDouble("serving_size_grams"),
-                        resultSet.getDouble("calories_per_serving"),
-                        resultSet.getDouble("protein_per_serving"),
-                        resultSet.getDouble("carbs_per_serving"),
-                        resultSet.getDouble("fat_per_serving"),
-                        resultSet.getObject(
-                                "created_by_user_id",
-                                Integer.class
-                        )
-                ),
+                this::mapFoodResponse,
                 request.name().trim(),
                 brand,
                 request.servingSizeGrams(),
@@ -188,5 +257,19 @@ public class FoodJdbcRepository {
         }
 
         return brand.trim();
+    }
+
+    private FoodResponse mapFoodResponse(ResultSet resultSet, int rowNum) throws SQLException {
+        return new FoodResponse(
+                resultSet.getInt("id"),
+                resultSet.getString("name"),
+                resultSet.getString("brand"),
+                resultSet.getDouble("serving_size_grams"),
+                resultSet.getDouble("calories_per_serving"),
+                resultSet.getDouble("protein_per_serving"),
+                resultSet.getDouble("carbs_per_serving"),
+                resultSet.getDouble("fat_per_serving"),
+                resultSet.getObject("created_by_user_id", Integer.class)
+        );
     }
 }

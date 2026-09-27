@@ -1,6 +1,6 @@
 package com.fittrack.backend.service.measurements;
 
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.Gender;
 import com.fittrack.backend.repository.measurements.body.BodyMeasurementJdbcRepository;
 import com.fittrack.backend.repository.measurements.body.projection.LatestBodyMeasurement;
 import com.fittrack.backend.service.calculation.BodyFatCalculationService;

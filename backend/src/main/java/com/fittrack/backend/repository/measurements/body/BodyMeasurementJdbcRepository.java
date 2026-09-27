@@ -3,7 +3,7 @@ package com.fittrack.backend.repository.measurements.body;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementHistoryResponse;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementRequest;
 import com.fittrack.backend.dto.measurements.body.BodyMeasurementResponse;
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.Gender;
 import com.fittrack.backend.repository.measurements.body.projection.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

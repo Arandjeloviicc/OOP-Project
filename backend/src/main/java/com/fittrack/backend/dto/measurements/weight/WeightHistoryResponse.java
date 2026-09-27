@@ -1,6 +1,6 @@
 package com.fittrack.backend.dto.measurements.weight;
 
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.WeightGoal;
 
 import java.util.List;
 

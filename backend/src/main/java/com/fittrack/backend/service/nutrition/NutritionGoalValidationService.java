@@ -1,6 +1,6 @@
 package com.fittrack.backend.service.nutrition;
 
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.WeightGoal;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

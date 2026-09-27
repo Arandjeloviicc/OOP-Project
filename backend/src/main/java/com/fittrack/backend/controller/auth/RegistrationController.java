@@ -3,7 +3,7 @@ package com.fittrack.backend.controller.auth;
 import com.fittrack.backend.dto.auth.RegisterRequest;
 import com.fittrack.backend.dto.auth.RegisterResponse;
 import com.fittrack.backend.dto.auth.UserResponse;
-import com.fittrack.backend.entity.user.User;
+import com.fittrack.backend.repository.user.projection.CreatedUser;
 import com.fittrack.backend.service.auth.register.RegistrationResult;
 import com.fittrack.backend.service.auth.register.RegistrationService;
 import jakarta.validation.Valid;
@@ -32,12 +32,12 @@ public class RegistrationController {
 
         return switch (result.status()) {
             case SUCCESS -> {
-                User user = result.user();
+                CreatedUser user = result.user();
 
                 UserResponse userResponse = new UserResponse(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail()
+                        user.id(),
+                        user.username(),
+                        user.email()
                 );
 
                 yield ResponseEntity.ok(

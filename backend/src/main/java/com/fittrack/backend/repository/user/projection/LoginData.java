@@ -1,13 +1,9 @@
 package com.fittrack.backend.repository.user.projection;
 
-public interface LoginData {
-    Integer getId();
-
-    String getUsername();
-
-    String getEmail();
-
-    String getPasswordHash();
-
-    Boolean getProfileSetupComplete();
-}
+public record LoginData(
+        Integer id,
+        String username,
+        String email,
+        String passwordHash,
+        boolean profileSetupComplete
+) {}

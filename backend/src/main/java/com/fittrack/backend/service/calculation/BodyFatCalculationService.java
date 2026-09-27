@@ -1,6 +1,6 @@
 package com.fittrack.backend.service.calculation;
 
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.Gender;
 import org.springframework.stereotype.Service;
 
 @Service

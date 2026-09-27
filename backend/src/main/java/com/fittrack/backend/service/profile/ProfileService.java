@@ -28,7 +28,29 @@ public class ProfileService {
         ProfileData profile = profileJdbcRepository.findByUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Profile not found."));
 
-        return toResponse(profile);
+        return new ProfileResponse(
+                profile.username(),
+                profile.email(),
+
+                profile.firstName(),
+                profile.lastName(),
+                profile.dateOfBirth(),
+                profile.gender(),
+                profile.height(),
+
+                profile.currentWeight(),
+                profile.startWeight(),
+
+                profile.goalType(),
+                profile.goalWeight(),
+                profile.weeklyGoal(),
+                profile.activityLevel(),
+
+                profile.targetCalories(),
+                profile.targetCarbs(),
+                profile.targetFat(),
+                profile.targetProtein()
+        );
     }
 
     @Transactional
@@ -81,31 +103,5 @@ public class ProfileService {
                 current.height(),
                 request.height()
         ) != 0;
-    }
-
-    private ProfileResponse toResponse(ProfileData profile) {
-        return new ProfileResponse(
-                profile.username(),
-                profile.email(),
-
-                profile.firstName(),
-                profile.lastName(),
-                profile.dateOfBirth(),
-                profile.gender(),
-                profile.height(),
-
-                profile.currentWeight(),
-                profile.startWeight(),
-
-                profile.goalType(),
-                profile.goalWeight(),
-                profile.weeklyGoal(),
-                profile.activityLevel(),
-
-                profile.targetCalories(),
-                profile.targetCarbs(),
-                profile.targetFat(),
-                profile.targetProtein()
-        );
     }
 }

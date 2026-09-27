@@ -10,5 +10,4 @@ public record MealResponse(
         String name,
         LocalDate mealDate,
         List<MealItemResponse> items
-) {
-}
+) {}

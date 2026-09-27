@@ -1,4 +1,4 @@
-package com.fittrack.backend.entity.nutrition;
+package com.fittrack.backend.domain.nutrition;
 
 public enum MealKind {
     DAILY,

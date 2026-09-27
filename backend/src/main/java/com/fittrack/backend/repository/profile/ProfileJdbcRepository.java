@@ -1,9 +1,9 @@
 package com.fittrack.backend.repository.profile;
 
 import com.fittrack.backend.dto.profile.editor.PersonalInfoUpdateRequest;
-import com.fittrack.backend.entity.profile.ActivityLevel;
-import com.fittrack.backend.entity.profile.Gender;
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.ActivityLevel;
+import com.fittrack.backend.domain.profile.Gender;
+import com.fittrack.backend.domain.profile.WeightGoal;
 import com.fittrack.backend.repository.profile.projection.PersonalInfoData;
 import com.fittrack.backend.repository.profile.projection.ProfileData;
 import lombok.RequiredArgsConstructor;

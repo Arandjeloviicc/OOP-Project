@@ -1,7 +1,7 @@
 package com.fittrack.backend.dto.profile.editor;
 
-import com.fittrack.backend.entity.profile.ActivityLevel;
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.ActivityLevel;
+import com.fittrack.backend.domain.profile.WeightGoal;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package com.fittrack.backend.service.calculation;
 
 import com.fittrack.backend.dto.nutrition.goal.NutritionTargets;
-import com.fittrack.backend.entity.profile.ActivityLevel;
-import com.fittrack.backend.entity.profile.Gender;
-import com.fittrack.backend.entity.profile.WeightGoal;
+import com.fittrack.backend.domain.profile.ActivityLevel;
+import com.fittrack.backend.domain.profile.Gender;
+import com.fittrack.backend.domain.profile.WeightGoal;
 import org.springframework.stereotype.Service;
 
 @Service

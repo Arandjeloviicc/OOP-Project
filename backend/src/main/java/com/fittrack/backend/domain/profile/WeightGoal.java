@@ -1,4 +1,4 @@
-package com.fittrack.backend.entity.profile;
+package com.fittrack.backend.domain.profile;
 
 public enum WeightGoal {
     LOSE_WEIGHT,

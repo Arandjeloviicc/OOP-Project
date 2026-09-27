@@ -1,6 +1,6 @@
 package com.fittrack.backend.repository.profile.projection;
 
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.Gender;
 
 import java.time.LocalDate;
 

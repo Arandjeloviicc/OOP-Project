@@ -1,6 +1,6 @@
 package com.fittrack.backend.dto.profile.editor;
 
-import com.fittrack.backend.entity.profile.Gender;
+import com.fittrack.backend.domain.profile.Gender;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
