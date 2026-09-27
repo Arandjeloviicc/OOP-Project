@@ -3,6 +3,7 @@ package com.fittrack.backend.dto.measurements.weight;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.Instant;
 
@@ -12,5 +13,6 @@ public record WeightLogRequest(
         double weight,
 
         @NotNull
+        @PastOrPresent
         Instant loggedAt
 ) {}
